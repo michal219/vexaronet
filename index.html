@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="cs" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Vexaronet | AI platforma pro řízení podnikání</title>
+<meta name="description" content="Vexaronet je připravovaná AI platforma pro podnikatele: faktury, zákazníci, zakázky, jednoduché weby, marketing a automatizace v jednom systému. Early access.">
+<meta name="theme-color" content="#03040a">
+<link rel="canonical" href="https://vexaronet.com/">
+<meta property="og:type" content="website"><meta property="og:locale" content="cs_CZ"><meta property="og:site_name" content="Vexaronet">
+<meta property="og:title" content="Vexaronet | AI platforma pro řízení podnikání"><meta property="og:description" content="Celé podnikání v jednom systému. Řízené AI. Přihlaste se k early access.">
+<meta property="og:url" content="https://vexaronet.com/"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233b7bff'/%3E%3Cstop offset='1' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%2303040a'/%3E%3Cpath d='M7 9l9 15 9-15' fill='none' stroke='url(%23g)' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"Vexaronet","url":"https://vexaronet.com/","email":"info@vexaronet.com"},{"@type":"WebSite","name":"Vexaronet","url":"https://vexaronet.com/","inLanguage":"cs"}]}</script>
+<script>try{var t=localStorage.getItem('vx-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#03040a;--navy:#070b20;--graph:#10131d;--blue:#3b7bff;--violet:#8b5cf6;--text:#eceffa;--mut:#9aa3c0;
+  --line:rgba(150,170,255,.14);--glass:rgba(16,20,40,.55);--r:22px;
+  --grad:linear-gradient(120deg,#5b9bff,#8b5cf6);
+  --fd:'Sora','Segoe UI',system-ui,sans-serif;--fb:'Manrope','Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+body{font-family:var(--fb);background:var(--ink);color:var(--text);line-height:1.6;overflow-x:hidden;font-size:16px}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid #8fb2ff;outline-offset:3px;border-radius:8px}
+.wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+section{position:relative;padding:112px 0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.skip{position:absolute;left:12px;top:-60px;background:#fff;color:#000;padding:10px 14px;border-radius:10px;z-index:200}
+.skip:focus{top:10px}
+
+/* ---------- pozadí ---------- */
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(120% 80% at 50% -10%,#0b1340 0%,#050818 45%,#02030a 100%)}
+.bg .b{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;will-change:transform}
+.b1{width:60vmax;height:60vmax;left:-15vmax;top:-18vmax;background:radial-gradient(circle,#2f62ff,transparent 65%);animation:drift1 26s ease-in-out infinite alternate}
+.b2{width:50vmax;height:50vmax;right:-14vmax;top:20vh;background:radial-gradient(circle,#7c3aed,transparent 65%);opacity:.38!important;animation:drift2 32s ease-in-out infinite alternate}
+.b3{width:40vmax;height:40vmax;left:20vw;bottom:-22vmax;background:radial-gradient(circle,#1d4ed8,transparent 65%);opacity:.35!important;animation:drift1 38s ease-in-out infinite alternate-reverse}
+.bg .grid{position:absolute;inset:-60px 0 0;background-image:linear-gradient(rgba(130,160,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(130,160,255,.07) 1px,transparent 1px);background-size:56px 56px;background-position:0 var(--gy,0px);-webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 20%,transparent 80%);mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 20%,transparent 80%)}
+.bg .hot{position:absolute;inset:0;background:radial-gradient(420px circle at var(--cx,50%) var(--cy,30%),rgba(110,140,255,.20),transparent 70%)}
+.bg .vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,3,10,.75))}
+@keyframes drift1{to{transform:translate3d(8vw,6vh,0) scale(1.1)}}
+@keyframes drift2{to{transform:translate3d(-9vw,-7vh,0) scale(1.15)}}
+.fo{position:fixed;z-index:-1;pointer-events:none;opacity:.5;will-change:transform}
+.fo i{display:block;width:100%;height:100%;border:1px solid rgba(139,172,255,.4);border-radius:30%;background:linear-gradient(135deg,rgba(91,155,255,.12),rgba(139,92,246,.10));animation:spin 40s linear infinite}
+.fo.o1{width:90px;height:90px;left:6%;top:38%}
+.fo.o2{width:140px;height:140px;right:7%;top:62%}.fo.o2 i{border-radius:50%;animation-duration:60s}
+.fo.o3{width:60px;height:60px;left:46%;top:84%}.fo.o3 i{border-radius:12px;animation-duration:30s}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- navigace ---------- */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:.35s}
+header.nav .in{width:min(1180px,100% - 28px);margin:12px auto 0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 12px 10px 18px;border-radius:999px;border:1px solid transparent;transition:.35s}
+header.nav.sc .in{background:rgba(8,11,28,.72);border-color:var(--line);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--fd);font-weight:700;letter-spacing:-.02em;font-size:1.12rem}
+.logo svg{width:30px;height:30px}
+.logo small{display:block;font-family:var(--fb);font-weight:500;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin-top:-3px}
+.links{display:flex;gap:4px}
+.links a{padding:8px 14px;border-radius:999px;font-size:.92rem;color:#c5cbe6;transition:.25s}
+.links a:hover,.links a.on{color:#fff;background:rgba(120,150,255,.12)}
+.nav-r{display:flex;align-items:center;gap:8px}
+.burger{display:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);position:relative}
+.burger i,.burger::before,.burger::after{content:"";position:absolute;left:12px;right:12px;height:2px;background:#fff;border-radius:2px;transition:.3s}
+.burger i{top:21px}.burger::before{top:14px}.burger::after{top:28px}
+.burger[aria-expanded=true] i{opacity:0}.burger[aria-expanded=true]::before{top:21px;transform:rotate(45deg)}.burger[aria-expanded=true]::after{top:21px;transform:rotate(-45deg)}
+
+/* ---------- tlačítka ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 26px;min-height:48px;border-radius:999px;font-weight:700;font-size:.97rem;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s,background .25s;white-space:nowrap}
+.btn-main{background:var(--grad);color:#fff;box-shadow:0 10px 40px -8px rgba(91,110,255,.7),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn-main::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 16px 50px -8px rgba(110,110,255,.9)}
+.btn-main:hover::after{transform:translateX(120%)}
+.btn-ghost{border:1px solid rgba(150,175,255,.3);background:rgba(20,26,56,.4);backdrop-filter:blur(8px)}
+.btn-ghost:hover{border-color:#8fb2ff;background:rgba(60,90,200,.2);transform:translateY(-2px)}
+.btn-sm{padding:10px 20px;min-height:44px;font-size:.9rem}
+
+/* ---------- typografie ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#a9c1ff;padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(40,60,160,.14)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--grad);box-shadow:0 0 12px #6d8cff}
+h1,h2,h3{font-family:var(--fd);letter-spacing:-.03em;line-height:1.08}
+h2{font-size:clamp(2rem,4.6vw,3.4rem);margin:18px 0 14px}
+.lead{color:var(--mut);font-size:1.08rem;max-width:620px}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sec-h{margin-bottom:56px}.sec-h.c{text-align:center}.sec-h.c .lead{margin-inline:auto}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;padding:132px 0 70px;display:flex;align-items:center}
+.hero .wrap{display:grid;grid-template-columns:1.02fr 1fr;gap:30px;align-items:center}
+.hero h1{font-size:clamp(2.5rem,5.6vw,4.7rem);margin:22px 0 22px;font-weight:800}
+.hero h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em}
+.hero h1 .w>span{display:inline-block;transform:translateY(105%);animation:up .9s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(.12s*var(--i))}
+@keyframes up{to{transform:none}}
+.hero .sub{font-size:1.14rem;color:#b3bbd8;max-width:540px;margin-bottom:34px}
+.cta{display:flex;flex-wrap:wrap;gap:14px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.chips span{font-size:.84rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:#c3cbe8;backdrop-filter:blur(8px)}
+.fade{opacity:0;transform:translateY(18px);animation:fin .9s .55s cubic-bezier(.2,.8,.2,1) forwards}
+.fade.d2{animation-delay:.75s}.fade.d3{animation-delay:.95s}
+@keyframes fin{to{opacity:1;transform:none}}
+
+/* notebook */
+.scene{position:relative;height:540px}
+.fit{position:absolute;left:50%;top:0;width:640px;height:540px;transform-origin:top left;transform:translateX(calc(-320px*var(--s,1))) scale(var(--s,1))}
+.stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 38%}
+.laptop{position:absolute;left:40px;top:120px;width:560px;height:360px;transform-style:preserve-3d;transform:rotateX(calc(-16deg + var(--rx,0)*1deg)) rotateY(calc(-14deg + var(--ry,0)*1deg));will-change:transform}
+.lid{position:absolute;left:0;bottom:0;width:560px;height:350px;transform-origin:bottom center;transform:translateZ(-340px) rotateX(14deg);transform-style:preserve-3d;border-radius:18px 18px 6px 6px;background:linear-gradient(160deg,#2a2f45,#12141f);padding:12px;box-shadow:0 0 0 1px #3a4062,0 0 80px rgba(80,110,255,.35)}
+.lid::after{content:"";position:absolute;top:4px;left:50%;width:5px;height:5px;margin-left:-2px;border-radius:50%;background:#1a1d2c}
+.screen{position:relative;width:100%;height:100%;border-radius:8px;overflow:hidden;background:#070a1c;border:1px solid #000}
+.screen::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.10),transparent 35%);pointer-events:none}
+.ms{position:absolute;left:0;right:0;top:0;padding:14px 18px 30px;animation:msc 22s ease-in-out infinite alternate;font-size:11px;color:#dfe5ff}
+@keyframes msc{0%,8%{transform:translateY(0)}92%,100%{transform:translateY(-62%)}}
+.ms .tb{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+.ms .tb b{font-family:var(--fd);font-size:12px}.ms .tb span{display:flex;gap:10px;color:#8e98c0}
+.ms .hh{font-family:var(--fd);font-weight:800;font-size:26px;line-height:1.05;letter-spacing:-.03em;margin-bottom:10px}
+.ms p{color:#8e98c0;max-width:260px;margin-bottom:12px;line-height:1.5}
+.ms .bt{display:inline-block;padding:7px 14px;border-radius:99px;background:var(--grad);font-weight:700;font-size:10px}
+.ms .cds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:26px}
+.ms .cds div{height:78px;border-radius:10px;border:1px solid rgba(150,170,255,.2);background:linear-gradient(160deg,rgba(80,110,255,.25),rgba(139,92,246,.1))}
+.ms .ban{margin-top:18px;height:100px;border-radius:12px;background:linear-gradient(120deg,#3b7bff,#8b5cf6);display:flex;align-items:center;padding:0 18px;font-family:var(--fd);font-weight:700;font-size:15px}
+.ms .rw{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.ms .rw div{height:60px;border-radius:10px;background:rgba(140,160,255,.1)}
+.ms .tag{position:absolute;right:10px;bottom:8px;font-size:9px;color:#6f7aa5}
+.sample{position:absolute;left:18px;bottom:16px;z-index:3;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7f8bb5;background:rgba(5,8,22,.7);padding:3px 8px;border-radius:99px}
+.base{position:absolute;left:0;bottom:0;width:560px;height:340px;transform-origin:bottom center;transform:rotateX(90deg);border-radius:6px 6px 22px 22px;background:linear-gradient(180deg,#1b1f31,#101320);box-shadow:inset 0 0 0 1px #343a5a;padding:20px 30px}
+.keys{display:flex;flex-direction:column;gap:5px;height:206px}
+.kr{display:flex;gap:5px;flex:1}.kr i{background:linear-gradient(180deg,#242a44,#171b2e);border-radius:4px;box-shadow:0 1px 0 #000,inset 0 1px 0 rgba(255,255,255,.08)}
+.pad{margin:18px auto 0;width:44%;height:80px;border-radius:10px;border:1px solid #343a5a;background:linear-gradient(180deg,#171a2b,#12151f)}
+.edge{position:absolute;left:6px;right:6px;top:100%;height:14px;border-radius:0 0 22px 22px;background:linear-gradient(180deg,#2a2f4a,#0c0e18);box-shadow:0 30px 60px rgba(40,80,255,.35)}
+.sh{position:absolute;left:-30px;right:-30px;bottom:-60px;height:120px;background:radial-gradient(ellipse,rgba(70,100,255,.45),transparent 65%);filter:blur(24px);transform:translateZ(-380px)}
+.fl{position:absolute;pointer-events:none;animation:flo 7s ease-in-out infinite alternate}
+.fl.a{left:2%;top:30px;width:74px;height:74px;border-radius:20px;background:linear-gradient(135deg,rgba(91,155,255,.5),rgba(139,92,246,.25));border:1px solid rgba(160,185,255,.5);backdrop-filter:blur(6px);transform:rotate(18deg);animation-delay:-1s}
+.fl.b{right:2%;top:60px;width:96px;height:96px;border-radius:50%;border:2px solid rgba(139,92,246,.7);box-shadow:0 0 40px rgba(139,92,246,.5),inset 0 0 30px rgba(139,92,246,.3);animation-duration:9s}
+.fl.c{right:8%;bottom:56px;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#9db8ff,#3b7bff 55%,#1c2f8a);box-shadow:0 0 40px rgba(59,123,255,.8);animation-duration:6s}
+.fl.d{left:0;bottom:90px;padding:9px 16px;border-radius:99px;font-size:.82rem;font-weight:700;background:rgba(14,20,48,.7);border:1px solid var(--line);backdrop-filter:blur(10px);animation-duration:8s}
+.fl.e{left:46%;top:-6px;padding:9px 16px;border-radius:99px;font-size:.82rem;font-weight:700;background:rgba(14,20,48,.7);border:1px solid var(--line);backdrop-filter:blur(10px);animation-duration:10s;animation-delay:-3s}
+@keyframes flo{to{translate:0 -20px}}
+
+/* ---------- pásek ---------- */
+.strip{padding:0;border-block:1px solid var(--line);background:rgba(8,11,28,.5);backdrop-filter:blur(8px);overflow:hidden}
+.strip .tr{display:flex;gap:56px;width:max-content;padding:20px 0;animation:mq 38s linear infinite;font-family:var(--fd);font-weight:600;color:#7f8bb5;font-size:1.05rem}
+.strip .tr span::before{content:"✦";margin-right:56px;color:#5b7bff}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- karty (společné) ---------- */
+[data-glow]{position:relative}
+[data-glow]::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(360px circle at var(--mx,50%) var(--my,0%),rgba(120,150,255,.22),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+[data-glow]:hover::before{opacity:1}
+.svcs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.svc{padding:30px;border-radius:var(--r);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:12px;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s}
+.svc:hover{transform:translateY(-6px);border-color:rgba(130,160,255,.45)}
+.svc.wide{grid-column:span 2;background:linear-gradient(135deg,rgba(40,60,160,.35),rgba(80,40,160,.25))}
+.svc-ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(59,123,255,.3),rgba(139,92,246,.25));border:1px solid rgba(150,175,255,.3);color:#b5c9ff;box-shadow:0 0 30px rgba(80,110,255,.25)}
+.svc-ic svg{width:28px;height:28px}
+.svc h3{font-size:1.28rem}.svc p{color:var(--mut);font-size:.96rem;flex:1}
+.svc-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+.from{font-size:.86rem;color:#a9c1ff;font-weight:700}
+.more{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;padding:10px 4px;min-height:44px}
+.more i{width:18px;height:2px;background:#fff;position:relative;transition:width .3s}
+.more i::after{content:"";position:absolute;right:0;top:-4px;width:8px;height:8px;border:solid #fff;border-width:2px 2px 0 0;transform:rotate(45deg)}
+.more:hover i{width:30px}
+
+/* ---------- ceník ---------- */
+.bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px}
+.bar.c{justify-content:center}
+.chipb{padding:10px 20px;min-height:44px;border-radius:999px;border:1px solid var(--line);background:var(--glass);font-weight:600;font-size:.92rem;color:#c3cbe8;transition:.25s}
+.chipb:hover{border-color:#8fb2ff}
+.chipb[aria-pressed=true]{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 8px 30px -8px rgba(100,110,255,.7)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.plan{padding:30px;border-radius:var(--r);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:6px;transition:transform .35s,border-color .3s,opacity .3s}
+.plan:hover{transform:translateY(-6px);border-color:rgba(130,160,255,.45)}
+.plan[hidden]{display:none}
+.plan h3{font-size:1.3rem}.note{color:var(--mut);font-size:.9rem}
+.price{margin:14px 0 6px}.price b{font-family:var(--fd);font-size:1.75rem;letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ticks{list-style:none;display:grid;gap:9px;margin:10px 0 24px;flex:1}
+.ticks li{padding-left:28px;position:relative;font-size:.94rem;color:#ced4ee}
+.ticks li::before{content:"";position:absolute;left:0;top:5px;width:16px;height:16px;border-radius:50%;background:rgba(80,120,255,.25);border:1px solid rgba(130,160,255,.5)}
+.ticks li::after{content:"";position:absolute;left:5px;top:9px;width:6px;height:3px;border:solid #bcd0ff;border-width:0 0 2px 2px;transform:rotate(-45deg)}
+.disc{margin-top:26px;text-align:center;color:var(--mut);font-size:.88rem}
+
+/* ---------- portfolio ---------- */
+.projs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.proj{border-radius:var(--r);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);transition:transform .35s,border-color .3s;overflow:hidden}
+.proj:hover{transform:translateY(-6px);border-color:rgba(130,160,255,.45)}
+.proj[hidden]{display:none}
+.proj-btn{display:block;width:100%;text-align:left;padding:18px;position:relative}
+.badge{position:absolute;top:26px;left:26px;z-index:3;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 11px;border-radius:99px;background:rgba(5,8,22,.8);border:1px solid rgba(150,175,255,.4);color:#c5d3ff}
+.proj-t{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:16px;padding:0 4px 4px}
+.proj-t b{font-family:var(--fd);font-size:1.05rem}.proj-t small{color:var(--mut)}
+.mock{position:relative;height:200px}
+.m-desk{position:absolute;left:0;top:0;width:76%;height:100%;border-radius:12px;background:#080b1d;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column}
+.m-bar{display:flex;gap:4px;padding:7px 9px;border-bottom:1px solid var(--line)}
+.m-bar i{width:6px;height:6px;border-radius:50%;background:#3a4166}
+.m-body{flex:1;padding:12px;display:flex;flex-direction:column;gap:7px;overflow:hidden;background:linear-gradient(155deg,color-mix(in srgb,var(--c2) 55%,#060914),#060914 75%)}
+.m-phone{position:absolute;right:2%;bottom:0;width:27%;height:88%;border-radius:16px;border:3px solid #232846;background:#060914;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.6);display:flex}
+.m-phone .m-body{padding:8px;gap:5px;flex:1}
+.m-h{height:26%;border-radius:8px;background:linear-gradient(120deg,var(--c1),transparent)}
+.m-l{height:7px;border-radius:4px;background:rgba(200,215,255,.3)}.w70{width:70%}.w45{width:45%}.c{margin-inline:auto}
+.m-b{width:38%;height:14px;border-radius:99px;background:var(--c1)}
+.m-row{display:flex;gap:6px;flex:1}.m-row i{flex:1;border-radius:7px;background:rgba(150,175,255,.14);border:1px solid rgba(150,175,255,.18)}
+.m-nav{display:flex;justify-content:space-between;align-items:center}.m-nav b{width:30%;height:7px;border-radius:4px;background:rgba(200,215,255,.35)}.m-nav em{font-style:normal;font-size:8px;min-width:14px;height:14px;display:grid;place-items:center;border-radius:50%;background:var(--c1)}
+.m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex:1}.m-grid i{border-radius:7px;background:linear-gradient(160deg,var(--c1),rgba(255,255,255,.04));opacity:.8}
+.m-orb{width:56px;height:56px;border-radius:50%;margin:2px auto;background:radial-gradient(circle at 30% 30%,#fff,var(--c1) 40%,var(--c2));box-shadow:0 0 40px var(--c1);animation:flo 3s ease-in-out infinite alternate}
+.m-big{height:14px;border-radius:5px;background:rgba(235,240,255,.85);width:80%;margin-inline:auto}.m-big.s{width:50%;opacity:.5}
+.m-cube{width:42px;height:42px;margin:14px auto 6px;position:relative;transform-style:preserve-3d;animation:cube 9s linear infinite}
+.m-cube i{position:absolute;inset:0;border:2px solid var(--c1);background:color-mix(in srgb,var(--c1) 22%,transparent)}
+.m-cube i:nth-child(1){transform:translateZ(21px)}.m-cube i:nth-child(2){transform:rotateY(90deg) translateZ(21px)}.m-cube i:nth-child(3){transform:rotateX(90deg) translateZ(21px)}
+@keyframes cube{to{transform:rotateX(360deg) rotateY(360deg)}}
+.m-split{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1}
+.m-split .old{display:grid;gap:4px;align-content:start;filter:grayscale(1);opacity:.6}.m-split .old i{height:12px;background:#667;border-radius:2px}
+.m-split .new{display:flex;flex-direction:column;gap:6px}
+.m-chat{display:flex;flex-direction:column;gap:6px;justify-content:center;flex:1}
+.m-chat span{height:14px;border-radius:9px;width:62%;background:rgba(150,175,255,.2)}.m-chat .u{align-self:flex-end;background:var(--c1)}.m-chat .s{width:38%}
+
+/* ---------- 3D kostka ---------- */
+.cube-sec .wrap{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.cube-box{height:360px;display:grid;place-items:center;perspective:1000px;cursor:grab;touch-action:pan-y;user-select:none;border-radius:var(--r);border:1px solid var(--line);background:radial-gradient(circle at 50% 50%,rgba(60,90,220,.2),transparent 65%),var(--glass)}
+.cube-box:active{cursor:grabbing}
+.cube{width:170px;height:170px;position:relative;transform-style:preserve-3d;transform:rotateX(var(--cx3,-20deg)) rotateY(var(--cy3,30deg))}
+.cube div{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:10px;font-family:var(--fd);font-weight:700;font-size:.9rem;border:1px solid rgba(160,185,255,.55);background:linear-gradient(135deg,rgba(59,123,255,.35),rgba(139,92,246,.3));box-shadow:inset 0 0 40px rgba(120,150,255,.25);backface-visibility:visible}
+.cube div:nth-child(1){transform:translateZ(85px)}.cube div:nth-child(2){transform:rotateY(180deg) translateZ(85px)}.cube div:nth-child(3){transform:rotateY(90deg) translateZ(85px)}.cube div:nth-child(4){transform:rotateY(-90deg) translateZ(85px)}.cube div:nth-child(5){transform:rotateX(90deg) translateZ(85px)}.cube div:nth-child(6){transform:rotateX(-90deg) translateZ(85px)}
+.hint{margin-top:14px;color:var(--mut);font-size:.88rem}
+
+/* ---------- postup ---------- */
+.tl{position:relative;max-width:820px;margin:0 auto;padding-left:0}
+.tl::before{content:"";position:absolute;left:23px;top:10px;bottom:10px;width:2px;background:var(--line)}
+.tl-f{position:absolute;left:23px;top:10px;width:2px;height:calc((100% - 20px)*var(--p,0));background:var(--grad);box-shadow:0 0 14px #6d8cff}
+.step{position:relative;padding-left:76px;margin-bottom:22px}
+.dot{position:absolute;left:0;top:10px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-family:var(--fd);font-weight:700;background:#0a0e24;border:2px solid var(--line);transition:.4s;z-index:1}
+.step.act .dot{border-color:#7ea3ff;background:var(--grad);box-shadow:0 0 30px rgba(110,130,255,.7)}
+.step-b{width:100%;text-align:left;display:block;position:relative;padding:20px 54px 20px 24px;border-radius:var(--r);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);transition:.3s;min-height:44px}
+.step.act .step-b,.step-b:hover{border-color:rgba(130,160,255,.5)}
+.step-b h3{font-size:1.25rem;margin-bottom:4px}.step-b p{color:var(--mut);font-size:.97rem}
+.step-b i{position:absolute;right:22px;top:50%;width:12px;height:12px;border:solid #b7c6ff;border-width:0 2px 2px 0;transform:translateY(-70%) rotate(45deg);transition:.3s}
+.step-b[aria-expanded=true] i{transform:translateY(-30%) rotate(-135deg)}
+.step-d{overflow:hidden;padding:14px 24px 0;color:#c3cbe8}
+.step-d[hidden]{display:none}
+
+/* ---------- o nás ---------- */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.vals{display:grid;gap:16px}
+.val{padding:22px 24px;border-radius:var(--r);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px)}
+.val b{font-family:var(--fd);display:block;margin-bottom:4px;font-size:1.08rem}.val span{color:var(--mut);font-size:.95rem}
+
+/* ---------- kontakt ---------- */
+.contact{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:start}
+.ci{display:grid;gap:14px;margin-top:28px}
+.ci a,.ci div{padding:16px 20px;border-radius:16px;background:var(--glass);border:1px solid var(--line);display:flex;flex-direction:column}
+.ci small{color:var(--mut);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}
+.ci b{font-weight:600}
+form.card{padding:32px;border-radius:26px;background:linear-gradient(160deg,rgba(24,32,72,.7),rgba(12,16,38,.7));border:1px solid rgba(140,165,255,.25);backdrop-filter:blur(18px);box-shadow:0 30px 80px -20px rgba(40,70,220,.35)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.f{display:flex;flex-direction:column;gap:6px}.f.full{grid-column:1/-1}
+label,.lab{font-size:.84rem;font-weight:600;color:#c3cbe8}
+label i{color:#ff9aa8;font-style:normal}
+input,select,textarea{font:inherit;width:100%;padding:13px 15px;min-height:48px;color:#fff;background:rgba(5,8,22,.65);border:1px solid rgba(140,165,255,.22);border-radius:14px;transition:.25s}
+select option{background:#0a0e24}
+textarea{min-height:130px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#7ea3ff;box-shadow:0 0 0 4px rgba(90,125,255,.2)}
+input[type=file]{padding:10px;font-size:.88rem}
+.chk{display:flex;gap:12px;align-items:flex-start;font-weight:500}
+.chk input{width:22px;height:22px;min-height:22px;margin-top:2px;flex:none;accent-color:#6d8cff}
+.chk a{text-decoration:underline;color:#a9c1ff}
+.hp{position:absolute;left:-9999px}
+.st{margin-top:16px;padding:14px 18px;border-radius:14px;font-size:.95rem;display:none}
+.st.ok{display:block;background:rgba(40,160,110,.15);border:1px solid rgba(60,200,140,.45)}
+.st.err{display:block;background:rgba(220,60,80,.13);border:1px solid rgba(255,100,120,.45)}
+.pre{display:none;margin-bottom:16px;padding:10px 14px;border-radius:12px;background:rgba(80,120,255,.14);border:1px solid rgba(130,160,255,.4);font-size:.9rem}
+.pre.on{display:block}
+
+/* ---------- patička ---------- */
+footer{border-top:1px solid var(--line);padding:56px 0 34px;background:rgba(3,4,10,.7)}
+.fg2{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:36px}
+footer h4{font-family:var(--fd);font-size:.9rem;margin-bottom:12px;color:#fff}
+footer a,footer button.fl2{display:block;color:var(--mut);padding:5px 0;font-size:.93rem;text-align:left}
+footer a:hover,footer button.fl2:hover{color:#fff}
+.copy{margin-top:36px;padding-top:22px;border-top:1px solid var(--line);color:#6f7aa5;font-size:.84rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+/* ---------- dialog ---------- */
+dialog{border:0;background:transparent;color:var(--text);width:min(720px,100% - 28px);max-height:calc(100svh - 28px);margin:auto;overflow:visible}
+dialog::backdrop{background:rgba(2,3,10,.75);backdrop-filter:blur(8px)}
+.dlg{padding:36px;border-radius:26px;background:linear-gradient(160deg,#10163a,#080b1f);border:1px solid rgba(140,165,255,.3);box-shadow:0 40px 120px rgba(20,40,200,.4);max-height:calc(100svh - 28px);overflow:auto;animation:pop .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.97)}}
+.dlg h2{font-size:clamp(1.6rem,4vw,2.2rem);margin:14px 0 10px}
+.dlg h3{font-size:1.05rem;margin:22px 0 8px}
+.dlg p{color:#b9c1dd;margin-bottom:10px}
+.dlg .ticks{margin:14px 0 20px}
+.dx{position:sticky;top:0;float:right;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(10,14,36,.9);font-size:1.3rem;line-height:1}
+.dx:hover{border-color:#8fb2ff}
+.dact{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.dlg .mock{margin:10px 0 20px;height:230px}
+.draft{padding:12px 16px;border-radius:12px;background:rgba(255,190,80,.1);border:1px solid rgba(255,190,80,.4);color:#ffd9a0;font-size:.9rem;margin-bottom:16px}
+
+/* ---------- chat ---------- */
+.fab{position:fixed;right:18px;bottom:18px;z-index:150;display:flex;align-items:center;gap:10px;padding:0 22px 0 18px;height:56px;border-radius:99px;background:var(--grad);font-weight:700;box-shadow:0 14px 40px -6px rgba(100,110,255,.8);transition:transform .25s}
+.fab:hover{transform:translateY(-3px)}
+.fab svg{width:24px;height:24px}
+.fab .pulse{width:9px;height:9px;border-radius:50%;background:#7dffb4;box-shadow:0 0 0 0 rgba(125,255,180,.7);animation:pl 2s infinite}
+@keyframes pl{70%{box-shadow:0 0 0 10px rgba(125,255,180,0)}100%{box-shadow:0 0 0 0 rgba(125,255,180,0)}}
+.aichat{position:fixed;right:18px;bottom:88px;z-index:160;width:min(390px,100% - 28px);height:min(560px,calc(100svh - 110px));display:none;flex-direction:column;border-radius:24px;background:linear-gradient(170deg,#0f1538,#070a1c);border:1px solid rgba(140,165,255,.3);box-shadow:0 30px 100px rgba(10,20,160,.55);overflow:hidden}
+.aichat.on{display:flex;animation:pop .3s}
+.ch{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.ch b{font-family:var(--fd)}.ch small{display:block;color:var(--mut);font-size:.76rem}
+.ch button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line)}
+#chatBody{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:86%;padding:11px 15px;border-radius:18px;font-size:.93rem;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.msg.bot{background:rgba(110,140,255,.14);border:1px solid var(--line);border-bottom-left-radius:6px;align-self:flex-start}
+.msg.me{background:var(--grad);align-self:flex-end;border-bottom-right-radius:6px}
+.msg.err{background:rgba(220,60,80,.13);border:1px solid rgba(255,100,120,.4)}
+#chatSugg{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 10px}
+#chatSugg button{padding:8px 13px;border-radius:99px;border:1px solid var(--line);font-size:.82rem;background:rgba(80,110,255,.1)}
+#chatSugg button:hover{border-color:#8fb2ff}
+#chatForm{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+#chatIn{min-height:46px;height:46px;resize:none;padding:11px 14px;border-radius:99px}
+#chatForm button{width:46px;height:46px;flex:none;border-radius:50%;background:var(--grad);font-size:1.1rem}
+.ainote{padding:0 16px 10px;font-size:.72rem;color:#6f7aa5}
+
+/* ---------- reveal ---------- */
+[data-r]{opacity:0;transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+[data-r=up]{transform:translateY(40px)}[data-r=left]{transform:translateX(-50px)}[data-r=right]{transform:translateX(50px)}[data-r=zoom]{transform:scale(.92)}
+[data-r].in{opacity:1;transform:none}
+.noscript [data-r]{opacity:1;transform:none}
+
+/* ---------- responzivita ---------- */
+@media(max-width:1000px){
+  section{padding:84px 0}
+  .links,.nav-r .btn{display:none}.burger{display:block}
+  .hero .wrap,.cube-sec .wrap,.about,.contact{grid-template-columns:1fr}
+  .hero{padding-top:110px}
+  .svcs,.plans,.projs{grid-template-columns:1fr 1fr}
+  .svc.wide{grid-column:span 2}
+  [data-r=left],[data-r=right]{transform:translateY(40px)}
+  .fg2{grid-template-columns:1fr 1fr}
+}
+.mnav{position:fixed;inset:0;z-index:90;background:rgba(3,4,10,.96);backdrop-filter:blur(20px);display:flex;flex-direction:column;justify-content:center;gap:6px;padding:90px 28px 40px;opacity:0;visibility:hidden;transition:.35s}
+.mnav.on{opacity:1;visibility:visible}
+.mnav a{font-family:var(--fd);font-size:1.7rem;font-weight:700;padding:12px 4px;border-bottom:1px solid var(--line);transform:translateY(20px);opacity:0;transition:.45s}
+.mnav.on a{transform:none;opacity:1;transition-delay:calc(.05s*var(--i))}
+@media(min-width:1001px){.mnav{display:none}}
+@media(max-width:640px){
+  section{padding:68px 0}
+  .svcs,.plans,.projs,.fg{grid-template-columns:1fr}.svc.wide{grid-column:auto}
+  .fg2{grid-template-columns:1fr}
+  .scene{height:calc(540px*var(--s,.6))}
+  .cta .btn{flex:1 1 100%}
+  form.card{padding:22px}.dlg{padding:24px}
+  .fab span.t{display:none}.fab{padding:0 18px}
+  .step{padding-left:62px}.dot{width:42px;height:42px}.tl::before,.tl-f{left:20px}
+  .cube-box{height:300px}.cube{transform-origin:center}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  [data-r]{opacity:1;transform:none}
+  .hero h1 .w>span{transform:none}.fade{opacity:1;transform:none}
+  .ms{transform:none}
+}
+
+/* --- SaaS doplňky --- */
+.ms{animation:none!important;padding:0!important;font-size:10px}
+.db{display:grid;grid-template-columns:62px 1fr;height:100%}
+.db aside{background:rgba(255,255,255,.04);border-right:1px solid rgba(150,170,255,.14);padding:12px 0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.db aside b{width:26px;height:26px;border-radius:8px;background:var(--grad);display:grid;place-items:center;font-family:var(--fd);font-size:12px}
+.db aside i{width:28px;height:6px;border-radius:4px;background:rgba(160,180,255,.22)}.db aside i.on{background:#7ea3ff}
+.db .mn{padding:12px 14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.db .top{display:flex;justify-content:space-between;align-items:center;font-family:var(--fd);font-weight:700;font-size:12px}
+.db .top em{font-style:normal;font-family:var(--fb);font-weight:600;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#ffd9a0;border:1px solid rgba(255,190,80,.5);padding:2px 7px;border-radius:99px}
+.db .kp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.db .kp div{padding:8px 9px;border-radius:10px;border:1px solid rgba(150,170,255,.18);background:linear-gradient(160deg,rgba(80,110,255,.2),rgba(139,92,246,.08))}
+.db .kp small{display:block;color:#8e98c0;font-size:8px}.db .kp b{font-family:var(--fd);font-size:14px}
+.db .row2{display:grid;grid-template-columns:1.5fr 1fr;gap:8px;flex:1;min-height:0}
+.db .ch2{border-radius:10px;border:1px solid rgba(150,170,255,.18);padding:8px;display:flex;align-items:flex-end;gap:5px}
+.db .ch2 i{flex:1;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#7ea3ff,#5a3fd8);transform-origin:bottom;animation:grow 1.6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scaleY(0)}}
+.db .ai2{border-radius:10px;border:1px solid rgba(139,92,246,.5);background:rgba(139,92,246,.12);padding:8px;display:flex;flex-direction:column;gap:5px;font-size:8.5px;line-height:1.35}
+.db .ai2 b{font-size:9px;color:#c9b8ff}.db .ai2 span.bt{align-self:flex-start;padding:3px 9px;border-radius:99px;background:var(--grad);font-weight:700;font-size:8px}
+.db .inv{border-radius:10px;border:1px solid rgba(150,170,255,.18);padding:4px 8px}
+.db .inv div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(150,170,255,.1);font-size:8.5px;color:#aeb8de}.db .inv div:last-child{border:0}
+.tagst{font-family:var(--fb);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:99px;margin-left:8px;vertical-align:middle;border:1px solid var(--line);color:var(--mut)}
+.st-done .tagst{color:#7dffb4;border-color:rgba(125,255,180,.5)}.st-next .tagst{color:#a9c1ff;border-color:rgba(130,160,255,.6)}
+.step:has(.st-done) .dot{background:var(--grad);border-color:#7ea3ff}
+.plans4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.plan.hot{border-color:rgba(130,160,255,.7);box-shadow:0 20px 70px -20px rgba(80,110,255,.6)}
+.ribbon{position:absolute;top:-12px;right:20px;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:99px;background:var(--grad)}
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:stretch}
+.panel{padding:28px;border-radius:var(--r);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px)}
+.panel h3{font-size:1.2rem;margin-bottom:6px}.panel p.sm{color:var(--mut);font-size:.92rem;margin-bottom:16px}
+.tag-demo{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;border:1px solid rgba(255,190,80,.5);color:#ffd9a0;margin-bottom:12px}
+.mods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.mods div{padding:16px;border-radius:14px;border:1px solid var(--line);background:rgba(80,110,255,.1);font-weight:600;animation:fin .5s both}
+.act{padding:16px;border-radius:16px;border:1px solid var(--line);background:rgba(110,140,255,.1);margin-bottom:12px;transition:.4s}
+.act b{display:block;margin-bottom:2px}.act small{color:var(--mut)}
+.act .bts{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.act.ok{border-color:rgba(60,200,140,.6);background:rgba(40,160,110,.14)}.act.no{opacity:.55}
+.act .res{margin-top:10px;font-size:.88rem;font-weight:700}
+.warn{padding:18px 22px;border-radius:16px;border:1px solid rgba(255,190,80,.4);background:rgba(255,190,80,.08);color:#ffd9a0;font-size:.93rem;margin-top:30px}
+.themeb{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center}
+.themeb svg{width:20px;height:20px}
+@media(max-width:1000px){.plans4{grid-template-columns:1fr 1fr}.demo{grid-template-columns:1fr}}
+@media(max-width:640px){.plans4{grid-template-columns:1fr}.mods{grid-template-columns:1fr}}
+/* světlý režim */
+[data-theme=light]{--ink:#f3f5ff;--text:#0b1130;--mut:#505a7c;--line:rgba(40,60,160,.18);--glass:rgba(255,255,255,.72)}
+[data-theme=light] body{background:var(--ink)}
+[data-theme=light] .bg{background:radial-gradient(120% 80% at 50% -10%,#dfe6ff,#f1f4ff 55%,#f8f9ff)}
+[data-theme=light] .bg .b{opacity:.28}[data-theme=light] .bg .vig{display:none}
+[data-theme=light] .bg .grid{background-image:linear-gradient(rgba(60,80,200,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(60,80,200,.09) 1px,transparent 1px)}
+[data-theme=light] .fo{opacity:.35}
+[data-theme=light] header.nav.sc .in{background:rgba(255,255,255,.8)}
+[data-theme=light] .links a,[data-theme=light] .chips span,[data-theme=light] .chipb,[data-theme=light] .ticks li,[data-theme=light] .step-d,[data-theme=light] label,[data-theme=light] .lab{color:#2b3558}
+[data-theme=light] .links a:hover,[data-theme=light] .links a.on{color:#000}
+[data-theme=light] .hero .sub{color:#434d70}
+[data-theme=light] .eyebrow{color:#2f4fd0;background:rgba(60,100,255,.1)}
+[data-theme=light] .svc-ic{color:#2f4fd0}
+[data-theme=light] .btn-ghost{background:rgba(255,255,255,.7);color:#0b1130}
+[data-theme=light] .more i{background:#0b1130}[data-theme=light] .more i::after{border-color:#0b1130}
+[data-theme=light] .from{color:#2f4fd0}
+[data-theme=light] .strip{background:rgba(255,255,255,.6)}
+[data-theme=light] input,[data-theme=light] select,[data-theme=light] textarea{background:rgba(255,255,255,.9);color:#0b1130;border-color:rgba(40,60,160,.25)}
+[data-theme=light] select option{background:#fff}
+[data-theme=light] form.card,[data-theme=light] .dlg{background:linear-gradient(160deg,#ffffff,#eef1ff);border-color:rgba(60,90,220,.3)}
+[data-theme=light] .dlg p{color:#3a4468}[data-theme=light] .dx{background:#fff}
+[data-theme=light] footer{background:rgba(255,255,255,.7)}
+[data-theme=light] footer h4{color:#0b1130}[data-theme=light] footer a:hover,[data-theme=light] footer button.fl2:hover{color:#000}
+[data-theme=light] .mnav{background:rgba(244,246,255,.97)}
+[data-theme=light] .burger i,[data-theme=light] .burger::before,[data-theme=light] .burger::after{background:#0b1130}
+[data-theme=light] .step-b p,[data-theme=light] .note{color:#505a7c}
+[data-theme=light] .dot{background:#fff}
+[data-theme=light] .aichat{background:linear-gradient(170deg,#fff,#eef1ff)}[data-theme=light] .msg.bot{color:#0b1130}
+[data-theme=light] .fl.d,[data-theme=light] .fl.e{background:rgba(255,255,255,.8);color:#0b1130}
+[data-theme=light] .mods div{background:rgba(60,100,255,.08)}
+[data-theme=light] .act{background:rgba(60,100,255,.07)}
+[data-theme=light] .tagst{color:#505a7c}
+</style>
+</head>
+<body>
+<a class="skip" href="#obsah">Přeskočit na obsah</a>
+<div class="bg" aria-hidden="true"><div class="b b1"></div><div class="b b2"></div><div class="b b3"></div><div class="grid"></div><div class="hot"></div><div class="vig"></div></div>
+
+<header class="nav" id="nav"><div class="in">
+  <a class="logo" href="#top" aria-label="Vexaronet – úvod"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>AI platforma</small></span></a>
+  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Tarify</a><a href="#postup">Vývoj</a><a href="#early">Early access</a></nav>
+  <div class="nav-r">
+    <button class="themeb" id="theme" type="button" aria-label="Přepnout světlý a tmavý režim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg></button>
+    <button class="btn btn-ghost btn-sm" id="acc" type="button">Přihlásit</button>
+    <a class="btn btn-main btn-sm" href="#early">Chci early access</a>
+    <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="mnav"><i></i></button>
+  </div>
+</div></header>
+<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Tarify</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Early access</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a></nav>
+
+<main id="obsah">
+<section class="hero" id="top"><div class="wrap">
+  <div>
+    <span class="eyebrow fade">AI platforma pro podnikatele</span>
+    <h1 id="h1">Celé podnikání v jednom systému. Řízené AI.</h1>
+    <p class="sub fade d2">Vexaronet spojí faktury, zákazníky, zakázky, jednoduché weby, marketing a automatizaci na jednom místě. AI připravuje práci za vás, důležité kroky vždy schvalujete vy.</p>
+    <div class="cta fade d3"><a class="btn btn-main" href="#early">Chci early access</a><a class="btn btn-ghost" href="#funkce">Prohlédnout funkce</a></div>
+    <div class="chips fade d3"><span>30 dní zdarma</span><span>Od 99 Kč / měsíc</span><span>Světlý i tmavý režim</span></div>
+  </div>
+  <div class="scene" id="scene"><div class="fit" id="fit"><div class="stage" id="stage"><div class="laptop" id="laptop">
+    <div class="sh"></div>
+    <div class="lid"><div class="screen"><div class="ms" aria-hidden="true"><div class="db">
+      <aside><b>V</b><i class="on"></i><i></i><i></i><i></i><i></i></aside>
+      <div class="mn">
+        <div class="top"><span>Přehled firmy</span><em>Ukázková data</em></div>
+        <div class="kp"><div><small>Tržby (ukázka)</small><b>128 400 Kč</b></div><div><small>Nezaplaceno</small><b>3 faktury</b></div><div><small>Zakázky</small><b>12</b></div></div>
+        <div class="row2">
+          <div class="ch2"><i style="height:35%"></i><i style="height:52%;animation-delay:.1s"></i><i style="height:44%;animation-delay:.2s"></i><i style="height:70%;animation-delay:.3s"></i><i style="height:58%;animation-delay:.4s"></i><i style="height:86%;animation-delay:.5s"></i><i style="height:74%;animation-delay:.6s"></i></div>
+          <div class="ai2"><b>AI navrhuje</b>Odeslat upomínku 3 klientům s fakturou po splatnosti.<span class="bt">Čeká na schválení</span></div>
+        </div>
+        <div class="inv"><div><span>Faktura 2026-014</span><span>Zaplaceno</span></div><div><span>Faktura 2026-015</span><span>Po splatnosti</span></div></div>
+      </div></div></div><span class="sample">Ukázka rozhraní</span></div></div>
+    <div class="base"><div class="keys"><div class="kr"><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i></div><div class="kr"><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1.6"></i></div><div class="kr"><i style="flex:1.6"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1.4"></i></div><div class="kr"><i style="flex:2.1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:2.1"></i></div><div class="kr"><i style="flex:1.2"></i><i style="flex:1.2"></i><i style="flex:1.2"></i><i style="flex:6.2"></i><i style="flex:1.2"></i><i style="flex:1.2"></i><i style="flex:1.2"></i></div></div><div class="pad"></div></div><div class="edge"></div>
+  </div>
+  <div class="fl d">AI Autopilot</div><div class="fl e">Faktury a CRM</div>
+  </div></div></div>
+</div></section>
+
+<div class="strip" aria-hidden="true"><div class="tr">
+ <span>AI centrum</span><span>Faktury a účetnictví</span><span>CRM a zakázky</span><span>Jednoduché weby</span><span>Marketing</span><span>Automatizace</span>
+ <span>AI centrum</span><span>Faktury a účetnictví</span><span>CRM a zakázky</span><span>Jednoduché weby</span><span>Marketing</span><span>Automatizace</span>
+</div></div>
+
+<section id="funkce"><div class="wrap">
+  <div class="sec-h" data-r="up"><span class="eyebrow">Funkce platformy</span><h2>Šest oblastí, <span class="grad">jeden systém</span></h2><p class="lead">Takhle je platforma navržená. Moduly se budou stavět po etapách a u každého je uvedeno, v jaké fázi je. Zatím není hotový žádný z nich, tento web je návrh úvodní stránky.</p></div>
+  <div class="svcs"><article class="svc" data-r="up" style="--d:0.00s" data-glow>
+  <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3.5"/><path d="M9.5 10h.01M14.5 10h.01"/><path d="M9.5 14.5c1.4 1 3.6 1 5 0"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div><h3>AI centrum</h3><p>Poradce, účetní, obchodník, krizový manažer, Autopilot a podpora 24/7 na jednom místě.</p>
+  <div class="svc-foot"><span class="from">Etapa 5 · plánováno</span><a class="more" href="#modul-ai" data-mod="ai" aria-label="Zjistit více: AI centrum">Zjistit více <i aria-hidden="true"></i></a></div>
+</article>
+<article class="svc" data-r="up" style="--d:0.06s" data-glow>
+  <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h3"/></svg></div><h3>Finance a účetnictví</h3><p>Faktury, QR platby, výdaje, DPH, pohledávky a párování plateb.</p>
+  <div class="svc-foot"><span class="from">Etapa 4 · plánováno</span><a class="more" href="#modul-fin" data-mod="fin" aria-label="Zjistit více: Finance a účetnictví">Zjistit více <i aria-hidden="true"></i></a></div>
+</article>
+<article class="svc" data-r="up" style="--d:0.12s" data-glow>
+  <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.3 2.8-5 5.5-5s4.9 1.7 5.5 5"/><path d="M16 6.5a3 3 0 010 5.6M18 14.2c1.6.7 2.6 2.2 3 4.3"/></svg></div><h3>Řízení firmy</h3><p>CRM, zakázky, úkoly, zaměstnanci, kalendář, rezervace a sklad.</p>
+  <div class="svc-foot"><span class="from">Etapa 3 · plánováno</span><a class="more" href="#modul-biz" data-mod="biz" aria-label="Zjistit více: Řízení firmy">Zjistit více <i aria-hidden="true"></i></a></div>
+</article>
+<article class="svc" data-r="up" style="--d:0.18s" data-glow>
+  <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="2.5"/><path d="M3 9h18"/><path d="M8 14.5l2.2 2.2L15 12"/></svg></div><h3>Jednoduché weby</h3><p>AI generátor jednoduchých firemních webů s úpravou vzhledu a vlastní doménou.</p>
+  <div class="svc-foot"><span class="from">Etapa 6 · plánováno</span><a class="more" href="#modul-web" data-mod="web" aria-label="Zjistit více: Jednoduché weby">Zjistit více <i aria-hidden="true"></i></a></div>
+</article>
+<article class="svc" data-r="up" style="--d:0.24s" data-glow>
+  <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></div><h3>Marketing a analytika</h3><p>Kampaně, slevové kódy, veřejné profily, recenze a přehledy.</p>
+  <div class="svc-foot"><span class="from">Etapa 7 · plánováno</span><a class="more" href="#modul-mkt" data-mod="mkt" aria-label="Zjistit více: Marketing a analytika">Zjistit více <i aria-hidden="true"></i></a></div>
+</article>
+<article class="svc" data-r="up" style="--d:0.30s" data-glow>
+  <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></div><h3>Automatizace</h3><p>Objednávky, faktury a připomínky se zpracují samy. Vy jen schvalujete.</p>
+  <div class="svc-foot"><span class="from">Etapa 5 · plánováno</span><a class="more" href="#modul-auto" data-mod="auto" aria-label="Zjistit více: Automatizace">Zjistit více <i aria-hidden="true"></i></a></div>
+</article></div>
+</div></section>
+
+<section id="ukazka"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Interaktivní ukázka</span><h2>Takhle to <span class="grad">bude fungovat</span></h2><p class="lead">Dvě krátké ukázky principu. Jde o demonstraci s vymyšlenými daty, ne o skutečnou aplikaci.</p></div>
+  <div class="demo">
+    <div class="panel" data-r="up"><span class="tag-demo">Ukázka</span><h3>Dashboard podle oboru</h3><p class="sm">Při registraci vyberete typ podnikání a nabídka modulů se přizpůsobí.</p>
+      <div class="bar" id="bizbar" role="group" aria-label="Typ podnikání"><button type="button" class="chipb" data-biz="Služby" aria-pressed="true">Služby</button><button type="button" class="chipb" data-biz="Autoservis" aria-pressed="false">Autoservis</button><button type="button" class="chipb" data-biz="Řemeslník" aria-pressed="false">Řemeslník</button><button type="button" class="chipb" data-biz="Restaurace" aria-pressed="false">Restaurace</button><button type="button" class="chipb" data-biz="Jiný obor" aria-pressed="false">Jiný obor</button></div><div class="mods" id="mods"></div></div>
+    <div class="panel" data-r="up" style="--d:.1s"><span class="tag-demo">Ukázka</span><h3>AI připraví, vy schválíte</h3><p class="sm">Důležité finanční, obchodní a externí akce bude AI provádět jen po schválení uživatelem.</p>
+      <div class="act" id="a1"><b>Odeslat upomínku 3 klientům</b><small>Faktury po splatnosti, celkem 18 400 Kč (ukázka)</small><div class="bts"><button class="btn btn-main btn-sm" type="button" data-ap="ok">Schválit</button><button class="btn btn-ghost btn-sm" type="button" data-ap="no">Zamítnout</button></div><div class="res" hidden></div></div>
+      <div class="act" id="a2"><b>Vystavit fakturu za zakázku č. 41</b><small>Částka 6 500 Kč (ukázka)</small><div class="bts"><button class="btn btn-main btn-sm" type="button" data-ap="ok">Schválit</button><button class="btn btn-ghost btn-sm" type="button" data-ap="no">Zamítnout</button></div><div class="res" hidden></div></div>
+    </div>
+  </div>
+  <div class="warn" data-r="up"><b>Důležité upozornění:</b> účetnictví, daně a fakturace pro jednotlivé země nejsou legislativně ověřené. Před ostrým použitím bude nutná kontrola odborníkem. Funkce závislé na externích službách (platby, doprava, AI, domény) vyžadují jejich napojení a klíče.</div>
+</div></section>
+
+<section id="cenik"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Tarify</span><h2>Vyzkoušejte <span class="grad">30 dní zdarma</span></h2><p class="lead">Ceny jsou orientační, uvedené za firmu a měsíc bez DPH. Přesný rozsah funkcí tarifů se upřesní a ceny půjdou upravit v administraci.</p></div>
+  <div class="plans4"><article class="plan" data-glow>
+  
+  <h3>STARTER</h3><p class="note">Pro začínající podnikatele.</p><div class="price"><b>99 Kč / měsíc</b></div>
+  <ul class="ticks"><li>30denní zkušební období</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
+  <button class="btn btn-ghost" type="button" data-early="STARTER">Chci early access</button>
+</article>
+<article class="plan" data-glow>
+  
+  <h3>PRO</h3><p class="note">Pro rostoucí firmy.</p><div class="price"><b>199 Kč / měsíc</b></div>
+  <ul class="ticks"><li>30denní zkušební období</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
+  <button class="btn btn-ghost" type="button" data-early="PRO">Chci early access</button>
+</article>
+<article class="plan" data-glow>
+  
+  <h3>BUSINESS</h3><p class="note">Pro větší týmy.</p><div class="price"><b>399 Kč / měsíc</b></div>
+  <ul class="ticks"><li>30denní zkušební období</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
+  <button class="btn btn-ghost" type="button" data-early="BUSINESS">Chci early access</button>
+</article>
+<article class="plan" data-glow>
+  
+  <h3>ENTERPRISE</h3><p class="note">Řešení na míru.</p><div class="price"><b>Individuální cena</b></div>
+  <ul class="ticks"><li>Konzultace a nabídka na míru</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
+  <button class="btn btn-ghost" type="button" data-early="ENTERPRISE">Chci early access</button>
+</article></div>
+  <p class="disc">Předplatné a zkušební období zatím nejsou spuštěné. Přihlaste se k early access a dáme vám vědět.</p>
+</div></section>
+
+<section id="postup"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Postup vývoje</span><h2>Osm etap <span class="grad">k hotové platformě</span></h2><p class="lead">Stavíme po částech a každou etapu otestujeme. Stav je uveden otevřeně.</p></div>
+  <div class="tl" id="tl"><div class="tl-f"></div><div class="step" data-r="up">
+  <div class="dot" aria-hidden="true">1</div>
+  <div class="step-b st-done"><h3>Úvodní stránka a designový systém <span class="tagst">Návrh hotov</span></h3><p>Hotový návrh úvodní stránky, který právě vidíte. Zbývá schválení a nasazení.</p></div>
+</div>
+<div class="step" data-r="up">
+  <div class="dot" aria-hidden="true">2</div>
+  <div class="step-b st-next"><h3>Registrace, přihlášení a databáze <span class="tagst">Další krok</span></h3><p>Účty, firmy (oddělená data), role a základ databáze. Schéma je připravené jako návrh, ještě nenasazené.</p></div>
+</div>
+<div class="step" data-r="up">
+  <div class="dot" aria-hidden="true">3</div>
+  <div class="step-b st-plan"><h3>Dashboard, CRM, zakázky a kalendář <span class="tagst">Plánováno</span></h3><p>První skutečně použitelné moduly pro řízení firmy.</p></div>
+</div>
+<div class="step" data-r="up">
+  <div class="dot" aria-hidden="true">4</div>
+  <div class="step-b st-plan"><h3>Finance a fakturace <span class="tagst">Plánováno</span></h3><p>Faktury, QR platby, výdaje, pohledávky. Vyžaduje odbornou kontrolu účetním.</p></div>
+</div>
+<div class="step" data-r="up">
+  <div class="dot" aria-hidden="true">5</div>
+  <div class="step-b st-plan"><h3>AI centrum a automatizace <span class="tagst">Plánováno</span></h3><p>Asistenti a Autopilot se schvalováním akcí. Vyžaduje API klíč AI poskytovatele.</p></div>
+</div>
+<div class="step" data-r="up">
+  <div class="dot" aria-hidden="true">6</div>
+  <div class="step-b st-plan"><h3>Tvorba jednoduchých webů <span class="tagst">Plánováno</span></h3><p>Generátor jednoduchých webů, úprava vzhledu a domény. Vyžaduje externí služby.</p></div>
+</div>
+<div class="step" data-r="up">
+  <div class="dot" aria-hidden="true">7</div>
+  <div class="step-b st-plan"><h3>Marketing, analytika a další moduly <span class="tagst">Plánováno</span></h3><p>Kampaně, slevy, profily, recenze a přehledy.</p></div>
+</div>
+<div class="step" data-r="up">
+  <div class="dot" aria-hidden="true">8</div>
+  <div class="step-b st-plan"><h3>Předplatné, zabezpečení a testování <span class="tagst">Plánováno</span></h3><p>Tarify, zkušební období, platební brána, audit zabezpečení.</p></div>
+</div></div>
+</div></section>
+
+<section id="early"><div class="wrap contact">
+  <div data-r="up"><span class="eyebrow">Early access</span><h2>Buďte u toho <span class="grad">od začátku</span></h2><p class="lead">Nechte nám e-mail a ozveme se, až bude první verze připravená. Nic vám neúčtujeme a nic neuzavíráme.</p>
+    <div class="ci"><a href="mailto:info@vexaronet.com"><small>E-mail</small><b>info@vexaronet.com</b></a><button type="button" class="btn btn-ghost" id="openChat" style="justify-content:flex-start">Zeptat se AI asistenta</button></div></div>
+  <form class="card" id="form" name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" data-r="up" novalidate>
+    <input type="hidden" name="form-name" value="early-access">
+    <p class="hp" aria-hidden="true"><label>Nevyplňovat <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+    <div class="fg">
+      <div class="f"><label for="fName">Jméno <i>*</i></label><input id="fName" name="jmeno" required autocomplete="name"></div>
+      <div class="f"><label for="fMail">E-mail <i>*</i></label><input id="fMail" name="email" type="email" required autocomplete="email" inputmode="email"></div>
+      <div class="f"><label for="fCo">Firma (nepovinné)</label><input id="fCo" name="firma" autocomplete="organization"></div>
+      <div class="f"><label for="fBiz">Typ podnikání</label><select id="fBiz" name="obor"><option value="">Vyberte</option><option>Služby</option>
+<option>Autoservis</option>
+<option>Řemeslník</option>
+<option>Restaurace</option>
+<option>Jiný obor</option></select></div>
+      <div class="f full"><label for="fPlan">Zajímá mě tarif</label><select id="fPlan" name="tarif"><option value="">Zatím nevím</option><option>STARTER</option><option>PRO</option><option>BUSINESS</option><option>ENTERPRISE</option></select></div>
+      <div class="f full"><label for="fMsg">Co by měla platforma umět především? (nepovinné)</label><textarea id="fMsg" name="zprava"></textarea></div>
+      <div class="f full"><label class="chk"><input type="checkbox" name="souhlas" id="fOk" required><span>Souhlasím se zpracováním e-mailu a údajů za účelem informování o spuštění. <a href="#ochrana-udaju">Zásady ochrany osobních údajů</a> <i>*</i></span></label></div>
+      <div class="f full"><button class="btn btn-main" type="submit" id="send">Přihlásit se k early access</button></div>
+    </div>
+    <div class="st" id="st" role="status" aria-live="polite"></div>
+  </form>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="fg2">
+    <div><a class="logo" href="#top" style="padding:0"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>AI platforma</small></span></a><p style="color:var(--mut);margin-top:14px;max-width:320px;font-size:.93rem">AI platforma pro podnikatele a firmy. Připravujeme pro ČR, Slovensko a postupně celou EU.</p></div>
+    <div><h4>Navigace</h4><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Tarify</a><a href="#postup">Vývoj</a><a href="#early">Early access</a></div>
+    <div><h4>Informace</h4><button type="button" class="fl2" data-legal="ochrana-udaju">Ochrana osobních údajů</button><button type="button" class="fl2" data-legal="cookies">Cookies</button><a href="mailto:info@vexaronet.com">info@vexaronet.com</a></div>
+  </div>
+  <div class="copy"><span>© <span id="yr">2026</span> Vexaronet</span><span>vexaronet.com</span></div>
+</div></footer>
+
+<button class="fab" id="chatFab" type="button" aria-expanded="false" aria-controls="chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span class="t">AI asistent</span><i class="pulse"></i></button>
+<div class="aichat" id="chat" role="dialog" aria-label="AI asistent Vexaronet"><div class="ch"><div><b>AI asistent</b><small>Odpovídá automaticky, jde o AI</small></div><button type="button" id="chatX" aria-label="Zavřít chat">✕</button></div><div id="chatBody" aria-live="polite"></div><div id="chatSugg"></div><form id="chatForm"><textarea id="chatIn" rows="1" placeholder="Napište dotaz…" aria-label="Vaše zpráva" maxlength="1000"></textarea><button type="submit" aria-label="Odeslat">➤</button></form><p class="ainote">Asistent může chybovat. Závazné jsou informace od týmu.</p></div>
+<dialog id="dlg" aria-labelledby="dT"><div class="dlg" id="dBody"></div></dialog>
+<noscript><style>[data-r]{opacity:1!important;transform:none!important}.hero h1 .w>span{transform:none}.fade{opacity:1;transform:none}</style></noscript>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" defer></script>
+<script type="application/json" id="modData">{"ai": {"name": "AI centrum", "short": "Poradce, účetní, obchodník, krizový manažer, Autopilot a podpora 24/7 na jednom místě.", "items": ["AI podnikatelský poradce", "AI účetní", "AI obchodník", "AI krizový manažer", "AI Autopilot, který propojuje moduly a automatizuje opakované činnosti", "AI zákaznická podpora 24/7", "AI analýza podnikání a návrhy na zlepšení"], "stage": 5}, "fin": {"name": "Finance a účetnictví", "short": "Faktury, QR platby, výdaje, DPH, pohledávky a párování plateb.", "items": ["Vystavování a správa faktur", "PDF faktury a QR platby", "Evidence příjmů, výdajů a DPH", "Pohledávky a závazky", "Párování bankovních plateb", "Upomínky neuhrazených faktur", "Účetní deník a hlavní kniha", "AI rozpoznávání faktur a účtenek", "Finanční statistiky a grafy"], "stage": 4}, "biz": {"name": "Řízení firmy", "short": "CRM, zakázky, úkoly, zaměstnanci, kalendář, rezervace a sklad.", "items": ["CRM a databáze zákazníků", "Správa zakázek, úkolů a projektů", "Zaměstnanci, role a oprávnění", "Kalendář a rezervace", "Připomínky a notifikace", "Firemní komunikace a e-mail", "Skladové hospodářství"], "stage": 3}, "web": {"name": "Jednoduché weby", "short": "AI generátor jednoduchých firemních webů s úpravou vzhledu a vlastní doménou.", "items": ["AI generátor jednoduchých webů podle textového zadání", "Úprava barev, písem, sekcí, obrázků a pozadí", "Vlastní domény", "Veřejný odkaz na vytvořený web", "Responzivní zobrazení", "Jde o jednoduché weby (prezentace firmy), ne o složité projekty"], "stage": 6}, "mkt": {"name": "Marketing a analytika", "short": "Kampaně, slevové kódy, veřejné profily, recenze a přehledy.", "items": ["Marketingové kampaně", "Slevové kódy", "Veřejné firemní profily", "Hodnocení a recenze", "Statistiky návštěvnosti, zakázek a tržeb", "Jednoduchý i pokročilý analytický režim", "Interaktivní grafy a přehledy podle dostupných dat"], "stage": 7}, "auto": {"name": "Automatizace", "short": "Objednávky, faktury a připomínky se zpracují samy. Vy jen schvalujete.", "items": ["Automatické zpracování poptávek a zakázek", "Automatické vystavování faktur", "Připomínky rezervací", "Automatizované pracovní postupy", "Propojení jednotlivých modulů", "Tvorba jednoduchých vlastních aplikací"], "stage": 5}}</script>
+<script type="application/json" id="bizData">{"Služby": ["Zakázky", "Kalendář", "Faktury", "CRM"], "Autoservis": ["Zakázky a vozidla", "Rezervace", "Sklad dílů", "Faktury"], "Řemeslník": ["Zakázky", "Kalendář", "Sklad materiálu", "Faktury"], "Restaurace": ["Rezervace stolů", "Sklad surovin", "Zaměstnanci", "Hodnocení"], "Jiný obor": ["CRM", "Kalendář", "Faktury", "Úkoly"]}</script>
+<script>
+(function(){'use strict';
+var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var MOD=JSON.parse($('#modData').textContent),BIZ=JSON.parse($('#bizData').textContent);
+$('#yr').textContent=new Date().getFullYear();
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+(function(){var h=$('#h1');var t=h.textContent.trim();h.setAttribute('aria-label',t);var i=0;h.innerHTML=t.split(' ').map(function(w){i++;return '<span class="w" aria-hidden="true"><span style="--i:'+i+'">'+w+'</span></span>'}).join(' ')})();
+
+/* motiv */
+$('#theme').addEventListener('click',function(){var r=document.documentElement,n=r.getAttribute('data-theme')==='light'?'dark':'light';r.setAttribute('data-theme',n);try{localStorage.setItem('vx-theme',n)}catch(e){}});
+
+/* scroll */
+var nav=$('#nav'),pars=$$('[data-par]'),tl=$('#tl'),steps=$$('.step');
+function onScroll(){var y=window.scrollY;nav.classList.toggle('sc',y>20);document.documentElement.style.setProperty('--gy',(-y*.3)+'px');
+ if(!RM)pars.forEach(function(p){p.style.transform='translate3d(0,'+(y*parseFloat(p.dataset.par))+'px,0)'});
+ var r=tl.getBoundingClientRect(),vh=window.innerHeight;tl.style.setProperty('--p',Math.min(1,Math.max(0,(vh*.6-r.top)/r.height)).toFixed(3));
+ steps.forEach(function(s){s.classList.toggle('act',s.getBoundingClientRect().top<vh*.62)});
+ var cur='';['funkce','ukazka','cenik','postup','early'].forEach(function(id){var e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<vh*.4)cur=id});
+ $$('.links a').forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)})}
+var tick=false;window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(function(){onScroll();tick=false})}},{passive:true});onScroll();
+if(!RM)window.addEventListener('pointermove',function(e){var d=document.documentElement.style;d.setProperty('--cx',e.clientX+'px');d.setProperty('--cy',e.clientY+'px')},{passive:true});
+document.addEventListener('pointermove',function(e){var c=e.target.closest&&e.target.closest('[data-glow]');if(c){var b=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-b.left)+'px');c.style.setProperty('--my',(e.clientY-b.top)+'px')}},{passive:true});
+
+/* reveal */
+var rv=$$('[data-r]');if('IntersectionObserver' in window&&!RM){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});rv.forEach(function(e){io.observe(e)})}else rv.forEach(function(e){e.classList.add('in')});
+
+/* menu */
+var bur=$('#burger'),mn=$('#mnav');
+function menu(o){bur.setAttribute('aria-expanded',o);bur.setAttribute('aria-label',o?'Zavřít menu':'Otevřít menu');mn.classList.toggle('on',o);document.body.style.overflow=o?'hidden':''}
+bur.addEventListener('click',function(){menu(bur.getAttribute('aria-expanded')!=='true')});$$('a',mn).forEach(function(a){a.addEventListener('click',function(){menu(false)})});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')menu(false)});
+
+/* notebook */
+var scene=$('#scene'),lap=$('#laptop');
+function resize(){var s=Math.min(1,scene.clientWidth/640);document.documentElement.style.setProperty('--s',s.toFixed(3));scene.style.height=(540*s)+'px'}resize();window.addEventListener('resize',resize);
+var tx=0,ty=0,cx=0,cy=0,last=0,t0=performance.now(),vis=true;
+$('.hero').addEventListener('pointermove',function(e){var b=scene.getBoundingClientRect();tx=Math.max(-1.4,Math.min(1.4,(e.clientX-(b.left+b.width/2))/(b.width/2)));ty=Math.max(-1.4,Math.min(1.4,(e.clientY-(b.top+b.height/2))/(b.height/2)));last=performance.now()});
+if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting}).observe(scene);
+function loop(now){if(vis){var idle=now-last>2500,gx=idle?Math.sin((now-t0)/2400)*.8:tx,gy=idle?Math.cos((now-t0)/3100)*.35:ty;cx+=(gx-cx)*.07;cy+=(gy-cy)*.07;lap.style.setProperty('--ry',(cx*12).toFixed(2));lap.style.setProperty('--rx',(-cy*7).toFixed(2))}requestAnimationFrame(loop)}
+if(!RM)requestAnimationFrame(loop);
+
+/* ukázka: obor */
+var mods=$('#mods');
+function showBiz(k){mods.innerHTML=BIZ[k].map(function(m,i){return '<div style="animation-delay:'+(i*.07)+'s">'+esc(m)+'</div>'}).join('')}
+$('#bizbar').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;$$('#bizbar button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});showBiz(b.dataset.biz)});showBiz(Object.keys(BIZ)[0]);
+/* ukázka: schvalování */
+$$('.act').forEach(function(a){a.addEventListener('click',function(e){var b=e.target.closest('[data-ap]');if(!b)return;var ok=b.dataset.ap==='ok';a.classList.remove('ok','no');a.classList.add(ok?'ok':'no');$('.bts',a).hidden=true;var r=$('.res',a);r.hidden=false;r.textContent=ok?'Schváleno uživatelem. V ostré verzi by se akce provedla. Tady jde jen o ukázku, nic se neodeslalo.':'Zamítnuto. AI akci neprovede.'})});
+
+/* dialogy */
+var dlg=$('#dlg'),dB=$('#dBody'),lastFocus=null;
+function openD(h){lastFocus=document.activeElement;dB.innerHTML='<button class="dx" type="button" aria-label="Zavřít">×</button>'+h;if(!dlg.open){if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','')}$('.dx',dB).focus();dB.scrollTop=0}
+function closeDlg(){if(dlg.open)dlg.close()}
+dlg.addEventListener('click',function(e){if(e.target===dlg||e.target.closest('.dx')||e.target.closest('[data-close]'))closeDlg()});
+dlg.addEventListener('close',function(){if(/^#(modul|ochrana|cookies|prihlaseni)/.test(location.hash))history.replaceState(null,'',location.pathname+location.search);if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true})});
+function showMod(id){var m=MOD[id];if(!m)return;openD('<span class="eyebrow">Modul · etapa '+m.stage+'</span><h2 id="dT">'+esc(m.name)+'</h2><p>'+esc(m.short)+'</p><h3>Plánované funkce</h3><ul class="ticks">'+m.items.map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+'</ul><div class="draft">Stav: plánováno. Modul zatím není vytvořený a nejde ho použít. Důležité akce AI budou vyžadovat schválení uživatele.</div><div class="dact"><button class="btn btn-main" type="button" data-early="">Chci early access</button><button class="btn btn-ghost" type="button" data-close>Zavřít</button></div>')}
+var LEGAL={'ochrana-udaju':'<span class="eyebrow">Právní informace</span><h2 id="dT">Ochrana osobních údajů</h2><div class="draft">Pracovní návrh textu. Před zveřejněním je nutné ho zkontrolovat a doplnit skutečnými údaji provozovatele.</div><h3>Správce údajů</h3><p>[Doplňte: jméno / obchodní firma, IČO, sídlo, kontaktní e-mail]</p><h3>Jaké údaje zpracováváme</h3><p>Údaje z formuláře early access: jméno, e-mail, firma, typ podnikání, zpráva.</p><h3>Účel a právní základ</h3><p>Informování o spuštění platformy. [Doplňte právní základ a dobu uchování.]</p><h3>Příjemci</h3><p>Poskytovatelé technických služeb (hosting a formuláře – Netlify; AI asistent – poskytovatel jazykového modelu). [Doplňte seznam.]</p><h3>Vaše práva</h3><p>Přístup, oprava, výmaz, omezení, námitka a stížnost u dozorového úřadu. [Doplňte kontakt.]</p>','cookies':'<span class="eyebrow">Právní informace</span><h2 id="dT">Informace o cookies</h2><div class="draft">Pracovní návrh textu. Před zveřejněním ho zkontrolujte.</div><p>Web nepoužívá analytické ani reklamní cookies. Prohlížeč si lokálně pamatuje zvolený světlý nebo tmavý režim a historii chatu v rámci karty (úložiště prohlížeče, ne cookies).</p>'};
+function showLegal(k){if(LEGAL[k])openD(LEGAL[k]+'<div class="dact"><button class="btn btn-ghost" type="button" data-close>Zavřít</button></div>')}
+function route(){var h=location.hash,m;if(h==='#prihlaseni')showAuth('login');else if(m=h.match(/^#modul-(\w+)/))showMod(m[1]);else if(h==='#ochrana-udaju'||h==='#cookies')showLegal(h.slice(1))}
+document.addEventListener('click',function(e){
+ var a=e.target.closest('[data-mod]');if(a){e.preventDefault();history.replaceState(null,'','#modul-'+a.dataset.mod);showMod(a.dataset.mod);return}
+ var l=e.target.closest('[data-legal]');if(l){history.replaceState(null,'','#'+l.dataset.legal);showLegal(l.dataset.legal);return}
+ var lk=e.target.closest('a[href="#ochrana-udaju"]');if(lk){e.preventDefault();history.replaceState(null,'','#ochrana-udaju');showLegal('ochrana-udaju');return}
+ var p=e.target.closest('[data-early]');if(p){e.preventDefault();closeDlg();if(p.dataset.early)$('#fPlan').value=p.dataset.early;$('#early').scrollIntoView({behavior:RM?'auto':'smooth'});setTimeout(function(){$('#fName').focus({preventScroll:true})},700)}});
+window.addEventListener('hashchange',route);setTimeout(route,0);
+
+/* formulář */
+var form=$('#form'),st=$('#st'),sendB=$('#send'),loadT=Date.now();
+function msg(t,c){st.className='st '+c;st.textContent=t}
+form.addEventListener('submit',function(e){e.preventDefault();var f=form.elements;
+ if(!f.jmeno.value.trim()||!f.email.value.trim()){msg('Vyplňte prosím jméno a e-mail.','err');return}
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.value.trim())){msg('Zkontrolujte prosím formát e-mailu.','err');return}
+ if(!f.souhlas.checked){msg('Pro odeslání je nutný souhlas se zpracováním údajů.','err');return}
+ if(f['bot-field'].value||Date.now()-loadT<2500){msg('Odeslání se nepodařilo ověřit. Zkuste to prosím znovu.','err');return}
+ sendB.disabled=true;sendB.textContent='Odesílám…';st.className='st';
+ fetch('/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()}).then(function(r){if(!r.ok)throw new Error(r.status);msg('Děkujeme, vaše přihlášení bylo přijato.','ok');form.reset()}).catch(function(){msg('Přihlášení se teď nepodařilo odeslat. Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;sendB.textContent='Přihlásit se k early access'})});
+
+
+/* ===== Supabase: registrace a přihlášení ===== */
+var SB_URL='https://micymdbqgzeckiqyvvkn.supabase.co';
+var SB_KEY='sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW'; /* veřejný (publishable) klíč, smí být ve webu */
+var PLAN_VALUE={STARTER:'starter',PRO:'pro',BUSINESS:'business'}; /* hodnoty tarifů v databázi, ověřit */
+var TERMS_VERSION='2026-10';
+var sb=null;
+function getSb(){if(sb)return sb;if(window.supabase&&window.supabase.createClient){sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}return sb}
+var accB=$('#acc');
+function setAcc(on){accB.textContent=on?'Můj účet':'Přihlásit'}
+window.addEventListener('load',function(){var c=getSb();if(c)c.auth.getSession().then(function(r){setAcc(!!(r.data&&r.data.session))}).catch(function(){});if(c)c.auth.onAuthStateChange(function(_e,ses){setAcc(!!ses)})});
+function authForm(mode){
+ var plans=Object.keys(PLAN_VALUE).map(function(p){return '<option>'+p+'</option>'}).join('');
+ var biz=Object.keys(BIZ).map(function(b){return '<option>'+esc(b)+'</option>'}).join('');
+ return '<span class="eyebrow">Účet</span><h2 id="dT">'+(mode==='login'?'Přihlášení':'Registrace')+'</h2>'
+ +'<div class="bar" role="tablist"><button type="button" class="chipb" data-auth="login" aria-pressed="'+(mode==='login')+'">Přihlášení</button><button type="button" class="chipb" data-auth="signup" aria-pressed="'+(mode==='signup')+'">Registrace</button></div>'
+ +'<form id="authForm" novalidate><div class="fg">'
+ +(mode==='signup'?'<div class="f"><label for="aName">Jméno a příjmení <i>*</i></label><input id="aName" autocomplete="name" required></div><div class="f"><label for="aCo">Název firmy <i>*</i></label><input id="aCo" autocomplete="organization" required></div><div class="f"><label for="aBiz">Typ podnikání</label><select id="aBiz">'+biz+'</select></div><div class="f"><label for="aPlan">Tarif (zkušební období 30 dní)</label><select id="aPlan">'+plans+'</select></div>':'')
+ +'<div class="f '+(mode==='login'?'full':'')+'"><label for="aMail">E-mail <i>*</i></label><input id="aMail" type="email" autocomplete="email" required></div>'
+ +'<div class="f '+(mode==='login'?'full':'')+'"><label for="aPw">Heslo <i>*</i></label><input id="aPw" type="password" autocomplete="'+(mode==='login'?'current-password':'new-password')+'" minlength="8" required></div>'
+ +(mode==='signup'?'<div class="f full"><label class="chk"><input type="checkbox" id="aOk"><span>Souhlasím s podmínkami a se zpracováním osobních údajů. <i>*</i></span></label></div>':'')
+ +'<div class="f full"><button class="btn btn-main" type="submit" id="aGo">'+(mode==='login'?'Přihlásit se':'Vytvořit účet')+'</button></div></div><div class="st" id="aSt" role="status" aria-live="polite"></div></form>';
+}
+function showAuth(mode){openD(authForm(mode||'login'))}
+function aMsg(t,c){var e=$('#aSt');if(e){e.className='st '+c;e.textContent=t}}
+function niceErr(e){var m=(e&&e.message)||String(e);if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
+async function ensureCompany(c,user){
+ var r=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);
+ if(r.error)throw r.error;
+ if(r.data&&r.data.length)return r.data[0].company_id;
+ var md=user.user_metadata||{};if(!md.company_name)return null;
+ var a=await c.rpc('record_registration_acceptance',{version:TERMS_VERSION,accepted:true});if(a.error)throw a.error;
+ var k=await c.rpc('create_company_for_plan',{company_name:md.company_name,company_industry:md.industry||'',selected_plan:PLAN_VALUE[md.plan]||'starter'});
+ if(k.error)throw k.error;
+ var r2=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);
+ return r2.data&&r2.data[0]?r2.data[0].company_id:(typeof k.data==='string'?k.data:null)}
+function kv(o){if(o==null)return '<p>Žádná data.</p>';if(typeof o!=='object')return '<p>'+esc(o)+'</p>';var rows=Array.isArray(o)?o.map(function(x,i){return [i+1,x]}):Object.keys(o).map(function(k){return [k,o[k]]});return '<ul class="ticks">'+rows.map(function(r){var v=r[1];return '<li><b>'+esc(r[0])+':</b> '+esc(typeof v==='object'?JSON.stringify(v):v)+'</li>'}).join('')+'</ul>'}
+async function showAccount(){
+ var c=getSb();openD('<span class="eyebrow">Účet</span><h2 id="dT">Můj účet</h2><p>Načítám…</p>');
+ try{
+  var u=(await c.auth.getUser()).data.user;if(!u){showAuth('login');return}
+  var cid=await ensureCompany(c,u);var h='<span class="eyebrow">Účet</span><h2 id="dT">Můj účet</h2><p>'+esc(u.email)+'</p>';
+  if(!cid){h+='<div class="draft">K účtu zatím není přiřazená žádná firma.</div>'}
+  else{
+   var co=await c.from('companies').select('name,industry').eq('id',cid).limit(1);
+   var sub=await c.from('subscriptions').select('plan,status,trial_end,paid_until').eq('company_id',cid).limit(1);
+   if(co.data&&co.data[0])h+='<h3>Firma</h3><p>'+esc(co.data[0].name)+(co.data[0].industry?' ('+esc(co.data[0].industry)+')':'')+'</p>';
+   if(sub.data&&sub.data[0]){var s=sub.data[0],left='';if(s.trial_end){var d=Math.ceil((new Date(s.trial_end)-new Date())/864e5);left=d>0?'Zbývá '+d+' dní zkušebního období.':'Zkušební období skončilo.'}h+='<h3>Předplatné</h3><p>Tarif: '+esc(s.plan)+', stav: '+esc(s.status)+'. '+left+'</p>'}
+   var ds=await c.rpc('dashboard_summary',{cid:cid});
+   h+='<h3>Přehled firmy (data z databáze)</h3>'+(ds.error?'<p>Přehled se nepodařilo načíst: '+esc(ds.error.message)+'</p>':kv(ds.data));
+  }
+  h+='<div class="dact"><button class="btn btn-ghost" type="button" id="logout">Odhlásit se</button></div>';
+  dB.innerHTML='<button class="dx" type="button" aria-label="Zavřít">×</button>'+h;
+ }catch(e){dB.innerHTML='<button class="dx" type="button" aria-label="Zavřít">×</button><span class="eyebrow">Účet</span><h2 id="dT">Můj účet</h2><div class="draft">'+esc(niceErr(e))+'</div><div class="dact"><button class="btn btn-ghost" type="button" id="logout">Odhlásit se</button></div>'}}
+accB.addEventListener('click',async function(){var c=getSb();if(!c){showAuth('login');setTimeout(function(){aMsg('Přihlášení se nepodařilo načíst. Zkontrolujte připojení.','err')},50);return}var r=await c.auth.getSession();if(r.data&&r.data.session)showAccount();else showAuth('login')});
+$('#mnav').addEventListener('click',function(e){if(e.target.getAttribute('href')==='#prihlaseni'){e.preventDefault();menu(false);var c=getSb();if(c)c.auth.getSession().then(function(r){if(r.data&&r.data.session)showAccount();else showAuth('login')});else showAuth('login')}});
+document.addEventListener('click',async function(e){
+ var t=e.target.closest('[data-auth]');if(t){showAuth(t.dataset.auth);return}
+ if(e.target.closest('#logout')){var c=getSb();if(c)await c.auth.signOut();closeDlg()}});
+document.addEventListener('submit',async function(e){
+ if(e.target.id!=='authForm')return;e.preventDefault();var c=getSb();
+ if(!c){aMsg('Služba přihlášení není dostupná. Zkuste to později.','err');return}
+ var signup=!!$('#aName'),mail=$('#aMail').value.trim(),pw=$('#aPw').value,b=$('#aGo');
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){aMsg('Zkontrolujte formát e-mailu.','err');return}
+ if(pw.length<8){aMsg('Heslo musí mít alespoň 8 znaků.','err');return}
+ if(signup&&(!$('#aName').value.trim()||!$('#aCo').value.trim())){aMsg('Vyplňte jméno a název firmy.','err');return}
+ if(signup&&!$('#aOk').checked){aMsg('Pro registraci je nutný souhlas s podmínkami.','err');return}
+ b.disabled=true;aMsg('Zpracovávám…','ok');
+ try{
+  if(signup){
+   var r=await c.auth.signUp({email:mail,password:pw,options:{emailRedirectTo:location.origin+location.pathname,data:{full_name:$('#aName').value.trim(),company_name:$('#aCo').value.trim(),industry:$('#aBiz').value,plan:$('#aPlan').value}}});
+   if(r.error)throw r.error;
+   if(r.data&&r.data.session){await showAccount()}else{aMsg('Účet je vytvořený. Poslali jsme vám e-mail, potvrďte ho a pak se přihlaste. Firma se založí při prvním přihlášení.','ok')}
+  }else{
+   var l=await c.auth.signInWithPassword({email:mail,password:pw});if(l.error)throw l.error;await showAccount()}
+ }catch(err){aMsg(niceErr(err),'err')}
+ b.disabled=false});
+
+/* chat */
+var fab=$('#chatFab'),chat=$('#chat'),body=$('#chatBody'),sugg=$('#chatSugg'),cf=$('#chatForm'),cin=$('#chatIn');
+var hist=[];try{hist=JSON.parse(sessionStorage.getItem('vx-chat-v3')||'[]')}catch(e){}
+function save(){try{sessionStorage.setItem('vx-chat-v3',JSON.stringify(hist.slice(-20)))}catch(e){}}
+function add(t,c){var d=document.createElement('div');d.className='msg '+c;d.textContent=t;body.appendChild(d);body.scrollTop=body.scrollHeight;return d}
+function openChat(o){chat.classList.toggle('on',o);fab.setAttribute('aria-expanded',o);if(o){if(!body.children.length){add('Dobrý den, jsem AI asistent Vexaronetu. Poradím, co platforma bude umět a v jaké je fázi. Na co se chcete zeptat?','bot');hist.forEach(function(m){add(m.content,m.role==='user'?'me':'bot')})}
+ if(!sugg.children.length&&!hist.length)['Co Vexaronet umí?','Kolik to stojí?','Je už k dispozici?'].forEach(function(q){var b=document.createElement('button');b.type='button';b.textContent=q;b.onclick=function(){cin.value=q;cf.requestSubmit()};sugg.appendChild(b)});setTimeout(function(){cin.focus()},50)}}
+fab.addEventListener('click',function(){openChat(!chat.classList.contains('on'))});$('#chatX').addEventListener('click',function(){openChat(false)});$('#openChat').addEventListener('click',function(){openChat(true)});
+cin.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();cf.requestSubmit()}});
+cf.addEventListener('submit',function(e){e.preventDefault();var t=cin.value.trim();if(!t)return;cin.value='';sugg.innerHTML='';add(t,'me');hist.push({role:'user',content:t});save();var w=add('Píšu odpověď…','bot');
+ fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:hist.slice(-12)})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){if(!d.reply)throw new Error('e');w.textContent=d.reply;hist.push({role:'assistant',content:d.reply});save();body.scrollTop=body.scrollHeight}).catch(function(){w.className='msg bot err';w.textContent='AI asistent zatím není dostupný nebo se nepodařilo spojit. Napište nám prosím na info@vexaronet.com.';hist.pop();save()})});
+})();
+</script>
+</body>
+</html>
