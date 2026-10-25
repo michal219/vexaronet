@@ -720,7 +720,7 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
 /* ===== Supabase: registrace a přihlášení ===== */
 var SB_URL='https://micymdbqgzeckiqyvvkn.supabase.co';
 var SB_KEY='sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW'; /* veřejný (publishable) klíč, smí být ve webu */
-var PLAN_VALUE={'VEXARONET PRO':'pro','AI ÚČETNÍ':'starter'}; /* hodnoty tarifů v databázi (AI Účetní = starter), ověřit */
+var PLAN_VALUE={'VEXARONET PRO':'pro','AI ÚČETNÍ':'start'}; /* povolené hodnoty v DB: start, pro, business, enterprise (CHECK constraint) */
 var TERMS_VERSION='2026-10';
 var sb=null;
 function getSb(){if(sb)return sb;if(window.supabase&&window.supabase.createClient){sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}return sb}
@@ -809,8 +809,8 @@ var IC={prehled:'M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10',zakaznici:'M16 11a4 4 0 10
 function ico(k,s){return '<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'+(s||20)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC[k]+'"/></svg>'}
 var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace']];
 var SOON={weby:['Weby','AI generátor jednoduchých firemních webů s úpravou vzhledu a publikováním. E-shopy platforma nenabízí.',6],sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6],zamestnanci:['Zaměstnanci','Správa týmu, role a oprávnění.',3],marketing:['Marketing','Kampaně, slevové kódy a analytika.',7],reporty:['Reporty','Přehledy výkonnosti firmy.',7],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
-var PLANN={starter:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet PRO',enterprise:'Vexaronet PRO'},STATN={trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
-function accOnly(){var p=((APP.sub&&APP.sub.plan)||'').toLowerCase();return /^(starter|ucetni|accountant|ai_ucetni)$/.test(p)}
+var PLANN={start:'AI Účetní',starter:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet PRO',enterprise:'Vexaronet PRO'},STATN={trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
+function accOnly(){var p=((APP.sub&&APP.sub.plan)||'').toLowerCase();return /^(start|starter|ucetni|accountant|ai_ucetni)$/.test(p)}
 function allowed(t){return accOnly()?['ucetni','faktury','finance','profil'].indexOf(t)>=0:true}
 function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
 function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ',{maximumFractionDigits:2})+' '+esc(!cur||cur==='CZK'?'Kč':cur)}
