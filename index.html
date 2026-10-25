@@ -1067,6 +1067,7 @@ var AFTER={zamestnanci:function(){loadTeam()},prehled:function(){
   A('chCust').innerHTML=tot?donut(it.map(function(x){return [x[0]+' ('+Math.round(x[1]/tot*100)+' %)',Math.round(x[1])]}),fM(tot)):'<p class="mut">Zatím žádné faktury.</p>'}};
 
 /* ---- Zaměstnanci: tým a pozvánky ---- */
+function teamErr(m){m=String(m||'');var M={'Nemate opravneni zvat cleny tymu.':'Nemáte oprávnění zvát členy týmu.','Neplatna role.':'Neplatná role.','Spravce muze pridat jen majitel.':'Správce může přidat jen majitel.','Zadejte platny e-mail.':'Zadejte platný e-mail.','Tento clovek uz ve firme je.':'Tento člověk už ve firmě je.','Tento e-mail uz je pozvany.':'Tento e-mail už je pozvaný.','Nemate opravneni.':'Nemáte oprávnění.','Majitele firmy nelze odebrat.':'Majitele firmy nelze odebrat.','Sami sebe odebrat nelze.':'Sami sebe odebrat nelze.','Spravce muze odebrat jen majitel.':'Správce může odebrat jen majitel.'};if(M[m])return M[m];var x=/nejvyse (\d+) uzivatelu/.exec(m);if(x)return 'Váš tarif umožňuje nejvýše '+x[1]+' uživatelů (včetně nevyřízených pozvánek). Pro více členů přejděte na vyšší tarif.';return m}
 async function loadTeam(){
  var box=A('teamBox');if(!box)return;var c=getSb(),mg=APP.role==='owner'||APP.role==='admin';
  var T=await c.rpc('company_team',{cid:APP.cid});
@@ -1209,8 +1210,8 @@ document.addEventListener('click',async function(e){
  var pay=e.target.closest('#vxapp [data-pay]');if(pay){if(!confirm('Označit fakturu jako zaplacenou dnes? Změna se promítne do účetních údajů.'))return;var pr=await rpcInv('paid',{id:pay.dataset.pay,payment_date:locD(new Date())});if(pr.error){toast('Nepodařilo se uložit: '+pr.error.message,'err');return}await refresh();appTab('faktury');toast('Faktura označena jako zaplacená.','ok');return}
  if(e.target.closest('#vxapp [data-invnew]')){inviteModal();return}
  var is=e.target.closest('#vxapp [data-invshow]');if(is){var iv=(APP.invs||[]).filter(function(x){return x.id===is.dataset.invshow})[0];if(iv)inviteDone(iv.email);return}
- var ic=e.target.closest('#vxapp [data-invcancel]');if(ic){if(!confirm('Zrušit tuto pozvánku?'))return;var cr=await getSb().rpc('cancel_invite',{invite_id:ic.dataset.invcancel});if(cr.error){toast('Nepodařilo se zrušit: '+cr.error.message,'err');return}toast('Pozvánka zrušena.','ok');loadTeam();return}
- var rm=e.target.closest('#vxapp [data-rmm]');if(rm){if(!confirm('Odebrat tohoto člena z firmy? Ztratí přístup k datům firmy.'))return;var rr2=await getSb().rpc('remove_member',{cid:APP.cid,member_id:rm.dataset.rmm});if(rr2.error){toast('Nepodařilo se odebrat: '+rr2.error.message,'err');return}toast('Člen odebrán.','ok');loadTeam();return}
+ var ic=e.target.closest('#vxapp [data-invcancel]');if(ic){if(!confirm('Zrušit tuto pozvánku?'))return;var cr=await getSb().rpc('cancel_invite',{invite_id:ic.dataset.invcancel});if(cr.error){toast('Nepodařilo se zrušit: '+teamErr(cr.error.message),'err');return}toast('Pozvánka zrušena.','ok');loadTeam();return}
+ var rm=e.target.closest('#vxapp [data-rmm]');if(rm){if(!confirm('Odebrat tohoto člena z firmy? Ztratí přístup k datům firmy.'))return;var rr2=await getSb().rpc('remove_member',{cid:APP.cid,member_id:rm.dataset.rmm});if(rr2.error){toast('Nepodařilo se odebrat: '+teamErr(rr2.error.message),'err');return}toast('Člen odebrán.','ok');loadTeam();return}
  var so=e.target.closest('#vxapp [data-soon]');if(so){toast(so.dataset.soon);return}
  var pq=A('qPop');if(pq&&pq.classList.contains('on')&&!e.target.closest('.qw'))pq.classList.remove('on');
  if(A('appBell')&&A('appBell').classList.contains('on')&&!e.target.closest('.bellw'))A('appBell').classList.remove('on');
@@ -1240,7 +1241,7 @@ document.addEventListener('submit',async function(e){
   var d={};['legal_name','ico','dic','address_text','bank_account','iban','email','country_code','default_currency','registration_text'].forEach(function(k){var v=A('p_'+k).value.trim();if(v)d[k]=v});
   var dd=A('p_default_due_days').value;if(dd)d.default_due_days=Number(dd);d.vat_payer=A('p_vat_payer').checked;
   var r2=await rpcInv('profile',d);if(r2.error){entMsg('Nepodařilo se uložit: '+r2.error.message);return}closeModal();toast('Fakturační údaje uloženy.','ok');return}
- if(f.id==='inviteForm'){e.preventDefault();var em=A('ivE').value.trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){entMsg('Zadejte platný e-mail.');return}var ib=f.querySelector('button[type=submit]');ib.disabled=true;var ir=await getSb().rpc('invite_member',{cid:APP.cid,invite_email:em,invite_role:A('ivR').value});ib.disabled=false;if(ir.error){entMsg(ir.error.message);return}await loadTeam();inviteDone(em);return}
+ if(f.id==='inviteForm'){e.preventDefault();var em=A('ivE').value.trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){entMsg('Zadejte platný e-mail.');return}var ib=f.querySelector('button[type=submit]');ib.disabled=true;var ir=await getSb().rpc('invite_member',{cid:APP.cid,invite_email:em,invite_role:A('ivR').value});ib.disabled=false;if(ir.error){entMsg(teamErr(ir.error.message));return}await loadTeam();inviteDone(em);return}
  if(f.id==='planForm'){e.preventDefault();var sel=f.querySelector('input[name=pl]:checked');if(!sel){entMsg('Vyberte tarif.');return}var want=sel.value,note=A('plN').value.trim(),bt=f.querySelector('button[type=submit]');bt.disabled=true;
   try{
    if(want==='start'){if(!confirm('Přejít na tarif START? AI CEO a rozšířené funkce se vypnou, data zůstanou zachována.')){bt.disabled=false;return}
