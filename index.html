@@ -107,7 +107,7 @@ h2{font-size:clamp(2rem,4.6vw,3.4rem);margin:18px 0 14px}
 .scene{position:relative;height:540px}
 .fit{position:absolute;left:50%;top:0;width:640px;height:540px;transform-origin:top left;transform:translateX(calc(-320px*var(--s,1))) scale(var(--s,1))}
 .stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 38%}
-.laptop{position:absolute;left:40px;top:120px;width:560px;height:360px;transform-style:preserve-3d;transform:rotateX(calc(-16deg + var(--rx,0)*1deg)) rotateY(calc(-14deg + var(--ry,0)*1deg));will-change:transform}
+.laptop{position:absolute;left:40px;top:120px;width:560px;height:360px;transform-style:preserve-3d;transform:rotateX(calc(-10deg + var(--rx,0)*1deg)) rotateY(calc(-9deg + var(--ry,0)*1deg));will-change:transform}
 .lid{position:absolute;left:0;bottom:0;width:560px;height:350px;transform-origin:bottom center;transform:translateZ(-340px) rotateX(14deg);transform-style:preserve-3d;border-radius:18px 18px 6px 6px;background:linear-gradient(160deg,#2a2f45,#12141f);padding:12px;box-shadow:0 0 0 1px #3a4062,0 0 80px rgba(80,110,255,.35)}
 .lid::after{content:"";position:absolute;top:4px;left:50%;width:5px;height:5px;margin-left:-2px;border-radius:50%;background:#1a1d2c}
 .screen{position:relative;width:100%;height:100%;border-radius:8px;overflow:hidden;background:#070a1c;border:1px solid #000}
@@ -359,6 +359,19 @@ dialog::backdrop{background:rgba(2,3,10,.75);backdrop-filter:blur(8px)}
   .ms{transform:none}
 }
 
+.shotb{position:absolute;inset:0;margin:0;padding:0;border:0;background:#070a1c;cursor:zoom-in;display:block}
+.shotb img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block}
+.shotb:focus-visible{outline:2px solid #8b6cff;outline-offset:-3px}
+#zoomShot{position:fixed;inset:0;z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(3,5,15,.9);padding:16px;cursor:zoom-out}
+#zoomShot.on{display:flex}
+#zoomShot img{max-width:min(96vw,1500px);max-height:84vh;border-radius:12px;box-shadow:0 20px 80px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.12)}
+#zoomShot p{margin:0;color:#c9d1f5;font-size:14px}
+#zoomShot .zx{position:absolute;top:12px;right:16px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:26px;line-height:1;cursor:pointer}
+
+.appshot{display:block;width:100%;max-width:1120px;margin:34px auto 0;padding:0;border:1px solid rgba(255,255,255,.14);border-radius:18px;overflow:hidden;background:#070a1c;cursor:zoom-in;box-shadow:0 30px 90px rgba(70,80,220,.35)}
+.appshot img{display:block;width:100%;height:auto}
+.appshot:focus-visible{outline:2px solid #8b6cff;outline-offset:3px}
+
 
 /* --- ceník --- */
 .plans5 .plan{position:relative}.plans5 .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:99px;white-space:nowrap}.plans5 .price{min-height:2.2em;display:flex;align-items:flex-end}.plans5 .price b.pp:not([data-m]){font-size:1.2rem;white-space:normal}.plans5 .plan.hot{border-color:rgba(130,160,255,.7)}
@@ -496,17 +509,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
   </div>
   <div class="scene" id="scene"><div class="fit" id="fit"><div class="stage" id="stage"><div class="laptop" id="laptop">
     <div class="sh"></div>
-    <div class="lid"><div class="screen"><div class="ms" aria-hidden="true"><div class="db">
-      <aside><b>V</b><i class="on"></i><i></i><i></i><i></i><i></i></aside>
-      <div class="mn">
-        <div class="top"><span>Přehled firmy</span><em>Ukázková data</em></div>
-        <div class="kp"><div><small>Tržby (ukázka)</small><b>128 400 Kč</b></div><div><small>Nezaplaceno</small><b>3 faktury</b></div><div><small>Zakázky</small><b>12</b></div></div>
-        <div class="row2">
-          <div class="ch2"><i style="height:35%"></i><i style="height:52%;animation-delay:.1s"></i><i style="height:44%;animation-delay:.2s"></i><i style="height:70%;animation-delay:.3s"></i><i style="height:58%;animation-delay:.4s"></i><i style="height:86%;animation-delay:.5s"></i><i style="height:74%;animation-delay:.6s"></i></div>
-          <div class="ai2"><b>AI navrhuje</b>Odeslat upomínku 3 klientům s fakturou po splatnosti.<span class="bt">Čeká na schválení</span></div>
-        </div>
-        <div class="inv"><div><span>Faktura 2026-014</span><span>Zaplaceno</span></div><div><span>Faktura 2026-015</span><span>Po splatnosti</span></div></div>
-      </div></div></div><span class="sample">Ukázka rozhraní</span></div></div>
+    <div class="lid"><div class="screen"><button type="button" class="shotb" id="shotB" data-zoom="1" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" alt="Přehled firmy ve Vexaronetu: ukazatele, doporučení AI CEO a chat s AI CEO (ukázková data)" fetchpriority="high"></button><span class="sample">Ukázková data · kliknutím zvětšíte</span></div></div>
     <div class="base"><div class="keys"><div class="kr"><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i></div><div class="kr"><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1.6"></i></div><div class="kr"><i style="flex:1.6"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1.4"></i></div><div class="kr"><i style="flex:2.1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:1"></i><i style="flex:2.1"></i></div><div class="kr"><i style="flex:1.2"></i><i style="flex:1.2"></i><i style="flex:1.2"></i><i style="flex:6.2"></i><i style="flex:1.2"></i><i style="flex:1.2"></i><i style="flex:1.2"></i></div></div><div class="pad"></div></div><div class="edge"></div>
   </div>
   <div class="fl d">AI Autopilot</div><div class="fl e">Faktury a CRM</div>
@@ -517,6 +520,12 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
  <span>AI centrum</span><span>Faktury a účetnictví</span><span>CRM a zakázky</span><span>Jednoduché weby</span><span>Marketing</span><span>Automatizace</span>
  <span>AI centrum</span><span>Faktury a účetnictví</span><span>CRM a zakázky</span><span>Jednoduché weby</span><span>Marketing</span><span>Automatizace</span>
 </div></div>
+
+<section id="ucet"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Přehled v účtu</span><h2>Takhle vypadá <span class="grad">váš účet</span></h2><p class="lead">Po přihlášení uvidíte na jednom místě ukazatele firmy, doporučení AI CEO a jeho chat. Obrázek je ze skutečné aplikace, jen s ukázkovými daty. Kliknutím ho zvětšíte.</p></div>
+  <button type="button" class="appshot" data-zoom="1" data-r="up" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" loading="lazy" alt="Přehled firmy ve Vexaronetu: tržby, nezaplacené faktury, aktivní zakázky, doporučení AI CEO a chat s AI CEO (ukázková data)"></button>
+  <p class="mut fine" style="text-align:center;margin-top:12px">Ukázková data. Aplikace je v rozpracované beta verzi, hotové části fungují se skutečnými daty, nehotové jsou označené „brzy“.</p>
+</div></section>
 
 <section id="funkce"><div class="wrap">
   <div class="sec-h" data-r="up"><span class="eyebrow">Funkce platformy</span><h2>Šest oblastí, <span class="grad">jeden systém</span></h2><p class="lead">Takhle je platforma navržená. Moduly se budou stavět po etapách a u každého je uvedeno, v jaké fázi je. Zatím není hotový žádný z nich, tento web je návrh úvodní stránky.</p></div>
@@ -705,6 +714,14 @@ $('.hero').addEventListener('pointermove',function(e){var b=scene.getBoundingCli
 if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting}).observe(scene);
 function loop(now){if(vis){var idle=now-last>2500,gx=idle?Math.sin((now-t0)/2400)*.8:tx,gy=idle?Math.cos((now-t0)/3100)*.35:ty;cx+=(gx-cx)*.07;cy+=(gy-cy)*.07;lap.style.setProperty('--ry',(cx*12).toFixed(2));lap.style.setProperty('--rx',(-cy*7).toFixed(2))}requestAnimationFrame(loop)}
 if(!RM)requestAnimationFrame(loop);
+
+
+/* zvětšení ukázky přehledu */
+(function(){var zs=$$('[data-zoom]');if(!zs.length)return;var z=null,from=null;
+function close(){if(z){z.classList.remove('on');document.documentElement.style.overflow='';if(from)from.focus()}}
+zs.forEach(function(zb){zb.addEventListener('click',function(){from=zb;if(!z){z=document.createElement('div');z.id='zoomShot';z.setAttribute('role','dialog');z.setAttribute('aria-modal','true');z.setAttribute('aria-label','Ukázka přehledu v účtu');z.innerHTML='<button type="button" class="zx" aria-label="Zavřít">×</button><img src="assets/prehled.webp" alt="Přehled firmy ve Vexaronetu (ukázková data)"><p>Ukázková data. Takto vypadá přehled po přihlášení do účtu.</p>';document.body.appendChild(z);z.addEventListener('click',close)}
+z.classList.add('on');document.documentElement.style.overflow='hidden'})});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&z&&z.classList.contains('on'))close()})})();
 
 /* ukázka: obor */
 var mods=$('#mods');
