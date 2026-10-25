@@ -12,7 +12,7 @@ jobs:[{id:'j1',title:'Výměna oleje',customer_id:'u1',price:1500,due_at:iso(-5*
 reservations:[{id:'r1',title:'Servis',customer_id:'u1',starts_at:iso(36e5),ends_at:iso(72e5),canceled:false}],
 tasks:[{id:'t1',title:'Zavolat',due_at:iso(-3*864e5),completed:false}],
 invoices:[{number:'2026001',total:4900,currency:'CZK',issued_on:iso(-20*864e5).slice(0,10),due_on:iso(-5*864e5).slice(0,10),customer_snapshot:{name:'Jan Novák'}}]};
-window.__log=[];var of=window.fetch;window.fetch=function(u){if(String(u).indexOf('/api/advisor')>=0)return Promise.resolve(new Response(JSON.stringify({reply:'Odpověď AI.'}),{status:200,headers:{'content-type':'application/json'}}));return of.apply(this,arguments)};
+window.__log=[];var of=window.fetch;window.fetch=function(u,o){if(String(u).indexOf('/api/subscribe')>=0){window.__log.push(['sub',JSON.parse(o.body)]);return Promise.resolve(new Response('{"ok":true}',{status:200,headers:{'content-type':'application/json'}}))}if(String(u).indexOf('/api/advisor')>=0)return Promise.resolve(new Response(JSON.stringify({reply:'Odpověď AI.'}),{status:200,headers:{'content-type':'application/json'}}));return of.apply(this,arguments)};
 function qb(t){var o={_op:'sel',select(){return o},eq(){return o},limit(){return o},insert(r){window.__log.push(['ins',t,r]);return Promise.resolve({error:null})},update(r){window.__log.push(['upd',t,r]);o._op='u';return o},delete(){window.__log.push(['del',t]);o._op='d';return o},then(f){return Promise.resolve({data:o._op==='sel'?(D[t]||[]):null,error:null}).then(f)}};return o}
 window.supabase={createClient:function(){return{from:qb,rpc:function(){return Promise.resolve({data:{income:4900,expenses:0,customers:2,active_jobs:1,reservations_today:1},error:null})},auth:{getSession:()=>Promise.resolve({data:{session:{access_token:'t'}}}),getUser:()=>Promise.resolve({data:{user:{id:'x',email:'a@b.cz',user_metadata:{full_name:'Jan Procházka',onboarded:true}}}}),onAuthStateChange(){},updateUser:(x)=>Promise.resolve({data:{user:{user_metadata:x.data}},error:null}),signOut(){}}}}}})();
 '''
@@ -77,6 +77,6 @@ with sync_playwright() as p:
     check(len(pg.inner_text('#appMain')) > 20, 'START: CRM dostupné')
     pg.evaluate("document.querySelector('#vxside [data-tab=profil]').click()"); pg.click('[data-app=plan]'); pg.wait_for_selector('#planForm'); check(pg.locator('#planForm input[name=pl]').count()==4, 'změna tarifu: 4 možnosti')
     pg.keyboard.press('Escape'); pg.keyboard.press('Escape'); pg.wait_for_timeout(2600); pg.evaluate("document.getElementById('early').scrollIntoView()"); pg.fill('#fName','Test'); pg.fill('#fMail','T@Example.cz'); pg.check('#fOk'); pg.click('#send'); pg.wait_for_timeout(500)
-    check(any(l[0]=='ins' and l[1]=='newsletter_subscribers' and l[2]['email']=='t@example.cz' for l in pg.evaluate('window.__log')), 'novinky: přihláška se uloží do Supabase')
+    check(any(l[0]=='sub' and l[1]['email']=='T@Example.cz' and l[1]['consent'] is True for l in pg.evaluate('window.__log')), 'novinky: přihláška jde na /api/subscribe')
     check(not errs, 'tarify: žádné JS chyby ' + str(errs)); b.close()
 print('\nSELHALO %d' % len(fails) if fails else '\nVŠE V POŘÁDKU (včetně tarifů)'); sys.exit(1 if fails else 0)
