@@ -6,15 +6,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MOCK = r'''
 (function(){
 var now=Date.now(),iso=function(o){return new Date(now+o).toISOString()};
-var D={company_members:[{company_id:'c1',role:'owner'}],companies:[{id:'c1',name:'Test autoservis',industry:'Autoservis'}],subscriptions:[{plan:'pro',status:'trial',trial_end:iso(20*864e5)}],
+var D={company_members:[{company_id:'c1',role:'owner'}],company_invites:[{id:'i1',email:'novy@firma.cz',role:'employee',created_at:iso(-864e5)}],companies:[{id:'c1',name:'Test autoservis',industry:'Autoservis'}],subscriptions:[{plan:'pro',status:'trial',trial_end:iso(20*864e5)}],
 customers:[{id:'u1',name:'Jan Novák',email:'j@x.cz',phone:'123',created_at:iso(-864e5)},{id:'u2',name:'Eva Svobodová',created_at:iso(-40*864e5)}],
 jobs:[{id:'j1',title:'Výměna oleje',customer_id:'u1',price:1500,due_at:iso(-5*864e5),status:'rozpracováno',created_at:iso(-9e8)},{id:'j2',title:'Brzdy',status:'hotovo',created_at:iso(-8e8)}],
 reservations:[{id:'r1',title:'Servis',customer_id:'u1',starts_at:iso(36e5),ends_at:iso(72e5),canceled:false}],
 tasks:[{id:'t1',title:'Zavolat',due_at:iso(-3*864e5),completed:false}],
 invoices:[{number:'2026001',total:4900,currency:'CZK',issued_on:iso(-20*864e5).slice(0,10),due_on:iso(-5*864e5).slice(0,10),customer_snapshot:{name:'Jan Novák'}}]};
 window.__log=[];var of=window.fetch;window.fetch=function(u,o){if(String(u).indexOf('/api/subscribe')>=0){window.__log.push(['sub',JSON.parse(o.body)]);return Promise.resolve(new Response('{"ok":true}',{status:200,headers:{'content-type':'application/json'}}))}if(String(u).indexOf('/api/advisor')>=0)return Promise.resolve(new Response(JSON.stringify({reply:'Odpověď AI.'}),{status:200,headers:{'content-type':'application/json'}}));return of.apply(this,arguments)};
-function qb(t){var o={_op:'sel',select(){return o},eq(){return o},limit(){return o},insert(r){window.__log.push(['ins',t,r]);return Promise.resolve({error:null})},update(r){window.__log.push(['upd',t,r]);o._op='u';return o},delete(){window.__log.push(['del',t]);o._op='d';return o},then(f){return Promise.resolve({data:o._op==='sel'?(D[t]||[]):null,error:null}).then(f)}};return o}
-window.supabase={createClient:function(){return{from:qb,rpc:function(){return Promise.resolve({data:{income:4900,expenses:0,customers:2,active_jobs:1,reservations_today:1},error:null})},auth:{getSession:()=>Promise.resolve({data:{session:{access_token:'t'}}}),getUser:()=>Promise.resolve({data:{user:{id:'x',email:'a@b.cz',user_metadata:{full_name:'Jan Procházka',onboarded:true}}}}),onAuthStateChange(){},updateUser:(x)=>Promise.resolve({data:{user:{user_metadata:x.data}},error:null}),signOut(){}}}}}})();
+function qb(t){var o={_op:'sel',select(){return o},eq(){return o},limit(){return o},is(){return o},order(){return o},insert(r){window.__log.push(['ins',t,r]);return Promise.resolve({error:null})},update(r){window.__log.push(['upd',t,r]);o._op='u';return o},delete(){window.__log.push(['del',t]);o._op='d';return o},then(f){return Promise.resolve({data:o._op==='sel'?(D[t]||[]):null,error:null}).then(f)}};return o}
+window.supabase={createClient:function(){return{from:qb,rpc:function(n,a){window.__log.push(['rpc',n,a]);if(n==='company_team')return Promise.resolve({data:[{user_id:'x',email:'a@b.cz',role:'owner',is_me:true},{user_id:'y',email:'kolega@firma.cz',role:'employee',is_me:false}],error:null});if(n==='invite_member')return Promise.resolve({data:'iid',error:null});if(n==='accept_company_invites')return Promise.resolve({data:0,error:null});return Promise.resolve({data:{income:4900,expenses:0,customers:2,active_jobs:1,reservations_today:1},error:null})},auth:{getSession:()=>Promise.resolve({data:{session:{access_token:'t'}}}),getUser:()=>Promise.resolve({data:{user:{id:'x',email:'a@b.cz',user_metadata:{full_name:'Jan Procházka',onboarded:true}}}}),onAuthStateChange(){},updateUser:(x)=>Promise.resolve({data:{user:{user_metadata:x.data}},error:null}),signOut(){}}}}}})();
 '''
 fails = []
 def check(c, m):
@@ -75,8 +75,39 @@ with sync_playwright() as p:
     check('Tato část není součástí' in pg.inner_text('#appMain'), 'START: zamčená stránka AI CEO')
     pg.evaluate("document.querySelector('#vxside [data-tab=zakaznici]').click()"); pg.wait_for_timeout(100)
     check(len(pg.inner_text('#appMain')) > 20, 'START: CRM dostupné')
+    pg.evaluate("document.querySelector('#vxside [data-tab=zamestnanci]').click()"); pg.wait_for_timeout(400)
+    check('Tarif START' in pg.inner_text('#appMain') or 'není součástí' in pg.inner_text('#appMain'), 'START: zaměstnanci zamčeno')
+    pg.evaluate("document.querySelector('#vxside [data-tab=zakaznici]').click()"); pg.wait_for_timeout(100)
     pg.evaluate("document.querySelector('#vxside [data-tab=profil]').click()"); pg.click('[data-app=plan]'); pg.wait_for_selector('#planForm'); check(pg.locator('#planForm input[name=pl]').count()==4, 'změna tarifu: 4 možnosti')
     pg.keyboard.press('Escape'); pg.keyboard.press('Escape'); pg.wait_for_timeout(2600); pg.evaluate("document.getElementById('early').scrollIntoView()"); pg.fill('#fName','Test'); pg.fill('#fMail','T@Example.cz'); pg.check('#fOk'); pg.click('#send'); pg.wait_for_timeout(500)
     check(any(l[0]=='sub' and l[1]['email']=='T@Example.cz' and l[1]['consent'] is True for l in pg.evaluate('window.__log')), 'novinky: přihláška jde na /api/subscribe')
     check(not errs, 'tarify: žádné JS chyby ' + str(errs)); b.close()
+
+# --- zaměstnanci (PRO, majitel) ---
+with sync_playwright() as p:
+    b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 900}); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK, content_type='text/javascript'))
+    pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
+    pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(400)
+    pg.evaluate("document.querySelector('#vxside [data-tab=zamestnanci]').click()"); pg.wait_for_selector('#teamBox li'); 
+    tx = pg.inner_text('#teamBox')
+    check('kolega@firma.cz' in tx and 'novy@firma.cz' in tx and 'Majitel' in tx, 'zaměstnanci: tým i pozvánky se zobrazí')
+    pg.click('[data-invnew]'); pg.wait_for_selector('#inviteForm'); pg.fill('#ivE', 'Nova@Firma.cz'); pg.click('#inviteForm button[type=submit]'); pg.wait_for_selector('#remTx'); pg.wait_for_timeout(200)
+    check(any(l[0]=='rpc' and l[1]=='invite_member' and l[2]['invite_email']=='nova@firma.cz' and l[2]['invite_role']=='employee' for l in pg.evaluate('window.__log')), 'zaměstnanci: pozvánka volá invite_member')
+    check('nova@firma.cz' in pg.input_value('#remTx') and 'vexaronet.com' in pg.input_value('#remTx'), 'zaměstnanci: text pozvánky')
+    pg.screenshot(path=os.path.join(ROOT, 'tests', 'shot_team.png'))
+    check(not errs, 'zaměstnanci: žádné JS chyby ' + str(errs)); b.close()
+# --- role zaměstnance ---
+with sync_playwright() as p:
+    b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 900}); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK.replace("company_id:'c1',role:'owner'", "company_id:'c1',role:'employee'"), content_type='text/javascript'))
+    pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
+    pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(400)
+    pg.evaluate("document.querySelector('#vxside [data-tab=faktury]').click()"); pg.wait_for_timeout(200)
+    check('není součástí' in pg.inner_text('#appMain'), 'role zaměstnanec: faktury zamčené')
+    pg.evaluate("document.querySelector('#vxside [data-tab=zakaznici]').click()"); pg.wait_for_timeout(200)
+    check('Jan Novák' in pg.inner_text('#appMain'), 'role zaměstnanec: zákazníci dostupní')
+    check(not errs, 'role zaměstnanec: žádné JS chyby ' + str(errs)); b.close()
 print('\nSELHALO %d' % len(fails) if fails else '\nVŠE V POŘÁDKU (včetně tarifů)'); sys.exit(1 if fails else 0)
