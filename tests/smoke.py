@@ -12,7 +12,7 @@ jobs:[{id:'j1',title:'Výměna oleje',customer_id:'u1',price:1500,due_at:iso(-5*
 reservations:[{id:'r1',title:'Servis',customer_id:'u1',starts_at:iso(36e5),ends_at:iso(72e5),canceled:false}],
 tasks:[{id:'t1',title:'Zavolat',due_at:iso(-3*864e5),completed:false}],
 invoices:[{number:'2026001',total:4900,currency:'CZK',issued_on:iso(-20*864e5).slice(0,10),due_on:iso(-5*864e5).slice(0,10),customer_snapshot:{name:'Jan Novák'}}]};
-window.__log=[];var of=window.fetch;window.fetch=function(u,o){if(String(u).indexOf('/api/subscribe')>=0){window.__log.push(['sub',JSON.parse(o.body)]);return Promise.resolve(new Response('{"ok":true}',{status:200,headers:{'content-type':'application/json'}}))}if(String(u).indexOf('/api/invite')>=0){window.__log.push(['inv',JSON.parse(o.body)]);return Promise.resolve(new Response('{"ok":true,"mail":"'+(window.__mailfail?'failed':'sent')+'"}',{status:200,headers:{'content-type':'application/json'}}))}if(String(u).indexOf('/api/advisor')>=0)return Promise.resolve(new Response(JSON.stringify({reply:'Odpověď AI.'}),{status:200,headers:{'content-type':'application/json'}}));return of.apply(this,arguments)};
+window.__log=[];var of=window.fetch;window.fetch=function(u,o){if(String(u).indexOf('/api/subscribe')>=0){window.__log.push(['sub',JSON.parse(o.body)]);return Promise.resolve(new Response('{"ok":true}',{status:200,headers:{'content-type':'application/json'}}))}if(String(u).indexOf('/api/invite')>=0){window.__log.push(['inv',JSON.parse(o.body)]);return Promise.resolve(new Response('{"ok":true,"mail":"'+(window.__mailfail?'failed':'sent')+'"}',{status:200,headers:{'content-type':'application/json'}}))}if(String(u).indexOf('/api/accountant')>=0){var ab=JSON.parse(o.body);window.__log.push(['acc',ab.mode||'extract']);if(ab.mode==='ask')return Promise.resolve(new Response('{"reply":"Tento měsíc máte výdaje 1 200 Kč."}',{status:200,headers:{'content-type':'application/json'}}));return Promise.resolve(new Response(JSON.stringify({doc:{document_type:'received_invoice',supplier_name:'Dodavatel s.r.o.',document_number:'FA2026-1',issue_date:'2026-10-20',total_amount:1210,vat_amount:210,vat_rate:21,currency:'CZK',description:'Materiál',category:'material',confidence:'high',warnings:[]},used:1,limit:150}),{status:200,headers:{'content-type':'application/json'}}))}if(String(u).indexOf('/api/advisor')>=0)return Promise.resolve(new Response(JSON.stringify({reply:'Odpověď AI.'}),{status:200,headers:{'content-type':'application/json'}}));return of.apply(this,arguments)};
 function qb(t){var o={_op:'sel',select(){return o},eq(){return o},limit(){return o},is(){return o},order(){return o},insert(r){window.__log.push(['ins',t,r]);return Promise.resolve({error:null})},update(r){window.__log.push(['upd',t,r]);o._op='u';return o},delete(){window.__log.push(['del',t]);o._op='d';return o},then(f){return Promise.resolve({data:o._op==='sel'?(D[t]||[]):null,error:null}).then(f)}};return o}
 window.supabase={createClient:function(){return{from:qb,rpc:function(n,a){window.__log.push(['rpc',n,a]);if(n==='company_team')return Promise.resolve({data:[{user_id:'x',email:'a@b.cz',role:'owner',is_me:true},{user_id:'y',email:'kolega@firma.cz',role:'employee',is_me:false}],error:null});if(n==='invite_member')return Promise.resolve({data:'iid',error:null});if(n==='accept_company_invites')return Promise.resolve({data:0,error:null});return Promise.resolve({data:{income:4900,expenses:0,customers:2,active_jobs:1,reservations_today:1},error:null})},auth:{getSession:()=>Promise.resolve({data:{session:{access_token:'t'}}}),getUser:()=>Promise.resolve({data:{user:{id:'x',email:'a@b.cz',user_metadata:{full_name:'Jan Procházka',onboarded:true}}}}),onAuthStateChange(){},updateUser:(x)=>Promise.resolve({data:{user:{user_metadata:x.data}},error:null}),signOut(){}}}}}})();
 '''
@@ -100,6 +100,29 @@ with sync_playwright() as p:
     check('nepodařilo odeslat' in pg.inner_text('#appModal') and 'jiny@firma.cz' in pg.input_value('#remTx'), 'zaměstnanci: záloha s textem, když e-mail selže')
     pg.screenshot(path=os.path.join(ROOT, 'tests', 'shot_team.png'))
     check(not errs, 'zaměstnanci: žádné JS chyby ' + str(errs)); b.close()
+# --- AI Účetní ---
+with sync_playwright() as p:
+    b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 1000}, accept_downloads=True); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK, content_type='text/javascript'))
+    pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
+    pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(400)
+    pg.evaluate("document.querySelector('#vxside [data-tab=ucetni]').click()"); pg.wait_for_selector('#accFile'); pg.wait_for_timeout(300)
+    check('Kontrola záznamů' in pg.inner_text('#appMain') and 'Export pro účetního' in pg.inner_text('#appMain'), 'AI Účetní: sekce se zobrazí')
+    import base64
+    png = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==')
+    open('/tmp/doklad.png', 'wb').write(png)
+    pg.set_input_files('#accFile', '/tmp/doklad.png'); pg.click('[data-acc=process]'); pg.wait_for_selector('#accRF'); 
+    check(pg.input_value('#af_amt') == '1210' and 'Dodavatel s.r.o.' in pg.input_value('#af_title'), 'AI Účetní: návrh záznamu z dokladu')
+    check(not any(l[0]=='ins' and l[1]=='financial_entries' for l in pg.evaluate('window.__log')), 'AI Účetní: bez potvrzení se nic neuloží')
+    pg.click('#accRF button[type=submit]'); pg.wait_for_timeout(500)
+    log = pg.evaluate('window.__log')
+    check(any(l[0]=='ins' and l[1]=='financial_entries' and l[2]['amount']==1210 and l[2]['kind']=='expense' and l[2]['company_id']=='c1' for l in log) or any(l[0]=='ins' and l[1]=='financial_entries' and l[2]['amount']==1210 for l in log), 'AI Účetní: po potvrzení se záznam uloží')
+    pg.fill('#accIn', 'Kolik jsem utratil?'); pg.press('#accIn', 'Enter'); pg.wait_for_timeout(500)
+    check('1 200 Kč' in pg.inner_text('#accLog'), 'AI Účetní: odpověď na dotaz')
+    with pg.expect_download() as dl: pg.click('[data-acc=csv-inv]')
+    check(dl.value.suggested_filename.startswith('vexaronet-faktury'), 'AI Účetní: export faktur CSV')
+    check(not errs, 'AI Účetní: žádné JS chyby ' + str(errs)); b.close()
 # --- role zaměstnance ---
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 900}); errs = []
