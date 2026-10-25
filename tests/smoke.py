@@ -76,5 +76,7 @@ with sync_playwright() as p:
     pg.evaluate("document.querySelector('#vxside [data-tab=zakaznici]').click()"); pg.wait_for_timeout(100)
     check(len(pg.inner_text('#appMain')) > 20, 'START: CRM dostupné')
     pg.evaluate("document.querySelector('#vxside [data-tab=profil]').click()"); pg.click('[data-app=plan]'); pg.wait_for_selector('#planForm'); check(pg.locator('#planForm input[name=pl]').count()==4, 'změna tarifu: 4 možnosti')
+    pg.keyboard.press('Escape'); pg.keyboard.press('Escape'); pg.wait_for_timeout(2600); pg.evaluate("document.getElementById('early').scrollIntoView()"); pg.fill('#fName','Test'); pg.fill('#fMail','T@Example.cz'); pg.check('#fOk'); pg.click('#send'); pg.wait_for_timeout(500)
+    check(any(l[0]=='ins' and l[1]=='newsletter_subscribers' and l[2]['email']=='t@example.cz' for l in pg.evaluate('window.__log')), 'novinky: přihláška se uloží do Supabase')
     check(not errs, 'tarify: žádné JS chyby ' + str(errs)); b.close()
 print('\nSELHALO %d' % len(fails) if fails else '\nVŠE V POŘÁDKU (včetně tarifů)'); sys.exit(1 if fails else 0)

@@ -626,8 +626,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 <section id="early"><div class="wrap contact">
   <div data-r="up"><span class="eyebrow">Novinky a stav vývoje</span><h2>Aplikace <span class="grad">se právě staví</span></h2><p class="lead">Vexaronet je rozpracovaná beta verze. Část už funguje a můžete ji vyzkoušet. Zbytek přidáváme po etapách. Nechte nám e-mail a napíšeme vám, až bude hotová další část.</p><div class="ready"><div><h4>Už funguje</h4><ul class="ticks"><li>Registrace, přihlášení, obnova hesla</li><li>Přehled firmy s grafy</li><li>Zákazníci, zakázky, kalendář, úkoly</li><li>Faktury a příjmy a výdaje (základ)</li><li>AI CEO: doporučení a chat</li></ul></div><div><h4>Připravujeme</h4><ul class="ticks soonl"><li>AI Účetní (po odborné kontrole)</li><li>Odesílání faktur a PDF</li><li>Jednoduché weby</li><li>Marketing a zaměstnanci</li><li>Automatizace</li></ul></div></div>
     <div class="ci"><a href="mailto:info@vexaronet.com"><small>E-mail</small><b>info@vexaronet.com</b></a><button type="button" class="btn btn-ghost" id="openChat" style="justify-content:flex-start">Zeptat se AI asistenta</button></div></div>
-  <form class="card" id="form" name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" data-r="up" novalidate>
-    <input type="hidden" name="form-name" value="early-access">
+  <form class="card" id="form" name="early-access" data-r="up" novalidate>
     <p class="hp" aria-hidden="true"><label>Nevyplňovat <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
     <div class="fg">
       <div class="f"><label for="fName">Jméno <i>*</i></label><input id="fName" name="jmeno" required autocomplete="name"></div>
@@ -647,10 +646,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
   </form>
 </div></section>
 </main>
-<form name="plan-change" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" hidden>
-  <input type="hidden" name="form-name" value="plan-change"><input name="bot-field">
-  <input name="firma"><input name="email"><input name="aktualni_tarif"><input name="pozadovany_tarif"><textarea name="poznamka"></textarea>
-</form>
+
 
 <footer><div class="wrap">
   <div class="fg2">
@@ -745,7 +741,8 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
  if(!f.souhlas.checked){msg('Pro odeslání je nutný souhlas se zpracováním údajů.','err');return}
  if(f['bot-field'].value||Date.now()-loadT<2500){msg('Odeslání se nepodařilo ověřit. Zkuste to prosím znovu.','err');return}
  sendB.disabled=true;sendB.textContent='Odesílám…';st.className='st';
- fetch('/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()}).then(function(r){if(!r.ok)throw new Error(r.status);msg('Děkujeme, e-mail jsme uložili. O novinkách vám dáme vědět.','ok');form.reset()}).catch(function(er){msg('Odeslání se teď nepodařilo (chyba '+((er&&er.message)||'síť')+'). Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;sendB.textContent='Odebírat novinky'})});
+ var c0=window.supabase&&window.supabase.createClient?getSb():null;
+ (c0?c0.from('newsletter_subscribers').insert({email:f.email.value.trim().toLowerCase(),name:f.jmeno.value.trim(),company:f.firma.value.trim()||null,business_type:f.obor.value||null,interested_plan:f.tarif.value||null,message:f.zprava.value.trim()||null,consent:true}):Promise.resolve({error:{message:'služba není dostupná'}})).then(function(r){var er=r.error;if(er&&(er.code==='23505'||/duplicate/i.test(er.message||''))){msg('Tento e-mail už novinky odebírá. Děkujeme!','ok');form.reset();return}if(er)throw er;msg('Děkujeme, e-mail jsme uložili. O novinkách vám dáme vědět.','ok');form.reset()}).catch(function(er){msg('Odeslání se teď nepodařilo ('+((er&&(er.code||er.message))||'síť')+'). Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;sendB.textContent='Odebírat novinky'})});
 
 
 /* ===== Supabase: registrace a přihlášení ===== */
@@ -1097,9 +1094,7 @@ var PLANPR={start:'zdarma',accountant:'399 Kč / měsíc',pro:'699 Kč / měsíc
 function planModal(){
  var cur=effPlan(),opts=PLAN_ALLOWED.filter(function(x){return x!==cur}).map(function(x){return '<label class="chk"><input type="radio" name="pl" value="'+x+'"><span><b>'+esc(PLANN[x])+'</b> – '+PLANPR[x]+' (bez DPH)</span></label>'}).join('');
  modal('<h3>Změna tarifu</h3><p class="mut">Aktuální tarif: <b>'+esc(PLANN[cur])+'</b>. Placené tarify mají 30 dní zdarma, jednou na firmu.</p><form id="planForm"><div class="chks" style="grid-template-columns:1fr">'+opts+'</div><div class="f full"><label for="plN">Poznámka (nepovinné)</label><input id="plN" maxlength="300"></div><div class="draft">Přechod na START proběhne ihned a data zůstanou zachována. U ostatních tarifů odešleme žádost a tarif nastavíme ručně, protože platební brána zatím není připojená. Nic se neúčtuje.</div><div class="st" id="entSt" role="status"></div><div class="dact"><button class="pri" type="submit">Pokračovat</button><button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div></form>')}
-async function sendPlanRequest(want,note){
- var body=new URLSearchParams({'form-name':'plan-change','bot-field':'',firma:APP.co,email:APP.user.email,aktualni_tarif:PLANN[effPlan()],pozadovany_tarif:PLANN[want],poznamka:note||''}).toString();
- var r=await fetch('/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:body});if(!r.ok)throw new Error(r.status)}
+async function sendPlanRequest(want,note){var r=await getSb().from('plan_requests').insert({company_id:APP.cid,current_plan:effPlan(),requested_plan:want,note:note||null});if(r.error)throw r.error}
 function isInc(k){return /inc|přij|prij|^in$|revenue|výnos/i.test(String(k))}
 function KL(k){return k==='income'?'Příjem':(k==='expense'?'Výdaj':(isInc(k)?'Příjem ('+k+')':'Výdaj ('+k+')'))}
 function openForm(ent,id){var lm=!id&&limitMsg(ent);if(lm){toast(lm,'err');return}
@@ -1206,7 +1201,7 @@ document.addEventListener('submit',async function(e){
     var u=await getSb().from('subscriptions').update({plan:'start'}).eq('company_id',APP.cid).select();
     if(!u.error&&u.data&&u.data.length){var rs=await getSb().from('subscriptions').select('*').eq('company_id',APP.cid).limit(1);APP.sub=rs.data&&rs.data[0]||APP.sub;closeModal();subCard();appTab('profil');toast('Přešli jste na tarif START.','ok');return}}
    await sendPlanRequest(want,note);closeModal();toast('Žádost o změnu tarifu odeslána. Ozveme se vám e-mailem.','ok')
-  }catch(x){entMsg('Žádost se nepodařilo odeslat. Napište nám na info@vexaronet.com.')}bt.disabled=false;return}
+  }catch(x){entMsg('Žádost se nepodařilo odeslat ('+((x&&(x.code||x.message))||'chyba')+'). Napište nám na info@vexaronet.com.')}bt.disabled=false;return}
  if(f.id==='ceoForm'){e.preventDefault();var inp=A('ceoIn'),q=inp.value.trim();if(!q)return;inp.value='';ceoAsk(q);return}
  if(f.id==='gsForm'){e.preventDefault();var gi=A('gsIn'),g=gi.value.trim();if(!g)return;gi.value='';if(!A('ceoLog'))appTab('ceo');ceoAsk(g)}});
 document.addEventListener('keydown',function(e){
