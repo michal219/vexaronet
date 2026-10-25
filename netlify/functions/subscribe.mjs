@@ -44,6 +44,7 @@ export default async (req, context) => {
   if (!r.ok) { console.error('Supabase', r.status, await r.text()); return json({ error: 'db' }, 502); }
 
   const key = process.env.RESEND_API_KEY, to = process.env.NOTIFY_EMAIL;
+  let mail = 'not_configured';
   if (key && to) {
     try {
       const m = await fetch('https://api.resend.com/emails', {
@@ -56,10 +57,11 @@ export default async (req, context) => {
           html: `<h2>Nová přihláška k novinkám Vexaronet</h2><p><b>Jméno:</b> ${esc(row.name)}<br><b>E-mail:</b> ${esc(row.email)}<br><b>Firma:</b> ${esc(row.company)}<br><b>Obor:</b> ${esc(row.business_type)}<br><b>Tarif:</b> ${esc(row.interested_plan)}<br><b>Zpráva:</b> ${esc(row.message)}</p><p>Všechny přihlášky najdeš v Supabase, Table Editor, newsletter_subscribers.</p>`,
         }),
       });
-      if (!m.ok) console.error('Resend', m.status, await m.text());
-    } catch (e) { console.error('Resend', e); }
+      if (m.ok) mail = 'sent';
+      else { const t = await m.text(); console.error('Resend', m.status, t); mail = `failed ${m.status}: ${t.slice(0, 160)}`; }
+    } catch (e) { console.error('Resend', e); mail = 'error ' + String(e).slice(0, 100); }
   } else console.warn('E-mailové upozornění není nastaveno (RESEND_API_KEY, NOTIFY_EMAIL).');
-  return json({ ok: true });
+  return json({ ok: true, mail });
 };
 
 export const config = { path: '/api/subscribe' };
