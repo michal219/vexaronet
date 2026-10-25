@@ -638,7 +638,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 <option>Řemeslník</option>
 <option>Restaurace</option>
 <option>Jiný obor</option></select></div>
-      <div class="f full"><label for="fPlan">Zajímá mě tarif</label><select id="fPlan" name="tarif"><option value="">Zatím nevím</option><option>VEXARONET PRO</option><option>AI ÚČETNÍ</option></select></div>
+      <div class="f full"><label for="fPlan">Zajímá mě tarif</label><select id="fPlan" name="tarif"><option value="">Zatím nevím</option><option>START (zdarma)</option><option>AI Účetní</option><option>PRO</option><option>BUSINESS</option><option>ENTERPRISE</option></select></div>
       <div class="f full"><label for="fMsg">Co by měla platforma umět především? (nepovinné)</label><textarea id="fMsg" name="zprava"></textarea></div>
       <div class="f full"><label class="chk"><input type="checkbox" name="souhlas" id="fOk" required><span>Souhlasím se zpracováním e-mailu a údajů za účelem informování o spuštění. <a href="#ochrana-udaju">Zásady ochrany osobních údajů</a> <i>*</i></span></label></div>
       <div class="f full"><button class="btn btn-main" type="submit" id="send">Odebírat novinky</button></div>
@@ -647,6 +647,10 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
   </form>
 </div></section>
 </main>
+<form name="plan-change" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="plan-change"><input name="bot-field">
+  <input name="firma"><input name="email"><input name="aktualni_tarif"><input name="pozadovany_tarif"><textarea name="poznamka"></textarea>
+</form>
 
 <footer><div class="wrap">
   <div class="fg2">
@@ -741,7 +745,7 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
  if(!f.souhlas.checked){msg('Pro odeslání je nutný souhlas se zpracováním údajů.','err');return}
  if(f['bot-field'].value||Date.now()-loadT<2500){msg('Odeslání se nepodařilo ověřit. Zkuste to prosím znovu.','err');return}
  sendB.disabled=true;sendB.textContent='Odesílám…';st.className='st';
- fetch('/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()}).then(function(r){if(!r.ok)throw new Error(r.status);msg('Děkujeme, vaše přihlášení bylo přijato.','ok');form.reset()}).catch(function(){msg('Přihlášení se teď nepodařilo odeslat. Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;sendB.textContent='Odebírat novinky'})});
+ fetch('/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()}).then(function(r){if(!r.ok)throw new Error(r.status);msg('Děkujeme, e-mail jsme uložili. O novinkách vám dáme vědět.','ok');form.reset()}).catch(function(){msg('Odeslání se teď nepodařilo. Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;sendB.textContent='Odebírat novinky'})});
 
 
 /* ===== Supabase: registrace a přihlášení ===== */
@@ -887,7 +891,7 @@ function appTab(t){
  [].forEach.call(el.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
  var m=A('appMain');try{m.innerHTML=!allowed(t)?lockView(t):(VIEWS[t]?VIEWS[t]():soonView(t))}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
  m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]()}
-function lockView(t){return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><a class="btn btn-ghost btn-sm" href="mailto:info@vexaronet.com?subject=Zm%C4%9Bna%20tarifu">Požádat o změnu tarifu</a></div><p class="mut fine">Platební brána zatím není připojená, změnu tarifu zatím vyřizujeme e-mailem.</p></div>'}
+function lockView(t){return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><button class="btn btn-ghost btn-sm" type="button" data-app="plan">Změnit tarif</button></div><p class="mut fine">Platební brána zatím není připojená. Žádost o vyšší tarif vyřídíme ručně.</p></div>'}
 function errBox(x){return x.err?'<div class="draft">Data se nepodařilo načíst: '+esc(x.err)+'</div>':''}
 function soonView(t){var s=SOON[t];return '<div class="card2 soonc"><span class="eyebrow">Etapa '+s[2]+' · připravujeme</span><h2>'+esc(s[0])+'</h2><p>'+esc(s[1])+'</p><div class="draft">Tento modul zatím není hotový ani připojený. Nic zde neukládáme ani nepředstíráme. Ozveme se, až bude k dispozici.</div></div>'}
 
@@ -1029,11 +1033,11 @@ var VIEWS={
   return h+'<ul class="rows big">'+fs.map(function(f){var cu=f.customer_snapshot,nm=cu&&typeof cu==='object'?(cu.name||cu.company_name||''):'',late=!f.paid_at&&f.due_on&&new Date(f.due_on)<dayStart(0);return '<li><div><b>'+esc(f.number||'bez čísla')+'</b><small>'+esc(nm)+' · vystaveno '+fD(f.issued_on)+' · splatnost '+fD(f.due_on)+(f.lifecycle?' · '+esc(f.lifecycle):'')+'</small></div><span'+(late?' class="late"':'')+'>'+fM(f.total,f.currency)+' · '+(f.paid_at?'zaplaceno '+fD(f.paid_at):(late?'po splatnosti':'nezaplaceno'))+'</span>'+(f.paid_at?'':'<button type="button" class="lnk" data-pay="'+esc(f.id)+'">Označit jako zaplacenou</button>')+'</li>'}).join('')+'</ul>'},
  profil:function(){
   var s=APP.sub,m=APP.meta,fs=m.features||[];
-  return '<div class="two"><section class="card2"><h3>Firma a účet</h3><ul class="rows"><li><b>E-mail</b><span>'+esc(APP.user.email)+'</span></li><li><b>Jméno</b><span>'+esc(m.full_name||'–')+'</span></li><li><b>Firma</b><span>'+esc(APP.co)+'</span></li><li><b>Obor</b><span>'+esc(APP.ind||'–')+'</span></li><li><b>Stát</b><span>'+esc(m.country||'–')+'</span></li><li><b>Role</b><span>'+esc(APP.role||'–')+'</span></li></ul></section><section class="card2"><h3>Předplatné</h3>'+(s?'<ul class="rows"><li><b>Tarif</b><span>'+esc(PLANN[String(s.plan).toLowerCase()]||s.plan)+'</span></li><li><b>Stav</b><span>'+esc(STATN[s.status]||s.status)+'</span></li>'+(s.trial_end?'<li><b>Zkušební období do</b><span>'+fD(s.trial_end)+'</span></li>':'')+(effPlan()!==String(s.plan).toLowerCase()?'<li><b>Aktuálně platí</b><span>'+esc(PLANN[effPlan()])+'</span></li>':'')+'</ul><p class="mut">'+esc(PLANLIM[effPlan()]||'')+'</p><p class="mut fine">Ceny jsou měsíční bez DPH. Platební brána zatím není připojená, nic vám neúčtujeme a nic se automaticky nestrhává.</p><div class="dact"><a class="btn btn-ghost btn-sm" href="/cenik">Zobrazit ceník</a><a class="btn btn-ghost btn-sm" href="mailto:info@vexaronet.com?subject=Zm%C4%9Bna%20tarifu&body=Chci%20zm%C4%9Bnit%20tarif%20(upgrade%20nebo%20downgrade)%20pro%20firmu%20'+encodeURIComponent(APP.co)+'.">Požádat o změnu tarifu</a></div>':'<p class="mut">Předplatné nenalezeno.</p>')+'</section></div>'
+  return '<div class="two"><section class="card2"><h3>Firma a účet</h3><ul class="rows"><li><b>E-mail</b><span>'+esc(APP.user.email)+'</span></li><li><b>Jméno</b><span>'+esc(m.full_name||'–')+'</span></li><li><b>Firma</b><span>'+esc(APP.co)+'</span></li><li><b>Obor</b><span>'+esc(APP.ind||'–')+'</span></li><li><b>Stát</b><span>'+esc(m.country||'–')+'</span></li><li><b>Role</b><span>'+esc(APP.role||'–')+'</span></li></ul></section><section class="card2"><h3>Předplatné</h3>'+(s?'<ul class="rows"><li><b>Tarif</b><span>'+esc(PLANN[String(s.plan).toLowerCase()]||s.plan)+'</span></li><li><b>Stav</b><span>'+esc(STATN[s.status]||s.status)+'</span></li>'+(s.trial_end?'<li><b>Zkušební období do</b><span>'+fD(s.trial_end)+'</span></li>':'')+(effPlan()!==String(s.plan).toLowerCase()?'<li><b>Aktuálně platí</b><span>'+esc(PLANN[effPlan()])+'</span></li>':'')+'</ul><p class="mut">'+esc(PLANLIM[effPlan()]||'')+'</p><p class="mut fine">Ceny jsou měsíční bez DPH. Platební brána zatím není připojená, nic vám neúčtujeme a nic se automaticky nestrhává. Přechod na START je okamžitý, vyšší tarif nastavíme po vaší žádosti ručně.</p><div class="dact"><a class="btn btn-ghost btn-sm" href="/cenik">Zobrazit ceník</a><button class="pri sm" type="button" data-app="plan">Změnit tarif</button></div>':'<p class="mut">Předplatné nenalezeno.</p>')+'</section></div>'
   +'<section class="card2"><h3>Použité funkce</h3><form id="featForm"><div class="fg"><div class="f"><label for="pC">Stát</label><select id="pC">'+COUNTRIES.map(function(x){return '<option'+(x===m.country?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div></div><div class="chks">'+FEATS.map(function(f){return '<label class="chk"><input type="checkbox" name="ft" value="'+f[0]+'"'+(fs.indexOf(f[0])>=0?' checked':'')+'><span>'+f[1]+'</span></label>'}).join('')+'</div><button class="btn btn-main btn-sm" type="submit">Uložit</button></form></section><div class="dact"><button class="btn btn-ghost" type="button" data-app="logout">Odhlásit se</button></div>'}
 };
 function trialBanner(){var x=APP.sub;if(!x||x.status!=='trial'||!x.trial_end)return '';var d=Math.ceil((new Date(x.trial_end)-new Date())/864e5);
- if(d<=0)return '<div class="betab"><span><b>Zkušební období skončilo.</b> Účet teď běží v tarifu START, vaše data zůstávají zachována. Pro plné funkce vyberte tarif.</span><a class="btn btn-ghost btn-sm" href="/cenik">Ceník</a></div>';
+ if(d<=0)return '<div class="betab"><span><b>Zkušební období skončilo.</b> Účet teď běží v tarifu START, vaše data zůstávají zachována. Pro plné funkce vyberte tarif.</span><button class="btn btn-ghost btn-sm" type="button" data-app="plan">Změnit tarif</button></div>';
  if(d<=7)return '<div class="betab"><span><b>Zkušební období končí za '+d+' '+(d===1?'den':(d<5?'dny':'dní'))+'.</b> Pak můžete vybrat placený tarif, nebo přejít na START. Nic se automaticky neúčtuje.</span><a class="btn btn-ghost btn-sm" href="/cenik">Ceník</a></div>';return ''}
 function recsHtml(n){if(!hasCeo())return '<p class="mut">AI CEO (doporučení a chat nad vašimi daty) je součástí tarifu Vexaronet PRO a vyšších.</p><div class="dact"><a class="btn btn-ghost btn-sm" href="/cenik">Zobrazit ceník</a></div>';return '<div class="rl">'+recs().slice(0,n).map(function(r,i){return '<div class="rec"><span class="ki '+(r.c==='bad'?'r':r.c==='warn'?'o':r.c==='ok'?'g':'b')+'">'+ico(r.ic,22)+'</span><div class="rt"><b>'+esc(r.t)+'</b><small>'+esc(r.x)+'</small></div><div class="ra">'+(r.go?'<button type="button" class="btn btn-ghost btn-sm" data-tab="'+r.go+'">Zobrazit</button>':'')+(r.act?'<button type="button" class="pri sm" data-act="'+r.act+'">'+ico('send',16)+' '+esc(r.lab)+'</button>':'')+'</div></div>'}).join('')+'</div>'}
 function evHtml(){var E=events();if(!E.length)return '<p class="mut">Žádné nadcházející události.</p>';return '<ul class="ev">'+E.map(function(e){var tm=e[0].getHours()||e[0].getMinutes()?e[0].toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'}):'';return '<li><button type="button" data-tab="'+e[2]+'"><span class="evd"><b>'+dayLbl(e[0])+'</b><small>'+tm+'</small></span><span class="evt">'+esc(e[1])+'</span></button></li>'}).join('')+'</ul>'}
@@ -1089,6 +1093,13 @@ function profForm(){
  var last=APP.d.invoices.rows.filter(function(x){return x.supplier_snapshot&&typeof x.supplier_snapshot==='object'}).sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at)})[0],sp=last?last.supplier_snapshot:{};
  function f(k,l,req,t){return '<div class="f"><label for="p_'+k+'">'+l+(req?' <i>*</i>':'')+'</label><input id="p_'+k+'" type="'+(t||'text')+'" value="'+esc(sp[k]==null?'':sp[k])+'"></div>'}
  modal('<h3>Fakturační údaje (dodavatel)</h3><p class="mut">Údaje, které se objeví na fakturách. Uloží se přes pravidla ve vaší databázi.</p><form id="profForm"><div class="fg">'+f('legal_name','Obchodní jméno',1)+f('ico','IČO')+f('dic','DIČ')+f('address_text','Adresa')+f('bank_account','Číslo účtu')+f('iban','IBAN')+f('email','E-mail','','email')+f('country_code','Země (kód)')+f('default_due_days','Splatnost (dní)','','number')+f('default_currency','Výchozí měna')+f('registration_text','Zápis v rejstříku')+'<div class="f full"><label class="chk"><input type="checkbox" id="p_vat_payer"'+(sp.vat_payer?' checked':'')+'><span>Jsem plátce DPH</span></label></div></div><div class="st" id="entSt" role="status"></div><div class="dact"><button class="pri" type="submit">Uložit</button><button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div></form>')}
+var PLANPR={start:'zdarma',accountant:'399 Kč / měsíc',pro:'699 Kč / měsíc',business:'1 199 Kč / měsíc',enterprise:'individuální cena'};
+function planModal(){
+ var cur=effPlan(),opts=PLAN_ALLOWED.filter(function(x){return x!==cur}).map(function(x){return '<label class="chk"><input type="radio" name="pl" value="'+x+'"><span><b>'+esc(PLANN[x])+'</b> – '+PLANPR[x]+' (bez DPH)</span></label>'}).join('');
+ modal('<h3>Změna tarifu</h3><p class="mut">Aktuální tarif: <b>'+esc(PLANN[cur])+'</b>. Placené tarify mají 30 dní zdarma, jednou na firmu.</p><form id="planForm"><div class="chks" style="grid-template-columns:1fr">'+opts+'</div><div class="f full"><label for="plN">Poznámka (nepovinné)</label><input id="plN" maxlength="300"></div><div class="draft">Přechod na START proběhne ihned a data zůstanou zachována. U ostatních tarifů odešleme žádost a tarif nastavíme ručně, protože platební brána zatím není připojená. Nic se neúčtuje.</div><div class="st" id="entSt" role="status"></div><div class="dact"><button class="pri" type="submit">Pokračovat</button><button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div></form>')}
+async function sendPlanRequest(want,note){
+ var body=new URLSearchParams({'form-name':'plan-change','bot-field':'',firma:APP.co,email:APP.user.email,aktualni_tarif:PLANN[effPlan()],pozadovany_tarif:PLANN[want],poznamka:note||''}).toString();
+ var r=await fetch('/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:body});if(!r.ok)throw new Error(r.status)}
 function isInc(k){return /inc|přij|prij|^in$|revenue|výnos/i.test(String(k))}
 function KL(k){return k==='income'?'Příjem':(k==='expense'?'Výdaj':(isInc(k)?'Příjem ('+k+')':'Výdaj ('+k+')'))}
 function openForm(ent,id){var lm=!id&&limitMsg(ent);if(lm){toast(lm,'err');return}
@@ -1145,6 +1156,7 @@ document.addEventListener('click',async function(e){
   else if(k==='quick'){var q=A('qPop');if(q)q.classList.toggle('on')}
   else if(k==='theme')themeToggle();
   else if(k==='mclose')closeModal();
+  else if(k==='plan')planModal();
   else if(k==='hidebeta'){APP.betaHidden=true;appTab(APP.tab)}
   else if(k==='logout'){var c=getSb();if(c)await c.auth.signOut();closeApp()}
   return}
@@ -1188,6 +1200,13 @@ document.addEventListener('submit',async function(e){
   var d={};['legal_name','ico','dic','address_text','bank_account','iban','email','country_code','default_currency','registration_text'].forEach(function(k){var v=A('p_'+k).value.trim();if(v)d[k]=v});
   var dd=A('p_default_due_days').value;if(dd)d.default_due_days=Number(dd);d.vat_payer=A('p_vat_payer').checked;
   var r2=await rpcInv('profile',d);if(r2.error){entMsg('Nepodařilo se uložit: '+r2.error.message);return}closeModal();toast('Fakturační údaje uloženy.','ok');return}
+ if(f.id==='planForm'){e.preventDefault();var sel=f.querySelector('input[name=pl]:checked');if(!sel){entMsg('Vyberte tarif.');return}var want=sel.value,note=A('plN').value.trim(),bt=f.querySelector('button[type=submit]');bt.disabled=true;
+  try{
+   if(want==='start'){if(!confirm('Přejít na tarif START? AI CEO a rozšířené funkce se vypnou, data zůstanou zachována.')){bt.disabled=false;return}
+    var u=await getSb().from('subscriptions').update({plan:'start'}).eq('company_id',APP.cid).select();
+    if(!u.error&&u.data&&u.data.length){var rs=await getSb().from('subscriptions').select('*').eq('company_id',APP.cid).limit(1);APP.sub=rs.data&&rs.data[0]||APP.sub;closeModal();subCard();appTab('profil');toast('Přešli jste na tarif START.','ok');return}}
+   await sendPlanRequest(want,note);closeModal();toast('Žádost o změnu tarifu odeslána. Ozveme se vám e-mailem.','ok')
+  }catch(x){entMsg('Žádost se nepodařilo odeslat. Napište nám na info@vexaronet.com.')}bt.disabled=false;return}
  if(f.id==='ceoForm'){e.preventDefault();var inp=A('ceoIn'),q=inp.value.trim();if(!q)return;inp.value='';ceoAsk(q);return}
  if(f.id==='gsForm'){e.preventDefault();var gi=A('gsIn'),g=gi.value.trim();if(!g)return;gi.value='';if(!A('ceoLog'))appTab('ceo');ceoAsk(g)}});
 document.addEventListener('keydown',function(e){

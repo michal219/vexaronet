@@ -75,5 +75,6 @@ with sync_playwright() as p:
     check('Tato část není součástí' in pg.inner_text('#appMain'), 'START: zamčená stránka AI CEO')
     pg.evaluate("document.querySelector('#vxside [data-tab=zakaznici]').click()"); pg.wait_for_timeout(100)
     check(len(pg.inner_text('#appMain')) > 20, 'START: CRM dostupné')
+    pg.evaluate("document.querySelector('#vxside [data-tab=profil]').click()"); pg.click('[data-app=plan]'); pg.wait_for_selector('#planForm'); check(pg.locator('#planForm input[name=pl]').count()==4, 'změna tarifu: 4 možnosti')
     check(not errs, 'tarify: žádné JS chyby ' + str(errs)); b.close()
 print('\nSELHALO %d' % len(fails) if fails else '\nVŠE V POŘÁDKU (včetně tarifů)'); sys.exit(1 if fails else 0)
