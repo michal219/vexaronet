@@ -15,11 +15,11 @@ PRAVIDLA
 
 CO JE VEXARONET
 AI platforma pro podnikatele a firmy, která má spojit řízení podnikání, finance a fakturaci, zákazníky (CRM), zakázky, zaměstnance, jednoduché weby, marketing a automatizaci v jednom systému. Cílí na ČR, Slovensko a postupně EU.
-Plánované oblasti: AI centrum (poradce, účetní, obchodník, krizový manažer, Autopilot, podpora 24/7), finance a účetnictví (faktury, QR platby, DPH, pohledávky, upomínky, párování plateb), řízení firmy (CRM, zakázky, úkoly, kalendář, rezervace, sklad), jednoduché weby (AI generátor, úprava vzhledu, vlastní domény; e-shopy platforma nenabízí), marketing a analytika, automatizace.
+Plánované oblasti: AI centrum (AI CEO jako digitální ředitel firmy: doporučení z dat, AI Účetní ve vývoji), finance a účetnictví (faktury, QR platby, DPH, pohledávky, upomínky, párování plateb), řízení firmy (CRM, zakázky, úkoly, kalendář, rezervace, sklad), jednoduché weby (AI generátor, úprava vzhledu, vlastní domény; e-shopy platforma nenabízí), marketing a analytika, automatizace.
 Důležité finanční, obchodní a externí akce AI provede jen po schválení uživatele.
 
 TARIFY
-STARTER 99 Kč měsíčně, PRO 199 Kč měsíčně, BUSINESS 399 Kč měsíčně (ceny za firmu, bez DPH, orientační), ENTERPRISE individuální cena. Součástí bude 30denní zkušební období. Rozsah funkcí jednotlivých tarifů zatím není určen. Netvrď, že jsme nejlevnější.
+Dva tarify: AI Účetní 399 Kč měsíčně (samostatný přístup k účetnictví, modul je zatím ve vývoji) a Vexaronet PRO 699 Kč měsíčně (kompletní All-in-One platforma včetně AI CEO a AI Účetní). Ceny jsou za firmu, orientační. Součástí je 30denní zkušební období. Rozsah funkcí jednotlivých tarifů zatím není určen. Netvrď, že jsme nejlevnější.
 
 VÝVOJ
 Osm etap: 1) úvodní stránka a design, 2) registrace, přihlášení a databáze, 3) dashboard, CRM, zakázky, kalendář, 4) finance a fakturace, 5) AI centrum a automatizace, 6) jednoduché weby, 7) marketing a analytika, 8) předplatné, zabezpečení a testování. Aktuálně je hotový jen návrh úvodní stránky.`;

@@ -361,67 +361,98 @@ dialog::backdrop{background:rgba(2,3,10,.75);backdrop-filter:blur(8px)}
 
 /* --- aplikace --- */
 body:has(#vxapp) #chatFab,body:has(#vxapp) #chat{display:none!important}
-.vxapp{position:fixed;inset:0;z-index:1000;background:var(--ink);color:var(--text);display:flex;font-family:var(--fb)}
+.vxapp{--ink:#080d2b;--glass:rgba(22,30,82,.55);--line:rgba(130,150,255,.2);position:fixed;inset:0;z-index:1000;background:radial-gradient(900px 500px at 85% -10%,rgba(120,80,255,.22),transparent),radial-gradient(700px 500px at 0% 100%,rgba(60,110,255,.14),transparent),var(--ink);color:var(--text);display:flex;font-family:var(--fb)}
+[data-theme=light] .vxapp{--ink:#eef1ff;--glass:rgba(255,255,255,.85);--line:rgba(60,80,200,.18)}
 .vxapp button,.vxapp input,.vxapp select,.vxapp textarea{font:inherit}
-.vxapp>aside{width:236px;flex:none;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;overflow:auto;background:var(--glass);backdrop-filter:blur(14px)}
-.vlogo{padding:4px 10px 16px}.vlogo b{display:block;font-size:1.25rem;font-weight:800}.vlogo small{color:var(--mut);letter-spacing:.14em;font-size:.65rem}
-.vxapp aside nav{display:flex;flex-direction:column;gap:4px;flex:1}
-.vxapp aside button{display:flex;align-items:center;gap:12px;background:none;border:0;color:var(--mut);padding:10px 12px;border-radius:12px;cursor:pointer;text-align:left;min-height:44px;transition:.2s}
+.vxapp .pri{background:linear-gradient(135deg,#7a5cff,#6b4bf2);color:#fff;border:0;border-radius:12px;padding:10px 16px;cursor:pointer;display:inline-flex;gap:8px;align-items:center;font-weight:600;min-height:40px;box-shadow:0 8px 22px rgba(110,76,255,.35);transition:.2s}
+.vxapp .pri:hover{transform:translateY(-1px);filter:brightness(1.1)}.vxapp .pri.sm{padding:8px 14px;white-space:nowrap}
+.vxapp>aside{width:244px;flex:none;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;overflow:auto;background:var(--glass);backdrop-filter:blur(14px)}
+.vlogo{display:flex;gap:10px;align-items:center;padding:4px 10px 18px}.vlogo b{display:block;font-size:1.2rem;font-weight:800;letter-spacing:.04em;line-height:1.1}.vlogo small{color:var(--mut);font-size:.95rem}
+.vxapp aside nav{display:flex;flex-direction:column;gap:3px;flex:1}
+.vxapp aside nav button,.vxapp .sfoot>button{display:flex;align-items:center;gap:12px;background:none;border:0;color:var(--mut);padding:7px 12px;border-radius:12px;cursor:pointer;text-align:left;min-height:38px;transition:.2s;width:100%;font-size:.93rem}
 .vxapp aside button:hover{background:rgba(110,140,255,.12);color:var(--text)}
-.vxapp aside button[aria-pressed=true]{background:linear-gradient(135deg,rgba(100,130,255,.28),rgba(160,110,255,.22));color:var(--text);font-weight:700}
-.vxapp aside .soon{opacity:.6}.vxapp .nh{margin:14px 12px 4px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.vxapp aside button[aria-pressed=true]{background:linear-gradient(135deg,#5b45e0,#4a3bc4);color:#fff;font-weight:700;box-shadow:0 6px 18px rgba(90,70,220,.35)}
+.vxapp aside .soon{opacity:.7}.vxapp aside em{margin-left:auto;font-size:.65rem;font-style:normal;border:1px solid var(--line);border-radius:99px;padding:1px 7px}
+.subc{margin-top:12px;padding:14px;border-radius:14px;border:1px solid var(--line);background:rgba(110,76,255,.1);display:grid;gap:2px}.subc small{color:var(--mut)}.subc b{color:#ffcf6e}
+.subc button{margin-top:8px;background:none;border:1px solid var(--line);color:inherit;border-radius:10px;padding:8px;cursor:pointer}
 .vxmain{flex:1;display:flex;flex-direction:column;min-width:0}
-.vxmain header{display:flex;align-items:center;gap:10px;padding:10px 20px;border-bottom:1px solid var(--line);min-height:64px}
-.vxmain header h1{font-size:1.2rem;margin:0}.vxapp .sp{flex:1}
-.vxapp .ib{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:none;color:inherit;display:grid;place-items:center;cursor:pointer;position:relative}
+.vxmain header{display:flex;align-items:center;gap:10px;padding:12px 20px;min-height:68px}
+.gs{flex:1;max-width:620px;display:flex;align-items:center;gap:10px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:var(--glass);height:46px}
+.gs input{flex:1;background:none;border:0;color:inherit;outline:0;min-width:0}.gs kbd{font-size:.72rem;border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--mut)}.gs .si{color:var(--mut);display:grid}
+.vxmain header>.bellw{margin-left:auto}
+.vxapp .ib{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:none;color:inherit;display:grid;place-items:center;cursor:pointer;position:relative;flex:none}
 .vxapp .ib.av{background:linear-gradient(135deg,#6e8cff,#a278ff);color:#fff;font-weight:800;border:0}
-.vxapp .burger{display:none}.vxapp .pill{font-size:.8rem;padding:6px 12px;border-radius:99px;border:1px solid var(--line);color:var(--mut);white-space:nowrap}
-.vxapp .pill:empty{display:none}
+.usr{display:flex;gap:10px;align-items:center;background:none;border:0;color:inherit;cursor:pointer;text-align:left}.usr .un{display:grid;line-height:1.2}.usr small{color:var(--mut)}
+.vxapp .burger{display:none}
 .vxapp .bdg{position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;border-radius:9px;background:#ff5a73;color:#fff;font-size:.7rem;font-style:normal;display:grid;place-items:center;padding:0 4px}
-.vxapp .bellw{position:relative}.vxapp .pop{display:none;position:absolute;right:0;top:50px;width:min(340px,86vw);max-height:60vh;overflow:auto;background:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.4);z-index:5}
+.vxapp .bellw,.vxapp .qw{position:relative}.vxapp .pop{display:none;position:absolute;right:0;top:50px;width:min(340px,86vw);max-height:60vh;overflow:auto;background:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.4);z-index:5}
 .vxapp .pop.on{display:block}.vxapp .pop h4{margin:0 0 8px}
-.vxapp .nt{display:block;width:100%;text-align:left;background:none;border:0;border-left:3px solid #6e8cff;padding:8px 10px;margin:6px 0;color:inherit;cursor:pointer;border-radius:0 8px 8px 0;background:rgba(110,140,255,.08)}
+.vxapp .qpop{width:200px;top:48px;padding:6px}.vxapp .qpop button{display:block;width:100%;text-align:left;background:none;border:0;color:inherit;padding:10px;border-radius:8px;cursor:pointer}.vxapp .qpop button:hover{background:rgba(110,140,255,.15)}
+.vxapp .nt{display:block;width:100%;text-align:left;border:0;border-left:3px solid #6e8cff;padding:8px 10px;margin:6px 0;color:inherit;cursor:pointer;border-radius:0 8px 8px 0;background:rgba(110,140,255,.08)}
 .vxapp .nt.bad{border-color:#ff5a73}.vxapp .nt.warn{border-color:#ffb347}
-.vxapp main{flex:1;overflow:auto;padding:22px 20px 70px}
-.vxapp main>*{max-width:1100px;margin-left:auto;margin-right:auto}
-.vxapp h3{margin:0 0 10px;font-size:1.05rem}.vxapp .mut,.vxapp small{color:var(--mut)}
-.vxapp .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
-.vxapp .tile{text-align:left;padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--glass);color:inherit;display:block;animation:fin .5s both}
-.vxapp button.tile{cursor:pointer;transition:.2s}.vxapp button.tile:hover{transform:translateY(-3px);border-color:rgba(130,160,255,.6)}
-.vxapp .tile span{display:block;color:var(--mut);font-size:.82rem}.vxapp .tile b{display:block;font-size:1.55rem;margin:4px 0}.vxapp .tile small{font-size:.78rem}
-.vxapp .card2{padding:18px;border-radius:16px;border:1px solid var(--line);background:var(--glass);margin-bottom:16px}
-.vxapp .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.vxapp main{flex:1;overflow:auto;padding:6px 20px 70px}
+.vxapp main>*{max-width:1280px;margin-left:auto;margin-right:auto}
+.vxapp h3{margin:0 0 10px;font-size:1.02rem}.vxapp h2{margin:0}.vxapp .mut,.vxapp small{color:var(--mut)}.vxapp .fine{font-size:.78rem;margin:10px 0 0}
+.dgrid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+.dl{display:grid;gap:16px;min-width:0}.dr{position:sticky;top:0;margin:0!important}
+.db4{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}.db4>.card2{margin:0}
+.greet{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}.greet>div:first-child{flex:1;min-width:220px}.greet h2{font-size:2rem}
+.gd{text-align:right;color:var(--text);font-size:.9rem;line-height:1.4}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}@media(max-width:1250px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{position:relative;text-align:left;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--glass);color:inherit;animation:fin .5s both}
+button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-3px);border-color:rgba(130,160,255,.6)}
+.kt small{display:block;font-size:.8rem}.kt b{font-size:1.3rem;white-space:nowrap}.ceop p{font-size:.9rem;margin:6px 0}.ks{grid-column:1/-1;display:flex;gap:8px;align-items:center;font-size:.8rem;min-height:30px;flex-wrap:wrap}
+.ks .up{color:#3ddc97;font-style:normal;font-weight:700}.ks .dn2{color:#ff6b81;font-style:normal;font-weight:700}
+.spk{margin-left:auto;display:flex;gap:3px;align-items:flex-end;height:30px}.spk i{width:5px;border-radius:2px;display:block;animation:grow .7s both;transform-origin:bottom}.sg{background:#3ddc97}.sr{background:#ff5a73}.sp{background:#a278ff}
+.prog{flex:1;height:6px;border-radius:3px;background:rgba(130,150,255,.2);overflow:hidden;min-width:60px}.prog i{display:block;height:100%;background:linear-gradient(90deg,#6e8cff,#a278ff);border-radius:3px}
+.ki{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:none}
+.ki.g{background:linear-gradient(135deg,#1fc58a,#13a06f)}.ki.r{background:linear-gradient(135deg,#ff5a73,#e03a56)}.ki.b{background:linear-gradient(135deg,#3b82f6,#2563eb)}.ki.p{background:linear-gradient(135deg,#8b5cf6,#6d3df0)}.ki.o{background:linear-gradient(135deg,#ffb347,#f59e0b)}
+.vxapp .card2{padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--glass);margin-bottom:16px;backdrop-filter:blur(10px)}
+.recs .rh{display:flex;gap:12px;align-items:center;margin-bottom:12px}.recs .rh h3{margin:0;flex:1;font-size:1.15rem}
+.rl{display:grid;gap:10px}.rec{display:flex;gap:14px;align-items:center;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(110,140,255,.06);flex-wrap:wrap}
+.rt{flex:1;min-width:200px}.rt b{display:block}.rt small{display:block;margin-top:2px}.ra{display:flex;gap:8px;flex-wrap:wrap}
+.ceop{text-align:left}.orb{margin:-4px 0 0}.ceop h3{font-size:1.4rem;margin:0}.ceop .chatl{height:150px;margin:12px 0 8px}
+.qp{display:grid;gap:6px;margin-bottom:10px}.qp button{text-align:left;background:rgba(110,140,255,.08);border:1px solid var(--line);color:inherit;padding:9px 12px;border-radius:10px;cursor:pointer;transition:.2s}.qp button:hover{background:rgba(110,140,255,.2)}
+.vxapp .aif{display:flex;gap:8px}.vxapp .aif input{flex:1;min-width:0;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(110,140,255,.06);color:inherit}
+.sendb{width:44px;border-radius:12px;border:0;background:linear-gradient(135deg,#7a5cff,#6b4bf2);color:#fff;cursor:pointer;display:grid;place-items:center}
+.vxapp .chatl{overflow:auto;display:flex;flex-direction:column;gap:8px;padding:4px}
+.vxapp .msg{max-width:92%;padding:9px 13px;border-radius:14px;line-height:1.45;white-space:pre-wrap;font-size:.92rem}.vxapp .msg.bot{background:rgba(110,140,255,.16);align-self:flex-start}.vxapp .msg.me{background:linear-gradient(135deg,#6e8cff,#a278ff);color:#fff;align-self:flex-end}.vxapp .msg.err{color:#ff8fa0}
+.dr0 .chatl{height:360px}
+.ev{list-style:none;margin:0;padding:0;display:grid;gap:8px}.ev button{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:none;border:0;color:inherit;cursor:pointer;padding:6px;border-radius:10px}.ev button:hover{background:rgba(110,140,255,.1)}
+.evd{width:62px;flex:none}.evd b{display:block;color:#6e8cff;font-size:.85rem}.evd small{font-size:.8rem}
+.qg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.qg button{position:relative;display:grid;gap:6px;justify-items:center;text-align:center;font-size:.78rem;padding:10px 4px;border-radius:12px;border:1px solid var(--line);background:rgba(110,140,255,.06);color:inherit;cursor:pointer;transition:.2s}
+.qg button:hover{transform:translateY(-2px);border-color:rgba(130,160,255,.6)}.qg .qs{opacity:.65}.qg em{position:absolute;top:4px;right:4px;font-size:.6rem;font-style:normal;color:var(--mut)}
+.vxapp .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.vxapp .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}.vxapp .two>.card2{margin:0}.vxapp .two{margin-bottom:16px}
 .vxapp .rows{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.vxapp .rows li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--glass)}
+.vxapp .rows li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(110,140,255,.06)}
 .vxapp .rows.big li[data-edit]{cursor:pointer;transition:.2s}.vxapp .rows.big li[data-edit]:hover{border-color:rgba(130,160,255,.6)}
 .vxapp .rows li.off{opacity:.55}.vxapp .rows small{display:block}.vxapp .rows li>span{color:var(--mut);font-size:.9rem}
 .vxapp .late{color:#ff6b81!important;font-weight:700}.vxapp .stt{font-style:normal;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}
-.vxapp .bar2{display:flex;gap:10px;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap}
+.vxapp .bar2{display:flex;gap:10px;justify-content:space-between;margin:10px 0 14px;flex-wrap:wrap}
 .vxapp .srch{flex:1;min-width:180px;max-width:360px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:inherit}
 .vxapp .lnk{background:none;border:0;text-decoration:underline;padding:0;color:inherit;cursor:pointer}
 .vxapp .dh{margin:18px 0 8px;color:var(--mut)}.vxapp .dh.today{color:#6e8cff;font-weight:800}.vxapp .dh.past{opacity:.6}
 .vxapp .chart{width:100%;height:auto}.vxapp .gl{stroke:var(--line)}.vxapp .ax{fill:var(--mut);font-size:11px}
-.vxapp .bar{transform-box:fill-box;transform-origin:bottom;animation:grow .7s cubic-bezier(.2,.8,.2,1) both}.vxapp .b1{fill:#6e8cff}.vxapp .b2{fill:#3ddc97}
+.vxapp .bar{transform-box:fill-box;transform-origin:bottom;animation:grow .7s cubic-bezier(.2,.8,.2,1) both}.vxapp .b1{fill:#6e8cff}.vxapp .b2{fill:#2fd08f}.vxapp .b3{fill:#ff5a73}
 @keyframes grow{from{transform:scaleY(0)}}
-.vxapp .leg{display:flex;gap:16px;font-size:.85rem;color:var(--mut)}.vxapp .leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}.vxapp .s1{background:#6e8cff}.vxapp .s2{background:#3ddc97}
-.vxapp .dn{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.vxapp .seg{animation:segin .9s both}@keyframes segin{from{opacity:0}}
-.vxapp .dnt{fill:var(--text);font-size:26px;font-weight:800}.vxapp .leg2{list-style:none;margin:0;padding:0;display:grid;gap:6px}.vxapp .leg2 i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
-.vxapp .advtxt{margin-top:12px;white-space:pre-wrap;line-height:1.5}.vxapp .qa{display:flex;gap:8px;flex-wrap:wrap}
+.vxapp .leg{display:flex;gap:16px;font-size:.85rem;color:var(--mut)}.vxapp .leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}.vxapp .sb1{background:#6e8cff}.vxapp .sb2{background:#2fd08f}.vxapp .sb3{background:#ff5a73}
+.vxapp .dn{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.vxapp .seg{animation:segin .9s both}@keyframes segin{from{opacity:0}}
+.vxapp .dnt{fill:var(--text);font-size:15px;font-weight:800}.vxapp .leg2{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:.85rem}.vxapp .leg2 i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
 .vxapp .chks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:12px 0}.vxapp fieldset{border:0;padding:0;margin:10px 0}
-.vxapp .chatl{height:320px;overflow:auto;display:flex;flex-direction:column;gap:8px;margin:10px 0;padding:6px}
-.vxapp .msg{max-width:88%;padding:10px 14px;border-radius:14px;line-height:1.45;white-space:pre-wrap}.vxapp .msg.bot{background:rgba(110,140,255,.14);align-self:flex-start}.vxapp .msg.me{background:linear-gradient(135deg,#6e8cff,#a278ff);color:#fff;align-self:flex-end}
-.vxapp .aif{display:flex;gap:8px}.vxapp .aif input{flex:1;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:inherit}
-.vxapp .amodal{position:absolute;inset:0;background:rgba(0,0,0,.55);display:none;place-items:center;padding:16px;z-index:10;overflow:auto}.vxapp .amodal.on{display:grid}
-.vxapp .mbox{width:min(560px,100%);background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:20px;max-height:92vh;overflow:auto}
-.vxapp .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;pointer-events:none;padding:12px 18px;border-radius:12px;background:#1e2a5a;color:#fff;transition:.3s;z-index:20}
+.vxapp .amodal{position:absolute;inset:0;background:rgba(0,0,0,.6);display:none;place-items:center;padding:16px;z-index:10;overflow:auto}.vxapp .amodal.on{display:grid}
+.vxapp .mbox{width:min(600px,100%);background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:20px;max-height:92vh;overflow:auto}
+.vxapp textarea{width:100%;box-sizing:border-box;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:inherit;padding:10px}
+.vxapp .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;pointer-events:none;padding:12px 18px;border-radius:12px;background:#1e2a5a;color:#fff;transition:.3s;z-index:20;max-width:90vw}
 .vxapp .toast.on{opacity:1;transform:translate(-50%,0)}.vxapp .toast.err{background:#a3243a}.vxapp .toast.ok{background:#1d7a55}
 .vxapp .scrim{display:none}.vxapp .note{font-size:.92rem}.vxapp .dact{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+@media(max-width:1100px){.dgrid{grid-template-columns:minmax(0,1fr)}.dr{position:static}.usr .un{display:none}}
 @media(max-width:820px){
  .vxapp>aside{position:fixed;inset:0 auto 0 0;z-index:30;transform:translateX(-100%);transition:.3s;background:var(--ink)}
  .vxapp.side>aside{transform:none}.vxapp.side .scrim{display:block;position:fixed;inset:0;z-index:25;background:rgba(0,0,0,.5)}
- .vxapp .burger{display:grid}.vxmain header{padding:8px 12px;gap:6px}.vxapp main{padding:16px 12px 70px}.vxapp .pill{display:none}
+ .vxapp .burger{display:grid}.vxmain header{padding:8px 12px;gap:6px}.vxapp main{padding:6px 12px 70px}.gs kbd,.webb{display:none}.greet h2{font-size:1.5rem}.gd{text-align:left}.qg{grid-template-columns:repeat(2,1fr)}
 }
-@media(prefers-reduced-motion:reduce){.vxapp .bar,.vxapp .seg,.vxapp .tile{animation:none}}
+@media(prefers-reduced-motion:reduce){.vxapp .bar,.vxapp .seg,.vxapp .kpi,.spk i{animation:none}}
 </style>
 </head>
 <body>
@@ -447,7 +478,7 @@ body:has(#vxapp) #chatFab,body:has(#vxapp) #chat{display:none!important}
     <h1 id="h1">Celé podnikání v jednom systému. Řízené AI.</h1>
     <p class="sub fade d2">Vexaronet spojí faktury, zákazníky, zakázky, jednoduché weby, marketing a automatizaci na jednom místě. AI připravuje práci za vás, důležité kroky vždy schvalujete vy.</p>
     <div class="cta fade d3"><button class="btn btn-main" type="button" data-early="">Vyzkoušet 30 dní zdarma</button><a class="btn btn-ghost" href="#funkce">Prohlédnout funkce</a></div>
-    <div class="chips fade d3"><span>30 dní zdarma</span><span>Od 99 Kč / měsíc</span><span>Světlý i tmavý režim</span></div>
+    <div class="chips fade d3"><span>30 dní zdarma</span><span>Od 399 Kč / měsíc</span><span>Světlý i tmavý režim</span></div>
   </div>
   <div class="scene" id="scene"><div class="fit" id="fit"><div class="stage" id="stage"><div class="laptop" id="laptop">
     <div class="sh"></div>
@@ -516,29 +547,17 @@ body:has(#vxapp) #chatFab,body:has(#vxapp) #chat{display:none!important}
 
 <section id="cenik"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Tarify</span><h2>Vyzkoušejte <span class="grad">30 dní zdarma</span></h2><p class="lead">Ceny jsou orientační, uvedené za firmu a měsíc bez DPH. Přesný rozsah funkcí tarifů se upřesní a ceny půjdou upravit v administraci.</p></div>
-  <div class="plans4"><article class="plan" data-glow>
-  
-  <h3>STARTER</h3><p class="note">Pro začínající podnikatele.</p><div class="price"><b>99 Kč / měsíc</b></div>
-  <ul class="ticks"><li>30denní zkušební období</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
-  <button class="btn btn-ghost" type="button" data-early="STARTER">Vyzkoušet 30 dní zdarma</button>
+  <div class="plans4"><article class="plan hot" data-glow>
+  <span class="ribbon">Uvedená cena</span>
+  <h3>VEXARONET PRO</h3><p class="note">Kompletní All-in-One platforma včetně AI CEO a AI Účetní.</p><div class="price"><b>699 Kč / měsíc</b></div>
+  <ul class="ticks"><li>30denní zkušební období zdarma</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
+  <button class="btn btn-main" type="button" data-early="VEXARONET PRO">Vyzkoušet 30 dní zdarma</button>
 </article>
 <article class="plan" data-glow>
   
-  <h3>PRO</h3><p class="note">Pro rostoucí firmy.</p><div class="price"><b>199 Kč / měsíc</b></div>
-  <ul class="ticks"><li>30denní zkušební období</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
-  <button class="btn btn-ghost" type="button" data-early="PRO">Vyzkoušet 30 dní zdarma</button>
-</article>
-<article class="plan" data-glow>
-  
-  <h3>BUSINESS</h3><p class="note">Pro větší týmy.</p><div class="price"><b>399 Kč / měsíc</b></div>
-  <ul class="ticks"><li>30denní zkušební období</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
-  <button class="btn btn-ghost" type="button" data-early="BUSINESS">Vyzkoušet 30 dní zdarma</button>
-</article>
-<article class="plan" data-glow>
-  
-  <h3>ENTERPRISE</h3><p class="note">Řešení na míru.</p><div class="price"><b>Individuální cena</b></div>
-  <ul class="ticks"><li>Konzultace a nabídka na míru</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
-  <button class="btn btn-ghost" type="button" data-early="ENTERPRISE">Vyzkoušet 30 dní zdarma</button>
+  <h3>AI ÚČETNÍ</h3><p class="note">Samostatný přístup k účetnictví (modul je ve vývoji).</p><div class="price"><b>399 Kč / měsíc</b></div>
+  <ul class="ticks"><li>30denní zkušební období zdarma</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
+  <button class="btn btn-ghost" type="button" data-early="AI ÚČETNÍ">Vyzkoušet 30 dní zdarma</button>
 </article></div>
   <p class="disc">Zkušební období je 30 dní zdarma a nepotřebujete k němu platební kartu. Placené předplatné a platební brána zatím nejsou připojené, po skončení zkoušky vám nic neúčtujeme.</p>
 </div></section>
@@ -594,7 +613,7 @@ body:has(#vxapp) #chatFab,body:has(#vxapp) #chat{display:none!important}
 <option>Řemeslník</option>
 <option>Restaurace</option>
 <option>Jiný obor</option></select></div>
-      <div class="f full"><label for="fPlan">Zajímá mě tarif</label><select id="fPlan" name="tarif"><option value="">Zatím nevím</option><option>STARTER</option><option>PRO</option><option>BUSINESS</option><option>ENTERPRISE</option></select></div>
+      <div class="f full"><label for="fPlan">Zajímá mě tarif</label><select id="fPlan" name="tarif"><option value="">Zatím nevím</option><option>VEXARONET PRO</option><option>AI ÚČETNÍ</option></select></div>
       <div class="f full"><label for="fMsg">Co by měla platforma umět především? (nepovinné)</label><textarea id="fMsg" name="zprava"></textarea></div>
       <div class="f full"><label class="chk"><input type="checkbox" name="souhlas" id="fOk" required><span>Souhlasím se zpracováním e-mailu a údajů za účelem informování o spuštění. <a href="#ochrana-udaju">Zásady ochrany osobních údajů</a> <i>*</i></span></label></div>
       <div class="f full"><button class="btn btn-main" type="submit" id="send">Odebírat novinky</button></div>
@@ -701,7 +720,7 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
 /* ===== Supabase: registrace a přihlášení ===== */
 var SB_URL='https://micymdbqgzeckiqyvvkn.supabase.co';
 var SB_KEY='sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW'; /* veřejný (publishable) klíč, smí být ve webu */
-var PLAN_VALUE={STARTER:'starter',PRO:'pro',BUSINESS:'business'}; /* hodnoty tarifů v databázi, ověřit */
+var PLAN_VALUE={'VEXARONET PRO':'pro','AI ÚČETNÍ':'starter'}; /* hodnoty tarifů v databázi (AI Účetní = starter), ověřit */
 var TERMS_VERSION='2026-10';
 var sb=null;
 function getSb(){if(sb)return sb;if(window.supabase&&window.supabase.createClient){sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}return sb}
@@ -733,7 +752,7 @@ async function ensureCompany(c,user){
  if(r.data&&r.data.length)return r.data[0].company_id;
  var md=user.user_metadata||{};if(!md.company_name)return null;
  var a=await c.rpc('record_registration_acceptance',{version:TERMS_VERSION,accepted:true});if(a.error)throw a.error;
- var k=await c.rpc('create_company_for_plan',{company_name:md.company_name,company_industry:md.industry||'',selected_plan:PLAN_VALUE[md.plan]||'starter'});
+ var k=await c.rpc('create_company_for_plan',{company_name:md.company_name,company_industry:md.industry||'',selected_plan:PLAN_VALUE[md.plan]||'pro'});
  if(k.error)throw k.error;
  var r2=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);
  return r2.data&&r2.data[0]?r2.data[0].company_id:(typeof k.data==='string'?k.data:null)}
@@ -783,14 +802,16 @@ document.addEventListener('submit',async function(e){
  b.disabled=false});
 
 /* ===== Aplikace po přihlášení ===== */
-var APP={cid:null,co:'',ind:'',tab:'prehled',user:null,meta:{},role:null,sub:null,d:null,chat:[]};
-var FEATS=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],['kalendar','Kalendář a rezervace'],['faktury','Faktury a finance'],['ai','AI poradce'],['zamestnanci','Zaměstnanci'],['weby','Jednoduchý web'],['marketing','Marketing'],['automatizace','Automatizace']];
+var APP={cid:null,co:'',ind:'',tab:'prehled',user:null,meta:{},role:null,sub:null,d:null,chat:[],busy:false};
+var FEATS=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],['kalendar','Kalendář a rezervace'],['faktury','Faktury a finance'],['ai','AI CEO'],['zamestnanci','Zaměstnanci'],['weby','Jednoduchý web'],['marketing','Marketing'],['automatizace','Automatizace']];
 var COUNTRIES=['Česko','Slovensko','Jiná země'];
-var IC={prehled:'M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10',zakaznici:'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21c0-4 4-6 8-6s8 2 8 6',zakazky:'M4 7h16v13H4zM9 7V4h6v3',kalendar:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',ukoly:'M5 12l4 4 10-10',faktury:'M6 3h9l4 4v14H6zM9 12h7M9 16h7',ai:'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z',zamestnanci:'M8 11a3 3 0 100-6 3 3 0 000 6zM16 12a3 3 0 100-6M2 20c0-3 3-5 6-5s6 2 6 5M16 15c3 0 6 1 6 5',weby:'M3 5h18v14H3zM3 9h18',marketing:'M4 14V10l12-5v14zM16 9a3 3 0 010 6',automatizace:'M13 2L4 14h7l-1 8 9-12h-7z',profil:'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c1-4 4-6 8-6s7 2 8 6',bell:'M6 17V11a6 6 0 1112 0v6l2 2H4zM10 21h4',menu:'M4 6h16M4 12h16M4 18h16',sun:'M12 8a4 4 0 100 8 4 4 0 000-8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5',plus:'M12 5v14M5 12h14'};
-function ico(k){return '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC[k]+'"/></svg>'}
-var NAV=[['prehled','Přehled'],['zakaznici','Zákazníci'],['zakazky','Zakázky'],['kalendar','Kalendář'],['ukoly','Úkoly'],['faktury','Faktury'],['ai','AI centrum']];
-var SOON={zamestnanci:['Zaměstnanci','Správa týmu, role a oprávnění.',3],weby:['Jednoduché weby','AI generátor jednoduchých firemních webů s úpravou vzhledu a publikováním. E-shopy platforma nenabízí.',6],marketing:['Marketing','Kampaně, slevové kódy a analytika.',7],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
-var PLANN={starter:'STARTER',pro:'PRO',business:'BUSINESS',enterprise:'ENTERPRISE'},STATN={trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
+var IC={prehled:'M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10',zakaznici:'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21c0-4 4-6 8-6s8 2 8 6',zakazky:'M4 7h16v13H4zM9 7V4h6v3',kalendar:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',ukoly:'M5 12l4 4 10-10',faktury:'M6 3h9l4 4v14H6zM9 12h7M9 16h7',ceo:'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z',ucetni:'M6 3h12v18H6zM9 7h6M9 11h6M9 15h3',zamestnanci:'M8 11a3 3 0 100-6 3 3 0 000 6zM16 12a3 3 0 100-6M2 20c0-3 3-5 6-5s6 2 6 5M16 15c3 0 6 1 6 5',weby:'M3 5h18v14H3zM3 9h18',marketing:'M4 14V10l12-5v14zM16 9a3 3 0 010 6',automatizace:'M13 2L4 14h7l-1 8 9-12h-7z',sklad:'M3 8l9-5 9 5v10l-9 5-9-5zM3 8l9 5 9-5',finance:'M4 19V9M10 19V5M16 19v-7M22 19H2',reporty:'M5 20V10M12 20V4M19 20v-8',profil:'M12 15a3 3 0 100-6 3 3 0 000 6zM19 12l2-1-2-4-2 1-2-1V5h-4v2l-2 1-2-1-2 4 2 1v2l-2 1 2 4 2-1 2 1v2h4v-2l2-1 2 1 2-4-2-1z',bell:'M6 17V11a6 6 0 1112 0v6l2 2H4zM10 21h4',menu:'M4 6h16M4 12h16M4 18h16',sun:'M12 8a4 4 0 100 8 4 4 0 000-8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5',plus:'M12 5v14M5 12h14',search:'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5',send:'M3 11l18-8-8 18-2-8z',warn:'M12 4l9 16H3zM12 10v4M12 17v1',tr:'M4 17l6-6 4 4 6-8'};
+function ico(k,s){return '<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'+(s||20)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC[k]+'"/></svg>'}
+var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['kalendar','Kalendář a rezervace']];
+var SOON={weby:['Weby','AI generátor jednoduchých firemních webů s úpravou vzhledu a publikováním. E-shopy platforma nenabízí.',6],sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6],zamestnanci:['Zaměstnanci','Správa týmu, role a oprávnění.',3],marketing:['Marketing','Kampaně, slevové kódy a analytika.',7],finance:['Finance','Příjmy, výdaje, závazky a účetní přehledy. Do té doby je základ v přehledu a v Fakturaci.',4],reporty:['Reporty','Přehledy výkonnosti firmy.',7],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
+var PLANN={starter:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet PRO',enterprise:'Vexaronet PRO'},STATN={trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
+function accOnly(){var p=((APP.sub&&APP.sub.plan)||'').toLowerCase();return /^(starter|ucetni|accountant|ai_ucetni)$/.test(p)}
+function allowed(t){return accOnly()?['ucetni','faktury','profil'].indexOf(t)>=0:true}
 function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
 function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ',{maximumFractionDigits:2})+' '+esc(!cur||cur==='CZK'?'Kč':cur)}
 function custName(r){if(!r)return '';return r.name||r.company_name||[r.first_name,r.last_name].filter(Boolean).join(' ')||r.full_name||r.email||'(bez jména)'}
@@ -807,29 +828,33 @@ async function openApp(){
  var cid;try{cid=await ensureCompany(c,u)}catch(e){openD('<h2 id="dT">Aplikace</h2><div class="draft">'+esc(niceErr(e))+'</div>');return}
  if(!cid){openD('<h2 id="dT">Aplikace</h2><div class="draft">K účtu zatím není přiřazená žádná firma. Zkuste se odhlásit a znovu přihlásit.</div><div class="dact"><button class="btn btn-ghost" type="button" id="logout">Odhlásit se</button></div>');return}
  APP.cid=cid;APP.user=u;APP.meta=u.user_metadata||{};
- var co=await c.from('companies').select('*').eq('id',cid).limit(1);var cr=co.data&&co.data[0]||{};APP.co=cr.name||'Moje firma';APP.ind=cr.industry||APP.meta.industry||'';APP.coRow=cr;
- var mb=await c.from('company_members').select('*').eq('company_id',cid).eq('user_id',u.id).limit(1);APP.role=mb.data&&mb.data[0]&&mb.data[0].role||null;
- var sb2=await c.from('subscriptions').select('*').eq('company_id',cid).limit(1);APP.sub=sb2.data&&sb2.data[0]||null;
+ var R=await Promise.all([c.from('companies').select('*').eq('id',cid).limit(1),c.from('company_members').select('*').eq('company_id',cid).eq('user_id',u.id).limit(1),c.from('subscriptions').select('*').eq('company_id',cid).limit(1)]);
+ var cr=R[0].data&&R[0].data[0]||{};APP.co=cr.name||'Moje firma';APP.ind=cr.industry||APP.meta.industry||'';
+ APP.role=R[1].data&&R[1].data[0]&&R[1].data[0].role||null;APP.sub=R[2].data&&R[2].data[0]||null;
  var el=A('vxapp');if(el)el.remove();
  el=document.createElement('div');el.id='vxapp';el.className='vxapp';
- var feats=APP.meta.features||[];
- el.innerHTML='<aside id="vxside"><div class="vlogo"><b>Vexaronet</b><small>AI PLATFORMA</small></div><nav>'+NAV.map(function(t){return '<button type="button" data-tab="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}).join('')+'<p class="nh">Připravujeme</p>'+Object.keys(SOON).map(function(k){return '<button type="button" data-tab="'+k+'" class="soon">'+ico(k)+'<span>'+SOON[k][0]+'</span></button>'}).join('')+'</nav><div class="sfoot"><button type="button" data-tab="profil">'+ico('profil')+'<span>Profil a firma</span></button></div></aside><div class="scrim" data-app="side"></div>'
- +'<div class="vxmain"><header><button type="button" class="ib burger" data-app="side" aria-label="Menu">'+ico('menu')+'</button><h1 id="appTitle">Přehled</h1><span class="sp"></span><span class="pill" id="appTrial"></span><div class="bellw"><button type="button" class="ib" data-app="bell" aria-label="Notifikace">'+ico('bell')+'<i class="bdg" id="appBdg"></i></button><div class="pop" id="appBell"></div></div><button type="button" class="ib" data-app="theme" aria-label="Světlý a tmavý režim">'+ico('sun')+'</button><button type="button" class="ib av" data-tab="profil" aria-label="Profil">'+esc((APP.co||'V').charAt(0).toUpperCase())+'</button><button type="button" class="btn btn-ghost btn-sm" data-app="close">Web</button></header><main id="appMain"></main></div><div class="toast" id="appToast" role="status"></div>';
+ var nm=(APP.meta.full_name||u.email||'').trim(),ini=nm.split(/\s+/).map(function(w){return w.charAt(0)}).join('').slice(0,2).toUpperCase()||'V';
+ function nb(t){return '<button type="button" data-tab="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}
+ el.innerHTML='<aside id="vxside"><div class="vlogo"><svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><path d="M5 7l11 19L27 7" fill="none" stroke="#8b6cff" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/></svg><div><b>VEXARONET</b><small>AI CEO</small></div></div><nav>'+NAV.map(nb).join('')+Object.keys(SOON).map(function(k){return '<button type="button" data-tab="'+k+'" class="soon">'+ico(k)+'<span>'+SOON[k][0]+'</span><em>brzy</em></button>'}).join('')+'</nav><div class="sfoot"><button type="button" data-tab="profil">'+ico('profil')+'<span>Nastavení</span></button><div class="subc" id="subCard"></div></div></aside><div class="scrim" data-app="side"></div>'
+ +'<div class="vxmain"><header><button type="button" class="ib burger" data-app="side" aria-label="Menu">'+ico('menu')+'</button><form class="gs" id="gsForm" autocomplete="off"><span class="si">'+ico('search',18)+'</span><input id="gsIn" placeholder="Zeptejte se AI CEO nebo napište, co potřebujete…" maxlength="400" aria-label="Zeptat se AI CEO"><kbd>Ctrl + K</kbd></form><div class="bellw"><button type="button" class="ib" data-app="bell" aria-label="Notifikace">'+ico('bell')+'<i class="bdg" id="appBdg"></i></button><div class="pop" id="appBell"></div></div><button type="button" class="ib" data-app="theme" aria-label="Světlý a tmavý režim">'+ico('sun')+'</button><button type="button" class="usr" data-tab="profil"><span class="ib av">'+esc(ini)+'</span><span class="un"><b>'+esc(nm.split('@')[0])+'</b><small>'+esc(APP.co)+'</small></span></button><button type="button" class="btn btn-ghost btn-sm webb" data-app="close">Web</button></header><main id="appMain"></main></div><div class="toast" id="appToast" role="status"></div>';
  document.body.appendChild(el);document.documentElement.style.overflow='hidden';
  await refresh(true);appTab(APP.tab)}
 function closeApp(){var el=A('vxapp');if(el)el.remove();document.documentElement.style.overflow=''}
-function trialPill(){var s=APP.sub,p=A('appTrial');if(!p)return;if(!s){p.textContent='';return}var t=STATN[s.status]||s.status,txt=(PLANN[s.plan]||s.plan)+' · '+t;if(s.status==='trial'&&s.trial_end){var d=Math.ceil((new Date(s.trial_end)-new Date())/864e5);txt+=d>0?' · zbývá '+d+' '+(d===1?'den':(d<5?'dny':'dní')):' · skončilo'}p.textContent=txt}
+function subCard(){var s=APP.sub,e=A('subCard');if(!e)return;if(!s){e.innerHTML='';return}
+ var nm=PLANN[(s.plan||'').toLowerCase()]||s.plan,t=STATN[s.status]||s.status,x='';
+ if(s.status==='trial'&&s.trial_end){var d=Math.ceil((new Date(s.trial_end)-new Date())/864e5);x=d>0?'Zbývá '+d+' '+(d===1?'den':(d<5?'dny':'dní'))+' zdarma':'Zkušební období skončilo'}else if(s.paid_until)x='Platné do '+fD(s.paid_until);
+ e.innerHTML='<b>'+esc(nm)+'</b><small>'+esc(t.charAt(0).toUpperCase()+t.slice(1))+'</small><small>'+esc(x)+'</small><button type="button" data-tab="profil">Správa předplatného</button>'}
 async function qt(t){var r=await getSb().from(t).select('*').eq('company_id',APP.cid);return r.error?{err:r.error.message,rows:[]}:{rows:r.data||[]}}
 async function refresh(first){
- var c=getSb(),R=await Promise.all([qt('customers'),qt('jobs'),qt('reservations'),qt('tasks'),qt('invoices'),c.rpc('dashboard_summary',{cid:APP.cid})]);
- APP.d={customers:R[0],jobs:R[1],reservations:R[2],tasks:R[3],invoices:R[4],ds:R[5].error?{err:R[5].error.message}:(R[5].data||{})};
- if(A('vxapp')){trialPill();renderBell()}}
+ var c=getSb(),R=await Promise.all([qt('customers'),qt('jobs'),qt('reservations'),qt('tasks'),qt('invoices'),c.rpc('dashboard_summary',{cid:APP.cid}),qt('financial_entries')]);
+ APP.d={customers:R[0],jobs:R[1],reservations:R[2],tasks:R[3],invoices:R[4],ds:R[5].error?{err:R[5].error.message}:(R[5].data||{}),fe:R[6]};
+ if(A('vxapp')){subCard();renderBell()}}
 function appTab(t){
  APP.tab=t;var el=A('vxapp');if(!el)return;el.classList.remove('side');
  [].forEach.call(el.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
- var T=(NAV.filter(function(x){return x[0]===t})[0]||[])[1]||(SOON[t]&&SOON[t][0])||'Profil a firma';A('appTitle').textContent=T;
- var m=A('appMain');try{m.innerHTML=VIEWS[t]?VIEWS[t]():soonView(t)}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
- m.scrollTop=0;if(AFTER[t])AFTER[t]()}
+ var m=A('appMain');try{m.innerHTML=!allowed(t)?lockView(t):(VIEWS[t]?VIEWS[t]():soonView(t))}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
+ m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]()}
+function lockView(t){return '<div class="card2 soonc"><span class="eyebrow">Tarif AI Účetní</span><h2>Tato část je v tarifu Vexaronet PRO</h2><p>Váš tarif zahrnuje samostatný přístup k účetnictví. AI CEO, CRM, zakázky a ostatní moduly jsou součástí Vexaronet PRO (699 Kč měsíčně).</p><div class="draft">Změnu tarifu zatím řešíme na info@vexaronet.com, platební brána není připojená.</div></div>'}
 function errBox(x){return x.err?'<div class="draft">Data se nepodařilo načíst: '+esc(x.err)+'</div>':''}
 function soonView(t){var s=SOON[t];return '<div class="card2 soonc"><span class="eyebrow">Etapa '+s[2]+' · připravujeme</span><h2>'+esc(s[0])+'</h2><p>'+esc(s[1])+'</p><div class="draft">Tento modul zatím není hotový ani připojený. Nic zde neukládáme ani nepředstíráme. Ozveme se, až bude k dispozici.</div></div>'}
 
@@ -844,19 +869,50 @@ function notes(){
 function renderBell(){var n=notes(),b=A('appBdg'),p=A('appBell');if(!b)return;b.textContent=n.length>9?'9+':n.length;b.style.display=n.length?'':'none';p.innerHTML='<h4>Notifikace</h4>'+(n.length?n.map(function(x){return '<button type="button" class="nt '+x[0]+'" data-tab="'+x[2]+'">'+esc(x[1])+'</button>'}).join(''):'<p class="mut">Nic zásadního. Vše je v pořádku.</p>')}
 
 /* ---- grafy (SVG, vlastní kód) ---- */
-function barChart(labels,sa,sb2,na,nb){
+function barChart(labels,sa,sb2,na,nb,c1,c2){c1=c1||'b1';c2=c2||'b2';
  var W=560,H=230,L=46,B=28,T=14,max=Math.max(1,Math.max.apply(null,sa.concat(sb2))),n=labels.length,gw=(W-L-8)/n,bw=Math.min(26,gw/3),h=H-B-T,g='';
  for(var i=0;i<=4;i++){var y=T+h-h*i/4;g+='<line x1="'+L+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" class="gl"/><text x="'+(L-6)+'" y="'+(y+4)+'" text-anchor="end" class="ax">'+Math.round(max*i/4).toLocaleString('cs-CZ')+'</text>'}
  labels.forEach(function(lb,i){var x=L+gw*i+gw/2,a=h*sa[i]/max,b=h*sb2[i]/max;
-  g+='<rect class="bar b1" style="animation-delay:'+(i*70)+'ms" x="'+(x-bw-2)+'" y="'+(T+h-a)+'" width="'+bw+'" height="'+a+'" rx="4"><title>'+esc(lb)+' · '+esc(na)+': '+fM(sa[i])+'</title></rect><rect class="bar b2" style="animation-delay:'+(i*70+40)+'ms" x="'+(x+2)+'" y="'+(T+h-b)+'" width="'+bw+'" height="'+b+'" rx="4"><title>'+esc(lb)+' · '+esc(nb)+': '+fM(sb2[i])+'</title></rect><text x="'+x+'" y="'+(H-8)+'" text-anchor="middle" class="ax">'+esc(lb)+'</text>'});
- return '<svg viewBox="0 0 '+W+' '+H+'" class="chart" role="img" aria-label="Graf: '+esc(na)+' a '+esc(nb)+' podle měsíců">'+g+'</svg><div class="leg"><span><i class="s1"></i>'+esc(na)+'</span><span><i class="s2"></i>'+esc(nb)+'</span></div>'}
+  g+='<rect class="bar '+c1+'" style="animation-delay:'+(i*70)+'ms" x="'+(x-bw-2)+'" y="'+(T+h-a)+'" width="'+bw+'" height="'+a+'" rx="4"><title>'+esc(lb)+' · '+esc(na)+': '+fM(sa[i])+'</title></rect><rect class="bar '+c2+'" style="animation-delay:'+(i*70+40)+'ms" x="'+(x+2)+'" y="'+(T+h-b)+'" width="'+bw+'" height="'+b+'" rx="4"><title>'+esc(lb)+' · '+esc(nb)+': '+fM(sb2[i])+'</title></rect><text x="'+x+'" y="'+(H-8)+'" text-anchor="middle" class="ax">'+esc(lb)+'</text>'});
+ return '<svg viewBox="0 0 '+W+' '+H+'" class="chart" role="img" aria-label="Graf: '+esc(na)+' a '+esc(nb)+' podle měsíců">'+g+'</svg><div class="leg"><span><i class="s'+c1+'"></i>'+esc(na)+'</span><span><i class="s'+c2+'"></i>'+esc(nb)+'</span></div>'}
 var PAL=['#6e8cff','#a278ff','#3ddc97','#ffb347','#ff6b81','#59c8ff'];
-function donut(items){
+function donut(items,center){
  var tot=items.reduce(function(s,x){return s+x[1]},0);if(!tot)return '<p class="mut">Zatím žádná data.</p>';
  var C=2*Math.PI*52,off=0,seg='';
  items.forEach(function(x,i){var len=C*x[1]/tot;seg+='<circle class="seg" r="52" cx="70" cy="70" fill="none" stroke="'+PAL[i%PAL.length]+'" stroke-width="22" stroke-dasharray="'+len+' '+(C-len)+'" stroke-dashoffset="'+(-off)+'" transform="rotate(-90 70 70)" style="animation-delay:'+(i*120)+'ms"><title>'+esc(x[0])+': '+x[1]+'</title></circle>';off+=len});
- return '<div class="dn"><svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Zakázky podle stavu">'+seg+'<text x="70" y="75" text-anchor="middle" class="dnt">'+tot+'</text></svg><ul class="leg2">'+items.map(function(x,i){return '<li><i style="background:'+PAL[i%PAL.length]+'"></i>'+esc(x[0])+' <b>'+x[1]+'</b></li>'}).join('')+'</ul></div>'}
+ return '<div class="dn"><svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Zakázky podle stavu">'+seg+'<text x="70" y="75" text-anchor="middle" class="dnt">'+(center||tot)+'</text></svg><ul class="leg2">'+items.map(function(x,i){return '<li><i style="background:'+PAL[i%PAL.length]+'"></i>'+esc(x[0])+' <b>'+x[1]+'</b></li>'}).join('')+'</ul></div>'}
 function monthsBack(n){var o=[],d=new Date();d.setDate(1);d.setHours(0,0,0,0);for(var i=n-1;i>=0;i--){var m=new Date(d.getFullYear(),d.getMonth()-i,1);o.push(m)}return o}
+function onboard(){
+ if(APP.meta.onboarded)return '';
+ return '<div class="card2 onb"><h3>Dokončete nastavení firmy</h3><p class="mut">Podle odpovědí vám přizpůsobíme rychlé akce na přehledu.</p><form id="onbForm"><div class="fg"><div class="f"><label for="oC">Stát</label><select id="oC">'+COUNTRIES.map(function(x){return '<option>'+x+'</option>'}).join('')+'</select></div></div><fieldset><legend>Které funkce budete používat?</legend><div class="chks">'+FEATS.map(function(f){return '<label class="chk"><input type="checkbox" name="ft" value="'+f[0]+'"><span>'+f[1]+'</span></label>'}).join('')+'</div></fieldset><button class="btn btn-main btn-sm" type="submit">Uložit nastavení</button></form></div>'}
+function plural(n,a,b,c){return n===1?a:(n>=2&&n<=4?b:c)}
+function mkey(d){return d.getFullYear()*12+d.getMonth()}
+function finSeries(ms){
+ var rows=APP.d.fe&&APP.d.fe.rows||[],inc=ms.map(function(){return 0}),exp=inc.slice(),src='faktury';
+ if(rows.length){var k=Object.keys(rows[0]),pick=function(a){return a.filter(function(x){return k.indexOf(x)>=0})[0]},am=pick(['amount','total','value','amount_czk']),dt=pick(['entry_date','occurred_on','booked_on','date','paid_at','issued_on','created_at']),ty=pick(['type','kind','direction','entry_type']);
+  if(am&&dt&&ty){var ok=false;rows.forEach(function(r){var d=new Date(r[dt]);if(isNaN(d))return;var i=ms.map(function(m){return mkey(m)}).indexOf(mkey(d));if(i<0)return;var v=Math.abs(Number(r[am])||0),t=String(r[ty]);
+    if(/inc|přij|prij|^in$|revenue|výnos/i.test(t)){inc[i]+=v;ok=true}else if(/exp|výd|vyd|out|cost|náklad/i.test(t)){exp[i]+=v;ok=true}});
+   if(ok)return {inc:inc,exp:exp,src:'záznamy financí'}}}
+ APP.d.invoices.rows.forEach(function(x){if(!x.paid_at)return;var d=new Date(x.paid_at),i=ms.map(function(m){return mkey(m)}).indexOf(mkey(d));if(i>=0)inc[i]+=Number(x.total||0)});
+ return {inc:inc,exp:exp,src:'zaplacené faktury (výdaje zatím nejsou k dispozici)'}}
+function trend(cur,prev){if(!prev)return '';var p=Math.round((cur-prev)/prev*100);return '<em class="'+(p>=0?'up':'dn2')+'">'+(p>=0?'↗ +':'↘ ')+p+' %</em>'}
+function spark(a,cls){var m=Math.max.apply(null,a.concat([1]));return '<span class="spk">'+a.map(function(v,i){return '<i class="'+cls+'" style="height:'+Math.max(8,Math.round(v/m*100))+'%;animation-delay:'+(i*60)+'ms"></i>'}).join('')+'</span>'}
+function byMonth(rows,f,ms){var o=ms.map(function(){return 0}),keys=ms.map(function(m){return mkey(m)});rows.forEach(function(r){var d=f(r);if(!d)return;d=new Date(d);if(isNaN(d))return;var i=keys.indexOf(mkey(d));if(i>=0)o[i]+=(r.__v==null?1:r.__v)});return o}
+function recs(){
+ var d=APP.d,s=summary(),R=[],t0=dayStart(0);
+ var over=d.invoices.rows.filter(function(x){return !x.paid_at&&x.due_on&&new Date(x.due_on)<t0}),osum=over.reduce(function(a,x){return a+Number(x.total||0)},0);
+ if(over.length)R.push({c:'bad',ic:'warn',t:over.length+' '+plural(over.length,'faktura','faktury','faktur')+' po splatnosti',x:'Celkem '+fM(osum)+'. Mohu připravit texty upomínek a úkoly k urgenci.',go:'faktury',act:'reminders',lab:'Připravit upomínky'});
+ var oj=d.jobs.rows.filter(function(x){return x.due_at&&!DONE.test(x.status||'')&&new Date(x.due_at)<t0});
+ if(oj.length)R.push({c:'blue',ic:'zakazky',t:oj.length+' '+plural(oj.length,'zakázka','zakázky','zakázek')+' po termínu',x:'Doporučuji kontaktovat zákazníky a domluvit nový termín. Mohu vytvořit úkoly.',go:'zakazky',act:'jobtasks',lab:'Vytvořit úkoly'});
+ if(s.vydaje_kc>s.prijmy_kc&&s.vydaje_kc>0)R.push({c:'warn',ic:'warn',t:'Výdaje převyšují příjmy',x:'Rozdíl '+fM(s.vydaje_kc-s.prijmy_kc)+' podle údajů v databázi. Zkontrolujte výdaje a nezaplacené pohledávky ('+fM(s.pohledavky_kc)+'). Přesnou předpověď cash flow umožní až modul Finance.',go:'faktury',act:null});
+ else if(s.pohledavky_kc>0&&!over.length)R.push({c:'warn',ic:'faktury',t:'Nezaplacené pohledávky '+fM(s.pohledavky_kc),x:'Žádná není po splatnosti. Hlídejte data splatnosti.',go:'faktury',act:null});
+ var withJob={};d.jobs.rows.forEach(function(j){if(j.customer_id)withJob[j.customer_id]=1});
+ var idle=d.customers.rows.filter(function(x){return !withJob[x.id]});
+ if(idle.length)R.push({c:'ok',ic:'tr',t:'Příležitost k růstu',x:idle.length+' '+plural(idle.length,'zákazník nemá','zákazníci nemají','zákazníků nemá')+' žádnou zakázku. Zvažte nabídnout jim službu.',go:'zakaznici',act:'offer',lab:'Připravit nabídku'});
+ if(s.ukoly_po_terminu)R.push({c:'warn',ic:'ukoly',t:s.ukoly_po_terminu+' '+plural(s.ukoly_po_terminu,'úkol','úkoly','úkolů')+' po termínu',x:'Projděte úkoly a dokončete nebo přesuňte termíny.',go:'ukoly',act:null});
+ if(!d.customers.rows.length)R.push({c:'blue',ic:'zakaznici',t:'Začněte prvním zákazníkem',x:'Po přidání zákazníků a zakázek bude AI CEO doporučovat konkrétnější kroky.',go:'zakaznici',act:null});
+ if(!R.length)R.push({c:'ok',ic:'ukoly',t:'Vše je v pořádku',x:'Žádné faktury ani zakázky po termínu.',go:null,act:null});
+ return R}
 function summary(){
  var d=APP.d,now=new Date(),t0=dayStart(0),t8=dayStart(7),ms=new Date(now.getFullYear(),now.getMonth(),1);
  var unpaid=d.invoices.rows.filter(function(x){return !x.paid_at}),over=unpaid.filter(function(x){return x.due_on&&new Date(x.due_on)<t0});
@@ -869,23 +925,50 @@ function summary(){
   faktury_nezaplacene:unpaid.length,pohledavky_kc:unpaid.reduce(function(s,x){return s+Number(x.total||0)},0),faktury_po_splatnosti:over.length,
   fakturovano_tento_mesic_kc:d.invoices.rows.filter(function(x){return x.issued_on&&new Date(x.issued_on)>=ms}).reduce(function(s,x){return s+Number(x.total||0)},0),
   prijmy_kc:d.ds.income,vydaje_kc:d.ds.expenses}}
-
-/* ---- zobrazení ---- */
-function tile(l,v,sub,go){return '<'+(go?'button type="button" data-tab="'+go+'"':'div')+' class="tile"><span>'+l+'</span><b>'+v+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</'+(go?'button':'div')+'>'}
-function onboard(){
- if(APP.meta.onboarded)return '';
- return '<div class="card2 onb"><h3>Dokončete nastavení firmy</h3><p class="mut">Podle odpovědí vám přizpůsobíme rychlé akce na přehledu.</p><form id="onbForm"><div class="fg"><div class="f"><label for="oC">Stát</label><select id="oC">'+COUNTRIES.map(function(x){return '<option>'+x+'</option>'}).join('')+'</select></div></div><fieldset><legend>Které funkce budete používat?</legend><div class="chks">'+FEATS.map(function(f){return '<label class="chk"><input type="checkbox" name="ft" value="'+f[0]+'"><span>'+f[1]+'</span></label>'}).join('')+'</div></fieldset><button class="btn btn-main btn-sm" type="submit">Uložit nastavení</button></form></div>'}
+function ceoPanel(){
+ var Q=[['Připravit přehled financí','Připrav stručný přehled financí mé firmy podle čísel.'],['Zkontrolovat zakázky','Zkontroluj stav zakázek a termínů a řekni, co hoří.'],['Navrhnout nabídku','Připrav krátkou obchodní nabídku pro stávající zákazníky mé firmy.'],['Najít nové zákazníky','Navrhni 3 způsoby, jak získat nové zákazníky pro můj obor.'],['Navrhnout marketing','Doporuč jednoduchou marketingovou kampaň pro můj obor.']];
+ return '<div class="ceop"><div class="orb" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64"><defs><linearGradient id="og" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#7fa0ff"/><stop offset="1" stop-color="#b07cff"/></linearGradient></defs><circle cx="32" cy="32" r="30" fill="url(#og)" opacity=".25"/><path d="M16 20l16 26 16-26" fill="none" stroke="url(#og)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/></svg></div><h3>Váš AI CEO</h3><p class="mut">Analyzuje data vaší firmy, hlídá důležité věci a radí. Důležité kroky provede až po vašem potvrzení.</p><div class="chatl" id="ceoLog">'+ceoMsgs()+'</div><div class="qp">'+Q.map(function(q,i){return '<button type="button" data-q="'+i+'">'+esc(q[0])+'</button>'}).join('')+'</div><form class="aif" id="ceoForm"><input id="ceoIn" placeholder="Napište mi, co potřebujete…" maxlength="500" autocomplete="off" aria-label="Zpráva pro AI CEO"><button class="sendb" type="submit" aria-label="Odeslat">'+ico('send')+'</button></form></div>'}
+var CEOQ=[['Připravit přehled financí','Připrav stručný přehled financí mé firmy podle čísel.'],['Zkontrolovat zakázky','Zkontroluj stav zakázek a termínů a řekni, co hoří.'],['Navrhnout nabídku','Připrav krátkou obchodní nabídku pro stávající zákazníky mé firmy.'],['Najít nové zákazníky','Navrhni 3 způsoby, jak získat nové zákazníky pro můj obor.'],['Navrhnout marketing','Doporuč jednoduchou marketingovou kampaň pro můj obor.']];
+function ceoMsgs(){return (APP.chat.length?APP.chat:[{role:'assistant',content:'Dobrý den. Co pro vás mohu dnes udělat? Zeptejte se na finance, zakázky nebo zákazníky.'}]).map(function(m){return '<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>'}).join('')}
+async function ceoAsk(q){
+ if(APP.busy)return;APP.busy=true;APP.chat.push({role:'user',content:q});
+ ['ceoLog'].forEach(function(id){var lg=A(id);if(lg){lg.innerHTML=ceoMsgs()+'<div class="msg bot" id="aiWait">Píšu odpověď…</div>';lg.scrollTop=lg.scrollHeight}});
+ var rep=await askAI(APP.chat.slice(-10),function(t){var w=A('aiWait');if(w)w.textContent=t});
+ if(rep)APP.chat.push({role:'assistant',content:rep});else APP.chat.pop();
+ APP.busy=false;var lg=A('ceoLog');if(lg){lg.innerHTML=ceoMsgs();if(!rep)lg.insertAdjacentHTML('beforeend','<div class="msg bot err">AI CEO teď není dostupný. Zkuste to později.</div>');lg.scrollTop=lg.scrollHeight}}
+function greet(){var h=new Date().getHours(),n=(APP.meta.full_name||'').trim().split(/\s+/)[0]||'';return (h<10?'Dobré ráno':(h<18?'Dobrý den':'Dobrý večer'))+(n?', '+esc(n):'')+'!'}
+function tile2(c,ic,l,v,sub,go,extra){return '<'+(go?'button type="button" data-tab="'+go+'"':'div')+' class="kpi"><span class="ki '+c+'">'+ico(ic,22)+'</span><div class="kt"><small>'+l+'</small><b>'+v+'</b></div><div class="ks">'+(sub||'')+'</div>'+(extra||'')+'</'+(go?'button':'div')+'>'}
+function events(){
+ var d=APP.d,now=new Date(),E=[];
+ d.reservations.rows.forEach(function(r){if(!r.canceled&&new Date(r.ends_at||r.starts_at)>=now)E.push([new Date(r.starts_at),r.title||'Rezervace','kalendar','calendar'])});
+ d.tasks.rows.forEach(function(r){if(!r.completed&&r.due_at&&new Date(r.due_at)>=dayStart(0))E.push([new Date(r.due_at),'Úkol: '+r.title,'ukoly','ukoly'])});
+ d.jobs.rows.forEach(function(r){if(r.due_at&&!DONE.test(r.status||'')&&new Date(r.due_at)>=dayStart(0))E.push([new Date(r.due_at),'Termín zakázky: '+r.title,'zakazky','zakazky'])});
+ return E.sort(function(a,b){return a[0]-b[0]}).slice(0,4)}
+function dayLbl(d){var a=dayStart(0),k=Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-a)/864e5);return k===0?'Dnes':(k===1?'Zítra':d.toLocaleDateString('cs-CZ',{day:'numeric',month:'numeric'}))}
 var VIEWS={
  prehled:function(){
-  var d=APP.d,s=summary(),n=notes().length,h='';
+  var d=APP.d,s=summary(),ms=monthsBack(6),h='';
   var errs=['customers','jobs','reservations','tasks','invoices'].filter(function(k){return d[k].err}).map(function(k){return k+': '+d[k].err});
   if(errs.length||d.ds.err)h+='<div class="draft">Část dat se nepodařilo načíst. '+esc(errs.concat(d.ds.err?['přehled: '+d.ds.err]:[]).join(' · '))+'</div>';
-  h+='<div class="tiles">'+tile('Příjmy',fM(s.prijmy_kc),'z databáze')+tile('Výdaje',fM(s.vydaje_kc),'z databáze')+tile('Fakturováno tento měsíc',fM(s.fakturovano_tento_mesic_kc),'vystavené faktury','faktury')+tile('Pohledávky',fM(s.pohledavky_kc),s.faktury_nezaplacene+' nezaplacených'+(s.faktury_po_splatnosti?', '+s.faktury_po_splatnosti+' po splatnosti':''),'faktury')+tile('Aktivní zakázky',s.zakazky_aktivni,s.zakazky_po_terminu?s.zakazky_po_terminu+' po termínu':'','zakazky')+tile('Zákazníci',s.zakaznici,'','zakaznici')+tile('Rezervace dnes',s.rezervace_dnes,s.rezervace_7_dni+' v příštích 7 dnech','kalendar')+tile('Otevřené úkoly',s.ukoly_otevrene,s.ukoly_po_terminu?s.ukoly_po_terminu+' po termínu':'','ukoly')+'</div>';
-  h+=onboard();
-  h+='<div class="two"><section class="card2"><h3>Faktury podle měsíců</h3><div id="chM"></div></section><section class="card2"><h3>Zakázky podle stavu</h3><div id="chJ"></div></section></div>';
-  var ft=(APP.meta.features||[]).filter(function(f){return NAV.some(function(x){return x[0]===f})||SOON[f]});
-  h+='<div class="two"><section class="card2"><h3>Doporučení AI</h3><p class="mut">AI projde souhrnná čísla vaší firmy a navrhne další kroky. Nic sama neprovede. Při použití se odešlou jen tato souhrnná čísla, ne jména zákazníků.</p><button class="btn btn-main btn-sm" type="button" data-app="advice" id="advBtn">Získat doporučení</button><div class="advtxt" id="advTxt" aria-live="polite"></div></section><section class="card2"><h3>Rychlé akce</h3><div class="qa"><button type="button" class="btn btn-ghost btn-sm" data-new="customers">+ Zákazník</button><button type="button" class="btn btn-ghost btn-sm" data-new="jobs">+ Zakázka</button><button type="button" class="btn btn-ghost btn-sm" data-new="reservations">+ Rezervace</button><button type="button" class="btn btn-ghost btn-sm" data-new="tasks">+ Úkol</button></div>'+(ft.length?'<p class="mut" style="margin-top:12px">Vaše vybrané funkce: '+ft.map(function(f){return esc((FEATS.filter(function(x){return x[0]===f})[0]||[0,f])[1])}).join(', ')+'</p>':'')+(n?'<p class="mut">Máte '+n+' upozornění (zvoneček nahoře).</p>':'')+'</section></div>';
+  var inv=d.invoices.rows.map(function(x){return {issued_on:x.issued_on,__v:Number(x.total||0),paid_at:x.paid_at}}),all=byMonth(inv,function(x){return x.issued_on},ms),
+      unp=byMonth(inv.filter(function(x){return !x.paid_at}),function(x){return x.issued_on},ms),
+      cu=byMonth(d.customers.rows,function(x){return x.created_at},ms),n=ms.length,
+      active=s.zakazky_aktivni,tot=s.zakazky_celkem,pct=tot?Math.round(active/tot*100):0,newC=cu[n-1];
+  var qa=[['jobs','Nová zakázka','zakazky'],['customers','Nový zákazník','zakaznici'],['reservations','Rezervace','kalendar'],['tasks','Nový úkol','ukoly']];
+  h+='<div class="dgrid"><div class="dl"><div class="greet"><div><h2>'+greet()+'</h2><p class="mut">Zde je přehled vaší firmy. AI CEO hlídá důležité věci a navrhuje kroky.</p></div><div class="gd">'+new Date().toLocaleDateString('cs-CZ',{weekday:'long'}).replace(/^./,function(c){return c.toUpperCase()})+'<br>'+new Date().toLocaleDateString('cs-CZ',{day:'numeric',month:'long',year:'numeric'})+'</div><div class="qw"><button type="button" class="pri" data-app="quick">+ Rychlá akce ▾</button><div class="pop qpop" id="qPop">'+qa.map(function(q){return '<button type="button" data-new="'+q[0]+'">'+q[1]+'</button>'}).join('')+'</div></div></div>'
+  +'<div class="kpis">'+tile2('g','tr','Tržby tento měsíc',fM(all[n-1]),trend(all[n-1],all[n-2])||'<small class="mut">vystavené faktury</small>','faktury',spark(all,'sg'))
+  +tile2('r','faktury','Nezaplacené faktury',fM(s.pohledavky_kc),'<small class="mut">'+s.faktury_nezaplacene+' '+plural(s.faktury_nezaplacene,'faktura','faktury','faktur')+(s.faktury_po_splatnosti?', '+s.faktury_po_splatnosti+' po splatnosti':'')+'</small>','faktury',spark(unp,'sr'))
+  +tile2('b','zakazky','Aktivní zakázky',active,'<small class="mut">z '+tot+' celkem</small><span class="prog"><i style="width:'+pct+'%"></i></span>','zakazky')
+  +tile2('p','zakaznici','Noví zákazníci',newC,(trend(newC,cu[n-2])||'<small class="mut">tento měsíc</small>')+'<small class="mut"> · celkem '+s.zakaznici+'</small>','zakaznici',spark(cu,'sp'))+'</div>'
+  +'<section class="card2 recs"><div class="rh"><span class="ki p">'+ico('ceo',22)+'</span><h3>AI CEO – dnešní doporučení</h3><button type="button" class="btn btn-ghost btn-sm" data-tab="ceo">Zobrazit všechny</button></div>'+recsHtml(4)+'<p class="mut fine">Doporučení vznikají z vašich skutečných dat podle pevných pravidel. Akce „Provést“ se vždy nejdřív zeptá na potvrzení.</p></section></div>'
+  +'<aside class="dr card2">'+ceoPanel()+'</aside>'
+  +'<div class="db4"><section class="card2"><h3>Příjmy a výdaje</h3><div id="chCash"></div></section><section class="card2"><h3>Tržby podle zákazníků</h3><div id="chCust"></div></section><section class="card2"><h3>Nejbližší události</h3>'+evHtml()+'</section><section class="card2"><h3>Rychlé akce</h3><div class="qg">'+qa.map(function(q){return '<button type="button" data-new="'+q[0]+'"><span class="ki b">'+ico(q[2],20)+'</span>'+q[1]+'</button>'}).join('')+'<button type="button" class="qs" data-soon="Vystavování faktur přidáme v etapě 4 (po odborné kontrole).">'+'<span class="ki g">'+ico('faktury',20)+'</span>Nová faktura<em>brzy</em></button><button type="button" class="qs" data-soon="Nahrávání dokladů zatím není připojené.">'+'<span class="ki p">'+ico('sklad',20)+'</span>Nahrát doklady<em>brzy</em></button></div></section></div></div>'+onboard();
   return h},
+ ceo:function(){
+  return '<div class="two"><section class="card2"><h3>Doporučení AI CEO</h3>'+recsHtml(10)+'<p class="mut fine">Pevná pravidla nad vašimi skutečnými daty, ne odhady AI. Akce vždy potvrzujete.</p></section><section class="card2 dr0">'+ceoPanel()+'</section></div><section class="card2"><h3>Co AI CEO umí a v jakém stavu</h3><ul class="rows">'+[['Analýza zakázek, zákazníků a faktur','funguje (rady od AI a pevná pravidla)'],['Upozornění na nezaplacené faktury a termíny','funguje'],['Příprava textů upomínek a nabídek','funguje (texty ke zkopírování)'],['Vytváření úkolů z doporučení','funguje po potvrzení'],['Odesílání e-mailů a zpráv','zatím není připojeno'],['Předpověď nedostatku peněz','omezeně, přesná předpověď až s modulem Finance'],['Automatizace opakovaných úkolů','připravujeme (etapa 5)'],['Marketingové kampaně','pouze rady, spouštění připravujeme']].map(function(x){return '<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>'}).join('')+'</ul></section>'},
+ ucetni:function(){
+  var s=summary();
+  return '<div class="card2 note"><b>AI Účetní je ve vývoji.</b> Účetní funkce musí před ostrým použitím projít kontrolou účetního a daňového poradce. AI nebude nahrazovat přesné výpočty odhady. Nic z níže uvedeného zatím nepředstíráme.</div><div class="two"><section class="card2"><h3>Funkce AI Účetní</h3><ul class="rows">'+['Zpracování faktur a účtenek','Podvojné účetnictví, účetní deník a hlavní kniha','DPH a daňové podklady','Párování bankovních plateb','Evidence příjmů, výdajů a závazků','Účetní závěrky','Mzdy a odvody','AI kontrola účetních chyb'].map(function(x){return '<li class="off"><b>'+x+'</b><span>plánováno (etapa 4)</span></li>'}).join('')+'</ul></section><section class="card2"><h3>Co už vidíte z databáze</h3><ul class="rows"><li><b>Příjmy</b><span>'+fM(s.prijmy_kc)+'</span></li><li><b>Výdaje</b><span>'+fM(s.vydaje_kc)+'</span></li><li><b>Nezaplacené faktury</b><span>'+fM(s.pohledavky_kc)+'</span></li></ul><div class="dact"><button class="btn btn-ghost btn-sm" type="button" data-tab="faktury">Otevřít fakturaci</button></div></section></div>'},
  zakaznici:function(){return listView('customers','Hledat zákazníka…','+ Nový zákazník',function(x){return '<div><b>'+esc(custName(x))+'</b><small>'+[x.email,x.phone].filter(Boolean).map(esc).join(' · ')+'</small></div>'},'Zatím žádní zákazníci.')},
  zakazky:function(){var cm=cmap();return listView('jobs','Hledat zakázku…','+ Nová zakázka',function(x){return '<div><b>'+esc(x.title)+'</b><small>'+esc(cm[x.customer_id]||'bez zákazníka')+(x.description?' · '+esc(x.description):'')+'</small></div><span>'+fM(x.price)+' · do '+fD(x.due_at)+(x.status?' · <em class="stt">'+esc(x.status)+'</em>':'')+'</span>'},'Zatím žádné zakázky.',function(a,b){return new Date(b.created_at)-new Date(a.created_at)})},
  kalendar:function(){
@@ -904,18 +987,35 @@ var VIEWS={
   var h='<div class="card2 note"><b>Jen přehled.</b> Vystavování faktur, PDF a QR platby přidáme v etapě 4 a před ostrým použitím je musí zkontrolovat účetní. Zatím vidíte faktury, které už v databázi jsou.</div>'+errBox(x);
   if(!fs.length)return h+'<p class="mut">Zatím žádné faktury.</p>';
   return h+'<ul class="rows big">'+fs.map(function(f){var cu=f.customer_snapshot,nm=cu&&typeof cu==='object'?(cu.name||cu.company_name||''):'',late=!f.paid_at&&f.due_on&&new Date(f.due_on)<dayStart(0);return '<li><div><b>'+esc(f.number||'bez čísla')+'</b><small>'+esc(nm)+' · vystaveno '+fD(f.issued_on)+' · splatnost '+fD(f.due_on)+'</small></div><span'+(late?' class="late"':'')+'>'+fM(f.total,f.currency)+' · '+(f.paid_at?'zaplaceno '+fD(f.paid_at):(late?'po splatnosti':'nezaplaceno'))+'</span></li>'}).join('')+'</ul>'},
- ai:function(){
-  return '<div class="two"><section class="card2 aic"><h3>AI poradce</h3><p class="mut">Odpovídá podle souhrnných čísel vaší firmy. Jen radí, nic neprovádí. Nenahrazuje účetního ani právníka.</p><div class="chatl" id="aiLog">'+(APP.chat.length?APP.chat.map(function(m){return '<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>'}).join(''):'<div class="msg bot">Dobrý den, jsem AI poradce. Zeptejte se například: „Na co se mám tento týden zaměřit?“</div>')+'</div><form id="aiForm" class="aif"><input id="aiIn" placeholder="Napište dotaz…" maxlength="500" autocomplete="off"><button class="btn btn-main btn-sm" type="submit">Odeslat</button></form></section><section class="card2"><h3>Další asistenti</h3><ul class="rows"><li><b>AI poradce</b><span>aktivní</span></li><li class="off"><b>AI účetní</b><span>připravujeme</span></li><li class="off"><b>AI obchodník</b><span>připravujeme</span></li><li class="off"><b>Krizový manažer</b><span>připravujeme</span></li><li class="off"><b>AI Autopilot</b><span>připravujeme, vždy se schválením</span></li></ul></section></div>'},
  profil:function(){
   var s=APP.sub,m=APP.meta,fs=m.features||[];
   return '<div class="two"><section class="card2"><h3>Firma a účet</h3><ul class="rows"><li><b>E-mail</b><span>'+esc(APP.user.email)+'</span></li><li><b>Jméno</b><span>'+esc(m.full_name||'–')+'</span></li><li><b>Firma</b><span>'+esc(APP.co)+'</span></li><li><b>Obor</b><span>'+esc(APP.ind||'–')+'</span></li><li><b>Stát</b><span>'+esc(m.country||'–')+'</span></li><li><b>Role</b><span>'+esc(APP.role||'–')+'</span></li></ul></section><section class="card2"><h3>Předplatné</h3>'+(s?'<ul class="rows"><li><b>Tarif</b><span>'+esc(PLANN[s.plan]||s.plan)+'</span></li><li><b>Stav</b><span>'+esc(STATN[s.status]||s.status)+'</span></li>'+(s.trial_end?'<li><b>Zkušební období do</b><span>'+fD(s.trial_end)+'</span></li>':'')+'</ul><p class="mut">Platební brána zatím není připojená, nic vám neúčtujeme.</p>':'<p class="mut">Předplatné nenalezeno.</p>')+'</section></div>'
   +'<section class="card2"><h3>Použité funkce</h3><form id="featForm"><div class="fg"><div class="f"><label for="pC">Stát</label><select id="pC">'+COUNTRIES.map(function(x){return '<option'+(x===m.country?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div></div><div class="chks">'+FEATS.map(function(f){return '<label class="chk"><input type="checkbox" name="ft" value="'+f[0]+'"'+(fs.indexOf(f[0])>=0?' checked':'')+'><span>'+f[1]+'</span></label>'}).join('')+'</div><button class="btn btn-main btn-sm" type="submit">Uložit</button></form></section><div class="dact"><button class="btn btn-ghost" type="button" data-app="logout">Odhlásit se</button></div>'}
 };
+function recsHtml(n){return '<div class="rl">'+recs().slice(0,n).map(function(r,i){return '<div class="rec"><span class="ki '+(r.c==='bad'?'r':r.c==='warn'?'o':r.c==='ok'?'g':'b')+'">'+ico(r.ic,22)+'</span><div class="rt"><b>'+esc(r.t)+'</b><small>'+esc(r.x)+'</small></div><div class="ra">'+(r.go?'<button type="button" class="btn btn-ghost btn-sm" data-tab="'+r.go+'">Zobrazit</button>':'')+(r.act?'<button type="button" class="pri sm" data-act="'+r.act+'">'+ico('send',16)+' '+esc(r.lab)+'</button>':'')+'</div></div>'}).join('')+'</div>'}
+function evHtml(){var E=events();if(!E.length)return '<p class="mut">Žádné nadcházející události.</p>';return '<ul class="ev">'+E.map(function(e){var tm=e[0].getHours()||e[0].getMinutes()?e[0].toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'}):'';return '<li><button type="button" data-tab="'+e[2]+'"><span class="evd"><b>'+dayLbl(e[0])+'</b><small>'+tm+'</small></span><span class="evt">'+esc(e[1])+'</span></button></li>'}).join('')+'</ul>'}
 var AFTER={prehled:function(){
-  var d=APP.d,ms=monthsBack(6),a=ms.map(function(){return 0}),b=a.slice();
-  d.invoices.rows.forEach(function(x){var dt=x.issued_on&&new Date(x.issued_on);if(!dt)return;ms.forEach(function(m,i){if(dt.getFullYear()===m.getFullYear()&&dt.getMonth()===m.getMonth()){a[i]+=Number(x.total||0);if(x.paid_at)b[i]+=Number(x.total||0)}})});
-  A('chM').innerHTML=d.invoices.rows.length?barChart(ms.map(function(m){return m.toLocaleDateString('cs-CZ',{month:'short'})}),a,b,'Vystaveno','Zaplaceno'):'<p class="mut">Zatím žádné faktury.</p>';
-  var cnt={};d.jobs.rows.forEach(function(j){var k=j.status||'bez stavu';cnt[k]=(cnt[k]||0)+1});A('chJ').innerHTML=donut(Object.keys(cnt).map(function(k){return [k,cnt[k]]}))}};
+  var d=APP.d,ms=monthsBack(6),lb=ms.map(function(m){return m.toLocaleDateString('cs-CZ',{month:'short'})}),f=finSeries(ms);
+  A('chCash').innerHTML=(d.invoices.rows.length||d.ds.income)?barChart(lb,f.inc,f.exp,'Příjmy','Výdaje','b2','b3')+'<p class="mut fine">Zdroj: '+esc(f.src)+'.</p>':'<p class="mut">Zatím žádná data.</p>';
+  var cn={},tot=0;d.invoices.rows.forEach(function(x){var cu=x.customer_snapshot,nm=cu&&typeof cu==='object'?(cu.name||cu.company_name):'';nm=nm||'Neznámý';var v=Number(x.total||0);cn[nm]=(cn[nm]||0)+v;tot+=v});
+  var it=Object.keys(cn).map(function(k){return [k,cn[k]]}).sort(function(a,b){return b[1]-a[1]});if(it.length>4){var rest=it.slice(3).reduce(function(s,x){return s+x[1]},0);it=it.slice(0,3).concat([['Ostatní',rest]])}
+  A('chCust').innerHTML=tot?donut(it.map(function(x){return [x[0]+' ('+Math.round(x[1]/tot*100)+' %)',Math.round(x[1])]}),fM(tot)):'<p class="mut">Zatím žádné faktury.</p>'}};
+/* ---- akce AI CEO (vždy po potvrzení) ---- */
+function modal(h){var m=A('appModal');if(!m){m=document.createElement('div');m.id='appModal';m.className='amodal on';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');A('vxapp').appendChild(m)}m.className='amodal on';m.innerHTML='<div class="mbox">'+h+'</div>'}
+function invName(f){var cu=f.customer_snapshot;return cu&&typeof cu==='object'?(cu.name||cu.company_name||''):''}
+function overInv(){var t0=dayStart(0);return APP.d.invoices.rows.filter(function(x){return !x.paid_at&&x.due_on&&new Date(x.due_on)<t0})}
+function overJobs(){var t0=dayStart(0);return APP.d.jobs.rows.filter(function(x){return x.due_at&&!DONE.test(x.status||'')&&new Date(x.due_at)<t0})}
+function reminderText(f){return 'Dobrý den'+(invName(f)?', '+invName(f):'')+',\ndovolujeme si Vás upozornit, že faktura č. '+(f.number||'')+' ve výši '+fM(f.total,f.currency)+' byla splatná dne '+fD(f.due_on)+'. Prosíme o její úhradu. Pokud jste již platbu provedli, považujte tento e-mail za bezpředmětný.\nDěkujeme a zdravíme,\n'+APP.co}
+function doAct(a){
+ if(a==='reminders'){var L=overInv();if(!L.length){toast('Žádné faktury po splatnosti.');return}
+  modal('<h3>Upomínky k '+L.length+' '+plural(L.length,'faktuře','fakturám','fakturám')+'</h3><p class="mut">Odesílání e-mailů zatím není připojené. Texty si zkopírujte a pošlete sami. Můžete také vytvořit úkoly k urgenci.</p><textarea id="remTx" rows="10" readonly>'+esc(L.map(reminderText).join('\n\n---\n\n'))+'</textarea><div class="dact"><button class="pri" type="button" data-do="copy">Zkopírovat texty</button><button class="btn btn-ghost" type="button" data-do="remtasks">Vytvořit úkoly k urgenci</button><button class="btn btn-ghost" type="button" data-app="mclose">Zavřít</button></div>');return}
+ if(a==='jobtasks'){var J=overJobs();modal('<h3>Vytvořit úkoly?</h3><p>Vytvořím '+J.length+' '+plural(J.length,'úkol','úkoly','úkolů')+' s termínem dnes:</p><ul class="ticks">'+J.map(function(j){return '<li>Kontaktovat zákazníka: '+esc(j.title)+'</li>'}).join('')+'</ul><div class="dact"><button class="pri" type="button" data-do="jobtasks">Ano, vytvořit</button><button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div>');return}
+ if(a==='offer'){appTab('ceo');setTimeout(function(){ceoAsk('Připrav krátkou obchodní nabídku pro stávající zákazníky, kteří zatím nemají žádnou zakázku.')},50)}}
+async function mkTasks(titles){
+ var have={};APP.d.tasks.rows.forEach(function(t){if(!t.completed)have[t.title]=1});var rows=titles.filter(function(t){return !have[t]}).map(function(t){return {company_id:APP.cid,title:t,due_at:new Date(dayStart(0).getTime()+12*36e5).toISOString()}});
+ if(!rows.length){closeModal();toast('Tyto úkoly už existují.');return}
+ var r=await getSb().from('tasks').insert(rows);if(r.error){toast('Nepodařilo se vytvořit úkoly: '+r.error.message,'err');return}
+ closeModal();await refresh();appTab(APP.tab);toast('Vytvořeno úkolů: '+rows.length,'ok')}
 function cmap(){var m={};APP.d.customers.rows.forEach(function(x){m[x.id]=custName(x)});return m}
 function head(ent,btn,ph){return '<div class="bar2">'+(ph?'<input class="srch" type="search" placeholder="'+ph+'" aria-label="Hledat">':'<span></span>')+'<button type="button" class="btn btn-main btn-sm" data-new="'+ent+'">'+btn+'</button></div>'}
 function listView(ent,ph,btn,row,emptyT,sort){
@@ -962,7 +1062,6 @@ async function saveEnt(form){
   else if(f.t==='cust')row[f.k]=v||null;
   else row[f.k]=v===''?(id?null:undefined):v;
   if(row[f.k]===undefined)delete row[f.k]}
- if(!id)Object.keys(row).forEach(function(k){if(row[k]===null)delete row[k]});
  if(ent==='reservations'&&new Date(row.ends_at)<=new Date(row.starts_at)){entMsg('Konec musí být po začátku.');return}
  var b=form.querySelector('button[type=submit]');b.disabled=true;var q=getSb().from(ent),r;
  if(id)r=await q.update(row).eq('id',id).eq('company_id',APP.cid);else{row.company_id=APP.cid;r=await q.insert(row)}
@@ -986,14 +1085,22 @@ document.addEventListener('click',async function(e){
   if(k==='close')closeApp();
   else if(k==='side')A('vxapp').classList.toggle('side');
   else if(k==='bell')A('appBell').classList.toggle('on');
+  else if(k==='quick'){var q=A('qPop');if(q)q.classList.toggle('on')}
   else if(k==='theme')themeToggle();
   else if(k==='mclose')closeModal();
   else if(k==='logout'){var c=getSb();if(c)await c.auth.signOut();closeApp()}
-  else if(k==='advice'){var bt=A('advBtn'),tx=A('advTxt');bt.disabled=true;tx.textContent='AI přemýšlí…';var rep=await askAI([{role:'user',content:'Dej mi 3 konkrétní doporučení, na co se v mé firmě mám teď zaměřit, podle čísel.'}],function(t){tx.textContent=t});if(rep)tx.textContent=rep;bt.disabled=false}
   return}
+ var dd=e.target.closest('#vxapp [data-do]');
+ if(dd){var w=dd.dataset.do;if(w==='copy'){var tx=A('remTx');try{await navigator.clipboard.writeText(tx.value);toast('Zkopírováno.','ok')}catch(x){tx.select();toast('Označeno, zkopírujte pomocí Ctrl+C.')}}
+  else if(w==='remtasks')mkTasks(overInv().map(function(f){return 'Urgovat fakturu '+(f.number||'')+(invName(f)?' ('+invName(f)+')':'')}));
+  else if(w==='jobtasks')mkTasks(overJobs().map(function(j){return 'Kontaktovat zákazníka: '+j.title}));return}
+ var ac=e.target.closest('#vxapp [data-act]');if(ac){doAct(ac.dataset.act);return}
+ var qq=e.target.closest('#vxapp [data-q]');if(qq){ceoAsk(CEOQ[+qq.dataset.q][1]);return}
+ var so=e.target.closest('#vxapp [data-soon]');if(so){toast(so.dataset.soon);return}
+ var pq=A('qPop');if(pq&&pq.classList.contains('on')&&!e.target.closest('.qw'))pq.classList.remove('on');
  if(A('appBell')&&A('appBell').classList.contains('on')&&!e.target.closest('.bellw'))A('appBell').classList.remove('on');
- var t=e.target.closest('#vxapp [data-tab]');if(t){A('appBell')&&A('appBell').classList.remove('on');appTab(t.dataset.tab);return}
- var nw=e.target.closest('#vxapp [data-new]');if(nw){openForm(nw.dataset.new);return}
+ var t=e.target.closest('#vxapp [data-tab]');if(t){appTab(t.dataset.tab);return}
+ var nw=e.target.closest('#vxapp [data-new]');if(nw){if(pq)pq.classList.remove('on');openForm(nw.dataset.new);return}
  var ed=e.target.closest('#vxapp [data-edit]');if(ed&&!e.target.closest('input')){var p=ed.dataset.edit.split(':');openForm(p[0],p.slice(1).join(':'));return}
  if(e.target.closest('#vxapp [data-del]')){delEnt(A('entForm'));return}
  if(e.target.classList&&e.target.classList.contains('amodal'))closeModal()});
@@ -1006,9 +1113,12 @@ document.addEventListener('submit',async function(e){
  if(f.id==='onbForm'||f.id==='featForm'){e.preventDefault();var ft=[].map.call(f.querySelectorAll('input[name=ft]:checked'),function(x){return x.value}),co=(A('oC')||A('pC')).value;
   var r=await getSb().auth.updateUser({data:{country:co,features:ft,onboarded:true}});if(r.error){toast('Nepodařilo se uložit: '+r.error.message,'err');return}
   APP.meta=r.data.user.user_metadata||{};toast('Nastavení uloženo.','ok');appTab(APP.tab);return}
- if(f.id==='aiForm'){e.preventDefault();var inp=A('aiIn'),q=inp.value.trim();if(!q)return;inp.value='';APP.chat.push({role:'user',content:q});var lg=A('aiLog');lg.insertAdjacentHTML('beforeend','<div class="msg me">'+esc(q)+'</div><div class="msg bot" id="aiWait">Píšu odpověď…</div>');lg.scrollTop=lg.scrollHeight;
-  var rep=await askAI(APP.chat.slice(-10),function(t){A('aiWait').textContent=t});if(rep){A('aiWait').textContent=rep;APP.chat.push({role:'assistant',content:rep})}else APP.chat.pop();var w=A('aiWait');if(w)w.removeAttribute('id');lg.scrollTop=lg.scrollHeight}});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(A('appModal'))closeModal();else if(A('vxapp')&&!dlg.open)closeApp()}});
+ if(f.id==='ceoForm'){e.preventDefault();var inp=A('ceoIn'),q=inp.value.trim();if(!q)return;inp.value='';ceoAsk(q);return}
+ if(f.id==='gsForm'){e.preventDefault();var gi=A('gsIn'),g=gi.value.trim();if(!g)return;gi.value='';if(!A('ceoLog'))appTab('ceo');ceoAsk(g)}});
+document.addEventListener('keydown',function(e){
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&A('gsIn')){e.preventDefault();A('gsIn').focus();return}
+ if(e.key==='Escape'){if(A('appModal'))closeModal();else if(A('vxapp')&&!dlg.open)closeApp()}});
+
 
 /* chat */
 var fab=$('#chatFab'),chat=$('#chat'),body=$('#chatBody'),sugg=$('#chatSugg'),cf=$('#chatForm'),cin=$('#chatIn');
