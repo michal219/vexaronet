@@ -745,7 +745,7 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
  if(!f.souhlas.checked){msg('Pro odeslání je nutný souhlas se zpracováním údajů.','err');return}
  if(f['bot-field'].value||Date.now()-loadT<2500){msg('Odeslání se nepodařilo ověřit. Zkuste to prosím znovu.','err');return}
  sendB.disabled=true;sendB.textContent='Odesílám…';st.className='st';
- fetch('/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()}).then(function(r){if(!r.ok)throw new Error(r.status);msg('Děkujeme, e-mail jsme uložili. O novinkách vám dáme vědět.','ok');form.reset()}).catch(function(){msg('Odeslání se teď nepodařilo. Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;sendB.textContent='Odebírat novinky'})});
+ fetch('/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()}).then(function(r){if(!r.ok)throw new Error(r.status);msg('Děkujeme, e-mail jsme uložili. O novinkách vám dáme vědět.','ok');form.reset()}).catch(function(er){msg('Odeslání se teď nepodařilo (chyba '+((er&&er.message)||'síť')+'). Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;sendB.textContent='Odebírat novinky'})});
 
 
 /* ===== Supabase: registrace a přihlášení ===== */
