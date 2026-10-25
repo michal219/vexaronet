@@ -428,7 +428,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 .vxapp .rows li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(110,140,255,.06)}
 .vxapp .rows.big li[data-edit]{cursor:pointer;transition:.2s}.vxapp .rows.big li[data-edit]:hover{border-color:rgba(130,160,255,.6)}
 .vxapp .rows li.off{opacity:.55}.vxapp .rows small{display:block}.vxapp .rows li>span{color:var(--mut);font-size:.9rem}
-.vxapp .late{color:#ff6b81!important;font-weight:700}.vxapp .stt{font-style:normal;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}
+.vxapp .inc{color:#3ddc97!important}.vxapp .late{color:#ff6b81!important;font-weight:700}.vxapp .stt{font-style:normal;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}
 .vxapp .bar2{display:flex;gap:10px;justify-content:space-between;margin:10px 0 14px;flex-wrap:wrap}
 .vxapp .srch{flex:1;min-width:180px;max-width:360px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:inherit}
 .vxapp .lnk{background:none;border:0;text-decoration:underline;padding:0;color:inherit;cursor:pointer}
@@ -807,11 +807,11 @@ var FEATS=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],['k
 var COUNTRIES=['Česko','Slovensko','Jiná země'];
 var IC={prehled:'M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10',zakaznici:'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21c0-4 4-6 8-6s8 2 8 6',zakazky:'M4 7h16v13H4zM9 7V4h6v3',kalendar:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',ukoly:'M5 12l4 4 10-10',faktury:'M6 3h9l4 4v14H6zM9 12h7M9 16h7',ceo:'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z',ucetni:'M6 3h12v18H6zM9 7h6M9 11h6M9 15h3',zamestnanci:'M8 11a3 3 0 100-6 3 3 0 000 6zM16 12a3 3 0 100-6M2 20c0-3 3-5 6-5s6 2 6 5M16 15c3 0 6 1 6 5',weby:'M3 5h18v14H3zM3 9h18',marketing:'M4 14V10l12-5v14zM16 9a3 3 0 010 6',automatizace:'M13 2L4 14h7l-1 8 9-12h-7z',sklad:'M3 8l9-5 9 5v10l-9 5-9-5zM3 8l9 5 9-5',finance:'M4 19V9M10 19V5M16 19v-7M22 19H2',reporty:'M5 20V10M12 20V4M19 20v-8',profil:'M12 15a3 3 0 100-6 3 3 0 000 6zM19 12l2-1-2-4-2 1-2-1V5h-4v2l-2 1-2-1-2 4 2 1v2l-2 1 2 4 2-1 2 1v2h4v-2l2-1 2 1 2-4-2-1z',bell:'M6 17V11a6 6 0 1112 0v6l2 2H4zM10 21h4',menu:'M4 6h16M4 12h16M4 18h16',sun:'M12 8a4 4 0 100 8 4 4 0 000-8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5',plus:'M12 5v14M5 12h14',search:'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5',send:'M3 11l18-8-8 18-2-8z',warn:'M12 4l9 16H3zM12 10v4M12 17v1',tr:'M4 17l6-6 4 4 6-8'};
 function ico(k,s){return '<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'+(s||20)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC[k]+'"/></svg>'}
-var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['kalendar','Kalendář a rezervace']];
-var SOON={weby:['Weby','AI generátor jednoduchých firemních webů s úpravou vzhledu a publikováním. E-shopy platforma nenabízí.',6],sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6],zamestnanci:['Zaměstnanci','Správa týmu, role a oprávnění.',3],marketing:['Marketing','Kampaně, slevové kódy a analytika.',7],finance:['Finance','Příjmy, výdaje, závazky a účetní přehledy. Do té doby je základ v přehledu a v Fakturaci.',4],reporty:['Reporty','Přehledy výkonnosti firmy.',7],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
+var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace']];
+var SOON={weby:['Weby','AI generátor jednoduchých firemních webů s úpravou vzhledu a publikováním. E-shopy platforma nenabízí.',6],sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6],zamestnanci:['Zaměstnanci','Správa týmu, role a oprávnění.',3],marketing:['Marketing','Kampaně, slevové kódy a analytika.',7],reporty:['Reporty','Přehledy výkonnosti firmy.',7],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
 var PLANN={starter:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet PRO',enterprise:'Vexaronet PRO'},STATN={trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
 function accOnly(){var p=((APP.sub&&APP.sub.plan)||'').toLowerCase();return /^(starter|ucetni|accountant|ai_ucetni)$/.test(p)}
-function allowed(t){return accOnly()?['ucetni','faktury','profil'].indexOf(t)>=0:true}
+function allowed(t){return accOnly()?['ucetni','faktury','finance','profil'].indexOf(t)>=0:true}
 function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
 function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ',{maximumFractionDigits:2})+' '+esc(!cur||cur==='CZK'?'Kč':cur)}
 function custName(r){if(!r)return '';return r.name||r.company_name||[r.first_name,r.last_name].filter(Boolean).join(' ')||r.full_name||r.email||'(bez jména)'}
@@ -847,6 +847,7 @@ function subCard(){var s=APP.sub,e=A('subCard');if(!e)return;if(!s){e.innerHTML=
 async function qt(t){var r=await getSb().from(t).select('*').eq('company_id',APP.cid);return r.error?{err:r.error.message,rows:[]}:{rows:r.data||[]}}
 async function refresh(first){
  var c=getSb(),R=await Promise.all([qt('customers'),qt('jobs'),qt('reservations'),qt('tasks'),qt('invoices'),c.rpc('dashboard_summary',{cid:APP.cid}),qt('financial_entries')]);
+ R[0].rows=R[0].rows.filter(function(x){return !x.archived});
  APP.d={customers:R[0],jobs:R[1],reservations:R[2],tasks:R[3],invoices:R[4],ds:R[5].error?{err:R[5].error.message}:(R[5].data||{}),fe:R[6]};
  if(A('vxapp')){subCard();renderBell()}}
 function appTab(t){
@@ -966,6 +967,12 @@ var VIEWS={
   return h},
  ceo:function(){
   return '<div class="two"><section class="card2"><h3>Doporučení AI CEO</h3>'+recsHtml(10)+'<p class="mut fine">Pevná pravidla nad vašimi skutečnými daty, ne odhady AI. Akce vždy potvrzujete.</p></section><section class="card2 dr0">'+ceoPanel()+'</section></div><section class="card2"><h3>Co AI CEO umí a v jakém stavu</h3><ul class="rows">'+[['Analýza zakázek, zákazníků a faktur','funguje (rady od AI a pevná pravidla)'],['Upozornění na nezaplacené faktury a termíny','funguje'],['Příprava textů upomínek a nabídek','funguje (texty ke zkopírování)'],['Vytváření úkolů z doporučení','funguje po potvrzení'],['Odesílání e-mailů a zpráv','zatím není připojeno'],['Předpověď nedostatku peněz','omezeně, přesná předpověď až s modulem Finance'],['Automatizace opakovaných úkolů','připravujeme (etapa 5)'],['Marketingové kampaně','pouze rady, spouštění připravujeme']].map(function(x){return '<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>'}).join('')+'</ul></section>'},
+ finance:function(){
+  var x=APP.d.fe,rs=x.rows.slice().sort(function(a,b){return new Date(b.entry_date||b.created_at)-new Date(a.entry_date||a.created_at)}),inc=0,exp=0;
+  rs.forEach(function(r){var v=Math.abs(Number(r.amount)||0);if(isInc(r.kind))inc+=v;else exp+=v});
+  var h='<div class="kpis" style="margin:10px 0 14px">'+tile2('g','tr','Příjmy (záznamy)',fM(inc),'')+tile2('r','finance','Výdaje (záznamy)',fM(exp),'')+tile2(inc>=exp?'b':'o','faktury','Rozdíl',fM(inc-exp),'')+'</div>'+head('financial_entries','+ Nový záznam')+errBox(x);
+  if(!rs.length)return h+'<p class="mut">Zatím žádné záznamy. Přidejte příjem nebo výdaj.</p>';
+  return h+'<ul class="rows big">'+rs.map(function(r){return '<li data-edit="financial_entries:'+esc(r.id)+'"><div><b>'+esc(r.title||'Záznam')+'</b><small>'+fD(r.entry_date)+'</small></div><span class="'+(isInc(r.kind)?'inc':'')+'">'+(isInc(r.kind)?'+':'−')+fM(Math.abs(Number(r.amount)||0))+' · '+esc(KL(r.kind))+'</span></li>'}).join('')+'</ul><p class="mut fine">Jednoduchá evidence příjmů a výdajů. Nejde o účetnictví ani daňové přiznání.</p>'},
  ucetni:function(){
   var s=summary();
   return '<div class="card2 note"><b>AI Účetní je ve vývoji.</b> Účetní funkce musí před ostrým použitím projít kontrolou účetního a daňového poradce. AI nebude nahrazovat přesné výpočty odhady. Nic z níže uvedeného zatím nepředstíráme.</div><div class="two"><section class="card2"><h3>Funkce AI Účetní</h3><ul class="rows">'+['Zpracování faktur a účtenek','Podvojné účetnictví, účetní deník a hlavní kniha','DPH a daňové podklady','Párování bankovních plateb','Evidence příjmů, výdajů a závazků','Účetní závěrky','Mzdy a odvody','AI kontrola účetních chyb'].map(function(x){return '<li class="off"><b>'+x+'</b><span>plánováno (etapa 4)</span></li>'}).join('')+'</ul></section><section class="card2"><h3>Co už vidíte z databáze</h3><ul class="rows"><li><b>Příjmy</b><span>'+fM(s.prijmy_kc)+'</span></li><li><b>Výdaje</b><span>'+fM(s.vydaje_kc)+'</span></li><li><b>Nezaplacené faktury</b><span>'+fM(s.pohledavky_kc)+'</span></li></ul><div class="dact"><button class="btn btn-ghost btn-sm" type="button" data-tab="faktury">Otevřít fakturaci</button></div></section></div>'},
@@ -1024,27 +1031,27 @@ function listView(ent,ph,btn,row,emptyT,sort){
  return h+'<ul class="rows big" id="lst">'+rs.map(function(r){return '<li data-edit="'+ent+':'+esc(r.id)+'">'+row(r)+'</li>'}).join('')+'</ul>'}
 
 /* ---- formuláře (přidání, úprava, mazání) ---- */
-function custFields(){
- var keys=Object.keys(APP.d.customers.rows[0]||{}),F=[['name','Jméno / firma','text',1],['first_name','Jméno'],['last_name','Příjmení'],['company_name','Firma'],['email','E-mail','email'],['phone','Telefon','tel'],['address','Adresa'],['ico','IČO'],['notes','Poznámka','textarea'],['note','Poznámka','textarea']];
- if(!keys.length)return F.filter(function(f){return /^(name|email|phone)$/.test(f[0])}).map(function(f){return {k:f[0],l:f[1],t:f[2]||'text',req:f[3]}});
- var out=F.filter(function(f){return keys.indexOf(f[0])>=0}).map(function(f){return {k:f[0],l:f[1],t:f[2]||'text',req:f[3]&&keys.indexOf('name')>=0}});
- if(!out.length)out=[{k:'name',l:'Jméno / firma',t:'text',req:1}];return out}
+function custFields(){return [{k:'name',l:'Jméno / firma',t:'text',req:1},{k:'email',l:'E-mail',t:'email'},{k:'phone',l:'Telefon',t:'tel'},{k:'billing_address',l:'Fakturační adresa'},{k:'ico',l:'IČO'},{k:'dic',l:'DIČ'},{k:'notes',l:'Poznámka',t:'textarea'},{k:'archived',l:'Archivovat (skrýt ze seznamu)',t:'bool'}]}
 function entDef(ent){
  var cu=APP.d.customers.rows;
  var D={
   customers:{n:'zákazníka',f:custFields},
   jobs:{n:'zakázku',f:function(){var st=[];APP.d.jobs.rows.forEach(function(j){if(j.status&&st.indexOf(j.status)<0)st.push(j.status)});return [{k:'title',l:'Název',req:1},{k:'customer_id',l:'Zákazník',t:'cust'},{k:'price',l:'Cena (Kč)',t:'number'},{k:'due_at',l:'Termín',t:'date'},{k:'status',l:'Stav',t:'text',list:st},{k:'description',l:'Popis',t:'textarea'},{k:'notes',l:'Poznámky',t:'textarea'}]}},
   reservations:{n:'rezervaci',f:function(){return [{k:'title',l:'Název',req:1},{k:'customer_id',l:'Zákazník',t:'cust'},{k:'starts_at',l:'Začátek',t:'datetime-local',req:1},{k:'ends_at',l:'Konec',t:'datetime-local',req:1},{k:'reminder_minutes',l:'Připomenout minut předem',t:'number'},{k:'canceled',l:'Zrušeno',t:'bool'}]}},
+  financial_entries:{n:'finanční záznam',f:function(){var ks=['income','expense'];APP.d.fe.rows.forEach(function(r){if(r.kind&&ks.indexOf(r.kind)<0)ks.push(r.kind)});return [{k:'title',l:'Popis',req:1},{k:'kind',l:'Druh',t:'sel',opts:ks.map(function(k){return [k,KL(k)]}),req:1},{k:'amount',l:'Částka (Kč)',t:'number',req:1},{k:'entry_date',l:'Datum',t:'dateonly',req:1}]}},
   tasks:{n:'úkol',f:function(){return [{k:'title',l:'Úkol',req:1},{k:'due_at',l:'Termín',t:'date'},{k:'description',l:'Popis',t:'textarea'},{k:'completed',l:'Hotovo',t:'bool'}]}}
  };return D[ent]}
+function isInc(k){return /inc|přij|prij|^in$|revenue|výnos/i.test(String(k))}
+function KL(k){return k==='income'?'Příjem':(k==='expense'?'Výdaj':(isInc(k)?'Příjem ('+k+')':'Výdaj ('+k+')'))}
 function openForm(ent,id){
  var def=entDef(ent),row=id?(APP.d[ent].rows.filter(function(r){return String(r.id)===id})[0]||{}):{},F=def.f();
  var h='<h3>'+(id?'Upravit':'Nový')+' – '+def.n+'</h3><form id="entForm" data-ent="'+ent+'" data-id="'+esc(id||'')+'"><div class="fg">';
  F.forEach(function(f){var v=row[f.k],lab='<label for="e_'+f.k+'">'+f.l+(f.req?' <i>*</i>':'')+'</label>',c='';
   if(f.t==='cust')c='<select id="e_'+f.k+'">'+'<option value="">– bez zákazníka –</option>'+APP.d.customers.rows.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===v?' selected':'')+'>'+esc(custName(x))+'</option>'}).join('')+'</select>';
+  else if(f.t==='sel')c='<select id="e_'+f.k+'">'+f.opts.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===v?' selected':'')+'>'+esc(o[1])+'</option>'}).join('')+'</select>';
   else if(f.t==='textarea')c='<textarea id="e_'+f.k+'" rows="3">'+esc(v||'')+'</textarea>';
   else if(f.t==='bool'){h+='<div class="f full"><label class="chk"><input type="checkbox" id="e_'+f.k+'"'+(v?' checked':'')+'><span>'+f.l+'</span></label></div>';return}
-  else{var val=v==null?'':v;if(f.t==='date')val=v?locD(v):'';if(f.t==='datetime-local')val=v?loc(v):'';c='<input id="e_'+f.k+'" type="'+(f.t||'text')+'" value="'+esc(val)+'"'+(f.t==='number'?' step="any"':'')+(f.list?' list="dl_'+f.k+'"':'')+'>'+(f.list?'<datalist id="dl_'+f.k+'">'+f.list.map(function(s){return '<option value="'+esc(s)+'">'}).join('')+'</datalist>':'')}
+  else{var val=v==null?'':v;if(f.t==='date')val=v?locD(v):'';if(f.t==='dateonly')val=v||'';if(f.t==='datetime-local')val=v?loc(v):'';c='<input id="e_'+f.k+'" type="'+(f.t==='dateonly'?'date':(f.t||'text'))+'" value="'+esc(val)+'"'+(f.t==='number'?' step="any"':'')+(f.list?' list="dl_'+f.k+'"':'')+'>'+(f.list?'<datalist id="dl_'+f.k+'">'+f.list.map(function(s){return '<option value="'+esc(s)+'">'}).join('')+'</datalist>':'')}
   h+='<div class="f'+(f.t==='textarea'?' full':'')+'">'+lab+c+'</div>'});
  h+='</div><div class="st" id="entSt" role="status"></div><div class="dact"><button class="btn btn-main" type="submit">Uložit</button>'+(id?'<button class="btn btn-ghost" type="button" data-del="1">Smazat</button>':'')+'<button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div></form>';
  var m=A('appModal');if(!m){m=document.createElement('div');m.id='appModal';m.className='amodal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');A('vxapp').appendChild(m)}
@@ -1057,6 +1064,7 @@ async function saveEnt(form){
   if(f.req&&!v){entMsg('Vyplňte pole: '+f.l+'.');return}
   if(f.t==='bool')row[f.k]=v;
   else if(f.t==='number')row[f.k]=v===''?null:Number(v);
+  else if(f.t==='dateonly')row[f.k]=v||null;
   else if(f.t==='date')row[f.k]=v?new Date(v+'T12:00:00').toISOString():null;
   else if(f.t==='datetime-local')row[f.k]=v?new Date(v).toISOString():null;
   else if(f.t==='cust')row[f.k]=v||null;

@@ -43,7 +43,7 @@ with sync_playwright() as p:
             check(any(l[0] == 'ins' and l[1] == 'tasks' for l in pg.evaluate('window.__log')), 'akce se provede až po potvrzení a vloží úkoly')
             pg.fill('#ceoIn', 'Jak jsme na tom?'); pg.press('#ceoIn', 'Enter'); pg.wait_for_timeout(500)
             check('Odpověď AI.' in pg.inner_text('#ceoLog'), 'AI CEO odpovídá')
-            for tab in ['zakaznici', 'zakazky', 'kalendar', 'ukoly', 'faktury', 'ceo', 'ucetni', 'weby', 'profil']:
+            for tab in ['finance', 'zakaznici', 'zakazky', 'kalendar', 'ukoly', 'faktury', 'ceo', 'ucetni', 'weby', 'profil']:
                 pg.evaluate("document.querySelector('#vxside [data-tab=%s]').click()" % tab); pg.wait_for_timeout(150)
                 check(len(pg.inner_text('#appMain')) > 20, 'záložka ' + tab)
             pg.evaluate("document.querySelector('#vxside [data-tab=zakazky]').click()"); pg.click('[data-new=jobs]'); pg.fill('#e_title', 'Nová'); pg.click('#entForm button[type=submit]'); pg.wait_for_timeout(300)
