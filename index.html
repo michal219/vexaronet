@@ -359,6 +359,27 @@ dialog::backdrop{background:rgba(2,3,10,.75);backdrop-filter:blur(8px)}
   .ms{transform:none}
 }
 
+/* --- aplikace --- */
+body:has(#vxapp) #chatFab,body:has(#vxapp) #chat{display:none!important}
+.vxapp{position:fixed;inset:0;z-index:1000;background:var(--ink);color:var(--text);display:flex;flex-direction:column;font-family:var(--fb)}
+.vxapp header{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.vxapp header .co{color:var(--mut);font-size:.9rem}.vxapp header .sp{flex:1}
+.vxapp button{font:inherit;color:inherit;cursor:pointer}
+.vxapp header button,.vxapp nav button{background:none;border:1px solid var(--line);border-radius:99px;padding:8px 14px;min-height:40px}
+.vxapp nav{display:flex;gap:8px;padding:10px 16px;overflow-x:auto;border-bottom:1px solid var(--line)}
+.vxapp nav button{white-space:nowrap}.vxapp nav button[aria-pressed=true]{background:rgba(110,140,255,.25);border-color:rgba(130,160,255,.6);font-weight:700}
+.vxapp main{flex:1;overflow:auto;padding:20px 16px 60px;max-width:960px;width:100%;margin:0 auto}
+.vxapp h2{margin:0 0 14px}.vxapp h3{margin:18px 0 8px;font-size:1rem}.vxapp .mut{color:var(--mut)}
+.vxapp .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.vxapp .tile{padding:16px;border-radius:14px;border:1px solid var(--line);background:var(--glass)}.vxapp .tile span{display:block;color:var(--mut);font-size:.85rem}.vxapp .tile b{font-size:1.5rem}
+.vxapp .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.vxapp .rows{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.vxapp .rows li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--glass)}
+.vxapp .rows li.off{opacity:.55}.vxapp .rows small{display:block;color:var(--mut)}.vxapp .rows li>span{color:var(--mut);font-size:.9rem}
+.vxapp .addf{padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--glass);margin-bottom:14px}
+.vxapp .addf .fg{margin-bottom:12px}
+.vxapp .lnk{background:none;border:0;text-decoration:underline;padding:0}
+.vxapp select{max-width:160px}
 /* --- SaaS doplňky --- */
 .ms{animation:none!important;padding:0!important;font-size:10px}
 .db{display:grid;grid-template-columns:62px 1fr;height:100%}
@@ -759,7 +780,7 @@ async function showAccount(){
    var ds=await c.rpc('dashboard_summary',{cid:cid});
    h+='<h3>Přehled firmy (data z databáze)</h3>'+(ds.error?'<p>Přehled se nepodařilo načíst: '+esc(ds.error.message)+'</p>':kv(ds.data));
   }
-  h+='<div class="dact"><button class="btn btn-ghost" type="button" id="logout">Odhlásit se</button></div>';
+  h+='<div class="dact"><button class="btn btn-main" type="button" id="openApp">Otevřít aplikaci</button><button class="btn btn-ghost" type="button" id="logout">Odhlásit se</button></div>';
   dB.innerHTML='<button class="dx" type="button" aria-label="Zavřít">×</button>'+h;
  }catch(e){dB.innerHTML='<button class="dx" type="button" aria-label="Zavřít">×</button><span class="eyebrow">Účet</span><h2 id="dT">Můj účet</h2><div class="draft">'+esc(niceErr(e))+'</div><div class="dact"><button class="btn btn-ghost" type="button" id="logout">Odhlásit se</button></div>'}}
 accB.addEventListener('click',async function(){var c=getSb();if(!c){showAuth('login');setTimeout(function(){aMsg('Přihlášení se nepodařilo načíst. Zkontrolujte připojení.','err')},50);return}var r=await c.auth.getSession();if(r.data&&r.data.session)showAccount();else showAuth('login')});
@@ -785,6 +806,101 @@ document.addEventListener('submit',async function(e){
    var l=await c.auth.signInWithPassword({email:mail,password:pw});if(l.error)throw l.error;await showAccount()}
  }catch(err){aMsg(niceErr(err),'err')}
  b.disabled=false});
+
+/* ===== Aplikace po přihlášení ===== */
+var APP={cid:null,co:'',tab:'prehled'};
+var TABS=[['prehled','Přehled'],['zakaznici','Zákazníci'],['zakazky','Zakázky'],['kalendar','Kalendář'],['ukoly','Úkoly'],['faktury','Faktury']];
+function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
+function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ')+' '+esc(cur||'Kč')}
+function custName(r){if(!r)return '';return r.name||r.company_name||[r.first_name,r.last_name].filter(Boolean).join(' ')||r.full_name||r.email||'(bez jména)'}
+function appMsg(t,c){var e=document.getElementById('appSt');if(e){e.className='st '+c;e.textContent=t}}
+function appErr(e){return 'Nepodařilo se uložit: '+((e&&e.message)||e)}
+async function openApp(){
+ var c=getSb();if(!c)return;closeDlg();
+ var u=(await c.auth.getUser()).data.user;if(!u){showAuth('login');return}
+ var cid;try{cid=await ensureCompany(c,u)}catch(e){openD('<h2 id="dT">Aplikace</h2><div class="draft">'+esc(niceErr(e))+'</div>');return}
+ if(!cid){openD('<h2 id="dT">Aplikace</h2><div class="draft">K účtu zatím není přiřazená žádná firma.</div>');return}
+ var co=await c.from('companies').select('name').eq('id',cid).limit(1);
+ APP.cid=cid;APP.co=(co.data&&co.data[0]&&co.data[0].name)||'Moje firma';
+ var el=document.getElementById('vxapp');if(el)el.remove();
+ el=document.createElement('div');el.id='vxapp';el.className='vxapp';el.setAttribute('role','dialog');el.setAttribute('aria-label','Aplikace Vexaronet');
+ el.innerHTML='<header><b>Vexaronet</b><span class="co">'+esc(APP.co)+'</span><span class="sp"></span><button type="button" data-app="acc">Účet</button><button type="button" data-app="close">Zavřít</button></header><nav>'+TABS.map(function(t){return '<button type="button" data-tab="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</nav><main id="appMain"></main>';
+ document.body.appendChild(el);document.documentElement.style.overflow='hidden';appTab(APP.tab)}
+function closeApp(){var el=document.getElementById('vxapp');if(el)el.remove();document.documentElement.style.overflow=''}
+async function appTab(t){
+ APP.tab=t;var el=document.getElementById('vxapp');if(!el)return;
+ [].forEach.call(el.querySelectorAll('nav button'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
+ var m=document.getElementById('appMain');m.innerHTML='<p class="mut">Načítám…</p>';
+ try{var h=await VIEWS[t]();if(APP.tab===t)m.innerHTML=h}catch(e){m.innerHTML='<div class="draft">Data se nepodařilo načíst: '+esc((e&&e.message)||e)+'</div>'}}
+async function q(table,sel){var r=await getSb().from(table).select(sel||'*').eq('company_id',APP.cid);if(r.error)throw r.error;return r.data||[]}
+function custOpts(cs,sel){return '<option value="">– bez zákazníka –</option>'+cs.map(function(x){return '<option value="'+esc(x.id)+'"'+(x.id===sel?' selected':'')+'>'+esc(custName(x))+'</option>'}).join('')}
+function fld(l,id,type,ph){return '<div class="f"><label for="'+id+'">'+l+'</label><input id="'+id+'" type="'+(type||'text')+'" placeholder="'+(ph||'')+'"></div>'}
+function empty(t){return '<p class="mut">'+t+'</p>'}
+var VIEWS={
+ prehled:async function(){
+  var c=getSb(),ds=await c.rpc('dashboard_summary',{cid:APP.cid});
+  var L={income:'Příjmy',expenses:'Výdaje',customers:'Zákazníci',active_jobs:'Aktivní zakázky',reservations_today:'Rezervace dnes'};
+  var h='<h2>Přehled</h2>';
+  if(ds.error)h+='<div class="draft">'+esc(ds.error.message)+'</div>';
+  else{h+='<div class="tiles">'+Object.keys(ds.data||{}).map(function(k){var v=ds.data[k];var money=(k==='income'||k==='expenses');return '<div class="tile"><span>'+esc(L[k]||k)+'</span><b>'+(money?fM(v):esc(v))+'</b></div>'}).join('')+'</div>'}
+  var rs=await q('reservations'),now=Date.now();
+  rs=rs.filter(function(r){return !r.canceled&&new Date(r.starts_at)>=now-36e5}).sort(function(a,b){return new Date(a.starts_at)-new Date(b.starts_at)}).slice(0,5);
+  var ts=(await q('tasks')).filter(function(x){return !x.completed}).sort(function(a,b){return new Date(a.due_at||'2999')-new Date(b.due_at||'2999')}).slice(0,5);
+  h+='<div class="two"><section><h3>Nejbližší rezervace</h3>'+(rs.length?'<ul class="rows">'+rs.map(function(r){return '<li><b>'+esc(r.title||'Rezervace')+'</b><span>'+fD(r.starts_at,1)+'</span></li>'}).join('')+'</ul>':empty('Žádné nadcházející rezervace.'))+'</section>';
+  h+='<section><h3>Otevřené úkoly</h3>'+(ts.length?'<ul class="rows">'+ts.map(function(r){return '<li><b>'+esc(r.title)+'</b><span>'+fD(r.due_at)+'</span></li>'}).join('')+'</ul>':empty('Žádné otevřené úkoly.'))+'</section></div>';
+  return h},
+ zakaznici:async function(){
+  var cs=await q('customers');var keys=Object.keys(cs[0]||{});
+  var h='<h2>Zákazníci</h2><form class="addf" data-form="cust"><div class="fg">'+fld('Jméno / firma <i>*</i>','cN')+fld('E-mail','cE','email')+fld('Telefon','cP','tel')+'</div><button class="btn btn-main btn-sm" type="submit">Přidat zákazníka</button></form><div class="st" id="appSt" role="status"></div>';
+  if(!cs.length)return h+empty('Zatím žádní zákazníci.');
+  return h+'<ul class="rows big">'+cs.map(function(x){return '<li><b>'+esc(custName(x))+'</b><span>'+[x.email,x.phone].filter(Boolean).map(esc).join(' · ')+'</span></li>'}).join('')+'</ul>'},
+ zakazky:async function(){
+  var cs=await q('customers'),js=await q('jobs');var cm={};cs.forEach(function(x){cm[x.id]=custName(x)});
+  var sts=[];js.forEach(function(j){if(j.status&&sts.indexOf(j.status)<0)sts.push(j.status)});
+  js.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at)});
+  var h='<h2>Zakázky</h2><form class="addf" data-form="job"><div class="fg">'+fld('Název <i>*</i>','jT')+'<div class="f"><label for="jC">Zákazník</label><select id="jC">'+custOpts(cs)+'</select></div>'+fld('Cena (Kč)','jP','number')+fld('Termín','jD','date')+'<div class="f full"><label for="jN">Popis</label><input id="jN"></div></div><button class="btn btn-main btn-sm" type="submit">Přidat zakázku</button></form><div class="st" id="appSt" role="status"></div>';
+  if(!js.length)return h+empty('Zatím žádné zakázky.');
+  return h+'<ul class="rows big">'+js.map(function(j){return '<li><div><b>'+esc(j.title)+'</b><small>'+esc(cm[j.customer_id]||'bez zákazníka')+(j.description?' · '+esc(j.description):'')+'</small></div><span>'+fM(j.price)+' · do '+fD(j.due_at)+(sts.length?' · <select data-job="'+esc(j.id)+'" aria-label="Stav">'+sts.map(function(s){return '<option'+(s===j.status?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select>':(j.status?' · '+esc(j.status):''))+'</span></li>'}).join('')+'</ul>'},
+ kalendar:async function(){
+  var cs=await q('customers'),rs=await q('reservations');var cm={};cs.forEach(function(x){cm[x.id]=custName(x)});
+  rs.sort(function(a,b){return new Date(a.starts_at)-new Date(b.starts_at)});
+  var h='<h2>Kalendář a rezervace</h2><form class="addf" data-form="res"><div class="fg">'+fld('Název <i>*</i>','rT')+'<div class="f"><label for="rC">Zákazník</label><select id="rC">'+custOpts(cs)+'</select></div>'+fld('Začátek <i>*</i>','rS','datetime-local')+fld('Konec <i>*</i>','rE','datetime-local')+'</div><button class="btn btn-main btn-sm" type="submit">Přidat rezervaci</button></form><div class="st" id="appSt" role="status"></div>';
+  if(!rs.length)return h+empty('Zatím žádné rezervace.');
+  return h+'<ul class="rows big">'+rs.map(function(r){return '<li'+(r.canceled?' class="off"':'')+'><div><b>'+esc(r.title||'Rezervace')+'</b><small>'+esc(cm[r.customer_id]||'bez zákazníka')+'</small></div><span>'+fD(r.starts_at,1)+' – '+fD(r.ends_at,1)+(r.canceled?' · zrušeno':' · <button type="button" class="lnk" data-cancel="'+esc(r.id)+'">Zrušit</button>')+'</span></li>'}).join('')+'</ul>'},
+ ukoly:async function(){
+  var ts=await q('tasks');ts.sort(function(a,b){return (a.completed-b.completed)||(new Date(a.due_at||'2999')-new Date(b.due_at||'2999'))});
+  var h='<h2>Úkoly</h2><form class="addf" data-form="task"><div class="fg">'+fld('Úkol <i>*</i>','tT')+fld('Termín','tD','date')+'</div><button class="btn btn-main btn-sm" type="submit">Přidat úkol</button></form><div class="st" id="appSt" role="status"></div>';
+  if(!ts.length)return h+empty('Zatím žádné úkoly.');
+  return h+'<ul class="rows big">'+ts.map(function(t){return '<li'+(t.completed?' class="off"':'')+'><label class="chk"><input type="checkbox" data-task="'+esc(t.id)+'"'+(t.completed?' checked':'')+'><span>'+esc(t.title)+'</span></label><span>'+fD(t.due_at)+'</span></li>'}).join('')+'</ul>'},
+ faktury:async function(){
+  var fs=await q('invoices');fs.sort(function(a,b){return new Date(b.issued_on||b.created_at)-new Date(a.issued_on||a.created_at)});
+  var h='<h2>Faktury</h2><p class="mut">Zatím jen přehled vydaných faktur. Vystavování a odesílání faktur přidáme v dalším kroku.</p>';
+  if(!fs.length)return h+empty('Zatím žádné faktury.');
+  return h+'<ul class="rows big">'+fs.map(function(f){var cu=f.customer_snapshot;var n=cu&&typeof cu==='object'?(cu.name||cu.company_name||''):'';return '<li><div><b>'+esc(f.number||'bez čísla')+'</b><small>'+esc(n)+' · vystaveno '+fD(f.issued_on)+' · splatnost '+fD(f.due_on)+'</small></div><span>'+fM(f.total,f.currency==='CZK'?'Kč':f.currency)+' · '+(f.paid_at?'zaplaceno '+fD(f.paid_at):'nezaplaceno')+'</span></li>'}).join('')+'</ul>'}
+};
+document.addEventListener('click',async function(e){
+ if(e.target.closest('#openApp')){openApp();return}
+ var a=e.target.closest('#vxapp [data-app]');
+ if(a){if(a.dataset.app==='close')closeApp();else{closeApp();showAccount()}return}
+ var t=e.target.closest('#vxapp [data-tab]');if(t){appTab(t.dataset.tab);return}
+ var x=e.target.closest('[data-cancel]');
+ if(x){if(!confirm('Opravdu zrušit tuto rezervaci?'))return;var r=await getSb().from('reservations').update({canceled:true}).eq('id',x.dataset.cancel).eq('company_id',APP.cid);if(r.error)appMsg(appErr(r.error),'err');else appTab('kalendar')}});
+document.addEventListener('change',async function(e){
+ var t=e.target;
+ if(t.dataset&&t.dataset.task){var r=await getSb().from('tasks').update({completed:t.checked}).eq('id',t.dataset.task).eq('company_id',APP.cid);if(r.error){appMsg(appErr(r.error),'err');t.checked=!t.checked}else appTab('ukoly')}
+ if(t.dataset&&t.dataset.job){var r2=await getSb().from('jobs').update({status:t.value}).eq('id',t.dataset.job).eq('company_id',APP.cid);if(r2.error)appMsg(appErr(r2.error),'err')}});
+document.addEventListener('submit',async function(e){
+ var f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();
+ var c=getSb(),k=f.dataset.form,v=function(id){var el=document.getElementById(id);return el?el.value.trim():''},row,table,back;
+ if(k==='cust'){if(!v('cN')){appMsg('Vyplňte jméno.','err');return}table='customers';back='zakaznici';row={company_id:APP.cid,name:v('cN')};if(v('cE'))row.email=v('cE');if(v('cP'))row.phone=v('cP')}
+ if(k==='job'){if(!v('jT')){appMsg('Vyplňte název zakázky.','err');return}table='jobs';back='zakazky';row={company_id:APP.cid,title:v('jT')};if(v('jC'))row.customer_id=v('jC');if(v('jP'))row.price=Number(v('jP'));if(v('jD'))row.due_at=new Date(v('jD')+'T12:00:00').toISOString();if(v('jN'))row.description=v('jN')}
+ if(k==='res'){if(!v('rT')||!v('rS')||!v('rE')){appMsg('Vyplňte název, začátek a konec.','err');return}var s=new Date(v('rS')),en=new Date(v('rE'));if(en<=s){appMsg('Konec musí být po začátku.','err');return}table='reservations';back='kalendar';row={company_id:APP.cid,title:v('rT'),starts_at:s.toISOString(),ends_at:en.toISOString()};if(v('rC'))row.customer_id=v('rC')}
+ if(k==='task'){if(!v('tT')){appMsg('Vyplňte úkol.','err');return}table='tasks';back='ukoly';row={company_id:APP.cid,title:v('tT')};if(v('tD'))row.due_at=new Date(v('tD')+'T12:00:00').toISOString()}
+ var btn=f.querySelector('button[type=submit]');btn.disabled=true;
+ var r=await c.from(table).insert(row);btn.disabled=false;
+ if(r.error){appMsg(appErr(r.error),'err');return}
+ appTab(back)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('vxapp')&&!dlg.open)closeApp()});
 
 /* chat */
 var fab=$('#chatFab'),chat=$('#chat'),body=$('#chatBody'),sugg=$('#chatSugg'),cf=$('#chatForm'),cin=$('#chatIn');
