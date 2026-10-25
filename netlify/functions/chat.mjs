@@ -19,7 +19,7 @@ Plánované oblasti: AI centrum (AI CEO jako digitální ředitel firmy: doporu�
 Důležité finanční, obchodní a externí akce AI provede jen po schválení uživatele.
 
 TARIFY
-Dva tarify: AI Účetní 399 Kč měsíčně (samostatný přístup k účetnictví, modul je zatím ve vývoji) a Vexaronet PRO 699 Kč měsíčně (kompletní All-in-One platforma včetně AI CEO a AI Účetní). Ceny jsou za firmu, orientační. Součástí je 30denní zkušební období. Rozsah funkcí jednotlivých tarifů zatím není určen. Netvrď, že jsme nejlevnější.
+Pět tarifů, ceny měsíčně bez DPH: START zdarma (CRM do 50 zákazníků, 10 faktur měsíčně, 10 zakázek, bez AI CEO), AI Účetní 399 Kč (samostatné účetnictví, zatím ve vývoji), Vexaronet PRO 699 Kč (All-in-One včetně AI CEO), BUSINESS 1 199 Kč (pro rostoucí firmy, větší limity), ENTERPRISE individuální cena. Roční platba má slevu asi 15 %. Platební brána zatím není připojená. Nikdy netvrď, že jsme nejlevnější. Součástí je 30denní zkušební období. Rozsah funkcí jednotlivých tarifů zatím není určen. Netvrď, že jsme nejlevnější.
 
 VÝVOJ
 Osm etap: 1) úvodní stránka a design, 2) registrace, přihlášení a databáze, 3) dashboard, CRM, zakázky, kalendář, 4) finance a fakturace, 5) AI centrum a automatizace, 6) jednoduché weby, 7) marketing a analytika, 8) předplatné, zabezpečení a testování. Aktuálně je hotový jen návrh úvodní stránky.`;

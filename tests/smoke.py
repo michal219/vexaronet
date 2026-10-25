@@ -56,4 +56,24 @@ with sync_playwright() as p:
             check(pg.evaluate('document.documentElement.scrollWidth<=innerWidth+1'), 'mobil: bez vodorovného posuvu')
         check(not errs, name + ': žádné JS chyby ' + str(errs))
     b.close()
-print('\nSELHALO %d' % len(fails) if fails else '\nVŠE V POŘÁDKU'); sys.exit(1 if fails else 0)
+
+# --- ceník a řízení přístupu podle tarifu ---
+with sync_playwright() as p:
+    b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 900}); errs = []
+    pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK.replace("plan:'pro'", "plan:'start'").replace("status:'trial'", "status:'active'"), content_type='text/javascript'))
+    pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
+    t = pg.inner_text('#cenik')
+    check('1 199' in t or '1 199' in t, 'ceník: BUSINESS 1 199 Kč')
+    pg.click('[data-bill=y]'); pg.wait_for_timeout(100)
+    t = pg.inner_text('#cenik')
+    check('1 019' in t or '1 019' in t, 'ceník: roční cena BUSINESS')
+    check(pg.locator('.plans5 .plan').count() == 5, 'ceník: 5 tarifů')
+    pg.screenshot(path=os.path.join(ROOT, 'tests', 'shot_cenik.png'), full_page=False)
+    pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(500)
+    check('není součástí' in (pg.evaluate("document.querySelector('#vxside [data-tab=ceo]').click()") or '') or 'AI CEO' in pg.inner_text('#appMain'), 'START: AI CEO zamčeno')
+    check('Tato část není součástí' in pg.inner_text('#appMain'), 'START: zamčená stránka AI CEO')
+    pg.evaluate("document.querySelector('#vxside [data-tab=zakaznici]').click()"); pg.wait_for_timeout(100)
+    check(len(pg.inner_text('#appMain')) > 20, 'START: CRM dostupné')
+    check(not errs, 'tarify: žádné JS chyby ' + str(errs)); b.close()
+print('\nSELHALO %d' % len(fails) if fails else '\nVŠE V POŘÁDKU (včetně tarifů)'); sys.exit(1 if fails else 0)

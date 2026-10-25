@@ -43,6 +43,15 @@ export default async (req) => {
     return json({ error: 'auth' }, 401);
   }
   if (!uid) return json({ error: 'auth' }, 401);
+  try {
+    const sr = await fetch(`${SB_URL}/rest/v1/subscriptions?select=plan,status,trial_end&limit=1`, { headers: { apikey: SB_KEY, authorization: `Bearer ${token}` } });
+    const sub = sr.ok ? (await sr.json())[0] : null;
+    const plan = String(sub?.plan || '').toLowerCase();
+    const ended = sub && ((sub.status === 'trial' && sub.trial_end && new Date(sub.trial_end) < new Date()) || sub.status === 'expired' || sub.status === 'canceled');
+    if (!sub || ended || !['pro', 'business', 'enterprise'].includes(plan)) return json({ error: 'plan' }, 403);
+  } catch {
+    return json({ error: 'plan' }, 403);
+  }
   if (limited(uid)) return json({ error: 'rate' }, 429);
 
   let body;

@@ -3,3 +3,8 @@
 
 [functions]
   directory = "netlify/functions"
+
+[[redirects]]
+  from = "/cenik"
+  to = "/index.html"
+  status = 200

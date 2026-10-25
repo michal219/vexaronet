@@ -359,6 +359,20 @@ dialog::backdrop{background:rgba(2,3,10,.75);backdrop-filter:blur(8px)}
   .ms{transform:none}
 }
 
+
+/* --- ceník --- */
+.plans5 .plan{position:relative}.plans5 .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:99px;white-space:nowrap}.plans5 .price{min-height:2.2em;display:flex;align-items:flex-end}.plans5 .price b.pp:not([data-m]){font-size:1.2rem;white-space:normal}.plans5 .plan.hot{border-color:rgba(130,160,255,.7)}
+.bill{display:flex;gap:10px;justify-content:center;margin:0 0 24px;flex-wrap:wrap}.bill small{opacity:.8;font-weight:500}
+.plans5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-items:stretch}
+@media(max-width:1180px){.plans5{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:820px){.plans5{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.plans5{grid-template-columns:1fr}}
+.plans5 .plan{padding:22px}.plans5 .plan h3{font-size:1.1rem}.plans5 .price b{font-size:1.6rem;white-space:nowrap}.plans5 .pn{font-size:.8rem;color:var(--mut);min-height:2.4em}.plans5 .note{font-size:.88rem;color:var(--mut);min-height:3.2em}
+.plans5 .ticks li{font-size:.88rem}.plans5 .btn{width:100%;justify-content:center;text-align:center}
+.cmpt{text-align:center;margin:44px 0 14px}.cmpw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--glass)}
+.cmp{width:100%;border-collapse:collapse;min-width:760px;font-size:.9rem}.cmp th,.cmp td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:center}
+.cmp thead th{position:sticky;top:0;background:var(--ink);z-index:1}.cmp th[scope=row],.cmp thead th:first-child{text-align:left;font-weight:500}
+.cmp .grp th{text-align:left;background:rgba(110,140,255,.12);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}.cmp .hotc{color:#8fb2ff}
+.soonb{font-style:normal;font-size:.68rem;border:1px solid var(--line);border-radius:99px;padding:1px 7px;color:var(--mut);white-space:nowrap}
+.pnotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:26px}.pnotes>div{padding:18px;border-radius:16px;border:1px solid var(--line);background:var(--glass)}.pnotes h4{margin:0 0 6px}.pnotes p{margin:0;color:var(--mut);font-size:.9rem}
 /* --- aplikace --- */
 body:has(#vxapp) #chatFab,body:has(#vxapp) #chat{display:none!important}
 .vxapp{--ink:#080d2b;--glass:rgba(22,30,82,.55);--line:rgba(130,150,255,.2);position:fixed;inset:0;z-index:1000;background:radial-gradient(900px 500px at 85% -10%,rgba(120,80,255,.22),transparent),radial-gradient(700px 500px at 0% 100%,rgba(60,110,255,.14),transparent),var(--ink);color:var(--text);display:flex;font-family:var(--fb)}
@@ -461,7 +475,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 
 <header class="nav" id="nav"><div class="in">
   <a class="logo" href="#top" aria-label="Vexaronet – úvod"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>AI platforma</small></span></a>
-  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Tarify</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
+  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
   <div class="nav-r">
     <button class="themeb" id="theme" type="button" aria-label="Přepnout světlý a tmavý režim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg></button>
     <button class="btn btn-ghost btn-sm" id="acc" type="button">Přihlásit</button>
@@ -469,7 +483,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
     <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="mnav"><i></i></button>
   </div>
 </div></header>
-<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Tarify</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a></nav>
+<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Ceník</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a></nav>
 
 <main id="obsah">
 <section class="hero" id="top"><div class="wrap">
@@ -478,7 +492,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
     <h1 id="h1">Celé podnikání v jednom systému. Řízené AI.</h1>
     <p class="sub fade d2">Vexaronet spojí faktury, zákazníky, zakázky, jednoduché weby, marketing a automatizaci na jednom místě. AI připravuje práci za vás, důležité kroky vždy schvalujete vy.</p>
     <div class="cta fade d3"><button class="btn btn-main" type="button" data-early="">Vyzkoušet 30 dní zdarma</button><a class="btn btn-ghost" href="#funkce">Prohlédnout funkce</a></div>
-    <div class="chips fade d3"><span>30 dní zdarma</span><span>Od 399 Kč / měsíc</span><span>Světlý i tmavý režim</span></div>
+    <div class="chips fade d3"><span>30 dní zdarma</span><span>START zdarma</span><span>Světlý i tmavý režim</span></div>
   </div>
   <div class="scene" id="scene"><div class="fit" id="fit"><div class="stage" id="stage"><div class="laptop" id="laptop">
     <div class="sh"></div>
@@ -546,20 +560,31 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 </div></section>
 
 <section id="cenik"><div class="wrap">
-  <div class="sec-h c" data-r="up"><span class="eyebrow">Tarify</span><h2>Vyzkoušejte <span class="grad">30 dní zdarma</span></h2><p class="lead">Ceny jsou orientační, uvedené za firmu a měsíc bez DPH. Přesný rozsah funkcí tarifů se upřesní a ceny půjdou upravit v administraci.</p></div>
-  <div class="plans4"><article class="plan hot" data-glow>
-  <span class="ribbon">Uvedená cena</span>
-  <h3>VEXARONET PRO</h3><p class="note">Kompletní All-in-One platforma včetně AI CEO a AI Účetní.</p><div class="price"><b>699 Kč / měsíc</b></div>
-  <ul class="ticks"><li>30denní zkušební období zdarma</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
-  <button class="btn btn-main" type="button" data-early="VEXARONET PRO">Vyzkoušet 30 dní zdarma</button>
-</article>
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Ceník</span><h2>Jednoduchý ceník, <span class="grad">30 dní zdarma</span></h2><p class="lead">Začněte zdarma s tarifem START, nebo vyzkoušejte placené tarify 30 dní bez poplatku. Všechny ceny jsou měsíční bez DPH.</p></div>
+  <div class="bill" role="group" aria-label="Způsob platby"><button type="button" class="chipb" data-bill="m" aria-pressed="true">Měsíčně</button><button type="button" class="chipb" data-bill="y" aria-pressed="false">Ročně <small>sleva asi 15 %</small></button></div>
+  <div class="plans5"><article class="plan" data-glow>
+  <h3>START</h3><p class="note">Pro začínající OSVČ a malé podnikatele.</p><div class="price"><b class="pp">0 Kč</b></div><span class="pn">zdarma, bez časového omezení</span>
+  <ul class="ticks"><li>CRM do 50 zákazníků</li><li>Až 10 faktur měsíčně a 10 zakázek</li><li>Kalendář a úkoly</li><li>Jednoduchý finanční přehled</li><li>1 uživatel</li><li>Bez AI CEO a AI účetnictví</li></ul><button class="btn btn-ghost" type="button" data-early="start">Začít zdarma</button></article>
 <article class="plan" data-glow>
-  
-  <h3>AI ÚČETNÍ</h3><p class="note">Samostatný přístup k účetnictví (modul je ve vývoji).</p><div class="price"><b>399 Kč / měsíc</b></div>
-  <ul class="ticks"><li>30denní zkušební období zdarma</li><li>Rozsah funkcí tarifu bude upřesněn</li></ul>
-  <button class="btn btn-ghost" type="button" data-early="AI ÚČETNÍ">Vyzkoušet 30 dní zdarma</button>
-</article></div>
-  <p class="disc">Zkušební období je 30 dní zdarma a nepotřebujete k němu platební kartu. Placené předplatné a platební brána zatím nejsou připojené, po skončení zkoušky vám nic neúčtujeme.</p>
+  <h3>AI ÚČETNÍ</h3><p class="note">Samostatný účetní systém pro OSVČ a s.r.o. (připravujeme).</p><div class="price"><b class="pp" data-m="399" data-y="339">399 Kč</b></div><span class="pn" data-m="měsíčně, bez DPH" data-y="měsíčně při roční platbě (4 068 Kč/rok), bez DPH">měsíčně, bez DPH</span>
+  <ul class="ticks"><li>Neomezené vystavování faktur</li><li>Evidence příjmů a výdajů</li><li>Účetnictví a DPH (připravujeme)</li><li>100 AI vytěžených dokladů měsíčně</li><li>1 uživatel + 1 externí účetní</li><li>Bez CRM a AI CEO</li></ul><button class="btn btn-ghost" type="button" data-early="accountant">Vyzkoušet 30 dní zdarma</button></article>
+<article class="plan hot" data-glow><span class="ribbon">Nejvýhodnější</span>
+  <h3>PRO</h3><p class="note">Kompletní All-in-One platforma pro malé firmy.</p><div class="price"><b class="pp" data-m="699" data-y="594">699 Kč</b></div><span class="pn" data-m="měsíčně, bez DPH" data-y="měsíčně při roční platbě (7 128 Kč/rok), bez DPH">měsíčně, bez DPH</span>
+  <ul class="ticks"><li>Vše z AI Účetní</li><li>Neomezené CRM, zakázky a kalendář</li><li>AI CEO: doporučení a chat nad daty</li><li>3 uživatelé, 1 firma</li><li>150 AI dokladů a 500 AI akcí měsíčně</li><li>1 web (připravujeme)</li></ul><button class="btn btn-main" type="button" data-early="pro">Vyzkoušet 30 dní zdarma</button></article>
+<article class="plan" data-glow>
+  <h3>BUSINESS</h3><p class="note">Pro rostoucí společnosti.</p><div class="price"><b class="pp" data-m="1 199" data-y="1 019">1 199 Kč</b></div><span class="pn" data-m="měsíčně, bez DPH" data-y="měsíčně při roční platbě (12 228 Kč/rok), bez DPH">měsíčně, bez DPH</span>
+  <ul class="ticks"><li>Vše z PRO</li><li>Až 10 uživatelů a 3 weby</li><li>Pokročilý AI CEO a predikce (připravujeme)</li><li>500 AI dokladů a 2 000 AI akcí měsíčně</li><li>Role, oprávnění a schvalování</li><li>Prioritní podpora</li></ul><button class="btn btn-ghost" type="button" data-early="business">Vyzkoušet 30 dní zdarma</button></article>
+<article class="plan" data-glow>
+  <h3>ENTERPRISE</h3><p class="note">Pro větší společnosti a náročné provozy.</p><div class="price"><b class="pp">Individuální cena</b></div><span class="pn">Cena na základě nabídky</span>
+  <ul class="ticks"><li>Individuální počet uživatelů a limity</li><li>Více společností a poboček</li><li>Vlastní integrace a automatizace</li><li>Individuální onboarding</li><li>Dohodnutá podpora a SLA</li><li>Cena podle nabídky</li></ul><a class="btn btn-ghost" href="mailto:info@vexaronet.com?subject=Vexaronet%20ENTERPRISE">Požádat o nabídku</a></article></div>
+  <h3 class="cmpt">Podrobné porovnání funkcí</h3>
+  <div class="cmpw"><table class="cmp"><thead><tr><th>Funkce</th><th>START</th><th>AI Účetní</th><th class="hotc">PRO</th><th>BUSINESS</th><th>ENTERPRISE</th></tr></thead><tbody><tr class="grp"><th colspan="6">Základ</th></tr><tr><th scope="row">Uživatelé <em class="soonb">připravujeme</em></th><td>1</td><td>1 + 1 externí účetní</td><td>3</td><td>10</td><td>individuálně</td></tr><tr><th scope="row">Firmy <em class="soonb">připravujeme</em></th><td>1</td><td>1</td><td>1</td><td>1</td><td>více firem a poboček</td></tr><tr class="grp"><th colspan="6">CRM, zakázky a kalendář</th></tr><tr><th scope="row">Zákazníci</th><td>max. 50</td><td>—</td><td>neomezeně</td><td>neomezeně</td><td>neomezeně</td></tr><tr><th scope="row">Zakázky</th><td>max. 10</td><td>—</td><td>neomezeně</td><td>neomezeně</td><td>neomezeně</td></tr><tr><th scope="row">Úkoly a termíny</th><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Kalendář a plánování</th><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Online rezervace a synchronizace kalendářů <em class="soonb">připravujeme</em></th><td>—</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Obchodní příležitosti, historie komunikace, segmentace <em class="soonb">připravujeme</em></th><td>—</td><td>—</td><td>✓</td><td>✓</td><td>✓</td></tr><tr class="grp"><th colspan="6">Finance a účetnictví</th></tr><tr><th scope="row">Vystavování faktur</th><td>10 měsíčně</td><td>neomezeně</td><td>neomezeně</td><td>neomezeně</td><td>neomezeně</td></tr><tr><th scope="row">Evidence příjmů a výdajů, jednoduchý přehled</th><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Přijaté faktury a AI vytěžování dokladů <em class="soonb">připravujeme</em></th><td>—</td><td>100 / měsíc</td><td>150 / měsíc</td><td>500 / měsíc</td><td>individuálně</td></tr><tr><th scope="row">Bankovní transakce a párování plateb <em class="soonb">připravujeme</em></th><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Daňová evidence, podvojné účetnictví, deník, hlavní kniha, výkazy <em class="soonb">připravujeme</em></th><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">DPH a daňové podklady <em class="soonb">připravujeme</em></th><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Majetek, odpisy a mzdová agenda <em class="soonb">připravujeme</em></th><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Přístup externího účetního, auditní záznamy, archivace <em class="soonb">připravujeme</em></th><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr class="grp"><th colspan="6">AI</th></tr><tr><th scope="row">AI CEO: doporučení a chat nad firemními daty</th><td>—</td><td>—</td><td>✓</td><td>pokročilý</td><td>rozšířený</td></tr><tr><th scope="row">AI účetní poradce a kontrola nesrovnalostí <em class="soonb">připravujeme</em></th><td>—</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">AI akce měsíčně <em class="soonb">připravujeme</em></th><td>—</td><td>—</td><td>500</td><td>2 000</td><td>individuálně</td></tr><tr><th scope="row">AI Autopilot (akce vždy po schválení) <em class="soonb">připravujeme</em></th><td>—</td><td>—</td><td>✓</td><td>rozšířený</td><td>✓</td></tr><tr class="grp"><th colspan="6">Weby, sklad a ostatní</th></tr><tr><th scope="row">Weby a e-shopy (editor, AI generátor, produkty, objednávky) <em class="soonb">připravujeme</em></th><td>—</td><td>—</td><td>1 web nebo e-shop</td><td>3</td><td>individuálně</td></tr><tr><th scope="row">Sklad, zaměstnanci, marketingové kampaně, automatizace <em class="soonb">připravujeme</em></th><td>—</td><td>—</td><td>✓</td><td>pokročilé</td><td>✓</td></tr><tr><th scope="row">Vlastní reporty, role a oprávnění, schvalovací procesy <em class="soonb">připravujeme</em></th><td>—</td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr><tr><th scope="row">API integrace <em class="soonb">připravujeme</em></th><td>—</td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Základní veřejný firemní profil a ruční export dat <em class="soonb">připravujeme</em></th><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><th scope="row">Podpora <em class="soonb">připravujeme</em></th><td>základní</td><td>základní</td><td>základní</td><td>prioritní</td><td>dohodnutá (SLA)</td></tr></tbody></table></div>
+  <p class="disc">Funkce označené „připravujeme“ zatím nejsou dostupné a nejsou součástí aktuální verze. Uvedený limit se uplatní, až bude funkce hotová.</p>
+  <div class="pnotes">
+   <div><h4>Ceny a DPH</h4><p>Všechny ceny jsou měsíční a uvedené bez DPH. Při roční platbě je sleva přibližně 15 %. Doména, hosting, platební transakce a služby třetích stran mohou být zpoplatněny zvlášť, jejich ceny zobrazíme před objednávkou.</p></div>
+   <div><h4>30 dní zdarma</h4><p>Všechny placené tarify mají 30 dní zdarma pro nové zákazníky, jednou na firmu. Po skončení vás upozorníme a nabídneme výběr tarifu. Bez zaplacení se nic automaticky nestrhává, můžete přejít na START a vaše data zůstanou zachována. Konkrétní lhůty uchování dat uvedeme v podmínkách.</p></div>
+   <div><h4>Platby zatím nejsou spuštěné</h4><p>Platební brána zatím není připojená, takže předplatné zatím nejde zaplatit. Zkušební období a tarif START fungují. Změnu tarifu zatím vyřizujeme e-mailem na info@vexaronet.com.</p></div>
+  </div>
 </div></section>
 
 <section id="postup"><div class="wrap">
@@ -626,7 +651,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 <footer><div class="wrap">
   <div class="fg2">
     <div><a class="logo" href="#top" style="padding:0"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>AI platforma</small></span></a><p style="color:var(--mut);margin-top:14px;max-width:320px;font-size:.93rem">AI platforma pro podnikatele a firmy. Připravujeme pro ČR, Slovensko a postupně celou EU.</p></div>
-    <div><h4>Navigace</h4><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Tarify</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></div>
+    <div><h4>Navigace</h4><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></div>
     <div><h4>Informace</h4><button type="button" class="fl2" data-legal="ochrana-udaju">Ochrana osobních údajů</button><button type="button" class="fl2" data-legal="cookies">Cookies</button><a href="mailto:info@vexaronet.com">info@vexaronet.com</a></div>
   </div>
   <div class="copy"><span>© <span id="yr">2026</span> Vexaronet</span><span>vexaronet.com</span></div>
@@ -703,7 +728,9 @@ document.addEventListener('click',function(e){
  var l=e.target.closest('[data-legal]');if(l){history.replaceState(null,'','#'+l.dataset.legal);showLegal(l.dataset.legal);return}
  var lk=e.target.closest('a[href="#ochrana-udaju"]');if(lk){e.preventDefault();history.replaceState(null,'','#ochrana-udaju');showLegal('ochrana-udaju');return}
  var p=e.target.closest('[data-early]');if(p){e.preventDefault();showAuth('signup');if(p.dataset.early&&$('#aPlan'))$('#aPlan').value=p.dataset.early}});
+document.addEventListener('click',function(e){var b=e.target.closest('[data-bill]');if(!b)return;var y=b.dataset.bill==='y';[].forEach.call(document.querySelectorAll('[data-bill]'),function(x){x.setAttribute('aria-pressed',x===b)});[].forEach.call(document.querySelectorAll('.pp[data-m]'),function(el){el.textContent=(y?el.dataset.y:el.dataset.m)+' Kč'});[].forEach.call(document.querySelectorAll('.pn[data-m]'),function(el){el.textContent=y?el.dataset.y:el.dataset.m})});
 window.addEventListener('hashchange',route);setTimeout(route,0);
+if(location.pathname.replace(/\/$/,'')==='/cenik')setTimeout(function(){var c=document.getElementById('cenik');if(c)c.scrollIntoView()},400);
 
 /* formulář */
 var form=$('#form'),st=$('#st'),sendB=$('#send'),loadT=Date.now();
@@ -720,15 +747,17 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
 /* ===== Supabase: registrace a přihlášení ===== */
 var SB_URL='https://micymdbqgzeckiqyvvkn.supabase.co';
 var SB_KEY='sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW'; /* veřejný (publishable) klíč, smí být ve webu */
-var PLAN_VALUE={'VEXARONET PRO':'pro','AI ÚČETNÍ':'start'}; /* povolené hodnoty v DB: start, pro, business, enterprise (CHECK constraint) */
+var PLAN_OPTS=[['pro','Vexaronet PRO – 699 Kč / měsíc'],['accountant','AI Účetní – 399 Kč / měsíc'],['business','Vexaronet BUSINESS – 1 199 Kč / měsíc'],['start','START – zdarma']];
+var PLAN_ALLOWED=['start','accountant','pro','business','enterprise'],LEGACY={'VEXARONET PRO':'pro','AI ÚČETNÍ':'accountant','STARTER':'start','PRO':'pro','BUSINESS':'business'};
+function planVal(x){x=LEGACY[x]||x;return PLAN_ALLOWED.indexOf(x)>=0?x:'pro'}
 var TERMS_VERSION='2026-10';
 var sb=null;
 function getSb(){if(sb)return sb;if(window.supabase&&window.supabase.createClient){sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}return sb}
 var accB=$('#acc');
-function setAcc(on){accB.textContent=on?'Otevřít aplikaci (beta)':'Přihlásit'}
+function setAcc(on){accB.textContent=on?'Otevřít účet':'Přihlásit'}
 window.addEventListener('load',function(){var c=getSb();if(c)c.auth.getSession().then(function(r){setAcc(!!(r.data&&r.data.session))}).catch(function(){});if(c)c.auth.onAuthStateChange(function(ev,ses){setAcc(!!ses);if(ev==='PASSWORD_RECOVERY')setTimeout(function(){showAuth('newpw')},0)})});
 function authForm(mode){
- var plans=Object.keys(PLAN_VALUE).map(function(p){return '<option>'+p+'</option>'}).join('');
+ var plans=PLAN_OPTS.map(function(p){return '<option value="'+p[0]+'">'+p[1]+'</option>'}).join('');
  var biz=Object.keys(BIZ).map(function(b){return '<option>'+esc(b)+'</option>'}).join('');
  var tabs='<div class="bar" role="tablist"><button type="button" class="chipb" data-auth="login" aria-pressed="'+(mode==='login')+'">Přihlášení</button><button type="button" class="chipb" data-auth="signup" aria-pressed="'+(mode==='signup')+'">Registrace na 30 dní zdarma</button></div>';
  if(mode==='reset')return '<span class="eyebrow">Účet</span><h2 id="dT">Obnovení hesla</h2><p>Zadejte e-mail a pošleme vám odkaz pro nastavení nového hesla.</p><form id="authForm" novalidate><div class="fg"><div class="f full"><label for="aMail">E-mail <i>*</i></label><input id="aMail" type="email" autocomplete="email" required></div><div class="f full"><button class="btn btn-main" type="submit" id="aGo">Poslat odkaz</button> <button class="btn btn-ghost" type="button" data-auth="login">Zpět na přihlášení</button></div></div><div class="st" id="aSt" role="status" aria-live="polite"></div></form>';
@@ -736,7 +765,7 @@ function authForm(mode){
  var feats=FEATS_SU.map(function(f){return '<label class="chk"><input type="checkbox" name="aFt" value="'+f[0]+'"><span>'+f[1]+'</span></label>'}).join('');
  return '<span class="eyebrow">Účet</span><h2 id="dT">'+(mode==='login'?'Přihlášení':'Vyzkoušet 30 dní zdarma')+'</h2>'+tabs
  +'<form id="authForm" novalidate><div class="fg">'
- +(mode==='signup'?'<div class="f"><label for="aName">Jméno a příjmení <i>*</i></label><input id="aName" autocomplete="name" required></div><div class="f"><label for="aCo">Název firmy <i>*</i></label><input id="aCo" autocomplete="organization" required></div><div class="f"><label for="aCt">Stát</label><select id="aCt"><option>Česko</option><option>Slovensko</option><option>Jiná země</option></select></div><div class="f"><label for="aBiz">Obor podnikání</label><select id="aBiz">'+biz+'</select></div><div class="f full"><label for="aPlan">Tarif (30 dní zdarma, bez platební karty)</label><select id="aPlan">'+plans+'</select></div><div class="f full"><label>Které funkce chcete používat?</label><div class="chks">'+feats+'</div></div>':'')
+ +(mode==='signup'?'<div class="f"><label for="aName">Jméno a příjmení <i>*</i></label><input id="aName" autocomplete="name" required></div><div class="f"><label for="aCo">Název firmy <i>*</i></label><input id="aCo" autocomplete="organization" required></div><div class="f"><label for="aCt">Stát</label><select id="aCt"><option>Česko</option><option>Slovensko</option><option>Jiná země</option></select></div><div class="f"><label for="aBiz">Obor podnikání</label><select id="aBiz">'+biz+'</select></div><div class="f full"><label for="aPlan">Tarif (placené tarify 30 dní zdarma, bez platební karty)</label><select id="aPlan">'+plans+'</select></div><div class="f full"><label>Které funkce chcete používat?</label><div class="chks">'+feats+'</div></div>':'')
  +'<div class="f '+(mode==='login'?'full':'')+'"><label for="aMail">E-mail <i>*</i></label><input id="aMail" type="email" autocomplete="email" required></div>'
  +'<div class="f '+(mode==='login'?'full':'')+'"><label for="aPw">Heslo <i>*</i></label><input id="aPw" type="password" autocomplete="'+(mode==='login'?'current-password':'new-password')+'" minlength="8" required></div>'
  +(mode==='signup'?'<div class="f full"><label class="chk"><input type="checkbox" id="aOk"><span>Souhlasím s podmínkami a se zpracováním osobních údajů. <i>*</i></span></label></div>':'')
@@ -745,14 +774,14 @@ function authForm(mode){
 var FEATS_SU=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],['kalendar','Kalendář a rezervace'],['faktury','Faktury a finance'],['ai','AI poradce'],['zamestnanci','Zaměstnanci'],['weby','Jednoduchý web'],['marketing','Marketing'],['automatizace','Automatizace']];
 function showAuth(mode){openD(authForm(mode||'login'))}
 function aMsg(t,c){var e=$('#aSt');if(e){e.className='st '+c;e.textContent=t}}
-function niceErr(e){var m=(e&&e.message)||String(e);if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
+function niceErr(e){var m=(e&&e.message)||String(e);if(/check constraint|violates/i.test(m))return 'Vybraný tarif zatím není v databázi povolený. Napište na info@vexaronet.com.';if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
 async function ensureCompany(c,user){
  var r=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);
  if(r.error)throw r.error;
  if(r.data&&r.data.length)return r.data[0].company_id;
  var md=user.user_metadata||{};if(!md.company_name)return null;
  var a=await c.rpc('record_registration_acceptance',{version:TERMS_VERSION,accepted:true});if(a.error)throw a.error;
- var k=await c.rpc('create_company_for_plan',{company_name:md.company_name,company_industry:md.industry||'',selected_plan:PLAN_VALUE[md.plan]||'pro'});
+ var k=await c.rpc('create_company_for_plan',{company_name:md.company_name,company_industry:md.industry||'',selected_plan:planVal(md.plan)});
  if(k.error)throw k.error;
  var r2=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);
  return r2.data&&r2.data[0]?r2.data[0].company_id:(typeof k.data==='string'?k.data:null)}
@@ -809,9 +838,12 @@ var IC={prehled:'M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10',zakaznici:'M16 11a4 4 0 10
 function ico(k,s){return '<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'+(s||20)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC[k]+'"/></svg>'}
 var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace']];
 var SOON={weby:['Weby','AI generátor jednoduchých firemních webů s úpravou vzhledu a publikováním. E-shopy platforma nenabízí.',6],sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6],zamestnanci:['Zaměstnanci','Správa týmu, role a oprávnění.',3],marketing:['Marketing','Kampaně, slevové kódy a analytika.',7],reporty:['Reporty','Přehledy výkonnosti firmy.',7],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
-var PLANN={start:'AI Účetní',starter:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet PRO',enterprise:'Vexaronet PRO'},STATN={trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
-function accOnly(){var p=((APP.sub&&APP.sub.plan)||'').toLowerCase();return /^(start|starter|ucetni|accountant|ai_ucetni)$/.test(p)}
-function allowed(t){return accOnly()?['ucetni','faktury','finance','profil'].indexOf(t)>=0:true}
+var PLANN={start:'START',starter:'START',accountant:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet BUSINESS',enterprise:'ENTERPRISE'},STATN={trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
+var PLANLIM={start:'CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel. Bez AI CEO.',accountant:'1 uživatel + 1 externí účetní, 100 AI vytěžených dokladů měsíčně (funkce se připravují).',pro:'3 uživatelé, 150 AI dokladů a 500 AI akcí měsíčně, 1 web nebo e-shop, 1 firma (limity se uplatní s příslušnými funkcemi).',business:'10 uživatelů, 500 AI dokladů a 2 000 AI akcí měsíčně, 3 weby nebo e-shopy (limity se uplatní s příslušnými funkcemi).',enterprise:'Individuální limity podle dohody.'};
+function effPlan(){var s=APP.sub;if(!s)return 'start';var p=String(s.plan||'').toLowerCase();if(p==='starter')p='start';if(p==='ucetni')p='accountant';if(p==='start')return p;var ended=(s.status==='trial'&&s.trial_end&&new Date(s.trial_end)<new Date())||s.status==='expired'||s.status==='canceled';return ended?'start':p}
+function hasCeo(){return ['pro','business','enterprise'].indexOf(effPlan())>=0}
+function allowed(t){var p=effPlan();if(p==='start')return ['prehled','zakaznici','zakazky','ukoly','faktury','finance','kalendar','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','profil'].indexOf(t)>=0;return true}
+function limitMsg(k){if(effPlan()!=='start')return '';var d=APP.d;if(k==='customers'&&d.customers.rows.length>=50)return 'Tarif START umožňuje nejvýše 50 zákazníků.';if(k==='jobs'&&d.jobs.rows.length>=10)return 'Tarif START umožňuje evidovat nejvýše 10 zakázek.';if(k==='invoices'){var m=new Date(new Date().getFullYear(),new Date().getMonth(),1);if(d.invoices.rows.filter(function(x){return new Date(x.issued_on||x.created_at)>=m}).length>=10)return 'Tarif START umožňuje nejvýše 10 faktur měsíčně.'}return ''}
 function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
 function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ',{maximumFractionDigits:2})+' '+esc(!cur||cur==='CZK'?'Kč':cur)}
 function custName(r){if(!r)return '';return r.name||r.company_name||[r.first_name,r.last_name].filter(Boolean).join(' ')||r.full_name||r.email||'(bez jména)'}
@@ -838,7 +870,7 @@ async function openApp(){
  el.innerHTML='<aside id="vxside"><div class="vlogo"><svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><path d="M5 7l11 19L27 7" fill="none" stroke="#8b6cff" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/></svg><div><b>VEXARONET</b><small>AI CEO <span class="beta">BETA</span></small></div></div><nav>'+NAV.map(nb).join('')+Object.keys(SOON).map(function(k){return '<button type="button" data-tab="'+k+'" class="soon">'+ico(k)+'<span>'+SOON[k][0]+'</span><em>brzy</em></button>'}).join('')+'</nav><div class="sfoot"><button type="button" data-tab="profil">'+ico('profil')+'<span>Nastavení</span></button><div class="subc" id="subCard"></div></div></aside><div class="scrim" data-app="side"></div>'
  +'<div class="vxmain"><header><button type="button" class="ib burger" data-app="side" aria-label="Menu">'+ico('menu')+'</button><form class="gs" id="gsForm" autocomplete="off"><span class="si">'+ico('search',18)+'</span><input id="gsIn" placeholder="Zeptejte se AI CEO nebo napište, co potřebujete…" maxlength="400" aria-label="Zeptat se AI CEO"><kbd>Ctrl + K</kbd></form><div class="bellw"><button type="button" class="ib" data-app="bell" aria-label="Notifikace">'+ico('bell')+'<i class="bdg" id="appBdg"></i></button><div class="pop" id="appBell"></div></div><button type="button" class="ib" data-app="theme" aria-label="Světlý a tmavý režim">'+ico('sun')+'</button><button type="button" class="usr" data-tab="profil"><span class="ib av">'+esc(ini)+'</span><span class="un"><b>'+esc(nm.split('@')[0])+'</b><small>'+esc(APP.co)+'</small></span></button><button type="button" class="btn btn-ghost btn-sm webb" data-app="close">Web</button></header><main id="appMain"></main></div><div class="toast" id="appToast" role="status"></div>';
  document.body.appendChild(el);document.documentElement.style.overflow='hidden';
- await refresh(true);appTab(APP.tab)}
+ await refresh(true);if(!allowed(APP.tab))APP.tab='profil';appTab(APP.tab)}
 function closeApp(){var el=A('vxapp');if(el)el.remove();document.documentElement.style.overflow=''}
 function subCard(){var s=APP.sub,e=A('subCard');if(!e)return;if(!s){e.innerHTML='';return}
  var nm=PLANN[(s.plan||'').toLowerCase()]||s.plan,t=STATN[s.status]||s.status,x='';
@@ -855,7 +887,7 @@ function appTab(t){
  [].forEach.call(el.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
  var m=A('appMain');try{m.innerHTML=!allowed(t)?lockView(t):(VIEWS[t]?VIEWS[t]():soonView(t))}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
  m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]()}
-function lockView(t){return '<div class="card2 soonc"><span class="eyebrow">Tarif AI Účetní</span><h2>Tato část je v tarifu Vexaronet PRO</h2><p>Váš tarif zahrnuje samostatný přístup k účetnictví. AI CEO, CRM, zakázky a ostatní moduly jsou součástí Vexaronet PRO (699 Kč měsíčně).</p><div class="draft">Změnu tarifu zatím řešíme na info@vexaronet.com, platební brána není připojená.</div></div>'}
+function lockView(t){return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><a class="btn btn-ghost btn-sm" href="mailto:info@vexaronet.com?subject=Zm%C4%9Bna%20tarifu">Požádat o změnu tarifu</a></div><p class="mut fine">Platební brána zatím není připojená, změnu tarifu zatím vyřizujeme e-mailem.</p></div>'}
 function errBox(x){return x.err?'<div class="draft">Data se nepodařilo načíst: '+esc(x.err)+'</div>':''}
 function soonView(t){var s=SOON[t];return '<div class="card2 soonc"><span class="eyebrow">Etapa '+s[2]+' · připravujeme</span><h2>'+esc(s[0])+'</h2><p>'+esc(s[1])+'</p><div class="draft">Tento modul zatím není hotový ani připojený. Nic zde neukládáme ani nepředstíráme. Ozveme se, až bude k dispozici.</div></div>'}
 
@@ -926,12 +958,13 @@ function summary(){
   faktury_nezaplacene:unpaid.length,pohledavky_kc:unpaid.reduce(function(s,x){return s+Number(x.total||0)},0),faktury_po_splatnosti:over.length,
   fakturovano_tento_mesic_kc:d.invoices.rows.filter(function(x){return x.issued_on&&new Date(x.issued_on)>=ms}).reduce(function(s,x){return s+Number(x.total||0)},0),
   prijmy_kc:d.ds.income,vydaje_kc:d.ds.expenses}}
-function ceoPanel(){
+function ceoPanel(){if(!hasCeo())return '<div class="ceop"><h3>Váš AI CEO</h3><p class="mut">AI CEO není součástí tarifu '+esc(PLANN[effPlan()]||'')+'. Je ve Vexaronet PRO a vyšších.</p></div>';
  var Q=[['Připravit přehled financí','Připrav stručný přehled financí mé firmy podle čísel.'],['Zkontrolovat zakázky','Zkontroluj stav zakázek a termínů a řekni, co hoří.'],['Navrhnout nabídku','Připrav krátkou obchodní nabídku pro stávající zákazníky mé firmy.'],['Najít nové zákazníky','Navrhni 3 způsoby, jak získat nové zákazníky pro můj obor.'],['Navrhnout marketing','Doporuč jednoduchou marketingovou kampaň pro můj obor.']];
  return '<div class="ceop"><div class="orb" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64"><defs><linearGradient id="og" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#7fa0ff"/><stop offset="1" stop-color="#b07cff"/></linearGradient></defs><circle cx="32" cy="32" r="30" fill="url(#og)" opacity=".25"/><path d="M16 20l16 26 16-26" fill="none" stroke="url(#og)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/></svg></div><h3>Váš AI CEO</h3><p class="mut">Analyzuje data vaší firmy, hlídá důležité věci a radí. Důležité kroky provede až po vašem potvrzení.</p><div class="chatl" id="ceoLog">'+ceoMsgs()+'</div><div class="qp">'+Q.map(function(q,i){return '<button type="button" data-q="'+i+'">'+esc(q[0])+'</button>'}).join('')+'</div><form class="aif" id="ceoForm"><input id="ceoIn" placeholder="Napište mi, co potřebujete…" maxlength="500" autocomplete="off" aria-label="Zpráva pro AI CEO"><button class="sendb" type="submit" aria-label="Odeslat">'+ico('send')+'</button></form></div>'}
 var CEOQ=[['Připravit přehled financí','Připrav stručný přehled financí mé firmy podle čísel.'],['Zkontrolovat zakázky','Zkontroluj stav zakázek a termínů a řekni, co hoří.'],['Navrhnout nabídku','Připrav krátkou obchodní nabídku pro stávající zákazníky mé firmy.'],['Najít nové zákazníky','Navrhni 3 způsoby, jak získat nové zákazníky pro můj obor.'],['Navrhnout marketing','Doporuč jednoduchou marketingovou kampaň pro můj obor.']];
 function ceoMsgs(){return (APP.chat.length?APP.chat:[{role:'assistant',content:'Dobrý den. Co pro vás mohu dnes udělat? Zeptejte se na finance, zakázky nebo zákazníky.'}]).map(function(m){return '<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>'}).join('')}
 async function ceoAsk(q){
+ if(!hasCeo()){toast('AI CEO je součástí tarifu Vexaronet PRO a vyšších.','err');return}
  if(APP.busy)return;APP.busy=true;APP.chat.push({role:'user',content:q});
  ['ceoLog'].forEach(function(id){var lg=A(id);if(lg){lg.innerHTML=ceoMsgs()+'<div class="msg bot" id="aiWait">Píšu odpověď…</div>';lg.scrollTop=lg.scrollHeight}});
  var rep=await askAI(APP.chat.slice(-10),function(t){var w=A('aiWait');if(w)w.textContent=t});
@@ -948,7 +981,7 @@ function events(){
 function dayLbl(d){var a=dayStart(0),k=Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-a)/864e5);return k===0?'Dnes':(k===1?'Zítra':d.toLocaleDateString('cs-CZ',{day:'numeric',month:'numeric'}))}
 var VIEWS={
  prehled:function(){
-  var d=APP.d,s=summary(),ms=monthsBack(6),h=APP.betaHidden?'':'<div class="betab"><span><b>Rozpracovaná beta verze.</b> Hotové části fungují se skutečnými daty, nehotové jsou označené „brzy“.</span><button type="button" class="lnk" data-app="hidebeta">Skrýt</button></div>';
+  var d=APP.d,s=summary(),ms=monthsBack(6),h=trialBanner()+(APP.betaHidden?'':'<div class="betab"><span><b>Rozpracovaná beta verze.</b> Hotové části fungují se skutečnými daty, nehotové jsou označené „brzy“.</span><button type="button" class="lnk" data-app="hidebeta">Skrýt</button></div>');
   var errs=['customers','jobs','reservations','tasks','invoices'].filter(function(k){return d[k].err}).map(function(k){return k+': '+d[k].err});
   if(errs.length||d.ds.err)h+='<div class="draft">Část dat se nepodařilo načíst. '+esc(errs.concat(d.ds.err?['přehled: '+d.ds.err]:[]).join(' · '))+'</div>';
   var inv=d.invoices.rows.map(function(x){return {issued_on:x.issued_on,__v:Number(x.total||0),paid_at:x.paid_at}}),all=byMonth(inv,function(x){return x.issued_on},ms),
@@ -996,10 +1029,13 @@ var VIEWS={
   return h+'<ul class="rows big">'+fs.map(function(f){var cu=f.customer_snapshot,nm=cu&&typeof cu==='object'?(cu.name||cu.company_name||''):'',late=!f.paid_at&&f.due_on&&new Date(f.due_on)<dayStart(0);return '<li><div><b>'+esc(f.number||'bez čísla')+'</b><small>'+esc(nm)+' · vystaveno '+fD(f.issued_on)+' · splatnost '+fD(f.due_on)+(f.lifecycle?' · '+esc(f.lifecycle):'')+'</small></div><span'+(late?' class="late"':'')+'>'+fM(f.total,f.currency)+' · '+(f.paid_at?'zaplaceno '+fD(f.paid_at):(late?'po splatnosti':'nezaplaceno'))+'</span>'+(f.paid_at?'':'<button type="button" class="lnk" data-pay="'+esc(f.id)+'">Označit jako zaplacenou</button>')+'</li>'}).join('')+'</ul>'},
  profil:function(){
   var s=APP.sub,m=APP.meta,fs=m.features||[];
-  return '<div class="two"><section class="card2"><h3>Firma a účet</h3><ul class="rows"><li><b>E-mail</b><span>'+esc(APP.user.email)+'</span></li><li><b>Jméno</b><span>'+esc(m.full_name||'–')+'</span></li><li><b>Firma</b><span>'+esc(APP.co)+'</span></li><li><b>Obor</b><span>'+esc(APP.ind||'–')+'</span></li><li><b>Stát</b><span>'+esc(m.country||'–')+'</span></li><li><b>Role</b><span>'+esc(APP.role||'–')+'</span></li></ul></section><section class="card2"><h3>Předplatné</h3>'+(s?'<ul class="rows"><li><b>Tarif</b><span>'+esc(PLANN[s.plan]||s.plan)+'</span></li><li><b>Stav</b><span>'+esc(STATN[s.status]||s.status)+'</span></li>'+(s.trial_end?'<li><b>Zkušební období do</b><span>'+fD(s.trial_end)+'</span></li>':'')+'</ul><p class="mut">Platební brána zatím není připojená, nic vám neúčtujeme.</p>':'<p class="mut">Předplatné nenalezeno.</p>')+'</section></div>'
+  return '<div class="two"><section class="card2"><h3>Firma a účet</h3><ul class="rows"><li><b>E-mail</b><span>'+esc(APP.user.email)+'</span></li><li><b>Jméno</b><span>'+esc(m.full_name||'–')+'</span></li><li><b>Firma</b><span>'+esc(APP.co)+'</span></li><li><b>Obor</b><span>'+esc(APP.ind||'–')+'</span></li><li><b>Stát</b><span>'+esc(m.country||'–')+'</span></li><li><b>Role</b><span>'+esc(APP.role||'–')+'</span></li></ul></section><section class="card2"><h3>Předplatné</h3>'+(s?'<ul class="rows"><li><b>Tarif</b><span>'+esc(PLANN[String(s.plan).toLowerCase()]||s.plan)+'</span></li><li><b>Stav</b><span>'+esc(STATN[s.status]||s.status)+'</span></li>'+(s.trial_end?'<li><b>Zkušební období do</b><span>'+fD(s.trial_end)+'</span></li>':'')+(effPlan()!==String(s.plan).toLowerCase()?'<li><b>Aktuálně platí</b><span>'+esc(PLANN[effPlan()])+'</span></li>':'')+'</ul><p class="mut">'+esc(PLANLIM[effPlan()]||'')+'</p><p class="mut fine">Ceny jsou měsíční bez DPH. Platební brána zatím není připojená, nic vám neúčtujeme a nic se automaticky nestrhává.</p><div class="dact"><a class="btn btn-ghost btn-sm" href="/cenik">Zobrazit ceník</a><a class="btn btn-ghost btn-sm" href="mailto:info@vexaronet.com?subject=Zm%C4%9Bna%20tarifu&body=Chci%20zm%C4%9Bnit%20tarif%20(upgrade%20nebo%20downgrade)%20pro%20firmu%20'+encodeURIComponent(APP.co)+'.">Požádat o změnu tarifu</a></div>':'<p class="mut">Předplatné nenalezeno.</p>')+'</section></div>'
   +'<section class="card2"><h3>Použité funkce</h3><form id="featForm"><div class="fg"><div class="f"><label for="pC">Stát</label><select id="pC">'+COUNTRIES.map(function(x){return '<option'+(x===m.country?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div></div><div class="chks">'+FEATS.map(function(f){return '<label class="chk"><input type="checkbox" name="ft" value="'+f[0]+'"'+(fs.indexOf(f[0])>=0?' checked':'')+'><span>'+f[1]+'</span></label>'}).join('')+'</div><button class="btn btn-main btn-sm" type="submit">Uložit</button></form></section><div class="dact"><button class="btn btn-ghost" type="button" data-app="logout">Odhlásit se</button></div>'}
 };
-function recsHtml(n){return '<div class="rl">'+recs().slice(0,n).map(function(r,i){return '<div class="rec"><span class="ki '+(r.c==='bad'?'r':r.c==='warn'?'o':r.c==='ok'?'g':'b')+'">'+ico(r.ic,22)+'</span><div class="rt"><b>'+esc(r.t)+'</b><small>'+esc(r.x)+'</small></div><div class="ra">'+(r.go?'<button type="button" class="btn btn-ghost btn-sm" data-tab="'+r.go+'">Zobrazit</button>':'')+(r.act?'<button type="button" class="pri sm" data-act="'+r.act+'">'+ico('send',16)+' '+esc(r.lab)+'</button>':'')+'</div></div>'}).join('')+'</div>'}
+function trialBanner(){var x=APP.sub;if(!x||x.status!=='trial'||!x.trial_end)return '';var d=Math.ceil((new Date(x.trial_end)-new Date())/864e5);
+ if(d<=0)return '<div class="betab"><span><b>Zkušební období skončilo.</b> Účet teď běží v tarifu START, vaše data zůstávají zachována. Pro plné funkce vyberte tarif.</span><a class="btn btn-ghost btn-sm" href="/cenik">Ceník</a></div>';
+ if(d<=7)return '<div class="betab"><span><b>Zkušební období končí za '+d+' '+(d===1?'den':(d<5?'dny':'dní'))+'.</b> Pak můžete vybrat placený tarif, nebo přejít na START. Nic se automaticky neúčtuje.</span><a class="btn btn-ghost btn-sm" href="/cenik">Ceník</a></div>';return ''}
+function recsHtml(n){if(!hasCeo())return '<p class="mut">AI CEO (doporučení a chat nad vašimi daty) je součástí tarifu Vexaronet PRO a vyšších.</p><div class="dact"><a class="btn btn-ghost btn-sm" href="/cenik">Zobrazit ceník</a></div>';return '<div class="rl">'+recs().slice(0,n).map(function(r,i){return '<div class="rec"><span class="ki '+(r.c==='bad'?'r':r.c==='warn'?'o':r.c==='ok'?'g':'b')+'">'+ico(r.ic,22)+'</span><div class="rt"><b>'+esc(r.t)+'</b><small>'+esc(r.x)+'</small></div><div class="ra">'+(r.go?'<button type="button" class="btn btn-ghost btn-sm" data-tab="'+r.go+'">Zobrazit</button>':'')+(r.act?'<button type="button" class="pri sm" data-act="'+r.act+'">'+ico('send',16)+' '+esc(r.lab)+'</button>':'')+'</div></div>'}).join('')+'</div>'}
 function evHtml(){var E=events();if(!E.length)return '<p class="mut">Žádné nadcházející události.</p>';return '<ul class="ev">'+E.map(function(e){var tm=e[0].getHours()||e[0].getMinutes()?e[0].toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'}):'';return '<li><button type="button" data-tab="'+e[2]+'"><span class="evd"><b>'+dayLbl(e[0])+'</b><small>'+tm+'</small></span><span class="evt">'+esc(e[1])+'</span></button></li>'}).join('')+'</ul>'}
 var AFTER={prehled:function(){
   var d=APP.d,ms=monthsBack(6),lb=ms.map(function(m){return m.toLocaleDateString('cs-CZ',{month:'short'})}),f=finSeries(ms);
@@ -1045,7 +1081,7 @@ function entDef(ent){
 function rpcInv(action,doc){return getSb().rpc('invoice_action',{cid:APP.cid,action:action,doc:doc})}
 function itemRow(){return '<div class="irow"><input class="id" placeholder="Popis položky" aria-label="Popis"><input class="iq" type="number" step="any" value="1" aria-label="Množství"><input class="iu" value="ks" aria-label="Jednotka"><input class="ip" type="number" step="any" placeholder="Cena s DPH" aria-label="Cena za jednotku s DPH"><select class="iv" aria-label="Sazba DPH"><option>21</option><option>12</option><option>0</option></select><button type="button" class="lnk" data-delrow="1" aria-label="Odebrat">×</button></div>'}
 function invTotals(){var t=0;[].forEach.call(document.querySelectorAll('#iRows .irow'),function(r){t+=(parseFloat(r.querySelector('.iq').value)||0)*(parseFloat(r.querySelector('.ip').value)||0)});var e=A('iTot');if(e)e.textContent='Celkem s DPH: '+fM(Math.round(t*100)/100)}
-function invForm(){
+function invForm(){var lm=limitMsg('invoices');if(lm){toast(lm,'err');return}
  var cs=APP.d.customers.rows,td=locD(new Date()),du=locD(new Date(Date.now()+14*864e5));
  if(!cs.length){toast('Nejdřív přidejte zákazníka.');return}
  modal('<h3>Nová faktura</h3><form id="invForm"><div class="fg"><div class="f full"><label for="iC">Zákazník <i>*</i></label><select id="iC">'+cs.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(custName(x))+'</option>'}).join('')+'</select></div><div class="f"><label for="iI">Datum vystavení</label><input id="iI" type="date" value="'+td+'"></div><div class="f"><label for="iT">Datum zdanitelného plnění</label><input id="iT" type="date" value="'+td+'"></div><div class="f"><label for="iD">Splatnost</label><input id="iD" type="date" value="'+du+'"></div><div class="f"><label for="iCur">Měna</label><select id="iCur"><option>CZK</option><option>EUR</option></select></div><div class="f full"><label for="iJ">Zakázka (nepovinné)</label><select id="iJ"><option value="">– bez zakázky –</option>'+APP.d.jobs.rows.map(function(j){return '<option value="'+esc(j.id)+'">'+esc(j.title)+'</option>'}).join('')+'</select></div></div><h4>Položky</h4><div id="iRows">'+itemRow()+'</div><button type="button" class="btn btn-ghost btn-sm" data-addrow="1">+ Položka</button><p class="mut" id="iTot"></p><p class="mut fine">Sazby DPH a jejich použití musí ověřit účetní.</p><div class="st" id="entSt" role="status"></div><div class="dact"><button class="pri" type="submit">Vystavit fakturu</button><button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div></form>')}
@@ -1055,7 +1091,7 @@ function profForm(){
  modal('<h3>Fakturační údaje (dodavatel)</h3><p class="mut">Údaje, které se objeví na fakturách. Uloží se přes pravidla ve vaší databázi.</p><form id="profForm"><div class="fg">'+f('legal_name','Obchodní jméno',1)+f('ico','IČO')+f('dic','DIČ')+f('address_text','Adresa')+f('bank_account','Číslo účtu')+f('iban','IBAN')+f('email','E-mail','','email')+f('country_code','Země (kód)')+f('default_due_days','Splatnost (dní)','','number')+f('default_currency','Výchozí měna')+f('registration_text','Zápis v rejstříku')+'<div class="f full"><label class="chk"><input type="checkbox" id="p_vat_payer"'+(sp.vat_payer?' checked':'')+'><span>Jsem plátce DPH</span></label></div></div><div class="st" id="entSt" role="status"></div><div class="dact"><button class="pri" type="submit">Uložit</button><button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div></form>')}
 function isInc(k){return /inc|přij|prij|^in$|revenue|výnos/i.test(String(k))}
 function KL(k){return k==='income'?'Příjem':(k==='expense'?'Výdaj':(isInc(k)?'Příjem ('+k+')':'Výdaj ('+k+')'))}
-function openForm(ent,id){
+function openForm(ent,id){var lm=!id&&limitMsg(ent);if(lm){toast(lm,'err');return}
  var def=entDef(ent),row=id?(APP.d[ent].rows.filter(function(r){return String(r.id)===id})[0]||{}):{},F=def.f();
  var h='<h3>'+(id?'Upravit':'Nový')+' – '+def.n+'</h3><form id="entForm" data-ent="'+ent+'" data-id="'+esc(id||'')+'"><div class="fg">';
  F.forEach(function(f){var v=row[f.k],lab='<label for="e_'+f.k+'">'+f.l+(f.req?' <i>*</i>':'')+'</label>',c='';
@@ -1096,6 +1132,7 @@ function themeToggle(){var r=document.documentElement,n=r.getAttribute('data-the
 async function askAI(msgs,out){
  var ses=(await getSb().auth.getSession()).data.session;if(!ses){out('Přihlášení vypršelo. Přihlaste se znovu.');return null}
  try{var r=await fetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify({messages:msgs,summary:summary()})});
+  if(r.status===403){out('AI CEO je součástí tarifu Vexaronet PRO a vyšších.');return null}
   if(r.status===429){out('Příliš mnoho dotazů. Zkuste to za chvíli.');return null}
   if(!r.ok)throw new Error(r.status);var d=await r.json();if(!d.reply)throw new Error('e');return d.reply}catch(e){out('AI poradce teď není dostupný. Zkuste to později.');return null}}
 document.addEventListener('click',async function(e){
