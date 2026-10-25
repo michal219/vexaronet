@@ -46,6 +46,8 @@ with sync_playwright() as p:
             for tab in ['finance', 'zakaznici', 'zakazky', 'kalendar', 'ukoly', 'faktury', 'ceo', 'ucetni', 'weby', 'profil']:
                 pg.evaluate("document.querySelector('#vxside [data-tab=%s]').click()" % tab); pg.wait_for_timeout(150)
                 check(len(pg.inner_text('#appMain')) > 20, 'záložka ' + tab)
+            pg.evaluate("document.querySelector('#vxside [data-tab=faktury]').click()"); pg.click('[data-newinv]'); pg.fill('#iRows .ip','1000'); pg.wait_for_timeout(100)
+            check('1\u00a0000' in pg.inner_text('#iTot') or '1 000' in pg.inner_text('#iTot'), 'formulář faktury počítá součet'); pg.click('[data-app=mclose]'); pg.click('[data-invprof]'); check(pg.locator('#p_legal_name').count()==1, 'formulář fakturačních údajů'); pg.click('[data-app=mclose]')
             pg.evaluate("document.querySelector('#vxside [data-tab=zakazky]').click()"); pg.click('[data-new=jobs]'); pg.fill('#e_title', 'Nová'); pg.click('#entForm button[type=submit]'); pg.wait_for_timeout(300)
             check(any(l[0] == 'ins' and l[1] == 'jobs' and l[2].get('company_id') == 'c1' for l in pg.evaluate('window.__log')), 'přidání zakázky')
             pg.click('[data-edit^="jobs:j1"]'); pg.on('dialog', lambda d: d.accept()); pg.click('[data-del]'); pg.wait_for_timeout(300)

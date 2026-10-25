@@ -428,7 +428,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 .vxapp .rows li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(110,140,255,.06)}
 .vxapp .rows.big li[data-edit]{cursor:pointer;transition:.2s}.vxapp .rows.big li[data-edit]:hover{border-color:rgba(130,160,255,.6)}
 .vxapp .rows li.off{opacity:.55}.vxapp .rows small{display:block}.vxapp .rows li>span{color:var(--mut);font-size:.9rem}
-.vxapp .inc{color:#3ddc97!important}.vxapp .late{color:#ff6b81!important;font-weight:700}.vxapp .stt{font-style:normal;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}
+.vxapp .irow{display:grid;grid-template-columns:1fr 64px 56px 100px 64px 24px;gap:6px;margin-bottom:6px}.vxapp .irow input,.vxapp .irow select{padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--glass);color:inherit;min-width:0}@media(max-width:520px){.vxapp .irow{grid-template-columns:1fr 1fr}.vxapp .irow .id{grid-column:1/-1}}.vxapp .inc{color:#3ddc97!important}.vxapp .late{color:#ff6b81!important;font-weight:700}.vxapp .stt{font-style:normal;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}
 .vxapp .bar2{display:flex;gap:10px;justify-content:space-between;margin:10px 0 14px;flex-wrap:wrap}
 .vxapp .srch{flex:1;min-width:180px;max-width:360px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:inherit}
 .vxapp .lnk{background:none;border:0;text-decoration:underline;padding:0;color:inherit;cursor:pointer}
@@ -991,9 +991,9 @@ var VIEWS={
   return h+'<ul class="rows big">'+ts.map(function(t){var late=!t.completed&&t.due_at&&new Date(t.due_at)<dayStart(0);return '<li'+(t.completed?' class="off"':'')+'><label class="chk"><input type="checkbox" data-task="'+esc(t.id)+'"'+(t.completed?' checked':'')+'><span>'+esc(t.title)+'</span></label><span'+(late?' class="late"':'')+'>'+fD(t.due_at)+'</span><button type="button" class="lnk" data-edit="tasks:'+esc(t.id)+'">Upravit</button></li>'}).join('')+'</ul>'},
  faktury:function(){
   var x=APP.d.invoices,fs=x.rows.slice().sort(function(a,b){return new Date(b.issued_on||b.created_at)-new Date(a.issued_on||a.created_at)});
-  var h='<div class="card2 note"><b>Jen přehled.</b> Vystavování faktur, PDF a QR platby přidáme v etapě 4 a před ostrým použitím je musí zkontrolovat účetní. Zatím vidíte faktury, které už v databázi jsou.</div>'+errBox(x);
-  if(!fs.length)return h+'<p class="mut">Zatím žádné faktury.</p>';
-  return h+'<ul class="rows big">'+fs.map(function(f){var cu=f.customer_snapshot,nm=cu&&typeof cu==='object'?(cu.name||cu.company_name||''):'',late=!f.paid_at&&f.due_on&&new Date(f.due_on)<dayStart(0);return '<li><div><b>'+esc(f.number||'bez čísla')+'</b><small>'+esc(nm)+' · vystaveno '+fD(f.issued_on)+' · splatnost '+fD(f.due_on)+'</small></div><span'+(late?' class="late"':'')+'>'+fM(f.total,f.currency)+' · '+(f.paid_at?'zaplaceno '+fD(f.paid_at):(late?'po splatnosti':'nezaplaceno'))+'</span></li>'}).join('')+'</ul>'},
+  var h='<div class="card2 note"><b>Pozor:</b> faktury se vystavují přes pravidla ve vaší databázi (číslování, DPH). Před ostrým používáním je musí zkontrolovat účetní. Odesílání faktur e-mailem a PDF zatím nejsou připojené.</div><div class="bar2"><button type="button" class="btn btn-ghost btn-sm" data-invprof="1">Fakturační údaje</button><button type="button" class="pri sm" data-newinv="1">+ Nová faktura</button></div>'+errBox(x);
+  if(!fs.length)return h+'<p class="mut">Zatím žádné faktury. Nejdřív vyplňte Fakturační údaje, pak vystavte první fakturu.</p>';
+  return h+'<ul class="rows big">'+fs.map(function(f){var cu=f.customer_snapshot,nm=cu&&typeof cu==='object'?(cu.name||cu.company_name||''):'',late=!f.paid_at&&f.due_on&&new Date(f.due_on)<dayStart(0);return '<li><div><b>'+esc(f.number||'bez čísla')+'</b><small>'+esc(nm)+' · vystaveno '+fD(f.issued_on)+' · splatnost '+fD(f.due_on)+(f.lifecycle?' · '+esc(f.lifecycle):'')+'</small></div><span'+(late?' class="late"':'')+'>'+fM(f.total,f.currency)+' · '+(f.paid_at?'zaplaceno '+fD(f.paid_at):(late?'po splatnosti':'nezaplaceno'))+'</span>'+(f.paid_at?'':'<button type="button" class="lnk" data-pay="'+esc(f.id)+'">Označit jako zaplacenou</button>')+'</li>'}).join('')+'</ul>'},
  profil:function(){
   var s=APP.sub,m=APP.meta,fs=m.features||[];
   return '<div class="two"><section class="card2"><h3>Firma a účet</h3><ul class="rows"><li><b>E-mail</b><span>'+esc(APP.user.email)+'</span></li><li><b>Jméno</b><span>'+esc(m.full_name||'–')+'</span></li><li><b>Firma</b><span>'+esc(APP.co)+'</span></li><li><b>Obor</b><span>'+esc(APP.ind||'–')+'</span></li><li><b>Stát</b><span>'+esc(m.country||'–')+'</span></li><li><b>Role</b><span>'+esc(APP.role||'–')+'</span></li></ul></section><section class="card2"><h3>Předplatné</h3>'+(s?'<ul class="rows"><li><b>Tarif</b><span>'+esc(PLANN[s.plan]||s.plan)+'</span></li><li><b>Stav</b><span>'+esc(STATN[s.status]||s.status)+'</span></li>'+(s.trial_end?'<li><b>Zkušební období do</b><span>'+fD(s.trial_end)+'</span></li>':'')+'</ul><p class="mut">Platební brána zatím není připojená, nic vám neúčtujeme.</p>':'<p class="mut">Předplatné nenalezeno.</p>')+'</section></div>'
@@ -1041,6 +1041,18 @@ function entDef(ent){
   financial_entries:{n:'finanční záznam',f:function(){var ks=['income','expense'];APP.d.fe.rows.forEach(function(r){if(r.kind&&ks.indexOf(r.kind)<0)ks.push(r.kind)});return [{k:'title',l:'Popis',req:1},{k:'kind',l:'Druh',t:'sel',opts:ks.map(function(k){return [k,KL(k)]}),req:1},{k:'amount',l:'Částka (Kč)',t:'number',req:1},{k:'entry_date',l:'Datum',t:'dateonly',req:1}]}},
   tasks:{n:'úkol',f:function(){return [{k:'title',l:'Úkol',req:1},{k:'due_at',l:'Termín',t:'date'},{k:'description',l:'Popis',t:'textarea'},{k:'completed',l:'Hotovo',t:'bool'}]}}
  };return D[ent]}
+
+function rpcInv(action,doc){return getSb().rpc('invoice_action',{cid:APP.cid,action:action,doc:doc})}
+function itemRow(){return '<div class="irow"><input class="id" placeholder="Popis položky" aria-label="Popis"><input class="iq" type="number" step="any" value="1" aria-label="Množství"><input class="iu" value="ks" aria-label="Jednotka"><input class="ip" type="number" step="any" placeholder="Cena s DPH" aria-label="Cena za jednotku s DPH"><select class="iv" aria-label="Sazba DPH"><option>21</option><option>12</option><option>0</option></select><button type="button" class="lnk" data-delrow="1" aria-label="Odebrat">×</button></div>'}
+function invTotals(){var t=0;[].forEach.call(document.querySelectorAll('#iRows .irow'),function(r){t+=(parseFloat(r.querySelector('.iq').value)||0)*(parseFloat(r.querySelector('.ip').value)||0)});var e=A('iTot');if(e)e.textContent='Celkem s DPH: '+fM(Math.round(t*100)/100)}
+function invForm(){
+ var cs=APP.d.customers.rows,td=locD(new Date()),du=locD(new Date(Date.now()+14*864e5));
+ if(!cs.length){toast('Nejdřív přidejte zákazníka.');return}
+ modal('<h3>Nová faktura</h3><form id="invForm"><div class="fg"><div class="f full"><label for="iC">Zákazník <i>*</i></label><select id="iC">'+cs.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(custName(x))+'</option>'}).join('')+'</select></div><div class="f"><label for="iI">Datum vystavení</label><input id="iI" type="date" value="'+td+'"></div><div class="f"><label for="iT">Datum zdanitelného plnění</label><input id="iT" type="date" value="'+td+'"></div><div class="f"><label for="iD">Splatnost</label><input id="iD" type="date" value="'+du+'"></div><div class="f"><label for="iCur">Měna</label><select id="iCur"><option>CZK</option><option>EUR</option></select></div><div class="f full"><label for="iJ">Zakázka (nepovinné)</label><select id="iJ"><option value="">– bez zakázky –</option>'+APP.d.jobs.rows.map(function(j){return '<option value="'+esc(j.id)+'">'+esc(j.title)+'</option>'}).join('')+'</select></div></div><h4>Položky</h4><div id="iRows">'+itemRow()+'</div><button type="button" class="btn btn-ghost btn-sm" data-addrow="1">+ Položka</button><p class="mut" id="iTot"></p><p class="mut fine">Sazby DPH a jejich použití musí ověřit účetní.</p><div class="st" id="entSt" role="status"></div><div class="dact"><button class="pri" type="submit">Vystavit fakturu</button><button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div></form>')}
+function profForm(){
+ var last=APP.d.invoices.rows.filter(function(x){return x.supplier_snapshot&&typeof x.supplier_snapshot==='object'}).sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at)})[0],sp=last?last.supplier_snapshot:{};
+ function f(k,l,req,t){return '<div class="f"><label for="p_'+k+'">'+l+(req?' <i>*</i>':'')+'</label><input id="p_'+k+'" type="'+(t||'text')+'" value="'+esc(sp[k]==null?'':sp[k])+'"></div>'}
+ modal('<h3>Fakturační údaje (dodavatel)</h3><p class="mut">Údaje, které se objeví na fakturách. Uloží se přes pravidla ve vaší databázi.</p><form id="profForm"><div class="fg">'+f('legal_name','Obchodní jméno',1)+f('ico','IČO')+f('dic','DIČ')+f('address_text','Adresa')+f('bank_account','Číslo účtu')+f('iban','IBAN')+f('email','E-mail','','email')+f('country_code','Země (kód)')+f('default_due_days','Splatnost (dní)','','number')+f('default_currency','Výchozí měna')+f('registration_text','Zápis v rejstříku')+'<div class="f full"><label class="chk"><input type="checkbox" id="p_vat_payer"'+(sp.vat_payer?' checked':'')+'><span>Jsem plátce DPH</span></label></div></div><div class="st" id="entSt" role="status"></div><div class="dact"><button class="pri" type="submit">Uložit</button><button class="btn btn-ghost" type="button" data-app="mclose">Zrušit</button></div></form>')}
 function isInc(k){return /inc|přij|prij|^in$|revenue|výnos/i.test(String(k))}
 function KL(k){return k==='income'?'Příjem':(k==='expense'?'Výdaj':(isInc(k)?'Příjem ('+k+')':'Výdaj ('+k+')'))}
 function openForm(ent,id){
@@ -1104,6 +1116,11 @@ document.addEventListener('click',async function(e){
   else if(w==='jobtasks')mkTasks(overJobs().map(function(j){return 'Kontaktovat zákazníka: '+j.title}));return}
  var ac=e.target.closest('#vxapp [data-act]');if(ac){doAct(ac.dataset.act);return}
  var qq=e.target.closest('#vxapp [data-q]');if(qq){ceoAsk(CEOQ[+qq.dataset.q][1]);return}
+ if(e.target.closest('#vxapp [data-newinv]')){invForm();return}
+ if(e.target.closest('#vxapp [data-invprof]')){profForm();return}
+ if(e.target.closest('#vxapp [data-addrow]')){A('iRows').insertAdjacentHTML('beforeend',itemRow());return}
+ var dr=e.target.closest('#vxapp [data-delrow]');if(dr){if(document.querySelectorAll('#iRows .irow').length>1){dr.closest('.irow').remove();invTotals()}return}
+ var pay=e.target.closest('#vxapp [data-pay]');if(pay){if(!confirm('Označit fakturu jako zaplacenou dnes? Změna se promítne do účetních údajů.'))return;var pr=await rpcInv('paid',{id:pay.dataset.pay,payment_date:locD(new Date())});if(pr.error){toast('Nepodařilo se uložit: '+pr.error.message,'err');return}await refresh();appTab('faktury');toast('Faktura označena jako zaplacená.','ok');return}
  var so=e.target.closest('#vxapp [data-soon]');if(so){toast(so.dataset.soon);return}
  var pq=A('qPop');if(pq&&pq.classList.contains('on')&&!e.target.closest('.qw'))pq.classList.remove('on');
  if(A('appBell')&&A('appBell').classList.contains('on')&&!e.target.closest('.bellw'))A('appBell').classList.remove('on');
@@ -1114,13 +1131,25 @@ document.addEventListener('click',async function(e){
  if(e.target.classList&&e.target.classList.contains('amodal'))closeModal()});
 document.addEventListener('change',async function(e){
  var t=e.target;if(t.dataset&&t.dataset.task){var r=await getSb().from('tasks').update({completed:t.checked}).eq('id',t.dataset.task).eq('company_id',APP.cid);if(r.error){toast('Nepodařilo se uložit: '+r.error.message,'err');t.checked=!t.checked}else{await refresh();appTab('ukoly')}}});
-document.addEventListener('input',function(e){if(e.target.classList&&e.target.classList.contains('srch')){var v=e.target.value.toLowerCase();[].forEach.call(document.querySelectorAll('#lst li'),function(li){li.style.display=li.textContent.toLowerCase().indexOf(v)<0?'none':''})}});
+document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#iRows'))invTotals();if(e.target.classList&&e.target.classList.contains('srch')){var v=e.target.value.toLowerCase();[].forEach.call(document.querySelectorAll('#lst li'),function(li){li.style.display=li.textContent.toLowerCase().indexOf(v)<0?'none':''})}});
 document.addEventListener('submit',async function(e){
  var f=e.target;
  if(f.id==='entForm'){e.preventDefault();saveEnt(f);return}
  if(f.id==='onbForm'||f.id==='featForm'){e.preventDefault();var ft=[].map.call(f.querySelectorAll('input[name=ft]:checked'),function(x){return x.value}),co=(A('oC')||A('pC')).value;
   var r=await getSb().auth.updateUser({data:{country:co,features:ft,onboarded:true}});if(r.error){toast('Nepodařilo se uložit: '+r.error.message,'err');return}
   APP.meta=r.data.user.user_metadata||{};toast('Nastavení uloženo.','ok');appTab(APP.tab);return}
+ if(f.id==='invForm'){e.preventDefault();var its=[].map.call(f.querySelectorAll('#iRows .irow'),function(r){return {description:r.querySelector('.id').value.trim(),quantity:parseFloat(r.querySelector('.iq').value)||0,unit:r.querySelector('.iu').value.trim()||'ks',unit_gross:parseFloat(r.querySelector('.ip').value),vat_rate:parseFloat(r.querySelector('.iv').value)}}).filter(function(i){return i.description&&i.quantity>0&&!isNaN(i.unit_gross)});
+  if(!its.length){entMsg('Přidejte alespoň jednu položku s popisem, množstvím a cenou.');return}
+  var cu=APP.d.customers.rows.filter(function(x){return x.id===A('iC').value})[0]||{};
+  if(!confirm('Vystavit fakturu? Přidělí se číslo faktury a vystavenou fakturu už nelze vzít zpět.'))return;
+  var doc={customer:{id:cu.id,name:cu.name,email:cu.email||null,ico:cu.ico||null,dic:cu.dic||null,billing_address:cu.billing_address||null},items:its,issued_on:A('iI').value,taxable_supply_on:A('iT').value,due_on:A('iD').value,currency:A('iCur').value,language:'cs'};if(A('iJ').value)doc.job_id=A('iJ').value;
+  var b=f.querySelector('button[type=submit]');b.disabled=true;var r=await rpcInv('issue',doc);b.disabled=false;
+  if(r.error){entMsg('Fakturu se nepodařilo vystavit: '+r.error.message);return}
+  closeModal();await refresh();appTab('faktury');toast('Faktura vystavena'+(r.data&&r.data.number?' (č. '+r.data.number+')':'')+'.','ok');return}
+ if(f.id==='profForm'){e.preventDefault();if(!A('p_legal_name').value.trim()){entMsg('Vyplňte obchodní jméno.');return}
+  var d={};['legal_name','ico','dic','address_text','bank_account','iban','email','country_code','default_currency','registration_text'].forEach(function(k){var v=A('p_'+k).value.trim();if(v)d[k]=v});
+  var dd=A('p_default_due_days').value;if(dd)d.default_due_days=Number(dd);d.vat_payer=A('p_vat_payer').checked;
+  var r2=await rpcInv('profile',d);if(r2.error){entMsg('Nepodařilo se uložit: '+r2.error.message);return}closeModal();toast('Fakturační údaje uloženy.','ok');return}
  if(f.id==='ceoForm'){e.preventDefault();var inp=A('ceoIn'),q=inp.value.trim();if(!q)return;inp.value='';ceoAsk(q);return}
  if(f.id==='gsForm'){e.preventDefault();var gi=A('gsIn'),g=gi.value.trim();if(!g)return;gi.value='';if(!A('ceoLog'))appTab('ceo');ceoAsk(g)}});
 document.addEventListener('keydown',function(e){
