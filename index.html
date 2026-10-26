@@ -931,8 +931,8 @@ var FEATS=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],['k
 var COUNTRIES=['Česko','Slovensko','Jiná země'];
 var IC={online:'M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',prehled:'M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10',zakaznici:'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21c0-4 4-6 8-6s8 2 8 6',zakazky:'M4 7h16v13H4zM9 7V4h6v3',kalendar:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',ukoly:'M5 12l4 4 10-10',faktury:'M6 3h9l4 4v14H6zM9 12h7M9 16h7',ceo:'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z',ucetni:'M6 3h12v18H6zM9 7h6M9 11h6M9 15h3',zamestnanci:'M8 11a3 3 0 100-6 3 3 0 000 6zM16 12a3 3 0 100-6M2 20c0-3 3-5 6-5s6 2 6 5M16 15c3 0 6 1 6 5',weby:'M3 5h18v14H3zM3 9h18',marketing:'M4 14V10l12-5v14zM16 9a3 3 0 010 6',automatizace:'M13 2L4 14h7l-1 8 9-12h-7z',sklad:'M3 8l9-5 9 5v10l-9 5-9-5zM3 8l9 5 9-5',finance:'M4 19V9M10 19V5M16 19v-7M22 19H2',reporty:'M5 20V10M12 20V4M19 20v-8',profil:'M12 15a3 3 0 100-6 3 3 0 000 6zM19 12l2-1-2-4-2 1-2-1V5h-4v2l-2 1-2-1-2 4 2 1v2l-2 1 2 4 2-1 2 1v2h4v-2l2-1 2 1 2-4-2-1z',bell:'M6 17V11a6 6 0 1112 0v6l2 2H4zM10 21h4',menu:'M4 6h16M4 12h16M4 18h16',sun:'M12 8a4 4 0 100 8 4 4 0 000-8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5',plus:'M12 5v14M5 12h14',search:'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5',send:'M3 11l18-8-8 18-2-8z',warn:'M12 4l9 16H3zM12 10v4M12 17v1',tr:'M4 17l6-6 4 4 6-8'};
 function ico(k,s){return '<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'+(s||20)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC[k]+'"/></svg>'}
-var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['zamestnanci','Zaměstnanci']];
-var SOON={sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6],marketing:['Marketing','Kampaně, slevové kódy a analytika.',7],reporty:['Reporty','Přehledy výkonnosti firmy.',7],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
+var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['zamestnanci','Zaměstnanci']];
+var SOON={sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6],reporty:['Reporty','Přehledy výkonnosti firmy.',7],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
 var PLANN={start:'START',starter:'START',accountant:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet BUSINESS',enterprise:'ENTERPRISE'},STATN={demo:'ukázka',trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
 var PLANLIM={start:'CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel. Bez AI CEO.',accountant:'1 uživatel + 1 externí účetní, 100 AI vytěžených dokladů měsíčně (funkce se připravují).',pro:'3 uživatelé, 150 AI dokladů a 500 AI akcí měsíčně, 1 web nebo e-shop, 1 firma (limity se uplatní s příslušnými funkcemi).',business:'10 uživatelů, 500 AI dokladů a 2 000 AI akcí měsíčně, 3 weby nebo e-shopy (limity se uplatní s příslušnými funkcemi).',enterprise:'Individuální limity podle dohody.'};
 function effPlan(){var s=APP.sub;if(!s)return 'start';var p=String(s.plan||'').toLowerCase();if(p==='starter')p='start';if(p==='ucetni')p='accountant';if(p==='start')return p;var ended=(s.status==='trial'&&s.trial_end&&new Date(s.trial_end)<new Date())||s.status==='expired'||s.status==='canceled';return ended?'start':p}
@@ -1009,6 +1009,7 @@ function dfetch(u,o){
  var b={};try{b=JSON.parse(o.body)}catch(e){}
  if(String(u).indexOf('/api/invite')>=0){DD.company_invites.push({id:'i'+Date.now(),company_id:'demo',email:b.email,role:b.role,created_at:new Date().toISOString(),accepted_at:null});return dresp({ok:true,mail:'demo'})}
  if(String(u).indexOf('/api/advisor')>=0){var q=((b.messages||[]).slice(-1)[0]||{}).content||'',s=b.summary||{};return new Promise(function(r){setTimeout(r,700)}).then(function(){return dresp({reply:'Ukázková odpověď (v ostrém účtu odpovídá AI podle vašich skutečných dat).\n\nPodle dat v ukázce máte '+(s.neuhrazene_faktury!=null?s.neuhrazene_faktury+' neuhrazených faktur. ':'rozpracované zakázky a neuhrazené faktury. ')+'Doporučuji: 1) připomenout se Kavárně U Lípy, faktura je po splatnosti, 2) potvrdit termín servisu flotily s Novák Auto, 3) objednat díly na výměnu brzd. Chcete, abych k tomu připravil úkoly? (Akce vždy provedu až po vašem potvrzení.)'})})}
+ if(String(u).indexOf('/api/marketing')>=0){var T={social:'Zimní pneumatiky? Objednejte přezutí online a ušetřete si čekání. Stačí vybrat termín a my se postaráme o zbytek. [doplnit cenu]\n\nRezervace na našem webu. #servis #pneuservis #přezutí',email:'Předmět: Je čas přezout? Objednejte se online\n\nDobrý den,\nblíží se zima a s ní i čas na zimní pneumatiky. Termín si můžete vybrat online na našem webu, a to během pár kliknutí.\n\nTěšíme se na vás,\n[doplnit jméno]',ad:'Nadpisy:\n1) Přezutí online\n2) Objednejte si termín\n3) Servis bez čekání\n\nPopisy:\n1) Vyberte volný termín online. [doplnit cenu]\n2) Zimní pneumatiky? Postaráme se o ně rychle a férově.',plan:'Po: Příspěvek (Instagram) – tip na kontrolu pneumatik\nSt: Příspěvek (Facebook) – před a po z dílny\nPá: Newsletter – připomenutí přezutí',review:'Dobrý den, děkujeme za zpětnou vazbu. Mrzí nás, že jste nebyl(a) úplně spokojen(a), a rádi věc společně vyřešíme. Ozvěte se nám prosím na [doplnit kontakt].'};return new Promise(function(r){setTimeout(r,800)}).then(function(){return dresp({demo:true,text:T[b.kind]||T.social})})}
  if(String(u).indexOf('/api/web-ai')>=0){var nm0=b.name||'Naše firma';return new Promise(function(r){setTimeout(r,900)}).then(function(){return dresp({demo:true,site:{hero:{title:nm0+': spolehlivý servis bez zbytečných starostí',subtitle:'Postaráme se o vaše auto rychle, férově a s jasným vysvětlením, co a proč děláme.',cta:'Objednat se'},about:{title:'O nás',text:'Jsme malá provozovna, která se věnuje servisu vozidel pro místní řidiče i firmy. Víme, že auto je pro vás nástroj, a proto klademe důraz na jasnou domluvu a dodržení termínů.'},services:[{name:'Servis a opravy',desc:'Běžné opravy, výměna dílů a kontrola stavu vozu.'},{name:'Pneuservis',desc:'Přezutí, vyvážení a uskladnění pneumatik.'},{name:'Diagnostika',desc:'Zjištění příčiny závady a návrh řešení.'}]}})})}
  if(String(u).indexOf('/api/accountant')>=0){
   if(b.mode==='ask'){var m=b.summary||{};return new Promise(function(r){setTimeout(r,600)}).then(function(){return dresp({reply:'Ukázková odpověď z čísel v evidenci: tento měsíc máte příjmy '+(m.prijmy_tento_mesic_kc||0).toLocaleString('cs-CZ')+' Kč a výdaje '+(m.vydaje_tento_mesic_kc||0).toLocaleString('cs-CZ')+' Kč. Minulý měsíc to bylo '+(m.prijmy_minuly_mesic_kc||0).toLocaleString('cs-CZ')+' Kč příjmů a '+(m.vydaje_minuly_mesic_kc||0).toLocaleString('cs-CZ')+' Kč výdajů. Nejde o účetní ani daňovou radu.'})})}
@@ -1041,9 +1042,9 @@ function subCard(){var s=APP.sub,e=A('subCard');if(!e)return;if(!s){e.innerHTML=
  e.innerHTML='<b>'+esc(nm)+'</b><small>'+esc(t.charAt(0).toUpperCase()+t.slice(1))+'</small><small>'+esc(x)+'</small><button type="button" data-tab="profil">Správa předplatného</button>'}
 async function qt(t){var r=await getSb().from(t).select('*').eq('company_id',APP.cid);return r.error?{err:r.error.message,rows:[]}:{rows:r.data||[]}}
 async function refresh(first){
- var c=getSb(),R=await Promise.all([qt('customers'),qt('jobs'),qt('reservations'),qt('tasks'),qt('invoices'),c.rpc('dashboard_summary',{cid:APP.cid}),qt('financial_entries'),qt('shifts'),qt('booking_profiles'),qt('booking_services'),qt('sites')]);
+ var c=getSb(),R=await Promise.all([qt('customers'),qt('jobs'),qt('reservations'),qt('tasks'),qt('invoices'),c.rpc('dashboard_summary',{cid:APP.cid}),qt('financial_entries'),qt('shifts'),qt('booking_profiles'),qt('booking_services'),qt('sites'),qt('marketing_posts')]);
  R[0].rows=R[0].rows.filter(function(x){return !x.archived});
- APP.d={customers:R[0],jobs:R[1],reservations:R[2],tasks:R[3],invoices:R[4],ds:R[5].error?{err:R[5].error.message}:(R[5].data||{}),fe:R[6],shifts:R[7],booking_profiles:R[8],booking_services:R[9],sites:R[10]};
+ APP.d={customers:R[0],jobs:R[1],reservations:R[2],tasks:R[3],invoices:R[4],ds:R[5].error?{err:R[5].error.message}:(R[5].data||{}),fe:R[6],shifts:R[7],booking_profiles:R[8],booking_services:R[9],sites:R[10],marketing_posts:R[11]};
  if(A('vxapp')){subCard();renderBell()}}
 function appTab(t){
  APP.tab=t;var el=A('vxapp');if(!el)return;el.classList.remove('side');
@@ -1198,6 +1199,7 @@ var VIEWS={
   return h+g},
  online:function(){return onlineView()},
  weby:function(){return webView()},
+ marketing:function(){return mkView()},
  ukoly:function(){
   var x=APP.d.tasks,ts=x.rows.slice().sort(function(a,b){return (a.completed-b.completed)||(new Date(a.due_at||'2999')-new Date(b.due_at||'2999'))});
   var h=head('tasks','+ Nový úkol')+errBox(x);if(!ts.length)return h+'<p class="mut">Zatím žádné úkoly.</p>';
@@ -1435,6 +1437,39 @@ async function webOpen(slug,prev){
  if(!r||r.error||!r.data){fr.srcdoc='<!doctype html><meta charset="utf-8"><body style="font-family:Arial;padding:40px"><h1>Stránka nenalezena</h1><p>Web neexistuje nebo je vypnutý. Zkontrolujte odkaz.</p>';return}
  var dd=r.data;try{document.title=(dd.data&&dd.data.hero&&dd.data.hero.title)||dd.name||document.title}catch(e){}
  fr.srcdoc=siteHTML(dd.data,{name:dd.name,bookUrl:dd.booking?bookUrl(dd.booking):''})}
+
+/* ===== Marketing: AI návrhy textů a plán příspěvků ===== */
+var MKK=[['social','Příspěvek na sociální sítě','Sociální sítě'],['email','E-mail zákazníkům (newsletter)','E-mail'],['ad','Text online reklamy','Reklama'],['plan','Plán obsahu na týden','Plán obsahu'],['review','Odpověď na recenzi','Recenze']],MKCH=['Instagram','Facebook','E-mail','Web nebo blog','Reklama','Jiné'],MKST={draft:'Koncept',planned:'Naplánováno',done:'Zveřejněno'};
+function mkView(){
+ var P=APP.d.marketing_posts;if(P.err)return '<div class="draft">Marketing vyžaduje dokončit nastavení databáze (SQL schema_marketing). Detail: '+esc(P.err)+'</div>';
+ var rs=P.rows.slice().sort(function(a,b){return String(b.planned_on||b.created_at).localeCompare(String(a.planned_on||a.created_at))});
+ var h='<div class="card2 note"><b>AI pomocník pro marketing.</b> Napíšete, o čem chcete psát, a AI navrhne text příspěvku, e-mailu, reklamy nebo týdenní plán. Nic se nikam neodesílá ani nepublikuje, text si zkontrolujete, upravíte a zkopírujete. Hromadné marketingové e-maily smíte posílat jen zákazníkům, kteří s tím souhlasili, a Vexaronet je zatím sám neodesílá.</div>';
+ h+='<section class="card2"><h3>Navrhnout text</h3>'+(hasCeo()?'':'<p class="mut fine">Návrhy od AI jsou v tarifu PRO a vyšších. Plán příspěvků níže můžete vést i bez nich.</p>')
+ +'<div class="fg"><div class="f"><label for="mk_kind">Co potřebujete</label><select id="mk_kind">'+MKK.map(function(k){return '<option value="'+k[0]+'">'+k[1]+'</option>'}).join('')+'</select></div><div class="f"><label for="mk_tone">Tón</label><select id="mk_tone"><option value="friendly">Přátelský</option><option value="pro">Profesionální</option><option value="light">Odlehčený</option></select></div>'
+ +'<div class="f full"><label for="mk_topic">O čem to má být</label><textarea id="mk_topic" rows="3" maxlength="700" placeholder="Např. Od listopadu nabízíme přezutí zimních pneumatik, objednat se dá online. Napište i cenu nebo slevu, pokud ji chcete uvést."></textarea></div></div>'
+ +'<div class="dact"><button type="button" class="pri" data-mk="gen"'+(hasCeo()?'':' disabled')+'>Navrhnout s AI</button></div><div class="st" id="mkSt" role="status"></div>'
+ +'<div id="mkRes"></div></section>';
+ h+='<section class="card2"><div class="bar2"><h3>Plán příspěvků</h3><button type="button" class="btn btn-main btn-sm" data-new="marketing_posts">+ Nový příspěvek</button></div>'+errBox(P)
+ +(rs.length?'<ul class="rows big">'+rs.map(function(r){return '<li data-edit="marketing_posts:'+esc(r.id)+'"><div><b>'+esc(r.title)+'</b><small>'+esc(r.channel||'bez kanálu')+' · '+esc(MKST[r.status]||r.status)+'</small></div><span>'+(r.planned_on?fD(r.planned_on):'bez data')+'</span></li>'}).join('')+'</ul>':'<p class="mut">Zatím žádné příspěvky. Nechte si jeden navrhnout výše, nebo přidejte vlastní.</p>')+'</section>';
+ return h}
+function mkSt(t,c){var e=A('mkSt');if(e){e.className='st '+(c||'');e.textContent=t}}
+async function mkGen(){
+ var tp=(A('mk_topic').value||'').trim();if(tp.length<5){mkSt('Napište aspoň pár slov, o čem má text být.','err');return}
+ if(!hasCeo()){mkSt('Návrhy od AI jsou v tarifu PRO a vyšších.','err');return}
+ if(APP.busy)return;APP.busy=true;mkSt('AI píše návrh, bývá to pár sekund…','ok');A('mkRes').innerHTML='';
+ try{var ses=(await getSb().auth.getSession()).data.session;
+  var r=await dfetch('/api/marketing',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({kind:A('mk_kind').value,tone:A('mk_tone').value,topic:tp,name:APP.co})});
+  var j=await r.json().catch(function(){return null});
+  if(!r.ok||!j||!j.text){var c=j&&j.error;mkSt(r.status===403?'Návrhy od AI jsou v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':c==='not_configured'?'AI zatím není na serveru zapnutá. Napište nám na info@vexaronet.com.':'Návrh se nepodařilo vytvořit. Zkuste to znovu.','err');return}
+  mkSt((j.demo?'Ukázkový návrh (v ostrém účtu ho píše AI podle vašeho zadání). ':'')+'Zkontrolujte text a doplňte údaje ve značkách [doplnit].','ok');
+  A('mkRes').innerHTML='<div class="f full"><label for="mk_out">Návrh textu (můžete upravit)</label><textarea id="mk_out" rows="9" maxlength="4000">'+esc(j.text)+'</textarea></div><div class="dact"><button type="button" class="btn btn-ghost btn-sm" data-mk="copy">Kopírovat</button><button type="button" class="btn btn-main btn-sm" data-mk="save">Uložit do plánu</button></div>'
+ }catch(x){mkSt('Návrh se nepodařilo vytvořit. Zkuste to znovu.','err')}finally{APP.busy=false}}
+async function mkSave(){
+ var tx=(A('mk_out').value||'').trim();if(!tx)return;var kd=MKK.filter(function(k){return k[0]===A('mk_kind').value})[0]||MKK[0],tp=(A('mk_topic').value||'').trim();
+ var ch={social:'Instagram',email:'E-mail',ad:'Reklama',plan:'Jiné',review:'Jiné'}[kd[0]];
+ var r=await getSb().from('marketing_posts').insert({company_id:APP.cid,title:(kd[2]+': '+tp).slice(0,100),channel:ch,status:'draft',body:tx});
+ if(r.error){mkSt('Nepodařilo se uložit: '+r.error.message,'err');return}
+ await refresh();appTab('marketing');toast('Uloženo do plánu jako koncept.','ok')}
 async function accProcess(){
  var fi=A('accFile'),f=fi&&fi.files&&fi.files[0];
  if(!f){accSt('Vyberte soubor s dokladem (foto nebo PDF).','err');return}
@@ -1611,6 +1646,7 @@ function entDef(ent){
   financial_entries:{n:'finanční záznam',f:function(){var ks=['income','expense'];APP.d.fe.rows.forEach(function(r){if(r.kind&&ks.indexOf(r.kind)<0)ks.push(r.kind)});return [{k:'title',l:'Popis',req:1},{k:'kind',l:'Druh',t:'sel',opts:ks.map(function(k){return [k,KL(k)]}),req:1},{k:'amount',l:'Částka (Kč)',t:'number',req:1},{k:'entry_date',l:'Datum',t:'dateonly',req:1}]}},
   shifts:{n:'směnu',f:function(){return [{k:'person',l:'Zaměstnanec (jméno nebo e-mail)',req:1,list:teamNames()},{k:'starts_at',l:'Začátek směny',t:'datetime-local',req:1},{k:'ends_at',l:'Konec směny',t:'datetime-local',req:1},{k:'note',l:'Poznámka'}]}},
   booking_services:{n:'službu',f:function(){return [{k:'name',l:'Název služby',req:1},{k:'duration_min',l:'Délka (minuty)',t:'number',req:1},{k:'price',l:'Cena (Kč, nepovinné)',t:'number'},{k:'active',l:'Nabízet zákazníkům',t:'bool',def:1}]}},
+  marketing_posts:{n:'příspěvek',f:function(){return [{k:'title',l:'Název',req:1},{k:'channel',l:'Kanál',t:'sel',opts:MKCH.map(function(c){return [c,c]})},{k:'status',l:'Stav',t:'sel',opts:Object.keys(MKST).map(function(k){return [k,MKST[k]]}),req:1},{k:'planned_on',l:'Naplánováno na',t:'dateonly'},{k:'body',l:'Text',t:'textarea'}]}},
   tasks:{n:'úkol',f:function(){return [{k:'title',l:'Úkol',req:1},{k:'due_at',l:'Termín',t:'date'},{k:'description',l:'Popis',t:'textarea'},{k:'completed',l:'Hotovo',t:'bool'}]}}
  };return D[ent]}
 
@@ -1711,6 +1747,7 @@ document.addEventListener('click',async function(e){
  var iv=e.target.closest('#vxapp [data-invview]');if(iv){invView(iv.dataset.invview);return}
  if(e.target.closest('#vxapp [data-invprint]')){invPrint();return}
  var pay=e.target.closest('#vxapp [data-pay]');if(pay){if(!confirm('Označit fakturu jako zaplacenou dnes? Změna se promítne do účetních údajů.'))return;var pr=await rpcInv('paid',{id:pay.dataset.pay,payment_date:locD(new Date())});if(pr.error){toast('Nepodařilo se uložit: '+pr.error.message,'err');return}await refresh();appTab('faktury');toast('Faktura označena jako zaplacená.','ok');return}
+ var mx=e.target.closest('#vxapp [data-mk]');if(mx){var mk=mx.dataset.mk;if(mk==='gen')mkGen();else if(mk==='save')mkSave();else if(mk==='copy'){var mo=A('mk_out');try{navigator.clipboard.writeText(mo.value);toast('Text zkopírován.','ok')}catch(x){mo.select();toast('Označeno, zkopírujte ručně (Ctrl+C).','ok')}}return}
  var wx=e.target.closest('#vxapp [data-web]');if(wx){var wk=wx.dataset.web;if(wk==='ai')webAI();else if(wk==='open')webOpen('',true);else if(wk==='copy'){var wr=APP.d.sites.rows[0];if(wr){try{navigator.clipboard.writeText(webUrl(wr.slug));toast('Odkaz zkopírován.','ok')}catch(x){toast(webUrl(wr.slug),'ok')}}}return}
  var ax=e.target.closest('#vxapp [data-acc]');if(ax){var ak=ax.dataset.acc;if(ak==='process')accProcess();else if(ak==='discard'){A('accRes').innerHTML='';accSt('','')}else if(ak==='csv-ent')accExport('ent');else if(ak==='csv-inv')accExport('inv');else if(ak==='bk-file')bkFile();else if(ak==='bk-demo')bkDemo();else if(ak==='bk-apply')bkApply();else if(ak==='bk-clear'){BK.rows=[];A('bkRes').innerHTML='';bkSt('','')}return}
  if(e.target.closest('#vxapp [data-invnew]')){inviteModal();return}
