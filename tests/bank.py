@@ -1,0 +1,25 @@
+from playwright.sync_api import sync_playwright
+R='/tmp/vexaronet-saas'
+with sync_playwright() as p:
+    b=p.chromium.launch();pg=b.new_page(viewport={'width':1360,'height':1000})
+    errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.route('**/supabase.js',lambda r:r.fulfill(body='',content_type='text/javascript'))
+    pg.goto('file://'+R+'/index.html');pg.wait_for_timeout(400)
+    pg.click('.cta [data-demo]');pg.wait_for_selector('#vxapp .kpi')
+    pg.evaluate("document.querySelector('#vxapp [data-tab=ucetni]').click()");pg.wait_for_timeout(500)
+    pg.click('[data-acc=bk-demo]');pg.wait_for_timeout(300)
+    print('rows',pg.locator('.bkl li').count(),'checked',pg.locator('.bkl input:checked').count())
+    pg.screenshot(path='/tmp/bank1.png',full_page=True)
+    tile=lambda: pg.evaluate("(function(){var t=[].slice.call(document.querySelectorAll('#vxapp .kpi')).map(function(k){return k.innerText.replace(/\\n/g,' ')}).filter(function(x){return /Nezaplacen/.test(x)});return t[0]||''})()")
+    print('before',tile())
+    pg.click('[data-acc=bk-apply]');pg.wait_for_timeout(900)
+    print('toast',pg.inner_text('#appToast'));print('after',tile())
+    # Fio-like CSV (windows-1250, metadata, mezery v castce)
+    csv='"accountId";"2400000000"\r\n"bankId";"2010"\r\n\r\n"ID pohybu";"Datum";"Objem";"Měna";"Protiúčet";"Název protistrany";"VS";"Zpráva pro příjemce"\r\n"1";"12.10.2026";"1 234,50";"CZK";"1/0100";"Novák Jan";"0000099";"faktura"\r\n"2";"13.10.2026";"-300,00";"CZK";"2/0100";"Shell";"";"palivo"\r\n'
+    pg.set_input_files('#bkFile',files=[{'name':'v.csv','mimeType':'text/csv','buffer':csv.encode('cp1250')}])
+    pg.click('[data-acc=bk-file]');pg.wait_for_timeout(400)
+    print('fio rows',pg.locator('.bkl li').count(),pg.inner_text('.bkl').replace('\n',' | ')[:300])
+    pg.set_input_files('#bkFile',files=[{'name':'x.csv','mimeType':'text/csv','buffer':b'abc;def\n1;2'}])
+    pg.click('[data-acc=bk-file]');pg.wait_for_timeout(300);print('bad:',pg.inner_text('#bkSt'))
+    pg.screenshot(path='/tmp/bank2.png',full_page=True)
+    print(errs);b.close()

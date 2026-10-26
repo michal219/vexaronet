@@ -19,7 +19,11 @@ with sync_playwright() as p:
     print('shift chips',pg.locator('.cchip.cs').count())
     T('online');pg.wait_for_timeout(500);pg.screenshot(path='/tmp/online.png')
     pg.click('[data-bkopen]');pg.wait_for_selector('#vxbook .bkc');pg.click('[data-bks="s2"]')
-    pg.click('[data-bkd]');pg.wait_for_selector('[data-bkt]');pg.screenshot(path='/tmp/book1.png')
+    ds=pg.locator('[data-bkd]')
+    for i in range(ds.count()):
+        ds.nth(i).click();pg.wait_for_timeout(300)
+        if pg.locator('[data-bkt]').count():break
+    pg.wait_for_selector('[data-bkt]');pg.screenshot(path='/tmp/book1.png')
     pg.click('[data-bkt]');pg.fill('#bk_n','Karel Test');pg.fill('#bk_e','karel@test.cz');pg.check('#bk_c');pg.click('.bkgo');pg.wait_for_timeout(600)
     pg.screenshot(path='/tmp/book2.png');print('done',pg.locator('.bkok').count())
     pg.click('[data-bk=close]');T('kalendar');pg.wait_for_timeout(300)

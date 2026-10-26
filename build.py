@@ -807,7 +807,8 @@ var VIEWS={
   h+='<section class="card2"><h3>Kontrola záznamů</h3><p class="mut fine">Jednoduchá kontrola vaší evidence podle pevných pravidel. Nejde o účetní audit.</p>'+(ch.length?'<ul class="rows">'+ch.map(function(x){return '<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>'}).join('')+'</ul>':'<p class="mut">Nic podezřelého jsme nenašli.</p>')+'</section></div>';
   h+='<div class="two"><section class="card2"><h3>Export pro účetního</h3><p class="mut">Stáhněte příjmy a výdaje nebo faktury jako soubor CSV (otevře Excel i účetní programy). Měsíc nechte prázdný pro vše.</p><div class="f full"><label for="accMon">Měsíc</label><input id="accMon" type="month" value="'+nowM+'"></div><div class="dact"><button class="btn btn-ghost btn-sm" type="button" data-acc="csv-ent">Příjmy a výdaje (CSV)</button><button class="btn btn-ghost btn-sm" type="button" data-acc="csv-inv">Faktury (CSV)</button></div></section>';
   h+='<section class="card2"><h3>Zeptejte se AI Účetní</h3><p class="mut fine">Odpovídá z čísel ve vaší evidenci. Nedává závazné rady k DPH, daním ani účtování, tam se obraťte na účetního.</p><div class="chatl" id="accLog" style="height:230px">'+accMsgs()+'</div><form class="aif" id="accForm"><input id="accIn" placeholder="Např. Kolik jsem tento měsíc utratil?" maxlength="500" autocomplete="off" aria-label="Zpráva pro AI Účetní"><button class="sendb" type="submit" aria-label="Odeslat">'+ico('send')+'</button></form></section></div>';
-  h+='<section class="card2"><h3>Co je hotové a co se připravuje</h3><ul class="rows">'+[['Vytěžení údajů z faktur a účtenek (foto, PDF)','funguje, vždy po vaší kontrole'],['Evidence příjmů a výdajů','funguje'],['Kontrola záznamů (duplicity, budoucí data, po splatnosti)','funguje'],['Export CSV pro účetního','funguje'],['Dotazy na AI Účetní nad vaší evidencí','funguje'],['Podvojné účetnictví, deník a hlavní kniha','připravujeme, čeká na kontrolu odborníkem'],['DPH a daňové podklady','připravujeme, čeká na kontrolu odborníkem'],['Párování bankovních plateb','připravujeme'],['Účetní závěrky, mzdy a odvody','připravujeme']].map(function(x){return '<li'+(/^funguje/.test(x[1])?'':' class="off"')+'><b>'+x[0]+'</b><span>'+x[1]+'</span></li>'}).join('')+'</ul><p class="mut fine">Váš tarif: '+esc(PLANN[effPlan()]||'')+' · limit '+lim+' dokladů měsíčně.</p></section>';
+  h+='<section class="card2"><h3>Bankovní výpis a párování plateb</h3><p class="mut">Nahrajte CSV výpis z internetového bankovnictví (funguje s většinou českých bank i s exporty z platebních terminálů). AI Účetní spáruje platby s vašimi fakturami podle variabilního symbolu a částky. Faktury označí jako zaplacené až po vašem potvrzení. Soubor se nikam neukládá, zpracuje se jen ve vašem prohlížeči.</p><div class="f full"><label for="bkFile">Výpis (CSV)</label><input id="bkFile" type="file" accept=".csv,.txt,text/csv"></div><div class="dact"><button class="pri" type="button" data-acc="bk-file">Načíst výpis</button>'+(DEMO?'<button class="btn btn-ghost btn-sm" type="button" data-acc="bk-demo">Načíst ukázkový výpis</button>':'')+'</div><div class="st" id="bkSt" role="status"></div><div id="bkRes">'+bkView()+'</div></section>';
+  h+='<section class="card2"><h3>Co je hotové a co se připravuje</h3><ul class="rows">'+[['Vytěžení údajů z faktur a účtenek (foto, PDF)','funguje, vždy po vaší kontrole'],['Evidence příjmů a výdajů','funguje'],['Kontrola záznamů (duplicity, budoucí data, po splatnosti)','funguje'],['Export CSV pro účetního','funguje'],['Dotazy na AI Účetní nad vaší evidencí','funguje'],['Podvojné účetnictví, deník a hlavní kniha','připravujeme, čeká na kontrolu odborníkem'],['DPH a daňové podklady','připravujeme, čeká na kontrolu odborníkem'],['Import bankovního výpisu (CSV) a párování plateb s fakturami','funguje, vždy po vašem potvrzení'],['Přímé napojení bankovního účtu (PSD2) a platebního terminálu','připravujeme, vyžaduje oficiální bankovní přístup'],['Účetní závěrky, mzdy a odvody','připravujeme']].map(function(x){return '<li'+(/^funguje/.test(x[1])?'':' class="off"')+'><b>'+x[0]+'</b><span>'+x[1]+'</span></li>'}).join('')+'</ul><p class="mut fine">Váš tarif: '+esc(PLANN[effPlan()]||'')+' · limit '+lim+' dokladů měsíčně.</p></section>';
   return h},
  zakaznici:function(){return listView('customers','Hledat zákazníka…','+ Nový zákazník',function(x){return '<div><b>'+esc(custName(x))+'</b><small>'+[x.email,x.phone].filter(Boolean).map(esc).join(' · ')+'</small></div>'},'Zatím žádní zákazníci.')},
  zakazky:function(){var cm=cmap();return listView('jobs','Hledat zakázku…','+ Nová zakázka',function(x){return '<div><b>'+esc(x.title)+'</b><small>'+esc(cm[x.customer_id]||'bez zákazníka')+(x.description?' · '+esc(x.description):'')+'</small></div><span>'+fM(x.price)+' · do '+fD(x.due_at)+(x.status?' · <em class="stt">'+esc(x.status)+'</em>':'')+'</span>'},'Zatím žádné zakázky.',function(a,b){return new Date(b.created_at)-new Date(a.created_at)})},
@@ -897,6 +898,80 @@ function accChecks(){var d=APP.d,out=[],g={},t1=dayStart(1);
 function accMsgs(){return (APP.accChat&&APP.accChat.length?APP.accChat:[{role:'assistant',content:'Dobrý den. Zeptejte se na příjmy, výdaje nebo faktury ve své evidenci.'}]).map(function(m){return '<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>'}).join('')}
 async function accCall(payload){var ses=(await getSb().auth.getSession()).data.session;if(!ses)throw new Error('auth');var r=await dfetch('/api/accountant',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify(Object.assign({cid:APP.cid},payload))});var j=await r.json().catch(function(){return null});return {r:r,j:j}}
 function accErr(r,j){var c=j&&j.error;if(r.status===403)return 'AI Účetní je součástí tarifu AI Účetní a vyšších.';if(c==='limit')return 'Tento měsíc jste využili všech '+j.limit+' zpracovaných dokladů. Limit se obnoví začátkem dalšího měsíce.';if(r.status===429)return 'Příliš mnoho požadavků. Zkuste to za chvíli.';if(c==='usage_table')return 'Počítadlo dokladů ještě není nastavené v databázi. Napište nám na info@vexaronet.com.';if(c==='bad_file')return 'Soubor se nepodařilo přijmout. Použijte fotku (JPG, PNG, WebP, HEIC) nebo PDF do 6 MB.';if(c==='unreadable')return 'Doklad se nepodařilo přečíst. Zkuste ostřejší fotku nebo PDF.';if(c==='not_configured')return 'AI Účetní zatím není na serveru nastavená.';return 'AI Účetní teď není dostupná. Zkuste to později.'}
+
+/* ===== Bankovní výpis (CSV) a párování plateb ===== */
+var BK={rows:[]};
+function bkNorm(x){return String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim()}
+function bkSplit(line,d){var o=[],c='',q=false;for(var i=0;i<line.length;i++){var ch=line.charAt(i);if(ch==='"'){if(q&&line.charAt(i+1)==='"'){c+='"';i++}else q=!q}else if(ch===d&&!q){o.push(c);c=''}else c+=ch}o.push(c);return o}
+function bkNum(v){var t=String(v==null?'':v).replace(/[\s ]/g,'').replace(/[^0-9,.\-+]/g,'');if(!t)return NaN;if(t.indexOf(',')>=0&&t.indexOf('.')>=0)t=t.replace(/\./g,'').replace(',','.');else t=t.replace(',','.');return parseFloat(t)}
+function bkDate(v){var t=String(v||''),m=t.match(/(\d{1,2})\.\s?(\d{1,2})\.\s?(\d{4})/);if(m)return m[3]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[1]).slice(-2);m=t.match(/(\d{4})-(\d{2})-(\d{2})/);return m?m[0]:''}
+function bkParse(text){
+ var ls=text.split(/\r?\n/).filter(function(l){return l.trim()});if(!ls.length)return {err:'Soubor je prázdný.'};
+ var dl=';',bn=-1;[';',',','\t'].forEach(function(d){var n=ls.slice(0,15).reduce(function(a,l){return a+bkSplit(l,d).length-1},0);if(n>bn){bn=n;dl=d}});
+ var hi=-1,col={};
+ for(var i=0;i<Math.min(ls.length,40)&&hi<0;i++){var h=bkSplit(ls[i],dl).map(bkNorm),c={};
+  h.forEach(function(x,j){
+   if(c.d==null&&/^(datum|date|booking date|datum (zauctovani|provedeni|pohybu|transakce))/.test(x))c.d=j;
+   else if(c.a==null&&/^(objem|castka|amount|hodnota|castka v|transaction amount)/.test(x))c.a=j;
+   else if(c.v==null&&/(variabil|^vs$|variable)/.test(x))c.v=j;
+   else if(c.n==null&&/(nazev protistrany|nazev uctu protistrany|protistrana|jmeno protistrany|counterparty|nazev uctu|^platce|^prijemce|^nazev$)/.test(x))c.n=j;
+   else if(c.m==null&&/(zprava|poznamk|message|popis|uzivatelska identifikace|note)/.test(x))c.m=j;
+   else if(c.c==null&&/^(mena|currency)/.test(x))c.c=j});
+  if(c.d!=null&&c.a!=null){hi=i;col=c}}
+ if(hi<0)return {err:'Nepodařilo se najít sloupce s datem a částkou. Použijte export pohybů na účtu ve formátu CSV (v internetovém bankovnictví hledejte „Export“ nebo „Stáhnout výpis“).'};
+ var rows=[];
+ for(var k=hi+1;k<ls.length&&rows.length<3000;k++){var p=bkSplit(ls[k],dl),dt=bkDate(p[col.d]),am=bkNum(p[col.a]);if(!dt||isNaN(am)||am===0)continue;
+  rows.push({date:dt,amt:am,vs:col.v!=null?String(p[col.v]||'').replace(/\D/g,''):'',name:col.n!=null?String(p[col.n]||'').trim():'',msg:col.m!=null?String(p[col.m]||'').trim():'',cur:col.c!=null?String(p[col.c]||'').trim().toUpperCase():'CZK'})}
+ if(!rows.length)return {err:'Ve výpisu jsem nenašel žádné platby.'};
+ return {rows:rows}}
+function bkMatch(rows){
+ var inv=APP.d.invoices.rows.filter(function(x){return !x.paid_at}),used={};
+ function z(v){return String(v||'').replace(/\D/g,'').replace(/^0+/,'')}
+ var fe=APP.d.fe.rows;
+ rows.forEach(function(r){
+  r.act=null;r.on=false;r.note='';
+  var kind=r.amt>0?'income':'expense',a=Math.abs(r.amt);
+  if(fe.some(function(x){return Math.abs(Math.abs(Number(x.amount)||0)-a)<0.005&&String(x.entry_date||'').slice(0,10)===r.date&&(isInc(x.kind)?'income':'expense')===kind&&String(x.title||'')===(r.name||r.msg||'Bankovní pohyb')})){r.act='dup';r.note='Už je v evidenci.';return}
+  if(r.amt>0){
+   var cand=inv.filter(function(x){return !used[x.id]&&(x.currency||'CZK')===(r.cur||'CZK')}),hit=null,lvl='';
+   if(r.vs){hit=cand.filter(function(x){return z(x.number)===z(r.vs)&&Math.abs(Number(x.total||0)-r.amt)<0.005})[0];if(hit)lvl='sure';
+    else{hit=cand.filter(function(x){return z(x.number)===z(r.vs)})[0];if(hit)lvl='vs'}}
+   if(!hit){var eq=cand.filter(function(x){return Math.abs(Number(x.total||0)-r.amt)<0.005});if(eq.length===1){hit=eq[0];lvl='maybe'}}
+   if(hit){used[hit.id]=1;r.act='pay';r.inv=hit;r.on=(lvl==='sure');r.note=lvl==='sure'?'Sedí variabilní symbol i částka.':lvl==='vs'?'Sedí variabilní symbol, ale částka se liší ('+fM(hit.total,hit.currency)+').':'Sedí částka, variabilní symbol chybí. Zkontrolujte.';return}
+   r.act='inc';r.note='Žádná faktura nesedí. Můžete zapsat jako příjem.';return}
+  r.act='exp';r.note='Můžete zapsat jako výdaj.'});
+ return rows}
+function bkView(){
+ var rs=BK.rows;if(!rs.length)return '';
+ var pay=rs.filter(function(r){return r.act==='pay'&&r.on}).length;
+ return '<p class="mut">Načteno '+rs.length+' plateb. Předvybrané jsou jen jistě sedící platby faktur. Ostatní si zaškrtněte sami, nic se neuloží, dokud nepotvrdíte.</p><ul class="rows big bkl">'+rs.map(function(r,i){
+  var lab=r.act==='pay'?'Označit fakturu '+esc(r.inv.number||'')+' jako zaplacenou':r.act==='inc'?'Zapsat jako příjem':r.act==='exp'?'Zapsat jako výdaj':'';
+  return '<li'+(r.act==='dup'?' class="off"':'')+'><label class="bkr"><input type="checkbox" data-bkrow="'+i+'"'+(r.on?' checked':'')+(r.act==='dup'?' disabled':'')+'><span><b>'+esc(r.name||r.msg||'Bankovní pohyb')+'</b><small>'+fD(r.date)+(r.vs?' · VS '+esc(r.vs):'')+' · '+esc(lab||'Přeskočeno')+' · '+esc(r.note)+'</small></span></label><span class="'+(r.amt>0?'inc':'')+'">'+(r.amt>0?'+':'−')+fM(Math.abs(r.amt),r.cur&&r.cur!=='CZK'?r.cur:'')+'</span></li>'}).join('')+'</ul><div class="dact"><button class="pri" type="button" data-acc="bk-apply">Potvrdit vybrané</button><button class="btn btn-ghost btn-sm" type="button" data-acc="bk-clear">Zrušit</button></div>'}
+function bkSt(t,c){var e=A('bkSt');if(e){e.className='st '+(c||'');e.textContent=t}}
+async function bkLoad(text){
+ var o=bkParse(text);if(o.err){bkSt(o.err,'err');return}
+ BK.rows=bkMatch(o.rows);A('bkRes').innerHTML=bkView();bkSt('Výpis načten. Zkontrolujte návrhy níže.','ok')}
+async function bkFile(){
+ var fi=A('bkFile'),f=fi&&fi.files&&fi.files[0];if(!f){bkSt('Vyberte soubor s výpisem (CSV).','err');return}
+ if(f.size>2e6){bkSt('Soubor je příliš velký (nejvýše 2 MB).','err');return}
+ try{var buf=await f.arrayBuffer();await bkLoad(bkDec(buf))}catch(e){bkSt('Soubor se nepodařilo přečíst.','err')}}
+function bkDec(buf){var t=new TextDecoder('utf-8').decode(buf);if(t.indexOf('�')>=0){try{t=new TextDecoder('windows-1250').decode(buf)}catch(e){}}return t.replace(/^﻿/,'')}
+function bkDemo(){
+ var un=APP.d.invoices.rows.filter(function(x){return !x.paid_at}).slice(0,2),L=['Datum;Objem;Měna;Protiúčet;Název protistrany;Variabilní symbol;Zpráva pro příjemce'];
+ un.forEach(function(x,i){var cu=x.customer_snapshot&&typeof x.customer_snapshot==='object'?(x.customer_snapshot.name||''):'';var d=new Date();d.setDate(d.getDate()-1-i);L.push(d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear()+';'+String(Number(x.total||0)).replace('.',',')+';CZK;123456789/0800;'+(cu||'Zákazník')+';'+String(x.number||'').replace(/\D/g,'')+';Platba faktury')});
+ var t=new Date();L.push(t.getDate()+'.'+(t.getMonth()+1)+'.'+t.getFullYear()+';-1250,00;CZK;987654321/0100;Kancelářské potřeby;;Nákup materiálu');
+ L.push(t.getDate()+'.'+(t.getMonth()+1)+'.'+t.getFullYear()+';890,00;CZK;111222333/0300;Neznámý plátce;;Platba kartou terminál');
+ bkLoad(L.join('\n'))}
+async function bkApply(){
+ var sel=BK.rows.filter(function(r){return r.on&&r.act&&r.act!=='dup'});if(!sel.length){bkSt('Nic není vybráno.','err');return}
+ if(APP.busy)return;APP.busy=true;var okp=0,oke=0,bad=0;
+ try{
+  for(var i=0;i<sel.length;i++){var r=sel[i];if(r.act==='pay'){var pr=await rpcInv('paid',{id:r.inv.id,payment_date:r.date});if(pr.error)bad++;else okp++}}
+  var ents=sel.filter(function(r){return r.act==='inc'||r.act==='exp'}).map(function(r){return {company_id:APP.cid,title:(r.name||r.msg||'Bankovní pohyb').slice(0,120),amount:Math.abs(r.amt),kind:r.act==='inc'?'income':'expense',entry_date:r.date}});
+  if(ents.length){var er=await getSb().from('financial_entries').insert(ents);if(er.error)bad+=ents.length;else oke=ents.length}
+ }finally{APP.busy=false}
+ BK.rows=[];await refresh();appTab('ucetni');
+ toast(bad?'Uloženo '+(okp+oke)+', nepodařilo se '+bad+'.':'Hotovo: '+okp+' zaplacených faktur, '+oke+' nových záznamů.',bad?'err':'ok')}
 async function accProcess(){
  var fi=A('accFile'),f=fi&&fi.files&&fi.files[0];
  if(!f){accSt('Vyberte soubor s dokladem (foto nebo PDF).','err');return}
@@ -1171,7 +1246,7 @@ document.addEventListener('click',async function(e){
  var iv=e.target.closest('#vxapp [data-invview]');if(iv){invView(iv.dataset.invview);return}
  if(e.target.closest('#vxapp [data-invprint]')){invPrint();return}
  var pay=e.target.closest('#vxapp [data-pay]');if(pay){if(!confirm('Označit fakturu jako zaplacenou dnes? Změna se promítne do účetních údajů.'))return;var pr=await rpcInv('paid',{id:pay.dataset.pay,payment_date:locD(new Date())});if(pr.error){toast('Nepodařilo se uložit: '+pr.error.message,'err');return}await refresh();appTab('faktury');toast('Faktura označena jako zaplacená.','ok');return}
- var ax=e.target.closest('#vxapp [data-acc]');if(ax){var ak=ax.dataset.acc;if(ak==='process')accProcess();else if(ak==='discard'){A('accRes').innerHTML='';accSt('','')}else if(ak==='csv-ent')accExport('ent');else if(ak==='csv-inv')accExport('inv');return}
+ var ax=e.target.closest('#vxapp [data-acc]');if(ax){var ak=ax.dataset.acc;if(ak==='process')accProcess();else if(ak==='discard'){A('accRes').innerHTML='';accSt('','')}else if(ak==='csv-ent')accExport('ent');else if(ak==='csv-inv')accExport('inv');else if(ak==='bk-file')bkFile();else if(ak==='bk-demo')bkDemo();else if(ak==='bk-apply')bkApply();else if(ak==='bk-clear'){BK.rows=[];A('bkRes').innerHTML='';bkSt('','')}return}
  if(e.target.closest('#vxapp [data-invnew]')){inviteModal();return}
  var is=e.target.closest('#vxapp [data-invshow]');if(is){var iv=(APP.invs||[]).filter(function(x){return x.id===is.dataset.invshow})[0];if(iv)inviteDone(iv.email);return}
  var ic=e.target.closest('#vxapp [data-invcancel]');if(ic){if(!confirm('Zrušit tuto pozvánku?'))return;var cr=await getSb().rpc('cancel_invite',{invite_id:ic.dataset.invcancel});if(cr.error){toast('Nepodařilo se zrušit: '+teamErr(cr.error.message),'err');return}toast('Pozvánka zrušena.','ok');loadTeam();return}
@@ -1185,7 +1260,7 @@ document.addEventListener('click',async function(e){
  if(e.target.closest('#vxapp [data-del]')){delEnt(A('entForm'));return}
  if(e.target.classList&&e.target.classList.contains('amodal'))closeModal()});
 document.addEventListener('change',async function(e){
- var t=e.target;if(t.dataset&&t.dataset.task){var r=await getSb().from('tasks').update({completed:t.checked}).eq('id',t.dataset.task).eq('company_id',APP.cid);if(r.error){toast('Nepodařilo se uložit: '+r.error.message,'err');t.checked=!t.checked}else{await refresh();appTab('ukoly')}}});
+ var t=e.target;if(t.dataset&&t.dataset.bkrow!=null&&BK.rows[+t.dataset.bkrow]){BK.rows[+t.dataset.bkrow].on=t.checked;return}if(t.dataset&&t.dataset.task){var r=await getSb().from('tasks').update({completed:t.checked}).eq('id',t.dataset.task).eq('company_id',APP.cid);if(r.error){toast('Nepodařilo se uložit: '+r.error.message,'err');t.checked=!t.checked}else{await refresh();appTab('ukoly')}}});
 document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#iRows'))invTotals();if(e.target.classList&&e.target.classList.contains('srch')){var v=e.target.value.toLowerCase();[].forEach.call(document.querySelectorAll('#lst li'),function(li){li.style.display=li.textContent.toLowerCase().indexOf(v)<0?'none':''})}});
 document.addEventListener('submit',async function(e){
  var f=e.target;
