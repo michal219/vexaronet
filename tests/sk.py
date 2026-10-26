@@ -1,0 +1,22 @@
+from playwright.sync_api import sync_playwright
+R='/tmp/vexaronet-saas'
+with sync_playwright() as p:
+    b=p.chromium.launch();pg=b.new_page(viewport={'width':1360,'height':1000})
+    errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.on('dialog',lambda d:d.accept())
+    pg.route('**/supabase.js',lambda r:r.fulfill(body='',content_type='text/javascript'))
+    pg.goto('file://'+R+'/index.html');pg.wait_for_timeout(400)
+    pg.click('.cta [data-demo]');pg.wait_for_selector('#vxapp .kpi')
+    T=lambda t:pg.evaluate("document.querySelector('#vxapp [data-tab=%s]').click()"%t)
+    T('sklad');pg.wait_for_timeout(500)
+    print('kpi',[t.replace('\n',' ') for t in pg.locator('#vxapp .kpi').all_inner_texts()])
+    print('rows',pg.locator('#lst li').count(),'|',pg.inner_text('#lst').replace('\n',' | ')[:330])
+    pg.click('[data-sk="move:p1"]');pg.wait_for_selector('#skForm')
+    pg.select_option('#sk_k','in');pg.fill('#sk_q','40');pg.click('#skForm button[type=submit]');pg.wait_for_timeout(600)
+    print('toast',pg.inner_text('#appToast'));print(pg.inner_text('#lst li:first-child').replace('\n',' | '))
+    pg.click('[data-sk="move:p3"]');pg.wait_for_selector('#skForm');pg.select_option('#sk_k','adjust');pg.fill('#sk_q','1');pg.click('#skForm button[type=submit]');pg.wait_for_timeout(600)
+    print('low kpi',[t.replace('\n',' ') for t in pg.locator('#vxapp .kpi').all_inner_texts()][1])
+    pg.click('[data-new=products]');pg.wait_for_selector('#entForm');pg.fill('#e_name','Žárovka H7');pg.click('#entForm button[type=submit]');pg.wait_for_timeout(600)
+    print('new rows',pg.locator('#lst li').count())
+    T('automatizace');pg.wait_for_timeout(500);print('auto lowstock',pg.evaluate("document.body.innerText.includes('Objednat zboží')"))
+    pg.screenshot(path='/tmp/sk1.png',full_page=True);print(errs);b.close()
