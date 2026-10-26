@@ -931,14 +931,14 @@ var FEATS=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],['k
 var COUNTRIES=['Česko','Slovensko','Jiná země'];
 var IC={online:'M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',prehled:'M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10',zakaznici:'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 21c0-4 4-6 8-6s8 2 8 6',zakazky:'M4 7h16v13H4zM9 7V4h6v3',kalendar:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',ukoly:'M5 12l4 4 10-10',faktury:'M6 3h9l4 4v14H6zM9 12h7M9 16h7',ceo:'M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z',ucetni:'M6 3h12v18H6zM9 7h6M9 11h6M9 15h3',zamestnanci:'M8 11a3 3 0 100-6 3 3 0 000 6zM16 12a3 3 0 100-6M2 20c0-3 3-5 6-5s6 2 6 5M16 15c3 0 6 1 6 5',weby:'M3 5h18v14H3zM3 9h18',marketing:'M4 14V10l12-5v14zM16 9a3 3 0 010 6',automatizace:'M13 2L4 14h7l-1 8 9-12h-7z',sklad:'M3 8l9-5 9 5v10l-9 5-9-5zM3 8l9 5 9-5',finance:'M4 19V9M10 19V5M16 19v-7M22 19H2',reporty:'M5 20V10M12 20V4M19 20v-8',profil:'M12 15a3 3 0 100-6 3 3 0 000 6zM19 12l2-1-2-4-2 1-2-1V5h-4v2l-2 1-2-1-2 4 2 1v2l-2 1 2 4 2-1 2 1v2h4v-2l2-1 2 1 2-4-2-1z',bell:'M6 17V11a6 6 0 1112 0v6l2 2H4zM10 21h4',menu:'M4 6h16M4 12h16M4 18h16',sun:'M12 8a4 4 0 100 8 4 4 0 000-8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5',plus:'M12 5v14M5 12h14',search:'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5',send:'M3 11l18-8-8 18-2-8z',warn:'M12 4l9 16H3zM12 10v4M12 17v1',tr:'M4 17l6-6 4 4 6-8'};
 function ico(k,s){return '<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'+(s||20)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC[k]+'"/></svg>'}
-var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['zamestnanci','Zaměstnanci']];
-var SOON={sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6],automatizace:['Automatizace','Pracovní postupy propojující moduly.',5]};
+var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['zamestnanci','Zaměstnanci']];
+var SOON={sklad:['Sklad a produkty','Evidence skladu materiálu a produktů.',6]};
 var PLANN={start:'START',starter:'START',accountant:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet BUSINESS',enterprise:'ENTERPRISE'},STATN={demo:'ukázka',trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
 var PLANLIM={start:'CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel. Bez AI CEO.',accountant:'1 uživatel + 1 externí účetní, 100 AI vytěžených dokladů měsíčně (funkce se připravují).',pro:'3 uživatelé, 150 AI dokladů a 500 AI akcí měsíčně, 1 web nebo e-shop, 1 firma (limity se uplatní s příslušnými funkcemi).',business:'10 uživatelů, 500 AI dokladů a 2 000 AI akcí měsíčně, 3 weby nebo e-shopy (limity se uplatní s příslušnými funkcemi).',enterprise:'Individuální limity podle dohody.'};
 function effPlan(){var s=APP.sub;if(!s)return 'start';var p=String(s.plan||'').toLowerCase();if(p==='starter')p='start';if(p==='ucetni')p='accountant';if(p==='start')return p;var ended=(s.status==='trial'&&s.trial_end&&new Date(s.trial_end)<new Date())||s.status==='expired'||s.status==='canceled';return ended?'start':p}
 function hasCeo(){return ['pro','business','enterprise'].indexOf(effPlan())>=0}
 var TEAMLIM={start:1,accountant:2,pro:3,business:10,enterprise:1000},ROLEN={owner:'Majitel',admin:'Správce',employee:'Zaměstnanec'};
-function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','zakazky','ukoly','faktury','finance','kalendar','online','reporty','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','profil'].indexOf(t)>=0;return true}
+function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','zakazky','ukoly','faktury','finance','kalendar','online','reporty','automatizace','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','profil'].indexOf(t)>=0;return true}
 function limitMsg(k){if(effPlan()!=='start')return '';var d=APP.d;if(k==='customers'&&d.customers.rows.length>=50)return 'Tarif START umožňuje nejvýše 50 zákazníků.';if(k==='jobs'&&d.jobs.rows.length>=10)return 'Tarif START umožňuje evidovat nejvýše 10 zakázek.';if(k==='invoices'){var m=new Date(new Date().getFullYear(),new Date().getMonth(),1);if(d.invoices.rows.filter(function(x){return new Date(x.issued_on||x.created_at)>=m}).length>=10)return 'Tarif START umožňuje nejvýše 10 faktur měsíčně.'}return ''}
 function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
 function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ',{maximumFractionDigits:2})+' '+esc(!cur||cur==='CZK'?'Kč':cur)}
@@ -1042,9 +1042,9 @@ function subCard(){var s=APP.sub,e=A('subCard');if(!e)return;if(!s){e.innerHTML=
  e.innerHTML='<b>'+esc(nm)+'</b><small>'+esc(t.charAt(0).toUpperCase()+t.slice(1))+'</small><small>'+esc(x)+'</small><button type="button" data-tab="profil">Správa předplatného</button>'}
 async function qt(t){var r=await getSb().from(t).select('*').eq('company_id',APP.cid);return r.error?{err:r.error.message,rows:[]}:{rows:r.data||[]}}
 async function refresh(first){
- var c=getSb(),R=await Promise.all([qt('customers'),qt('jobs'),qt('reservations'),qt('tasks'),qt('invoices'),c.rpc('dashboard_summary',{cid:APP.cid}),qt('financial_entries'),qt('shifts'),qt('booking_profiles'),qt('booking_services'),qt('sites'),qt('marketing_posts')]);
+ var c=getSb(),R=await Promise.all([qt('customers'),qt('jobs'),qt('reservations'),qt('tasks'),qt('invoices'),c.rpc('dashboard_summary',{cid:APP.cid}),qt('financial_entries'),qt('shifts'),qt('booking_profiles'),qt('booking_services'),qt('sites'),qt('marketing_posts'),qt('automation_rules')]);
  R[0].rows=R[0].rows.filter(function(x){return !x.archived});
- APP.d={customers:R[0],jobs:R[1],reservations:R[2],tasks:R[3],invoices:R[4],ds:R[5].error?{err:R[5].error.message}:(R[5].data||{}),fe:R[6],shifts:R[7],booking_profiles:R[8],booking_services:R[9],sites:R[10],marketing_posts:R[11]};
+ APP.d={customers:R[0],jobs:R[1],reservations:R[2],tasks:R[3],invoices:R[4],ds:R[5].error?{err:R[5].error.message}:(R[5].data||{}),fe:R[6],shifts:R[7],booking_profiles:R[8],booking_services:R[9],sites:R[10],marketing_posts:R[11],automation_rules:R[12]};
  if(A('vxapp')){subCard();renderBell()}}
 function appTab(t){
  APP.tab=t;var el=A('vxapp');if(!el)return;el.classList.remove('side');
@@ -1201,6 +1201,7 @@ var VIEWS={
  weby:function(){return webView()},
  marketing:function(){return mkView()},
  reporty:function(){return reportyView()},
+ automatizace:function(){return auView()},
  ukoly:function(){
   var x=APP.d.tasks,ts=x.rows.slice().sort(function(a,b){return (a.completed-b.completed)||(new Date(a.due_at||'2999')-new Date(b.due_at||'2999'))});
   var h=head('tasks','+ Nový úkol')+errBox(x);if(!ts.length)return h+'<p class="mut">Zatím žádné úkoly.</p>';
@@ -1517,6 +1518,40 @@ async function rpAI(){
   if(!r.ok||!j||!j.reply){st.className='st err';st.textContent=r.status===403?'Shrnutí je v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':'Shrnutí se nepodařilo vytvořit. Zkuste to znovu.';return}
   st.textContent='';A('rpAi').innerHTML='<div class="draft" style="white-space:pre-wrap">'+esc(j.reply)+'</div>'
  }catch(e){st.className='st err';st.textContent='Shrnutí se nepodařilo vytvořit. Zkuste to znovu.'}finally{APP.busy=false}}
+
+/* ===== Automatizace: pravidla navrhují úkoly, uživatel je schvaluje ===== */
+var AUR=[['overdue','Faktura po splatnosti','Navrhne úkol upomenout zákazníka.'],['jobdue','Blížící se termín zakázky','Navrhne úkol pohlídat zakázku, která není hotová a termín je do 2 dnů.'],['jobdone','Hotová zakázka bez faktury','Navrhne úkol vystavit fakturu (orientačně podle jména zákazníka).'],['inactive','Zákazník bez aktivity 90 dní','Navrhne úkol ozvat se zákazníkovi.'],['tomorrow','Rezervace zítra','Navrhne úkol připravit se na zítřejší rezervaci.']];
+function auOn(k){var r=(APP.d.automation_rules&&APP.d.automation_rules.rows||[]).filter(function(x){return x.rule===k})[0];return !(r&&r.enabled===false)}
+function auItems(){
+ var d=APP.d,t0=dayStart(0),t2=dayStart(3),t1=dayStart(1),tm=dayStart(2),out=[],done={};
+ d.tasks.rows.forEach(function(t){var m=String(t.description||'').match(/\[auto:([^\]]+)\]/);if(m)done[m[1]]=1});
+ function add(rule,key,title,due,why){if(done[key])return;out.push({rule:rule,key:key,title:title.slice(0,120),due:due,why:why})}
+ if(auOn('overdue'))d.invoices.rows.forEach(function(x){if(x.paid_at||!x.due_on||new Date(x.due_on)>=t0)return;add('overdue','inv:'+x.id,'Upomenout platbu: faktura '+(x.number||'')+(invName(x)?' ('+invName(x)+')':'')+', '+fM(x.total,x.currency),locD(t0),'Po splatnosti od '+fD(x.due_on))});
+ if(auOn('jobdue'))d.jobs.rows.forEach(function(j){if(!j.due_at||/hotov|done|zruš|dokon/i.test(j.status||''))return;var dd=new Date(j.due_at);if(dd>=t0&&dd<t2)add('jobdue','jobdue:'+j.id,'Pohlídat termín zakázky: '+j.title,locD(dd),'Termín '+fD(j.due_at))});
+ if(auOn('jobdone')){var cm={};d.customers.rows.forEach(function(c){cm[c.id]=custName(c)});d.jobs.rows.forEach(function(j){if(!/hotov|done|dokon/i.test(j.status||'')||!j.customer_id)return;var nm=cm[j.customer_id];if(!nm)return;var has=d.invoices.rows.some(function(x){return invName(x)===nm&&new Date(x.issued_on||x.created_at)>=new Date(String(j.created_at||'').slice(0,10))});if(!has)add('jobdone','jobdone:'+j.id,'Vystavit fakturu: '+j.title+' ('+nm+')',locD(t0),'Zakázka je hotová a od jejího vzniku nemá zákazník fakturu')})}
+ if(auOn('inactive')){var lim=new Date(t0);lim.setDate(lim.getDate()-90);var act={};d.jobs.rows.forEach(function(j){if(j.customer_id&&new Date(j.created_at)>=lim)act[j.customer_id]=1});d.reservations.rows.forEach(function(r){if(r.customer_id&&new Date(r.starts_at)>=lim)act[r.customer_id]=1});var an={};d.invoices.rows.forEach(function(x){if(new Date(x.issued_on||x.created_at)>=lim)an[invName(x)]=1});
+  d.customers.rows.forEach(function(c){if(c.archived||act[c.id]||an[custName(c)]||new Date(c.created_at)>=lim)return;add('inactive','inactive:'+c.id,'Ozvat se zákazníkovi: '+custName(c),locD(t0),'Žádná zakázka, rezervace ani faktura za posledních 90 dní')})}
+ if(auOn('tomorrow'))d.reservations.rows.forEach(function(r){if(r.canceled)return;var s0=new Date(r.starts_at);if(s0>=t1&&s0<tm)add('tomorrow','res:'+r.id,'Připravit se na rezervaci zítra: '+(r.title||''),locD(t1),'Rezervace '+fD(r.starts_at,1))});
+ return out}
+function auView(){
+ var R=APP.d.automation_rules||{rows:[]},it=auItems(),mg=APP.role==='owner'||APP.role==='admin',cnt={};it.forEach(function(x){cnt[x.rule]=(cnt[x.rule]||0)+1});
+ var h='<div class="card2 note"><b>Automatizace vám hlídá věci a navrhuje úkoly.</b> Pravidla se vyhodnotí vždy, když otevřete Vexaronet. Nic se nevytvoří samo, návrhy úkolů schvalujete tlačítkem. Běh na pozadí a automatické e-maily zákazníkům zatím nejsou.'+(R.err?' Zapínání a vypínání pravidel vyžaduje dokončit nastavení databáze (SQL schema_automatizace), do té doby jsou všechna pravidla zapnutá.':'')+'</div>';
+ h+='<section class="card2"><h3>Pravidla</h3><ul class="rows big">'+AUR.map(function(r){var on=auOn(r[0]);return '<li><label class="chk"><input type="checkbox" data-au="rule:'+r[0]+'"'+(on?' checked':'')+((mg&&!R.err)?'':' disabled')+'><span><b>'+esc(r[1])+'</b><small>'+esc(r[2])+'</small></span></label><span>'+(on?(cnt[r[0]]||0)+' '+plural(cnt[r[0]]||0,'návrh','návrhy','návrhů'):'vypnuto')+'</span></li>'}).join('')+'</ul></section>';
+ h+='<section class="card2"><div class="bar2"><h3>Návrhy úkolů</h3>'+(it.length&&mg?'<button type="button" class="btn btn-main btn-sm" data-au="all">Vytvořit všechny úkoly ('+it.length+')</button>':'<span></span>')+'</div>'+(it.length?'<ul class="rows big">'+it.map(function(x,i){return '<li><div><b>'+esc(x.title)+'</b><small>'+esc(x.why)+'</small></div>'+(mg?'<button type="button" class="btn btn-ghost btn-sm" data-au="one:'+i+'">Vytvořit úkol</button>':'')+'</li>'}).join('')+'</ul>':'<p class="mut">Teď není co navrhovat. Všechno vypadá v pořádku.</p>')+(mg?'':'<p class="mut fine">Úkoly z návrhů mohou vytvářet jen majitel a správce.</p>')+'</section>';
+ h+='<section class="card2"><h3>Co zatím neumíme</h3><ul class="rows"><li class="off"><b>Běh pravidel bez otevření aplikace</b><span>připravujeme</span></li><li class="off"><b>Automatické e-maily a upomínky zákazníkům</b><span>připravujeme</span></li><li class="off"><b>Vlastní pravidla a propojení s dalšími službami</b><span>připravujeme</span></li></ul></section>';
+ return h}
+async function auCreate(list){
+ if(!list.length||APP.busy)return;APP.busy=true;
+ try{var rows=list.map(function(x){return {company_id:APP.cid,title:x.title,due_at:x.due,description:'[auto:'+x.key+'] '+x.why,completed:false}});
+  var r=await getSb().from('tasks').insert(rows);if(r.error){toast('Nepodařilo se vytvořit úkoly: '+r.error.message,'err');return}
+  await refresh();appTab('automatizace');toast('Vytvořeno úkolů: '+rows.length+'. Najdete je v záložce Úkoly.','ok')
+ }finally{APP.busy=false}}
+async function auToggle(k,on){
+ var R=APP.d.automation_rules.rows.filter(function(x){return x.rule===k})[0],r;
+ if(R)r=await getSb().from('automation_rules').update({enabled:on,updated_at:new Date().toISOString()}).eq('company_id',APP.cid).eq('rule',k);
+ else r=await getSb().from('automation_rules').insert({company_id:APP.cid,rule:k,enabled:on});
+ if(r.error){toast('Nepodařilo se uložit: '+r.error.message,'err')}
+ await refresh();appTab('automatizace')}
 async function accProcess(){
  var fi=A('accFile'),f=fi&&fi.files&&fi.files[0];
  if(!f){accSt('Vyberte soubor s dokladem (foto nebo PDF).','err');return}
@@ -1794,6 +1829,7 @@ document.addEventListener('click',async function(e){
  var iv=e.target.closest('#vxapp [data-invview]');if(iv){invView(iv.dataset.invview);return}
  if(e.target.closest('#vxapp [data-invprint]')){invPrint();return}
  var pay=e.target.closest('#vxapp [data-pay]');if(pay){if(!confirm('Označit fakturu jako zaplacenou dnes? Změna se promítne do účetních údajů.'))return;var pr=await rpcInv('paid',{id:pay.dataset.pay,payment_date:locD(new Date())});if(pr.error){toast('Nepodařilo se uložit: '+pr.error.message,'err');return}await refresh();appTab('faktury');toast('Faktura označena jako zaplacená.','ok');return}
+ var ux=e.target.closest('#vxapp button[data-au]');if(ux){var uk=ux.dataset.au;if(uk==='all')auCreate(auItems());else if(uk.indexOf('one:')===0){var ui=auItems()[+uk.slice(4)];if(ui)auCreate([ui])}return}
  var rx=e.target.closest('#vxapp [data-rp]');if(rx){var rk=rx.dataset.rp;if(rk==='csv')rpCsv();else if(rk==='print')rpPrint();else if(rk==='ai')rpAI();return}
  var mx=e.target.closest('#vxapp [data-mk]');if(mx){var mk=mx.dataset.mk;if(mk==='gen')mkGen();else if(mk==='save')mkSave();else if(mk==='copy'){var mo=A('mk_out');try{navigator.clipboard.writeText(mo.value);toast('Text zkopírován.','ok')}catch(x){mo.select();toast('Označeno, zkopírujte ručně (Ctrl+C).','ok')}}return}
  var wx=e.target.closest('#vxapp [data-web]');if(wx){var wk=wx.dataset.web;if(wk==='ai')webAI();else if(wk==='open')webOpen('',true);else if(wk==='copy'){var wr=APP.d.sites.rows[0];if(wr){try{navigator.clipboard.writeText(webUrl(wr.slug));toast('Odkaz zkopírován.','ok')}catch(x){toast(webUrl(wr.slug),'ok')}}}return}
@@ -1811,7 +1847,7 @@ document.addEventListener('click',async function(e){
  if(e.target.closest('#vxapp [data-del]')){delEnt(A('entForm'));return}
  if(e.target.classList&&e.target.classList.contains('amodal'))closeModal()});
 document.addEventListener('change',async function(e){
- var t=e.target;if(t.id==='rpP'){APP.rpP=t.value;appTab('reporty');return}if(t.dataset&&t.dataset.bkrow!=null&&BK.rows[+t.dataset.bkrow]){BK.rows[+t.dataset.bkrow].on=t.checked;return}if(t.dataset&&t.dataset.task){var r=await getSb().from('tasks').update({completed:t.checked}).eq('id',t.dataset.task).eq('company_id',APP.cid);if(r.error){toast('Nepodařilo se uložit: '+r.error.message,'err');t.checked=!t.checked}else{await refresh();appTab('ukoly')}}});
+ var t=e.target;if(t.dataset&&t.dataset.au&&t.dataset.au.indexOf('rule:')===0){await auToggle(t.dataset.au.slice(5),t.checked);return}if(t.id==='rpP'){APP.rpP=t.value;appTab('reporty');return}if(t.dataset&&t.dataset.bkrow!=null&&BK.rows[+t.dataset.bkrow]){BK.rows[+t.dataset.bkrow].on=t.checked;return}if(t.dataset&&t.dataset.task){var r=await getSb().from('tasks').update({completed:t.checked}).eq('id',t.dataset.task).eq('company_id',APP.cid);if(r.error){toast('Nepodařilo se uložit: '+r.error.message,'err');t.checked=!t.checked}else{await refresh();appTab('ukoly')}}});
 document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#webForm'))webPrev();if(e.target.closest&&e.target.closest('#iRows'))invTotals();if(e.target.classList&&e.target.classList.contains('srch')){var v=e.target.value.toLowerCase();[].forEach.call(document.querySelectorAll('#lst li'),function(li){li.style.display=li.textContent.toLowerCase().indexOf(v)<0?'none':''})}});
 document.addEventListener('submit',async function(e){
  var f=e.target;
