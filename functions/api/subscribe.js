@@ -36,14 +36,28 @@ export const onRequest = async ({ request: req, env, ...context }) => {
     interested_plan: clip(b.interested_plan, 40), message: clip(b.message, 1000),
   };
 
-  const r = await fetch(`${SB_URL}/rest/v1/newsletter_subscribers`, {
-    method: 'POST',
-    headers: { apikey: SB_KEY, authorization: `Bearer ${SB_KEY}`, 'content-type': 'application/json', prefer: 'return=minimal' },
-    body: JSON.stringify(row),
-  });
   const inquiry = b?.inquiry === true;
-  if (r.status === 409 && !inquiry) return json({ ok: true, duplicate: true });
-  if (!r.ok && r.status !== 409) { console.error('Supabase', r.status, await r.text()); return json({ error: 'db' }, 502); }
+  let stored = false;
+  if (inquiry) {
+    // Poptávka na míru je oddělená od odběru novinek: funguje i pro e-mail, který už novinky odebírá.
+    try {
+      const q = await fetch(`${SB_URL}/rest/v1/custom_inquiries`, {
+        method: 'POST',
+        headers: { apikey: SB_KEY, authorization: `Bearer ${SB_KEY}`, 'content-type': 'application/json', prefer: 'return=minimal' },
+        body: JSON.stringify({ email, name, company: row.company, business_type: row.business_type, message: row.message }),
+      });
+      stored = q.ok;
+      if (!q.ok) console.warn('custom_inquiries', q.status, await q.text());
+    } catch (e) { console.warn('custom_inquiries', e); }
+  } else {
+    const r = await fetch(`${SB_URL}/rest/v1/newsletter_subscribers`, {
+      method: 'POST',
+      headers: { apikey: SB_KEY, authorization: `Bearer ${SB_KEY}`, 'content-type': 'application/json', prefer: 'return=minimal' },
+      body: JSON.stringify(row),
+    });
+    if (r.status === 409) return json({ ok: true, duplicate: true });
+    if (!r.ok) { console.error('Supabase', r.status, await r.text()); return json({ error: 'db' }, 502); }
+  }
 
   const key = env.RESEND_API_KEY, to = env.NOTIFY_EMAIL;
   let mail = 'not_configured';
@@ -63,6 +77,7 @@ export const onRequest = async ({ request: req, env, ...context }) => {
       else { const t = await m.text(); console.error('Resend', m.status, t); mail = `failed ${m.status}: ${t.slice(0, 160)}`; }
     } catch (e) { console.error('Resend', e); mail = 'error ' + String(e).slice(0, 100); }
   } else console.warn('E-mailové upozornění není nastaveno (RESEND_API_KEY, NOTIFY_EMAIL).');
+  if (inquiry && !stored && mail !== 'sent') return json({ error: 'inquiry_failed', mail }, 502);
   return json({ ok: true, mail });
 };
 
