@@ -17,3 +17,10 @@ Bez klíče chat napíše, že není dostupný.
 2. V Cloudflare Pages (Settings → Variables and Secrets) přidejte: `DIGEST_SECRET` (libovolné dlouhé heslo), `SUPABASE_SERVICE_KEY` (service_role klíč z Supabase, Project Settings → API; tajný, nikam jinam). `RESEND_API_KEY` a volitelně `GEMINI_API_KEY` už máte.
 3. V Supabase zapněte rozšíření pg_cron a pg_net (Database → Extensions) a spusťte `cron.schedule` z konce souboru schema_prehled_pobocky.sql s vaším DIGEST_SECRET.
 4. V aplikaci na Přehledu: Dnes ve firmě → Zapnout ranní e-mail → Poslat zkušební.
+
+## Docházka zaměstnanců (online / offline) a odpracované hodiny
+1. V Supabase SQL Editoru spusťte celý soubor `schema_dochazka.sql` (jednou). Vytvoří tabulku `time_entries`, funkce `clock_in` a `clock_out` a dovolí členům firmy přidávat a upravovat zákazníky, zakázky a úkoly (mazat nemohou).
+2. Majitel nebo správce vyznačí směny v Kalendáři (jméno nebo e-mail zaměstnance musí odpovídat jeho účtu).
+3. Zaměstnanec po přihlášení vidí na Přehledu kartu **Moje docházka**: při příchodu na směnu klikne na **Přijít na směnu (online)**, při odchodu na **Odejít (offline)**. Čas bere server, ne telefon.
+4. Majitel vidí v části **Zaměstnanci** kdo je online, odpracované hodiny za tento měsíc i celkem a poslední záznamy. Zapomenutou směnu ukončí tlačítkem **Ukončit**.
+5. Zaměstnanec může přidávat zákazníky a zakázky. Faktury, finance a AI CEO nevidí.
