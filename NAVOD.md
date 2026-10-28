@@ -27,3 +27,13 @@ Bez klíče chat napíše, že není dostupný.
 
 ## Poptávky na systém na míru
 Poptávka se ukládá do samostatné tabulky `custom_inquiries` (soubor `schema_poptavky.sql`, spustit jednou v Supabase SQL Editoru) a nezávisí na odběru novinek. Majiteli přijde e-mail „Poptávka: systém na míru“ (potřebuje `RESEND_API_KEY` a `NOTIFY_EMAIL` v Cloudflare). Pokud selže uložení i e-mail, formulář zobrazí chybu a zákazník uvidí e-mail info@vexaronet.com.
+
+## AI CEO – etapa 2
+
+V záložce **AI CEO** (tarif PRO a vyšší) přibylo:
+- **Zdraví firmy** – skóre 0–100 ze šesti oblastí (platby, zakázky v termínu, úkoly, aktivita zákazníků, rozložení tržeb, vývoj příjmů). Je to orientační ukazatel z dat v aplikaci, nikoli účetní hodnocení. Oblast bez dat se do skóre nepočítá. Skóre je i na přehledu.
+- **Výhled na 30 dní** – očekávané platby podle splatnosti faktur a průměrné výdaje. Bez zůstatku na účtu, proto jen orientační.
+- **Měsíční cíl** fakturace s průběhem a hrubým odhadem konce měsíce (ukládá se k účtu, záloha v prohlížeči).
+- **Nová doporučení** z reálných dat: závislost na jednom zákazníkovi, zákazníci bez zakázky 90 dní, hotové zakázky bez faktury, zapomenutá směna (>12 h), ohrožený cíl.
+- **Týdenní report** – fakta za 7 dní ke zkopírování + tlačítko pro slovní shrnutí od AI.
+Žádné nové SQL není potřeba. Po nasazení je nutný redeploy funkce advisor (děje se automaticky při pushi).

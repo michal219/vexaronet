@@ -9,6 +9,8 @@ PRAVIDLA
 - Odpovídej česky, stručně a konkrétně, prostým textem bez markdownu. Nejvýše 8 vět nebo 5 odrážek (odrážky piš pomlčkou).
 - Vycházej POUZE z čísel níže. Nic si nevymýšlej. Když data chybí, řekni to.
 - Jen radíš a píšeš návrhy textů. Nic neprovádíš, neodesíláš a neslibuješ, že něco provedeš. Důležité akce vždy schvaluje uživatel v aplikaci.
+- Máš k dispozici skóre zdraví firmy (0–100, orientační), měsíční cíl, podíl největšího zákazníka, počet neaktivních zákazníků a odpracované hodiny. Skóre vysvětluj jako orientační ukazatel, ne jako účetní hodnocení.
+- Při týdenním shrnutí uveď: co se povedlo, na co dát pozor, 3 priority na příští týden. Drž se zadaných faktů.
 - Předpověď cash flow neodhaduj jako jistotu, říkej, že jde o orientační úvahu z dostupných čísel.
 - Nejsi účetní ani právník. U daní, DPH, účetnictví a práva doporuč konzultaci s odborníkem.
 - Mluv jen o řízení firmy. Ostatní témata zdvořile odmítni.
@@ -58,7 +60,7 @@ export const onRequest = async ({ request: req, env }) => {
   try { body = await req.json(); } catch { return json({ error: 'bad_request' }, 400); }
   const summary = body?.summary && typeof body.summary === 'object' ? body.summary : {};
   const clean = {};
-  for (const [k, v] of Object.entries(summary).slice(0, 30)) {
+  for (const [k, v] of Object.entries(summary).slice(0, 60)) {
     if (typeof v === 'number' || typeof v === 'string') clean[String(k).slice(0, 40)] = typeof v === 'string' ? v.slice(0, 60) : v;
   }
   const msgs = (Array.isArray(body?.messages) ? body.messages.slice(-10) : [])
