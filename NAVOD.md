@@ -24,6 +24,7 @@ Bez klíče chat napíše, že není dostupný.
 3. Zaměstnanec po přihlášení vidí na Přehledu kartu **Moje docházka**: při příchodu na směnu klikne na **Přijít na směnu (online)**, při odchodu na **Odejít (offline)**. Čas bere server, ne telefon.
 4. Majitel vidí v části **Zaměstnanci** kdo je online, odpracované hodiny za tento měsíc i celkem a poslední záznamy. Zapomenutou směnu ukončí tlačítkem **Ukončit**.
 5. Zaměstnanec může přidávat zákazníky a zakázky. Faktury, finance a AI CEO nevidí.
+6. **Hodinová sazba a výdělek:** v SQL Editoru jednou spusťte `schema_sazby.sql`. Pak majitel nebo správce zadá v části Zaměstnanci u každého člověka sazbu v Kč za hodinu. U každého se zobrazí výdělek za odpracované hodiny tento měsíc a součet za tým. Sazbu vidí jen majitel/správce a zaměstnanec u sebe. Jde o orientační přehled, ne o mzdovou agendu (daně a odvody se nepočítají).
 
 ## Poptávky na systém na míru
 Poptávka se ukládá do samostatné tabulky `custom_inquiries` (soubor `schema_poptavky.sql`, spustit jednou v Supabase SQL Editoru) a nezávisí na odběru novinek. Majiteli přijde e-mail „Poptávka: systém na míru“ (potřebuje `RESEND_API_KEY` a `NOTIFY_EMAIL` v Cloudflare). Pokud selže uložení i e-mail, formulář zobrazí chybu a zákazník uvidí e-mail info@vexaronet.com.
