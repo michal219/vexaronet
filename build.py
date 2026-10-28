@@ -353,7 +353,7 @@ tpl = r'''<!doctype html>
     <p class="lead">Postavíme vám vlastní systém ve stylu Vexaronetu, včetně AI. Vycházíme z hotových částí Vexaronetu, takže nezačínáme od nuly.</p>
     <ul class="ticks"><li>Moduly a postupy podle toho, jak vaše firma opravdu pracuje</li><li>AI asistent napojený na vaše zakázky, zákazníky a faktury</li><li>Nasazení, nastavení a zaškolení týmu</li></ul></div>
     <div class="cu-p"><small>Cena</small><div class="cu-price"><span>od</span> <b>20 000 Kč</b></div><p class="mut">Bez DPH, jednorázově. Konečná cena závisí na rozsahu a určíme ji po nezávazné konzultaci.</p>
-    <button type="button" class="btn btn-main" id="askCustom" data-namiru="1">Poptat systém na míru</button></div>
+    <button type="button" class="btn btn-main" id="askCustom" data-namiru="1">Chcete systém jako náš? Jen pro vás</button></div>
   </div>
 </div></section>
 
