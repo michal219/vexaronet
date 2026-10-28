@@ -62,22 +62,32 @@ export const onRequest = async ({ request: req, env, ...context }) => {
   const key = env.RESEND_API_KEY, to = env.NOTIFY_EMAIL;
   let mail = 'not_configured';
   if (key && to) {
+    const send = (rcpt) => fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        from: env.NOTIFY_FROM || 'Vexaronet <onboarding@resend.dev>',
+        to: [rcpt],
+        subject: inquiry ? `Poptávka: systém na míru – ${row.name}` : `Nová přihláška k novinkám: ${row.name}`,
+        html: `<h2>${inquiry ? 'Poptávka: systém na míru (od 20 000 Kč)' : 'Nová přihláška k novinkám Vexaronet'}</h2><p><b>Jméno:</b> ${esc(row.name)}<br><b>E-mail:</b> ${esc(row.email)}<br><b>Firma:</b> ${esc(row.company)}<br><b>Obor:</b> ${esc(row.business_type)}<br><b>Tarif:</b> ${esc(row.interested_plan)}<br><b>Zpráva:</b> ${esc(row.message)}</p><p>Všechny přihlášky najdeš v Supabase (newsletter_subscribers, custom_inquiries).</p>`,
+      }),
+    });
+    const mask = (e) => String(e).replace(/^(.).*?(@.*)$/, '$1***$2');
     try {
-      const m = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
-        body: JSON.stringify({
-          from: env.NOTIFY_FROM || 'Vexaronet <onboarding@resend.dev>',
-          to: [to],
-          subject: inquiry ? `Poptávka: systém na míru – ${row.name}` : `Nová přihláška k novinkám: ${row.name}`,
-          html: `<h2>${inquiry ? 'Poptávka: systém na míru (od 20 000 Kč)' : 'Nová přihláška k novinkám Vexaronet'}</h2><p><b>Jméno:</b> ${esc(row.name)}<br><b>E-mail:</b> ${esc(row.email)}<br><b>Firma:</b> ${esc(row.company)}<br><b>Obor:</b> ${esc(row.business_type)}<br><b>Tarif:</b> ${esc(row.interested_plan)}<br><b>Zpráva:</b> ${esc(row.message)}</p><p>Všechny přihlášky najdeš v Supabase, Table Editor, newsletter_subscribers.</p>`,
-        }),
-      });
+      let m = await send(to);
       if (m.ok) mail = 'sent';
-      else { const t = await m.text(); console.error('Resend', m.status, t); mail = `failed ${m.status}: ${t.slice(0, 160)}`; }
+      else {
+        const t = await m.text(); console.error('Resend', m.status, t);
+        // Testovací režim Resendu: smí se poslat jen na adresu majitele účtu. Zkusíme ji.
+        const own = /own email address \(([^)\s]+@[^)\s]+)\)/.exec(t)?.[1];
+        if (m.status === 403 && own && own.toLowerCase() !== String(to).trim().toLowerCase()) {
+          const m2 = await send(own);
+          mail = m2.ok ? `sent_to_account_owner (NOTIFY_EMAIL ${mask(to)} Resend odmítl, ověřte doménu)` : `failed ${m2.status}`;
+        } else mail = `failed ${m.status} (NOTIFY_EMAIL=${mask(to)}): ${t.slice(0, 160)}`;
+      }
     } catch (e) { console.error('Resend', e); mail = 'error ' + String(e).slice(0, 100); }
   } else console.warn('E-mailové upozornění není nastaveno (RESEND_API_KEY, NOTIFY_EMAIL).');
-  if (inquiry && !stored && mail !== 'sent') return json({ error: 'inquiry_failed', mail }, 502);
+  if (inquiry && !stored && !String(mail).startsWith('sent')) return json({ error: 'inquiry_failed', mail }, 502);
   return json({ ok: true, mail });
 };
 
