@@ -41,8 +41,9 @@ export const onRequest = async ({ request: req, env, ...context }) => {
     headers: { apikey: SB_KEY, authorization: `Bearer ${SB_KEY}`, 'content-type': 'application/json', prefer: 'return=minimal' },
     body: JSON.stringify(row),
   });
-  if (r.status === 409) return json({ ok: true, duplicate: true });
-  if (!r.ok) { console.error('Supabase', r.status, await r.text()); return json({ error: 'db' }, 502); }
+  const inquiry = b?.inquiry === true;
+  if (r.status === 409 && !inquiry) return json({ ok: true, duplicate: true });
+  if (!r.ok && r.status !== 409) { console.error('Supabase', r.status, await r.text()); return json({ error: 'db' }, 502); }
 
   const key = env.RESEND_API_KEY, to = env.NOTIFY_EMAIL;
   let mail = 'not_configured';
@@ -54,8 +55,8 @@ export const onRequest = async ({ request: req, env, ...context }) => {
         body: JSON.stringify({
           from: env.NOTIFY_FROM || 'Vexaronet <onboarding@resend.dev>',
           to: [to],
-          subject: `Nová přihláška k novinkám: ${row.name}`,
-          html: `<h2>Nová přihláška k novinkám Vexaronet</h2><p><b>Jméno:</b> ${esc(row.name)}<br><b>E-mail:</b> ${esc(row.email)}<br><b>Firma:</b> ${esc(row.company)}<br><b>Obor:</b> ${esc(row.business_type)}<br><b>Tarif:</b> ${esc(row.interested_plan)}<br><b>Zpráva:</b> ${esc(row.message)}</p><p>Všechny přihlášky najdeš v Supabase, Table Editor, newsletter_subscribers.</p>`,
+          subject: inquiry ? `Poptávka: systém na míru – ${row.name}` : `Nová přihláška k novinkám: ${row.name}`,
+          html: `<h2>${inquiry ? 'Poptávka: systém na míru (od 20 000 Kč)' : 'Nová přihláška k novinkám Vexaronet'}</h2><p><b>Jméno:</b> ${esc(row.name)}<br><b>E-mail:</b> ${esc(row.email)}<br><b>Firma:</b> ${esc(row.company)}<br><b>Obor:</b> ${esc(row.business_type)}<br><b>Tarif:</b> ${esc(row.interested_plan)}<br><b>Zpráva:</b> ${esc(row.message)}</p><p>Všechny přihlášky najdeš v Supabase, Table Editor, newsletter_subscribers.</p>`,
         }),
       });
       if (m.ok) mail = 'sent';

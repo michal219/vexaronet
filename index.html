@@ -458,6 +458,10 @@ dialog::backdrop{background:rgba(2,3,10,.75);backdrop-filter:blur(8px)}
 .cmp{width:100%;border-collapse:collapse;min-width:760px;font-size:.9rem}.cmp th,.cmp td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:center}
 .cmp thead th{position:sticky;top:0;background:var(--ink);z-index:1}.cmp th[scope=row],.cmp thead th:first-child{text-align:left;font-weight:500}
 .cmp .grp th{text-align:left;background:rgba(110,140,255,.12);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}.cmp .hotc{color:#8fb2ff}
+.custom{display:grid;grid-template-columns:1.5fr 1fr;gap:32px;align-items:center;padding:40px;border-radius:28px;border:1px solid rgba(140,165,255,.3);background:linear-gradient(150deg,rgba(40,52,130,.5),rgba(12,16,40,.7));box-shadow:0 30px 80px -24px rgba(70,90,240,.45)}
+.custom h2{margin:14px 0 12px}.custom .ticks{margin-top:16px}.cu-p{padding:28px;border-radius:22px;background:rgba(8,10,30,.55);border:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.cu-p small{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#a9c1ff;font-weight:700}.cu-price{display:flex;align-items:baseline;gap:10px}.cu-price span{color:var(--mut);font-size:1.1rem}.cu-price b{font-size:2.3rem;white-space:nowrap}
+.cu-p .btn{width:100%;justify-content:center}@media(max-width:860px){.custom{grid-template-columns:1fr;padding:26px}}
 .soonb{font-style:normal;font-size:.68rem;border:1px solid var(--line);border-radius:99px;padding:1px 7px;color:var(--mut);white-space:nowrap}
 .pnotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:26px}.pnotes>div{padding:18px;border-radius:16px;border:1px solid var(--line);background:var(--glass)}.pnotes h4{margin:0 0 6px}.pnotes p{margin:0;color:var(--mut);font-size:.9rem}
 /* --- aplikace --- */
@@ -563,7 +567,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 
 <header class="nav" id="nav"><div class="in">
   <a class="logo" href="#top" aria-label="Vexaronet – úvod"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>AI platforma</small></span></a>
-  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
+  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#namiru">Na míru</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
   <div class="nav-r">
     <button class="themeb" id="theme" type="button" aria-label="Přepnout světlý a tmavý režim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg></button>
     <button class="btn btn-ghost btn-sm" id="acc" type="button">Přihlásit</button>
@@ -572,7 +576,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
     <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="mnav"><i></i></button>
   </div>
 </div></header>
-<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Ceník</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a><a href="#demo" data-demo="1" style="--i:7">▶ Vyzkoušet bez registrace</a></nav>
+<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Ceník</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#namiru" style="--i:5">Systém na míru</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a><a href="#demo" data-demo="1" style="--i:7">▶ Vyzkoušet bez registrace</a></nav>
 
 <main id="obsah">
 <section class="hero" id="top"><div class="wrap">
@@ -673,6 +677,16 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
   </div>
 </div></section>
 
+<section id="namiru"><div class="wrap">
+  <div class="custom" data-r="up">
+    <div class="cu-t"><span class="eyebrow">Řešení na míru</span><h2>Potřebujete systém <span class="grad">přesně pro svou firmu?</span></h2>
+    <p class="lead">Postavíme vám vlastní systém ve stylu Vexaronetu, včetně AI. Vycházíme z hotových částí Vexaronetu, takže nezačínáme od nuly.</p>
+    <ul class="ticks"><li>Moduly a postupy podle toho, jak vaše firma opravdu pracuje</li><li>AI asistent napojený na vaše zakázky, zákazníky a faktury</li><li>Nasazení, nastavení a zaškolení týmu</li></ul></div>
+    <div class="cu-p"><small>Cena</small><div class="cu-price"><span>od</span> <b>20 000 Kč</b></div><p class="mut">Bez DPH, jednorázově. Konečná cena závisí na rozsahu a určíme ji po nezávazné konzultaci.</p>
+    <button type="button" class="btn btn-main" id="askCustom" data-namiru="1">Poptat systém na míru</button></div>
+  </div>
+</div></section>
+
 <section id="postup"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Postup vývoje</span><h2>Osm etap <span class="grad">k hotové platformě</span></h2><p class="lead">Stavíme po částech a každou etapu otestujeme. Stav je uveden otevřeně.</p></div>
   <div class="tl" id="tl"><div class="tl-f"></div><div class="step" data-r="up">
@@ -723,9 +737,9 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 <option>Řemeslník</option>
 <option>Restaurace</option>
 <option>Jiný obor</option></select></div>
-      <div class="f full"><label for="fPlan">Zajímá mě tarif</label><select id="fPlan" name="tarif"><option value="">Zatím nevím</option><option>START (zdarma)</option><option>AI Účetní</option><option>PRO</option><option>BUSINESS</option><option>ENTERPRISE</option></select></div>
-      <div class="f full"><label for="fMsg">Co by měla platforma umět především? (nepovinné)</label><textarea id="fMsg" name="zprava"></textarea></div>
-      <div class="f full"><label class="chk"><input type="checkbox" name="souhlas" id="fOk" required><span>Souhlasím se zpracováním e-mailu a údajů za účelem informování o spuštění. <a href="#ochrana-udaju">Zásady ochrany osobních údajů</a> <i>*</i></span></label></div>
+      <div class="f full"><label for="fPlan">Zajímá mě tarif</label><select id="fPlan" name="tarif"><option value="">Zatím nevím</option><option>START (zdarma)</option><option>AI Účetní</option><option>PRO</option><option>BUSINESS</option><option>ENTERPRISE</option><option>Systém na míru (od 20 000 Kč)</option></select></div>
+      <div class="f full"><label for="fMsg" id="fMsgL">Co by měla platforma umět především? (nepovinné)</label><textarea id="fMsg" name="zprava"></textarea></div>
+      <div class="f full"><label class="chk"><input type="checkbox" name="souhlas" id="fOk" required><span id="fOkT">Souhlasím se zpracováním e-mailu a údajů za účelem informování o spuštění. <a href="#ochrana-udaju">Zásady ochrany osobních údajů</a> <i>*</i></span></label></div>
       <div class="f full"><button class="btn btn-main" type="submit" id="send">Odebírat novinky</button></div>
     </div>
     <div class="st" id="st" role="status" aria-live="polite"></div>
@@ -768,7 +782,7 @@ function onScroll(){var y=window.scrollY;nav.classList.toggle('sc',y>20);documen
  if(!RM)pars.forEach(function(p){p.style.transform='translate3d(0,'+(y*parseFloat(p.dataset.par))+'px,0)'});
  var r=tl.getBoundingClientRect(),vh=window.innerHeight;tl.style.setProperty('--p',Math.min(1,Math.max(0,(vh*.6-r.top)/r.height)).toFixed(3));
  steps.forEach(function(s){s.classList.toggle('act',s.getBoundingClientRect().top<vh*.62)});
- var cur='';['funkce','ukazka','cenik','postup','early'].forEach(function(id){var e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<vh*.4)cur=id});
+ var cur='';['funkce','ukazka','cenik','namiru','postup','early'].forEach(function(id){var e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<vh*.4)cur=id});
  $$('.links a').forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)})}
 var tick=false;window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(function(){onScroll();tick=false})}},{passive:true});onScroll();
 if(!RM)window.addEventListener('pointermove',function(e){var d=document.documentElement.style;d.setProperty('--cx',e.clientX+'px');d.setProperty('--cy',e.clientY+'px')},{passive:true});
@@ -829,13 +843,17 @@ if(location.pathname.replace(/\/$/,'')==='/cenik')setTimeout(function(){var c=do
 /* formulář */
 var form=$('#form'),st=$('#st'),sendB=$('#send'),loadT=Date.now();
 function msg(t,c){st.className='st '+c;st.textContent=t}
+var custom=false;
+function setMode(){var c=/na míru/.test($('#fPlan').value);custom=c;sendB.textContent=c?'Odeslat poptávku':'Odebírat novinky';$('#fMsgL').textContent=c?'Co by měl systém umět? Popište firmu a čeho chcete dosáhnout.':'Co by měla platforma umět především? (nepovinné)';var t=$('#fOkT');if(t&&!t._o)t._o=t.innerHTML;if(t)t.innerHTML=c?'Souhlasím se zpracováním e-mailu a údajů za účelem vyřízení poptávky. <a href="#ochrana-udaju">Zásady ochrany osobních údajů</a> <i>*</i>':t._o}
+$('#fPlan').addEventListener('change',setMode);
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-namiru]');if(!b)return;e.preventDefault();$('#fPlan').value='Systém na míru (od 20 000 Kč)';setMode();$('#early').scrollIntoView({behavior:'smooth'});setTimeout(function(){var m=$('#fMsg');if(m)m.focus({preventScroll:true})},700)});
 form.addEventListener('submit',function(e){e.preventDefault();var f=form.elements;
  if(!f.jmeno.value.trim()||!f.email.value.trim()){msg('Vyplňte prosím jméno a e-mail.','err');return}
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.value.trim())){msg('Zkontrolujte prosím formát e-mailu.','err');return}
  if(!f.souhlas.checked){msg('Pro odeslání je nutný souhlas se zpracováním údajů.','err');return}
  if(f['bot-field'].value||Date.now()-loadT<2500){msg('Odeslání se nepodařilo ověřit. Zkuste to prosím znovu.','err');return}
  sendB.disabled=true;sendB.textContent='Odesílám…';st.className='st';
- fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:f.email.value.trim(),name:f.jmeno.value.trim(),company:f.firma.value.trim(),business_type:f.obor.value,interested_plan:f.tarif.value,message:f.zprava.value.trim(),consent:true,hp:f['bot-field'].value})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){msg((d&&d.duplicate?'Tento e-mail už novinky odebírá. Děkujeme!':'Děkujeme, e-mail jsme uložili. O novinkách vám dáme vědět.')+(d&&d.mail&&d.mail!=='sent'&&!d.duplicate?' [diagnostika e-mailu: '+d.mail+']':''),'ok');form.reset()}).catch(function(er){msg('Odeslání se teď nepodařilo (chyba '+((er&&er.message)||'síť')+'). Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;sendB.textContent='Odebírat novinky'})});
+ fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:f.email.value.trim(),name:f.jmeno.value.trim(),company:f.firma.value.trim(),business_type:f.obor.value,interested_plan:f.tarif.value,message:f.zprava.value.trim(),consent:true,inquiry:custom,hp:f['bot-field'].value})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){msg(custom?'Děkujeme, poptávku jsme přijali. Ozveme se vám na uvedený e-mail.':(d&&d.duplicate?'Tento e-mail už novinky odebírá. Děkujeme!':'Děkujeme, e-mail jsme uložili. O novinkách vám dáme vědět.')+(d&&d.mail&&d.mail!=='sent'&&!d.duplicate?' [diagnostika e-mailu: '+d.mail+']':''),'ok');form.reset();setMode()}).catch(function(er){msg('Odeslání se teď nepodařilo (chyba '+((er&&er.message)||'síť')+'). Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;setMode()})});
 
 
 /* ===== Supabase: registrace a přihlášení ===== */
