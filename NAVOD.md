@@ -38,3 +38,7 @@ V záložce **AI CEO** (tarif PRO a vyšší) přibylo:
 - **Nová doporučení** z reálných dat: závislost na jednom zákazníkovi, zákazníci bez zakázky 90 dní, hotové zakázky bez faktury, zapomenutá směna (>12 h), ohrožený cíl.
 - **Týdenní report** – fakta za 7 dní ke zkopírování + tlačítko pro slovní shrnutí od AI.
 Žádné nové SQL není potřeba. Po nasazení je nutný redeploy funkce advisor (děje se automaticky při pushi).
+
+
+## Zpětná vazba z aplikace
+V Supabase SQL Editoru jednou spusťte `schema_zpetna_vazba.sql`. V aplikaci je v levém menu tlačítko **Něco nefunguje?**: uživatel vybere typ (problém, nápad, jiné) a napíše zprávu. Ukládá se do tabulky `feedback` (Supabase, Table Editor, feedback) i s e-mailem, stránkou a prohlížečem. Pokud tabulka ještě neexistuje, nabídne se odeslání e-mailem na info@vexaronet.com.
