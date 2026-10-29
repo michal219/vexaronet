@@ -561,7 +561,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 .vxapp .amodal{position:absolute;inset:0;background:rgba(0,0,0,.6);display:none;place-items:center;padding:16px;z-index:10;overflow:auto}.vxapp .amodal.on{display:grid}
 .vxapp .mbox{width:min(600px,100%);background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:20px;max-height:92vh;overflow:auto}
 .vxapp textarea{width:100%;box-sizing:border-box;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:inherit;padding:10px}
-.vxapp .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;pointer-events:none;padding:12px 18px;border-radius:12px;background:#1e2a5a;color:#fff;transition:.3s;z-index:20;max-width:90vw}
+.vxapp .toast{position:fixed;left:50%;bottom:24px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.45);transform:translate(-50%,30px);opacity:0;pointer-events:none;padding:12px 18px;border-radius:12px;background:#1e2a5a;color:#fff;transition:.3s;z-index:60;max-width:90vw}
 .vxapp .toast.on{opacity:1;transform:translate(-50%,0)}.vxapp .toast.err{background:#a3243a}.vxapp .toast.ok{background:#1d7a55}
 .vxapp .scrim{display:none}.vxapp .note{font-size:.92rem}.vxapp .dact{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 @media(max-width:1100px){.dgrid{grid-template-columns:minmax(0,1fr)}.dr{position:static}.usr .un{display:none}}
@@ -1964,9 +1964,9 @@ function doAct(a){
  if(a==='offer'){appTab('ceo');setTimeout(function(){ceoAsk('Připrav krátkou obchodní nabídku pro stávající zákazníky, kteří zatím nemají žádnou zakázku.')},50)}}
 async function mkTasks(titles){
  var have={};APP.d.tasks.rows.forEach(function(t){if(!t.completed)have[t.title]=1});var rows=titles.filter(function(t){return !have[t]}).map(function(t){return {company_id:APP.cid,title:t,due_at:new Date(dayStart(0).getTime()+12*36e5).toISOString()}});
- if(!rows.length){closeModal();toast('Tyto úkoly už existují.');return}
+ if(!rows.length){closeModal();appTab('ukoly');toast('Tyto úkoly už máte v části Úkoly.');return}
  var r=await getSb().from('tasks').insert(rows);if(r.error){toast('Nepodařilo se vytvořit úkoly: '+r.error.message,'err');return}
- closeModal();await refresh();appTab(APP.tab);toast('Vytvořeno úkolů: '+rows.length,'ok')}
+ closeModal();await refresh();appTab('ukoly');toast('Vytvořeno úkolů: '+rows.length+'. Najdete je v části Úkoly.','ok')}
 function cmap(){var m={};APP.d.customers.rows.forEach(function(x){m[x.id]=custName(x)});return m}
 function head(ent,btn,ph){return '<div class="bar2">'+(ph?'<input class="srch" type="search" placeholder="'+ph+'" aria-label="Hledat">':'<span></span>')+'<button type="button" class="btn btn-main btn-sm" data-new="'+ent+'">'+btn+'</button></div>'}
 function listView(ent,ph,btn,row,emptyT,sort){
@@ -2079,7 +2079,7 @@ document.addEventListener('click',async function(e){
   else if(k==='logout'){if(DEMO){closeApp();return}var c=getSb();if(c)await c.auth.signOut();closeApp()}
   return}
  var dd=e.target.closest('#vxapp [data-do]');
- if(dd){var w=dd.dataset.do;if(w==='repai'){closeModal();appTab('ceo');setTimeout(function(){ceoAsk('Napiš krátké slovní shrnutí uplynulého týdne mé firmy a 3 priority na další týden. Fakta: '+weekFacts().join('; '))},50);return}if(w==='copy'){var tx=A('remTx');try{await navigator.clipboard.writeText(tx.value);toast('Zkopírováno.','ok')}catch(x){tx.select();toast('Označeno, zkopírujte pomocí Ctrl+C.')}}
+ if(dd){var w=dd.dataset.do;if(w==='repai'){closeModal();appTab('ceo');setTimeout(function(){ceoAsk('Napiš krátké slovní shrnutí uplynulého týdne mé firmy a 3 priority na další týden. Fakta: '+weekFacts().join('; '))},50);return}if(w==='copy'){var tx=A('remTx'),okc=false;try{await navigator.clipboard.writeText(tx.value);okc=true}catch(x){try{tx.focus();tx.select();tx.setSelectionRange(0,tx.value.length);okc=document.execCommand('copy')}catch(y){okc=false}}if(okc){var ol=dd.textContent;dd.textContent='Zkopírováno ✓';setTimeout(function(){dd.textContent=ol},2200);toast('Zkopírováno do schránky.','ok')}else{tx.focus();tx.select();toast('Text je označený, zkopírujte ho pomocí Ctrl+C (na telefonu podržte a zvolte Kopírovat).')}}
   else if(w==='remtasks')mkTasks(overInv().map(function(f){return 'Urgovat fakturu '+(f.number||'')+(invName(f)?' ('+invName(f)+')':'')}));
   else if(w==='jobtasks')mkTasks(overJobs().map(function(j){return 'Kontaktovat zákazníka: '+j.title}));return}
  var ac=e.target.closest('#vxapp [data-act]');if(ac){doAct(ac.dataset.act);return}

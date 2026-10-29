@@ -41,6 +41,7 @@ with sync_playwright() as p:
             check('2026001' in pg.input_value('#remTx'), 'upomínka obsahuje číslo faktury'); pg.click('[data-app=mclose]')
             pg.click('[data-act=jobtasks]'); pg.click('[data-do=jobtasks]'); pg.wait_for_timeout(400)
             check(any(l[0] == 'ins' and l[1] == 'tasks' for l in pg.evaluate('window.__log')), 'akce se provede až po potvrzení a vloží úkoly')
+            pg.evaluate("document.querySelector('#vxapp [data-tab=ceo]').click()"); pg.wait_for_selector('#ceoIn')
             pg.fill('#ceoIn', 'Jak jsme na tom?'); pg.press('#ceoIn', 'Enter'); pg.wait_for_timeout(500)
             check('Odpověď AI.' in pg.inner_text('#ceoLog'), 'AI CEO odpovídá')
             for tab in ['finance', 'zakaznici', 'zakazky', 'kalendar', 'ukoly', 'faktury', 'ceo', 'ucetni', 'weby', 'profil']:
