@@ -91,7 +91,7 @@ h2{font-size:clamp(2rem,4.6vw,3.4rem);margin:18px 0 14px}
 /* ---------- hero ---------- */
 .hero{min-height:100svh;padding:132px 0 70px;display:flex;align-items:center}
 .hero .wrap{display:grid;grid-template-columns:1.02fr 1fr;gap:30px;align-items:center}
-.hero h1{font-size:clamp(2.5rem,5.6vw,4.7rem);margin:22px 0 22px;font-weight:800}
+.hero h1{font-size:clamp(2.4rem,5vw,4.2rem);margin:22px 0 22px;font-weight:800}
 .hero h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em}
 .hero h1 .w>span{display:inline-block;transform:translateY(105%);animation:up .9s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(.12s*var(--i))}
 @keyframes up{to{transform:none}}
@@ -446,6 +446,12 @@ dialog::backdrop{background:rgba(2,3,10,.75);backdrop-filter:blur(8px)}
 .vxsx{position:absolute;top:12px;right:12px;background:#1b1e2e;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.35)}
 @media(max-width:1000px){.webw{grid-template-columns:minmax(0,1fr)}.webp{position:static}}
 
+/* etapa zhezčování: menu bez zalamování, tlačítka v ceníku, střední šířky */
+header.nav .links a,header.nav .nav-r .btn{white-space:nowrap}
+@media(max-width:1240px){header.nav .nav-r .btn-demo{display:none}}
+@media(max-width:1100px){header.nav .links{gap:14px}header.nav .links a{font-size:.9rem}}
+.plans5 .btn{white-space:normal;line-height:1.2;min-height:48px;padding-left:12px;padding-right:12px}
+
 
 /* --- ceník --- */
 .plans5 .plan{position:relative}.plans5 .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:99px;white-space:nowrap}.plans5 .price{min-height:2.2em;display:flex;align-items:flex-end}.plans5 .price b.pp:not([data-m]){font-size:1.2rem;white-space:normal}.plans5 .plan.hot{border-color:rgba(130,160,255,.7)}
@@ -705,11 +711,11 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 </div>
 <div class="step" data-r="up">
   <div class="dot" aria-hidden="true">3</div>
-  <div class="step-b st-next"><h3>Dashboard, CRM, zakázky a kalendář <span class="tagst">Rozpracováno</span></h3><p>Dashboard, zákazníci, zakázky, kalendář a úkoly už fungují. Zaměstnanci a role se doplní.</p></div>
+  <div class="step-b st-done"><h3>Dashboard, CRM, zakázky a kalendář <span class="tagst">Hotovo</span></h3><p>Dashboard, zákazníci, zakázky, kalendář, úkoly, online rezervace a zaměstnanci s docházkou a hodinami fungují.</p></div>
 </div>
 <div class="step" data-r="up">
   <div class="dot" aria-hidden="true">4</div>
-  <div class="step-b st-plan"><h3>Finance a fakturace <span class="tagst">Plánováno</span></h3><p>Faktury, QR platby, výdaje, pohledávky. Vyžaduje odbornou kontrolu účetním.</p></div>
+  <div class="step-b st-next"><h3>Finance a fakturace <span class="tagst">Rozpracováno</span></h3><p>Vystavování faktur a evidence příjmů a výdajů fungují. QR platby, pohledávky a účetnictví doplňujeme. Vyžaduje odbornou kontrolu účetním.</p></div>
 </div>
 <div class="step" data-r="up">
   <div class="dot" aria-hidden="true">5</div>
@@ -730,7 +736,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 </div></section>
 
 <section id="early"><div class="wrap contact">
-  <div data-r="up"><span class="eyebrow">Novinky a stav vývoje</span><h2>Aplikace <span class="grad">se právě staví</span></h2><p class="lead">Vexaronet je rozpracovaná beta verze. Část už funguje a můžete ji vyzkoušet. Zbytek přidáváme po etapách. Nechte nám e-mail a napíšeme vám, až bude hotová další část.</p><div class="ready"><div><h4>Už funguje</h4><ul class="ticks"><li>Registrace, přihlášení, obnova hesla</li><li>Přehled firmy s grafy</li><li>Zákazníci, zakázky, kalendář, úkoly</li><li>Faktury a příjmy a výdaje (základ)</li><li>AI CEO: doporučení a chat</li></ul></div><div><h4>Připravujeme</h4><ul class="ticks soonl"><li>AI Účetní (po odborné kontrole)</li><li>Odesílání faktur a PDF</li><li>Jednoduché weby</li><li>Marketing a zaměstnanci</li><li>Automatizace</li></ul></div></div>
+  <div data-r="up"><span class="eyebrow">Novinky a stav vývoje</span><h2>Aplikace <span class="grad">se právě staví</span></h2><p class="lead">Vexaronet je rozpracovaná beta verze. Část už funguje a můžete ji vyzkoušet. Zbytek přidáváme po etapách. Nechte nám e-mail a napíšeme vám, až bude hotová další část.</p><div class="ready"><div><h4>Už funguje</h4><ul class="ticks"><li>Registrace, přihlášení, obnova hesla</li><li>Přehled firmy s grafy</li><li>Zákazníci, zakázky, kalendář, úkoly</li><li>Online rezervace pro zákazníky</li><li>Zaměstnanci, docházka a odpracované hodiny s výdělkem</li><li>Faktury a příjmy a výdaje (základ)</li><li>AI CEO: doporučení, zdraví firmy a měsíční cíl</li></ul></div><div><h4>Připravujeme</h4><ul class="ticks soonl"><li>AI Účetní (po odborné kontrole)</li><li>Odesílání faktur a PDF</li><li>Jednoduché weby</li><li>Marketing</li><li>Automatizace</li></ul></div></div>
     <div class="ci"><a href="mailto:info@vexaronet.com"><small>E-mail</small><b>info@vexaronet.com</b></a><button type="button" class="btn btn-ghost" id="openChat" style="justify-content:flex-start">Zeptat se AI asistenta</button></div></div>
   <form class="card" id="form" name="early-access" data-r="up" novalidate>
     <p class="hp" aria-hidden="true"><label>Nevyplňovat <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>

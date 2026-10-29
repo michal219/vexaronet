@@ -42,3 +42,7 @@ V záložce **AI CEO** (tarif PRO a vyšší) přibylo:
 
 ## Zpětná vazba z aplikace
 V Supabase SQL Editoru jednou spusťte `schema_zpetna_vazba.sql`. V aplikaci je v levém menu tlačítko **Něco nefunguje?**: uživatel vybere typ (problém, nápad, jiné) a napíše zprávu. Ukládá se do tabulky `feedback` (Supabase, Table Editor, feedback) i s e-mailem, stránkou a prohlížečem. Pokud tabulka ještě neexistuje, nabídne se odeslání e-mailem na info@vexaronet.com.
+
+
+## Etapa zhezčování (říjen 2026)
+Oprava horního menu (nezalamuje se, na středních šířkách se schová tlačítko Vyzkoušet), ořezaný text v tlačítkách ceníku, kratší nadpis na úvodu a aktuální stav vývoje (hotové: online rezervace, zaměstnanci a docházka s hodinami a výdělkem; etapa Finance a fakturace je rozpracovaná).

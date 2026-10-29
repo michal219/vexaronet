@@ -29,8 +29,8 @@ MODS = [
 STAGES = [
  ('Úvodní stránka a designový systém', 'Hotová a nasazená úvodní stránka s ukázkou aplikace.', 'done'),
  ('Registrace, přihlášení a databáze', 'Registrace, přihlášení, obnova hesla, firemní účty a 30denní zkušební období fungují.', 'done'),
- ('Dashboard, CRM, zakázky a kalendář', 'Dashboard, zákazníci, zakázky, kalendář a úkoly už fungují. Zaměstnanci a role se doplní.', 'next'),
- ('Finance a fakturace', 'Faktury, QR platby, výdaje, pohledávky. Vyžaduje odbornou kontrolu účetním.', 'plan'),
+ ('Dashboard, CRM, zakázky a kalendář', 'Dashboard, zákazníci, zakázky, kalendář, úkoly, online rezervace a zaměstnanci s docházkou a hodinami fungují.', 'done'),
+ ('Finance a fakturace', 'Vystavování faktur a evidence příjmů a výdajů fungují. QR platby, pohledávky a účetnictví doplňujeme. Vyžaduje odbornou kontrolu účetním.', 'next'),
  ('AI centrum a automatizace', 'Asistenti a Autopilot se schvalováním akcí. Vyžaduje API klíč AI poskytovatele.', 'plan'),
  ('Tvorba jednoduchých webů', 'Generátor jednoduchých webů, úprava vzhledu a domény. Vyžaduje externí služby.', 'plan'),
  ('Marketing, analytika a další moduly', 'Kampaně, slevy, profily, recenze a přehledy.', 'plan'),
@@ -368,7 +368,7 @@ tpl = r'''<!doctype html>
 </div></section>
 
 <section id="early"><div class="wrap contact">
-  <div data-r="up"><span class="eyebrow">Novinky a stav vývoje</span><h2>Aplikace <span class="grad">se právě staví</span></h2><p class="lead">Vexaronet je rozpracovaná beta verze. Část už funguje a můžete ji vyzkoušet. Zbytek přidáváme po etapách. Nechte nám e-mail a napíšeme vám, až bude hotová další část.</p><div class="ready"><div><h4>Už funguje</h4><ul class="ticks"><li>Registrace, přihlášení, obnova hesla</li><li>Přehled firmy s grafy</li><li>Zákazníci, zakázky, kalendář, úkoly</li><li>Faktury a příjmy a výdaje (základ)</li><li>AI CEO: doporučení a chat</li></ul></div><div><h4>Připravujeme</h4><ul class="ticks soonl"><li>AI Účetní (po odborné kontrole)</li><li>Odesílání faktur a PDF</li><li>Jednoduché weby</li><li>Marketing a zaměstnanci</li><li>Automatizace</li></ul></div></div>
+  <div data-r="up"><span class="eyebrow">Novinky a stav vývoje</span><h2>Aplikace <span class="grad">se právě staví</span></h2><p class="lead">Vexaronet je rozpracovaná beta verze. Část už funguje a můžete ji vyzkoušet. Zbytek přidáváme po etapách. Nechte nám e-mail a napíšeme vám, až bude hotová další část.</p><div class="ready"><div><h4>Už funguje</h4><ul class="ticks"><li>Registrace, přihlášení, obnova hesla</li><li>Přehled firmy s grafy</li><li>Zákazníci, zakázky, kalendář, úkoly</li><li>Online rezervace pro zákazníky</li><li>Zaměstnanci, docházka a odpracované hodiny s výdělkem</li><li>Faktury a příjmy a výdaje (základ)</li><li>AI CEO: doporučení, zdraví firmy a měsíční cíl</li></ul></div><div><h4>Připravujeme</h4><ul class="ticks soonl"><li>AI Účetní (po odborné kontrole)</li><li>Odesílání faktur a PDF</li><li>Jednoduché weby</li><li>Marketing</li><li>Automatizace</li></ul></div></div>
     <div class="ci"><a href="mailto:info@vexaronet.com"><small>E-mail</small><b>info@vexaronet.com</b></a><button type="button" class="btn btn-ghost" id="openChat" style="justify-content:flex-start">Zeptat se AI asistenta</button></div></div>
   <form class="card" id="form" name="early-access" data-r="up" novalidate>
     <p class="hp" aria-hidden="true"><label>Nevyplňovat <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
