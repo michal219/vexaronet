@@ -659,6 +659,7 @@ function demoSb(){
   if(n==='cancel_invite'){D.company_invites=D.company_invites.filter(function(x){return x.id!==a.invite_id});return {data:true,error:null}}
   if(n==='remove_member'||n==='accept_company_invites')return {data:0,error:null};
   if(n==='invoice_action'){var doc=a.doc||{};
+   if(a.action==='start'){return {data:{id:'draft-'+(++seq),job_id:doc.job_id,lifecycle:'draft'},error:null}}
    if(a.action==='paid'){D.invoices.forEach(function(x){if(x.id===doc.id)x.paid_at=new Date().toISOString()});return {data:{ok:true},error:null}}
    if(a.action==='profile'){var sp=Object.assign({},doc);D.invoices.forEach(function(x){x.supplier_snapshot=sp});return {data:{ok:true},error:null}}
    if(a.action==='issue'){var tot=0;(doc.items||[]).forEach(function(i){tot+=(i.quantity||0)*(i.unit_gross||0)});var no='2026'+('000'+(D.invoices.length+1)).slice(-3),sp2=(D.invoices[0]||{}).supplier_snapshot||{};
@@ -1757,8 +1758,16 @@ document.addEventListener('submit',async function(e){
   if(!its.length){entMsg('Přidejte alespoň jednu položku s popisem, množstvím a cenou.');return}
   var cu=APP.d.customers.rows.filter(function(x){return x.id===A('iC').value})[0]||{};
   if(!confirm('Vystavit fakturu? Přidělí se číslo faktury a vystavenou fakturu už nelze vzít zpět.'))return;
-  var doc={customer:{id:cu.id,name:cu.name,email:cu.email||null,ico:cu.ico||null,dic:cu.dic||null,billing_address:cu.billing_address||null},items:its,issued_on:A('iI').value,taxable_supply_on:A('iT').value,due_on:A('iD').value,currency:A('iCur').value,language:'cs'};if(A('iJ').value)doc.job_id=A('iJ').value;
-  var b=f.querySelector('button[type=submit]');b.disabled=true;var r=await rpcInv('issue',doc);b.disabled=false;
+  var doc={customer:{id:cu.id,name:cu.name,email:cu.email||null,ico:cu.ico||null,dic:cu.dic||null,billing_address:cu.billing_address||null,address_text:cu.billing_address||null,country_code:cu.country_code||null},items:its,issued_on:A('iI').value,taxable_supply_on:A('iT').value,due_on:A('iD').value,currency:A('iCur').value,language:'cs'};if(A('iJ').value)doc.job_id=A('iJ').value;
+  var b=f.querySelector('button[type=submit]');b.disabled=true;var jobId=A('iJ').value,r;
+  try{
+   if(!jobId){var tt=its.reduce(function(a,i){return a+i.quantity*i.unit_gross},0),jr=await getSb().from('jobs').insert({company_id:APP.cid,customer_id:cu.id,title:'Faktura: '+its[0].description.slice(0,80),price:Math.round(tt*100)/100,status:'hotovo'}).select('id');
+    if(jr.error)throw jr.error;jobId=jr.data&&jr.data[0]&&jr.data[0].id;if(!jobId)throw new Error('Nepodařilo se připravit fakturu.')}
+   var sr=await rpcInv('start',{job_id:jobId});if(sr.error)throw sr.error;
+   var dr=sr.data||{};if(!dr.id)throw new Error('Nepodařilo se založit fakturu.');doc.id=dr.id;doc.job_id=jobId;
+   r=await rpcInv('issue',doc)}catch(ex){r={error:ex}}
+  b.disabled=false;
+  if(r.error&&/fakturační údaje/i.test(r.error.message||'')){toast('Nejdřív vyplňte fakturační údaje dodavatele (vaše firma) a pak fakturu vystavte znovu.','err');profForm();return}
   if(r.error){entMsg('Fakturu se nepodařilo vystavit: '+r.error.message+'. Zkontrolujte, že máte v části Faktury vyplněné Fakturační údaje (dodavatel) a vybraného zákazníka. Pokud to nepomůže, použijte tlačítko Něco nefunguje? v menu a popište, co se stalo.');return}
   closeModal();await refresh();appTab('faktury');toast('Faktura vystavena'+(r.data&&r.data.number?' (č. '+r.data.number+')':'')+'.','ok');return}
  if(f.id==='profForm'){e.preventDefault();if(!A('p_legal_name').value.trim()){entMsg('Vyplňte obchodní jméno.');return}
