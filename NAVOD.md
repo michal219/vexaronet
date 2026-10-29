@@ -46,3 +46,10 @@ V Supabase SQL Editoru jednou spusťte `schema_zpetna_vazba.sql`. V aplikaci je 
 
 ## Etapa zhezčování (říjen 2026)
 Oprava horního menu (nezalamuje se, na středních šířkách se schová tlačítko Vyzkoušet), ořezaný text v tlačítkách ceníku, kratší nadpis na úvodu a aktuální stav vývoje (hotové: online rezervace, zaměstnanci a docházka s hodinami a výdělkem; etapa Finance a fakturace je rozpracovaná).
+
+## Přizpůsobení podle oboru
+
+Obor zvolený při registraci (Autoservis, Řemeslník, Restaurace, Služby, Kadeřnictví a krása, Obchod, Jiný obor) přepíná aplikaci:
+pořadí a názvy menu (ostatní moduly jsou v "Další moduly"), stavy a šablonu zakázky, doporučené služby pro online objednání,
+kartu "Začínáme", otázky AI CEO. Obor lze změnit v Nastavení → "Zaměření aplikace podle oboru"; v ukázce přepínačem "Obor".
+Žádné nové DB sloupce, nic se nemaže – všechny moduly zůstávají dostupné.

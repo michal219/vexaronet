@@ -434,3 +434,5 @@ header.nav .links a,header.nav .nav-r .btn{white-space:nowrap}
 @media(max-width:1240px){header.nav .nav-r .btn-demo{display:none}}
 @media(max-width:1100px){header.nav .links{gap:14px}header.nav .links a{font-size:.9rem}}
 .plans5 .btn{white-space:normal;line-height:1.2;min-height:48px;padding-left:12px;padding-right:12px}
+/* okno nad ukázkovou lištou: lišta nezakrývá tlačítka ve formulářích */
+.vxapp:has(.amodal.on) .demobar{display:none}
