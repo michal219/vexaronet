@@ -502,7 +502,7 @@ var SB_KEY='sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW'; /* veřejný (publi
 var PLAN_OPTS=[['pro','Vexaronet PRO – 699 Kč / měsíc'],['accountant','AI Účetní – 399 Kč / měsíc'],['business','Vexaronet BUSINESS – 1 199 Kč / měsíc'],['start','START – zdarma']];
 var PLAN_ALLOWED=['start','accountant','pro','business','enterprise'],LEGACY={'VEXARONET PRO':'pro','AI ÚČETNÍ':'accountant','STARTER':'start','PRO':'pro','BUSINESS':'business'};
 function planVal(x){x=LEGACY[x]||x;return PLAN_ALLOWED.indexOf(x)>=0?x:'pro'}
-var TERMS_VERSION='2026-10';
+var TERMS_VERSION='beta-2026-10-18';
 var sb=null;
 function getSb(){if(DEMO)return demoSb();if(sb)return sb;if(window.supabase&&window.supabase.createClient){sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}return sb}
 var accB=$('#acc');
