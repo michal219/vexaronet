@@ -7,6 +7,7 @@ esc = lambda s: html.escape(s, quote=True)
 IC = {
  'ai': '<rect x="5" y="5" width="14" height="14" rx="3.5"/><path d="M9.5 10h.01M14.5 10h.01"/><path d="M9.5 14.5c1.4 1 3.6 1 5 0"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
  'fin': '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h3"/>',
+ 'shop': '<path d="M3 4h2.2l2 11h11.3l2-8H6"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/>',
  'biz': '<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.3 2.8-5 5.5-5s4.9 1.7 5.5 5"/><path d="M16 6.5a3 3 0 010 5.6M18 14.2c1.6.7 2.6 2.2 3 4.3"/>',
  'web': '<rect x="3" y="4" width="18" height="15" rx="2.5"/><path d="M3 9h18"/><path d="M8 14.5l2.2 2.2L15 12"/>',
  'mkt': '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',
@@ -19,6 +20,8 @@ MODS = [
       items=['Vystavování a správa faktur','PDF faktury a QR platby','Evidence příjmů, výdajů a DPH','Pohledávky a závazky','Párování bankovních plateb','Upomínky neuhrazených faktur','Účetní deník a hlavní kniha','AI rozpoznávání faktur a účtenek','Finanční statistiky a grafy']),
  dict(id='biz', stage=3, name='Řízení firmy', short='CRM, zakázky, úkoly, zaměstnanci, kalendář, rezervace a sklad.',
       items=['CRM a databáze zákazníků','Správa zakázek, úkolů a projektů','Zaměstnanci, role, docházka a hodinová sazba s výdělkem za měsíc','Kalendář a rezervace','Připomínky a notifikace','Firemní komunikace a e-mail','Skladové hospodářství']),
+ dict(id='shop', stage=3, name='E-shop propojený se skladem a fakturami', short='Zákazník nakoupí na veřejné stránce vašeho obchodu, vám se sama vystaví faktura a ze skladu se odepíše zboží.',
+      items=['Veřejný obchod s vlastním odkazem, bez registrace zákazníka','Objednávka vytvoří zákazníka, zakázku a fakturu','Zboží se hned odepíše ze skladu, nelze prodat víc, než je skladem','Faktura s údaji k platbě převodem a správným číslováním','Zrušení objednávky vrátí zboží na sklad','Dostupné v tarifu PRO a vyšších','Zatím bez platební brány (platba převodem), fakturu zákazníkovi posíláte sami']),
  dict(id='web', stage=6, name='Jednoduché weby', short='AI generátor jednoduchých firemních webů s úpravou vzhledu a vlastní doménou.',
       items=['AI generátor jednoduchých webů podle textového zadání','Úprava barev, písem, sekcí, obrázků a pozadí','Vlastní domény','Veřejný odkaz na vytvořený web','Responzivní zobrazení','Jde o jednoduché weby (prezentace firmy), ne o složité projekty']),
  dict(id='mkt', stage=7, name='Marketing a analytika', short='Kampaně, slevové kódy, veřejné profily, recenze a přehledy.',
@@ -52,7 +55,7 @@ PLANS = [
  ('accountant','VEXARONET AI ÚČETNÍ',399,339,4068,'Samostatný účetní systém pro OSVČ a s.r.o. (připravujeme).',False,'Vyzkoušet 30 dní zdarma',
   ['Neomezené vystavování faktur','Evidence příjmů a výdajů','Účetnictví a DPH (připravujeme)','100 AI vytěžených dokladů měsíčně','1 uživatel + 1 externí účetní','Bez CRM a AI CEO']),
  ('pro','VEXARONET PRO',699,594,7128,'Kompletní All-in-One platforma pro malé firmy.',True,'Vyzkoušet 30 dní zdarma',
-  ['Vše z AI Účetní','Neomezené CRM, zakázky a kalendář','AI CEO: doporučení a chat nad daty','3 uživatelé, 1 firma','150 AI dokladů a 500 AI akcí měsíčně','1 web (připravujeme)']),
+  ['Vše z AI Účetní','Neomezené CRM, zakázky a kalendář','AI CEO: doporučení a chat nad daty','3 uživatelé, 1 firma','150 AI dokladů a 500 AI akcí měsíčně','E-shop propojený se skladem a fakturami','1 web (připravujeme)']),
  ('business','VEXARONET BUSINESS',1199,1019,12228,'Pro rostoucí společnosti.',False,'Vyzkoušet 30 dní zdarma',
   ['Vše z PRO','Až 10 uživatelů a 3 weby','Pokročilý AI CEO a predikce (připravujeme)','500 AI dokladů a 2 000 AI akcí měsíčně','Role, oprávnění a schvalování','Prioritní podpora']),
  ('enterprise','VEXARONET ENTERPRISE',None,None,None,'Pro větší společnosti a náročné provozy.',False,'Požádat o nabídku',
@@ -72,6 +75,7 @@ CMP = [
  ('Ranní přehled dne do e-mailu (úkoly, rezervace, faktury)', [Y,N,Y,Y,Y], 'now'),
  ('Pobočky a místa u zakázek, rezervací a směn', [N,N,Y,Y,Y], 'now'),
  ('Online rezervace s veřejnou stránkou pro zákazníky', [N,N,Y,Y,Y], 'now'),
+ ('E-shop: objednávka sama vytvoří fakturu a odepíše sklad (platba převodem)', [N,N,Y,Y,Y], 'now'),
  ('Obchodní příležitosti, historie komunikace, segmentace', [N,N,Y,Y,Y], 'soon'),
  ('Finance a účetnictví', None, None),
  ('Vystavování faktur', ['10 měsíčně','neomezeně','neomezeně','neomezeně','neomezeně'], 'now'),
@@ -101,7 +105,7 @@ def svg(k): return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
 
 mods_html = '\n'.join(f'''<article class="svc" data-r="up" style="--d:{i*0.06:.2f}s" data-glow>
   <div class="svc-ic">{svg(m['id'])}</div><h3>{esc(m['name'])}</h3><p>{esc(m['short'])}</p>
-  <div class="svc-foot"><span class="from">Etapa {m['stage']} · {'základ k dispozici' if m['id']=='biz' else 'plánováno'}</span><a class="more" href="#modul-{m['id']}" data-mod="{m['id']}" aria-label="Zjistit více: {esc(m['name'])}">Zjistit více <i aria-hidden="true"></i></a></div>
+  <div class="svc-foot"><span class="from">Etapa {m['stage']} · {'k dispozici' if m['id']=='shop' else ('základ k dispozici' if m['id']=='biz' else 'plánováno')}</span><a class="more" href="#modul-{m['id']}" data-mod="{m['id']}" aria-label="Zjistit více: {esc(m['name'])}">Zjistit více <i aria-hidden="true"></i></a></div>
 </article>''' for i, m in enumerate(MODS))
 
 def kc(n): return f'{n:,}'.replace(',', ' ')
