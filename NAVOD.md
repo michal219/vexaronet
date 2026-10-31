@@ -88,3 +88,9 @@ V části Zákazníci je tlačítko "Import z CSV / Excelu": soubor se uloží j
 - Obě aplikace jen otevírají vexaronet.com (Android WebView, Windows Electron), takže se obsah aktualizuje sám s webem.
 - APK se podepisuje klíčem, který se vytváří při každém sestavení: novou verzi je třeba před instalací odinstalovat. EXE nemá podpis vydavatele, Windows ukáže varování SmartScreen (Další informace, Přesto spustit).
 - iPhone a Mac: jen instalace přes Safari (Přidat na plochu / do Docku), soubor ke stažení tam není možný.
+
+## Editor jednoduchého webu (modul Weby)
+- Úpravy: barva, vzhled (světlý/tmavý/teplý), 4 písma, obrázek v záhlaví a logo, galerie až 6 obrázků, 3 reference, 5 častých otázek, odkazy na Facebook/Instagram, odkaz na mapu, tlačítka rezervace a e-shopu.
+- Obrázky se vkládají jen jako odkaz začínající https:// (nahrávání souborů zatím není). Odkazy jiného typu se při zobrazení ignorují.
+- Vše je v tabulce `sites` (sloupec `data`), žádná změna databáze nebyla potřeba. Veřejná adresa: `/?w=adresa`.
+- Vlastní doména zatím není.
