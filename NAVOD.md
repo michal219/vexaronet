@@ -53,3 +53,14 @@ Obor zvolený při registraci (Autoservis, Řemeslník, Restaurace, Služby, Kad
 pořadí a názvy menu (ostatní moduly jsou v "Další moduly"), stavy a šablonu zakázky, doporučené služby pro online objednání,
 kartu "Začínáme", otázky AI CEO. Obor lze změnit v Nastavení → "Zaměření aplikace podle oboru"; v ukázce přepínačem "Obor".
 Žádné nové DB sloupce, nic se nemaže – všechny moduly zůstávají dostupné.
+
+## Import a export zákazníků (CSV)
+
+V části Zákazníci je tlačítko "Import z CSV / Excelu": soubor se uloží jako CSV, rozpozná se záhlaví (Jméno/Firma, E-mail, Telefon, IČO, DIČ, Adresa, Poznámka), zobrazí se náhled a až po potvrzení se zákazníci uloží. Duplicity (stejný e-mail nebo jméno) se přeskočí, START má limit 50 zákazníků. "Export do CSV" je u zákazníků i zakázek. Testuje tests/imp.py.
+
+## Databáze (stav 31. 10. 2026)
+
+- Zkušební doba: výchozí 30 dní, START je rovnou "active" bez trial_end (sloupec trial_end už může být NULL).
+- private.writable() povoluje zápis i pro plan='start' ve stavu active (bez paid_until).
+- Tabulky member_rates a feedback (s rozšířenými sloupci email, page, user_agent) jsou v Supabase již vytvořené.
+- Fakturace ověřena proti skutečné databázi (profile → start → issue, v transakci s rollbackem).

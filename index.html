@@ -454,6 +454,19 @@ header.nav .links a,header.nav .nav-r .btn{white-space:nowrap}
 /* okno nad ukázkovou lištou: lišta nezakrývá tlačítka ve formulářích */
 .vxapp:has(.amodal.on) .demobar{display:none}
 
+/* FAQ */
+.faq{max-width:820px;margin:0 auto;display:grid;gap:10px}
+.faq details{border:1px solid var(--line,rgba(255,255,255,.14));border-radius:14px;background:rgba(255,255,255,.04);padding:0 18px;transition:border-color .2s}
+.faq details[open]{border-color:rgba(130,160,255,.55)}
+.faq summary{cursor:pointer;list-style:none;padding:16px 28px 16px 0;font-weight:700;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:22px;line-height:1;opacity:.7}
+.faq details[open] summary::after{content:"\2212"}
+.faq p{margin:0 0 16px;opacity:.85;line-height:1.6}
+/* ukázkový panel nesmí zakrývat obsah ani tlačítka na konci stránky */
+.vxapp:has(.demobar) #appMain{padding-bottom:170px}
+@media(max-width:700px){.vxapp:has(.demobar) #appMain{padding-bottom:230px}}
+
 
 /* --- ceník --- */
 .plans5 .plan{position:relative}.plans5 .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:99px;white-space:nowrap}.plans5 .price{min-height:2.2em;display:flex;align-items:flex-end}.plans5 .price b.pp:not([data-m]){font-size:1.2rem;white-space:normal}.plans5 .plan.hot{border-color:rgba(130,160,255,.7)}
@@ -547,7 +560,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 .vxapp .goalr{display:flex;gap:8px;margin:6px 0 12px}.vxapp .goalr input{flex:1;min-width:0}.vxapp .goalt{margin:8px 0}
 @media(max-width:560px){.vxapp .hbars li{grid-template-columns:1fr 70px 28px}}
 .vxapp .rows li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(110,140,255,.06)}
-.vxapp .rows.big li[data-edit]{cursor:pointer;transition:.2s}.vxapp .rows.big li[data-edit]:hover{border-color:rgba(130,160,255,.6)}
+.vxapp .cstools{margin:0 0 10px;justify-content:flex-end}.vxapp .rows.big li[data-edit]{cursor:pointer;transition:.2s}.vxapp .rows.big li[data-edit]:hover{border-color:rgba(130,160,255,.6)}
 .vxapp .rows li.off{opacity:.55}.vxapp .rows small{display:block}.vxapp .rows li>span{color:var(--mut);font-size:.9rem}
 .vxapp .irow{display:grid;grid-template-columns:1fr 64px 56px 100px 64px 24px;gap:6px;margin-bottom:6px}.vxapp .irow input,.vxapp .irow select{padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--glass);color:inherit;min-width:0}@media(max-width:520px){.vxapp .irow{grid-template-columns:1fr 1fr}.vxapp .irow .id{grid-column:1/-1}}.beta{font-size:.6rem;font-weight:800;letter-spacing:.08em;background:#ffb347;color:#2a1a00;border-radius:6px;padding:1px 6px;margin-left:4px;vertical-align:middle}.betab{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:10px 14px;margin:8px 0 12px;border-radius:12px;border:1px solid rgba(255,179,71,.5);background:rgba(255,179,71,.1);font-size:.9rem}.ready{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}.ready h4{margin:0 0 6px}.ready .soonl li{opacity:.75}@media(max-width:520px){.ready{grid-template-columns:1fr}}.vxapp .inc{color:#3ddc97!important}.vxapp .late{color:#ff6b81!important;font-weight:700}.vxapp .stt{font-style:normal;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}
 .vxapp .bar2{display:flex;gap:10px;justify-content:space-between;margin:10px 0 14px;flex-wrap:wrap}
@@ -702,6 +715,19 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
   </div>
 </div></section>
 
+<section id="otazky"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Časté otázky</span><h2>Co se nejčastěji <span class="grad">ptáte</span></h2><p class="lead">Odpovědi bez zkrášlování. Co funguje, je napsané jako funguje, co se připravuje, jako připravuje.</p></div>
+  <div class="faq" data-r="up">
+   <details><summary>Kolik to stojí a co je zdarma?</summary><p>Tarif START je zdarma (CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel). Placené tarify můžete 30 dní zdarma vyzkoušet. Platební brána zatím není připojená, takže se vám nic neúčtuje ani automaticky nestrhává. Ceny jsou měsíčně bez DPH.</p></details>
+   <details><summary>Mám zákazníky v Excelu. Dají se přenést?</summary><p>Ano. Tabulku uložíte jako CSV a nahrajete ji v části Zákazníci (Import z CSV). Před uložením uvidíte náhled a duplicity se přeskočí. Zakázky a faktury se zatím zadávají ručně. Všechna data si můžete kdykoli stáhnout zpět do CSV.</p></details>
+   <details><summary>Co už opravdu funguje a co se připravuje?</summary><p>Funguje: zakázky, zákazníci, kalendář a online objednávání, sklad, fakturace, docházka s hodinovou sazbou a výdělkem, úkoly, finance, reporty a AI CEO. Ve vývoji jsou podvojné účetnictví, DPH a přímé napojení banky. Nehotové části jsou v aplikaci označené „brzy“.</p></details>
+   <details><summary>Dělá AI něco sama bez mého svolení?</summary><p>Ne. AI CEO a AI Účetní navrhují a upozorňují. Cokoli změní vaše data, provede se až po vašem potvrzení.</p></details>
+   <details><summary>Kde jsou moje data a vidí je někdo jiný?</summary><p>Data jsou uložená v databázi v EU (Stockholm). Každá firma vidí jen svoje záznamy a zaměstnanci jen to, co jim role dovolí. Podrobnosti najdete v zásadách ochrany osobních údajů.</p></details>
+   <details><summary>Je to vhodné pro můj obor?</summary><p>Po registraci vyberete obor (autoservis, řemeslník, restaurace, služby, kadeřnictví a krása, obchod nebo jiný) a aplikace přizpůsobí menu, názvy, stavy zakázek a první kroky. Moduly mimo váš obor zůstávají dostupné v části Další moduly.</p></details>
+   <details><summary>Nahradí mi to účetního?</summary><p>Zatím ne. Vexaronet pomáhá připravit podklady (evidence, faktury, export pro účetního), ale účetnictví a DPH jsou ve vývoji. Daňové a právní rady od nás nečekejte.</p></details>
+  </div>
+</div></section>
+
 <section id="postup"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Postup vývoje</span><h2>Osm etap <span class="grad">k hotové platformě</span></h2><p class="lead">Stavíme po částech a každou etapu otestujeme. Stav je uveden otevřeně.</p></div>
   <div class="tl" id="tl"><div class="tl-f"></div><div class="step" data-r="up">
@@ -768,7 +794,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 <footer><div class="wrap">
   <div class="fg2">
     <div><a class="logo" href="#top" style="padding:0"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>AI platforma</small></span></a><p style="color:var(--mut);margin-top:14px;max-width:320px;font-size:.93rem">AI platforma pro podnikatele a firmy. Připravujeme pro ČR, Slovensko a postupně celou EU.</p></div>
-    <div><h4>Navigace</h4><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></div>
+    <div><h4>Navigace</h4><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#otazky">Časté otázky</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></div>
     <div><h4>Informace</h4><button type="button" class="fl2" data-legal="ochrana-udaju">Ochrana osobních údajů</button><button type="button" class="fl2" data-legal="cookies">Cookies</button><a href="mailto:info@vexaronet.com">info@vexaronet.com</a></div>
   </div>
   <div class="copy"><span>© <span id="yr">2026</span> Vexaronet</span><span>vexaronet.com</span></div>
@@ -1490,8 +1516,8 @@ var VIEWS={
   h+='<section class="card2"><h3>Bankovní výpis a párování plateb</h3><p class="mut">Nahrajte CSV výpis z internetového bankovnictví (funguje s většinou českých bank i s exporty z platebních terminálů). AI Účetní spáruje platby s vašimi fakturami podle variabilního symbolu a částky. Faktury označí jako zaplacené až po vašem potvrzení. Soubor se nikam neukládá, zpracuje se jen ve vašem prohlížeči.</p><div class="f full"><label for="bkFile">Výpis (CSV)</label><input id="bkFile" type="file" accept=".csv,.txt,text/csv"></div><div class="dact"><button class="pri" type="button" data-acc="bk-file">Načíst výpis</button>'+(DEMO?'<button class="btn btn-ghost btn-sm" type="button" data-acc="bk-demo">Načíst ukázkový výpis</button>':'')+'</div><div class="st" id="bkSt" role="status"></div><div id="bkRes">'+bkView()+'</div></section>';
   h+='<section class="card2"><h3>Co je hotové a co se připravuje</h3><ul class="rows">'+[['Vytěžení údajů z faktur a účtenek (foto, PDF)','funguje, vždy po vaší kontrole'],['Evidence příjmů a výdajů','funguje'],['Kontrola záznamů (duplicity, budoucí data, po splatnosti)','funguje'],['Export CSV pro účetního','funguje'],['Dotazy na AI Účetní nad vaší evidencí','funguje'],['Podvojné účetnictví, deník a hlavní kniha','připravujeme, čeká na kontrolu odborníkem'],['DPH a daňové podklady','připravujeme, čeká na kontrolu odborníkem'],['Import bankovního výpisu (CSV) a párování plateb s fakturami','funguje, vždy po vašem potvrzení'],['Přímé napojení bankovního účtu (PSD2) a platebního terminálu','připravujeme, vyžaduje oficiální bankovní přístup'],['Účetní závěrky, mzdy a odvody','připravujeme']].map(function(x){return '<li'+(/^funguje/.test(x[1])?'':' class="off"')+'><b>'+x[0]+'</b><span>'+x[1]+'</span></li>'}).join('')+'</ul><p class="mut fine">Váš tarif: '+esc(PLANN[effPlan()]||'')+' · limit '+lim+' dokladů měsíčně.</p></section>';
   return h},
- zakaznici:function(){return listView('customers','Hledat zákazníka…','+ Nový zákazník',function(x){return '<div><b>'+esc(custName(x))+'</b><small>'+[x.email,x.phone].filter(Boolean).map(esc).join(' · ')+'</small></div>'},'Zatím žádní zákazníci.')},
- zakazky:function(){var cm=cmap();return listView('jobs','Hledat zakázku…','+ '+jobNewL(),function(x){return '<div><b>'+esc(x.title)+'</b><small>'+esc(cm[x.customer_id]||'bez zákazníka')+(x.location_id&&locName(x.location_id)?' · '+esc(locName(x.location_id)):'')+(x.description?' · '+esc(x.description):'')+'</small></div><span>'+fM(x.price)+' · do '+fD(x.due_at)+(x.status?' · <em class="stt">'+esc(x.status)+'</em>':'')+'</span>'},'Zatím žádné zakázky.',function(a,b){return new Date(b.created_at)-new Date(a.created_at)})},
+ zakaznici:function(){return csTools('customers')+listView('customers','Hledat zákazníka…','+ Nový zákazník',function(x){return '<div><b>'+esc(custName(x))+'</b><small>'+[x.email,x.phone].filter(Boolean).map(esc).join(' · ')+'</small></div>'},'Zatím žádní zákazníci.')},
+ zakazky:function(){var cm=cmap();return csTools('jobs')+listView('jobs','Hledat zakázku…','+ '+jobNewL(),function(x){return '<div><b>'+esc(x.title)+'</b><small>'+esc(cm[x.customer_id]||'bez zákazníka')+(x.location_id&&locName(x.location_id)?' · '+esc(locName(x.location_id)):'')+(x.description?' · '+esc(x.description):'')+'</small></div><span>'+fM(x.price)+' · do '+fD(x.due_at)+(x.status?' · <em class="stt">'+esc(x.status)+'</em>':'')+'</span>'},'Zatím žádné zakázky.',function(a,b){return new Date(b.created_at)-new Date(a.created_at)})},
  kalendar:function(){
   if(!APP.calM){var n0=new Date();APP.calM=new Date(n0.getFullYear(),n0.getMonth(),1)}
   var M=APP.calM,mode=APP.calMode||'m',mg=APP.role==='owner'||APP.role==='admin',mn=M.toLocaleDateString('cs-CZ',{month:'long',year:'numeric'});mn=mn.charAt(0).toUpperCase()+mn.slice(1);
@@ -2058,6 +2084,52 @@ async function mkTasks(titles){
  closeModal();await refresh();appTab('ukoly');toast('Vytvořeno úkolů: '+rows.length+'. Najdete je v části Úkoly.','ok')}
 function cmap(){var m={};APP.d.customers.rows.forEach(function(x){m[x.id]=custName(x)});return m}
 function head(ent,btn,ph){return '<div class="bar2">'+(ph?'<input class="srch" type="search" placeholder="'+ph+'" aria-label="Hledat">':'<span></span>')+'<button type="button" class="btn btn-main btn-sm" data-new="'+ent+'">'+btn+'</button></div>'}
+
+/* ===== Import a export zákazníků (CSV) ===== */
+var CI={rows:[],skip:0};
+function csTools(ent){var n=APP.d[ent]&&APP.d[ent].rows.length;return '<div class="dact cstools">'+(ent==='customers'?'<button type="button" class="btn btn-ghost btn-sm" data-cs="imp">Import z CSV / Excelu</button>':'')+(n?'<button type="button" class="btn btn-ghost btn-sm" data-cs="exp:'+ent+'">Export do CSV</button>':'')+'</div>'}
+function csDl(rows,name){var csv='﻿'+rows.map(function(r){return r.map(function(c){var t=String(c==null?'':c);return /[;"\n\r]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t}).join(';')}).join('\r\n'),b=new Blob([csv],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500)}
+function csExport(ent){var d=APP.d,rows;
+ if(ent==='customers'){rows=[['Jméno / firma','E-mail','Telefon','Fakturační adresa','IČO','DIČ','Poznámka']];d.customers.rows.forEach(function(c){rows.push([c.name||'',c.email||'',c.phone||'',c.billing_address||'',c.ico||'',c.dic||'',c.notes||''])})}
+ else{rows=[['Název','Zákazník','Stav','Cena v Kč','Termín','Popis']];d.jobs.rows.forEach(function(j){var cu=d.customers.rows.filter(function(x){return x.id===j.customer_id})[0];rows.push([j.title||'',cu?custName(cu):'',j.status||'',j.price==null?'':String(j.price).replace('.',','),String(j.due_at||'').slice(0,10),j.description||''])})}
+ if(rows.length<2){toast('Není co exportovat.','err');return}
+ csDl(rows,ent==='customers'?'vexaronet-zakaznici.csv':'vexaronet-zakazky.csv');toast('Export stažen.','ok')}
+function ciParse(text){
+ var ls=String(text||'').replace(/^﻿/,'').split(/\r?\n/).filter(function(l){return l.trim()});
+ if(ls.length<2)return {err:'Soubor je prázdný nebo obsahuje jen záhlaví.'};
+ var dl=';',bn=-1;[';',',','\t'].forEach(function(d){var n=bkSplit(ls[0],d).length;if(n>bn){bn=n;dl=d}});
+ var h=bkSplit(ls[0],dl).map(bkNorm),c={};
+ h.forEach(function(x,j){
+  if(c.name==null&&/^(jmeno|nazev|firma|zakaznik|klient|name|obchodni jmeno|jmeno a prijmeni|nazev firmy|jmeno firmy)/.test(x))c.name=j;
+  else if(c.email==null&&/e-?mail/.test(x))c.email=j;
+  else if(c.phone==null&&/(telefon|mobil|phone|gsm|^tel)/.test(x))c.phone=j;
+  else if(c.dic==null&&/^(dic|ic dph|vat)/.test(x))c.dic=j;
+  else if(c.ico==null&&/^(ico|ic|ic o)$/.test(x))c.ico=j;
+  else if(c.billing_address==null&&/(adres|ulice|sidlo|address)/.test(x))c.billing_address=j;
+  else if(c.notes==null&&/(poznamk|note|komentar)/.test(x))c.notes=j});
+ if(c.name==null)return {err:'V záhlaví nevidím sloupec se jménem. Přejmenujte první řádek tak, aby sloupec s jmény zákazníků měl název „Jméno“ nebo „Firma“ (další sloupce: E-mail, Telefon, IČO, DIČ, Adresa, Poznámka).'};
+ var ex={};APP.d.customers.rows.forEach(function(r){ex[(r.email||r.name||'').toLowerCase().trim()]=1});
+ var out=[],skip=0,seen={};
+ ls.slice(1,501).forEach(function(l){var p=bkSplit(l,dl),o={};['name','email','phone','ico','dic','billing_address','notes'].forEach(function(k){var v=c[k]!=null?String(p[c[k]]||'').trim():'';if(v)o[k]=v.slice(0,500)});
+  if(!o.name){return}
+  var key=(o.email||o.name).toLowerCase().trim();if(ex[key]||seen[key]){skip++;return}seen[key]=1;out.push(o)});
+ return {rows:out,skip:skip,total:Math.max(0,ls.length-1),cols:Object.keys(c)}}
+function ciModal(){CI={rows:[],skip:0};modal('<h3>Import zákazníků</h3><p class="mut">Máte zákazníky v Excelu? Uložte tabulku jako <b>CSV</b> (Soubor → Uložit jako → CSV) a nahrajte ji sem. Rozpoznáme sloupce Jméno / Firma, E-mail, Telefon, IČO, DIČ, Adresa a Poznámka. Před importem uvidíte náhled a nic se neuloží bez vašeho potvrzení. Zákazníci, které už máte (stejný e-mail nebo jméno), se přeskočí.</p><div class="f full"><label for="ciFile">Soubor CSV</label><input id="ciFile" type="file" accept=".csv,.txt,text/csv"></div><div class="st" id="ciSt" role="status"></div><div id="ciRes"></div><div class="dact"><button class="pri" type="button" data-cs="read">Načíst soubor</button><button class="btn btn-ghost" type="button" data-app="mclose">Zavřít</button></div>')}
+function ciSt(t,c){var e=A('ciSt');if(e){e.className='st'+(c?' '+c:'');e.textContent=t||''}}
+async function ciRead(){var fi=A('ciFile'),f=fi&&fi.files&&fi.files[0];if(!f){ciSt('Vyberte soubor CSV.','err');return}
+ if(f.size>2e6){ciSt('Soubor je příliš velký (nejvýše 2 MB).','err');return}
+ var t=await f.text();var r=ciParse(t);if(r.err){ciSt(r.err,'err');A('ciRes').innerHTML='';return}
+ var lim=effPlan()==='start'?Math.max(0,50-APP.d.customers.rows.length):500;
+ if(!r.rows.length){ciSt('Nenašel jsem žádné nové zákazníky'+(r.skip?' ('+r.skip+' už v evidenci je).':'.'),'err');A('ciRes').innerHTML='';return}
+ var use=r.rows.slice(0,lim);CI={rows:use,skip:r.skip};
+ var warn=use.length<r.rows.length?'<p class="mut fine">Tarif START umožňuje nejvýše 50 zákazníků, naimportuje se prvních '+use.length+'.</p>':'';
+ if(!use.length){ciSt('Tarif START umožňuje nejvýše 50 zákazníků a limit už je naplněný.','err');return}
+ ciSt('','');
+ A('ciRes').innerHTML='<p><b>Nalezeno '+r.rows.length+' nových zákazníků</b>'+(r.skip?', '+r.skip+' už v evidenci je a přeskočí se':'')+'. Ukázka prvních řádků:</p><ul class="rows">'+use.slice(0,5).map(function(o){return '<li><b>'+esc(o.name)+'</b><span>'+[o.email,o.phone,o.ico].filter(Boolean).map(esc).join(' · ')+'</span></li>'}).join('')+'</ul>'+warn+'<div class="dact"><button class="pri" type="button" data-cs="go">Importovat '+use.length+' zákazníků</button></div>'}
+async function ciGo(){if(!CI.rows.length)return;var b=document.querySelector('[data-cs=go]');if(b)b.disabled=true;
+ try{for(var i=0;i<CI.rows.length;i+=100){var ch=CI.rows.slice(i,i+100).map(function(o){return Object.assign({company_id:APP.cid},o)});var r=await getSb().from('customers').insert(ch);if(r.error)throw r.error}}
+ catch(ex){if(b)b.disabled=false;ciSt('Import se nepodařilo dokončit: '+(ex.message||ex)+'. Již vložené záznamy zůstaly, zkuste soubor načíst znovu, duplicity se přeskočí.','err');await refresh();return}
+ var n=CI.rows.length;CI={rows:[],skip:0};closeModal();await refresh();appTab('zakaznici');toast('Naimportováno '+n+' zákazníků.','ok')}
 function listView(ent,ph,btn,row,emptyT,sort){
  var x=APP.d[ent],rs=x.rows.slice();if(sort)rs.sort(sort);var h=head(ent,btn,ph)+errBox(x);
  if(!rs.length)return h+'<p class="mut">'+emptyT+'</p>';
@@ -2188,6 +2260,7 @@ document.addEventListener('click',async function(e){
  if(e.target.closest('#vxapp [data-invprint]')){invPrint();return}
  var pay=e.target.closest('#vxapp [data-pay]');if(pay){if(!confirm('Označit fakturu jako zaplacenou dnes? Změna se promítne do účetních údajů.'))return;var pr=await rpcInv('paid',{id:pay.dataset.pay,payment_date:locD(new Date())});if(pr.error){toast('Nepodařilo se uložit: '+pr.error.message,'err');return}await refresh();appTab('faktury');toast('Faktura označena jako zaplacená.','ok');return}
  var ux=e.target.closest('#vxapp button[data-au]');if(ux){var uk=ux.dataset.au;if(uk==='all')auCreate(auItems());else if(uk.indexOf('one:')===0){var ui=auItems()[+uk.slice(4)];if(ui)auCreate([ui])}return}
+ var cx=e.target.closest('#vxapp [data-cs]');if(cx){var ck=cx.dataset.cs;if(ck==='imp')ciModal();else if(ck==='read')ciRead();else if(ck==='go')ciGo();else if(ck.indexOf('exp:')===0)csExport(ck.slice(4));return}
  var rx=e.target.closest('#vxapp [data-rp]');if(rx){var rk=rx.dataset.rp;if(rk==='csv')rpCsv();else if(rk==='print')rpPrint();else if(rk==='ai')rpAI();return}
  var mx=e.target.closest('#vxapp [data-mk]');if(mx){var mk=mx.dataset.mk;if(mk==='gen')mkGen();else if(mk==='save')mkSave();else if(mk==='copy'){var mo=A('mk_out');try{navigator.clipboard.writeText(mo.value);toast('Text zkopírován.','ok')}catch(x){mo.select();toast('Označeno, zkopírujte ručně (Ctrl+C).','ok')}}return}
  var wx=e.target.closest('#vxapp [data-web]');if(wx){var wk=wx.dataset.web;if(wk==='ai')webAI();else if(wk==='open')webOpen('',true);else if(wk==='copy'){var wr=APP.d.sites.rows[0];if(wr){try{navigator.clipboard.writeText(webUrl(wr.slug));toast('Odkaz zkopírován.','ok')}catch(x){toast(webUrl(wr.slug),'ok')}}}return}
