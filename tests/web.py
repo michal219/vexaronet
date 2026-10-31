@@ -64,3 +64,20 @@ with sync_playwright() as p:
     open('/tmp/t.png','wb').write(bytes.fromhex('89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d49444154789c6300010000000500010d0a2db40000000049454e44ae426082'))
     pg.set_input_files('#webForm input[data-up="w_hi"]','/tmp/t.png');pg.wait_for_timeout(400)
     print('demo upload toast:',pg.inner_text('#appToast')[:60],errs);b.close()
+
+# --- tlačítka a odkazy uvnitř hotového webu (kliknutí myší, ne JS) ---
+with sync_playwright() as p:
+    b=p.chromium.launch();pg=b.new_page(viewport={'width':1360,'height':900})
+    pg.route('**/supabase.js',lambda r:r.fulfill(body='',content_type='text/javascript'))
+    pg.goto('file://'+R+'/index.html');pg.wait_for_timeout(400)
+    pg.click('.cta [data-demo]');pg.wait_for_selector('#vxapp .kpi')
+    pg.evaluate("document.querySelector('#vxapp [data-tab=weby]').click()");pg.wait_for_timeout(600)
+    pg.fill('#w_ai','Rodinný autoservis v Plzni, děláme servis, pneuservis a diagnostiku pro řidiče a malé firmy.')
+    pg.click('[data-web=ai]');pg.wait_for_timeout(1500)
+    pg.click('[data-web=open]');pg.wait_for_selector('#vxsite iframe');pg.wait_for_timeout(1200)
+    f=pg.query_selector('#vxsite iframe').content_frame()
+    for sel,h in(('.nv a[href="#sluzby"]','#sluzby'),('.nv a[href="#kontakt"]','#kontakt')):
+        f.locator(sel).first.click();pg.wait_for_timeout(1500)
+        okk=f.url.endswith(h) and f.evaluate('scrollY')>200 and pg.url.startswith('file://') and 'index.html' in pg.url
+        print(('OK  ' if okk else 'FAIL'),'odkaz uvnitř webu scrolluje, nenačte aplikaci',sel,f.url)
+    b.close()
