@@ -40,13 +40,13 @@ STAGES = [
  ('Předplatné, zabezpečení a testování', 'Tarify, zkušební období, platební brána, audit zabezpečení.', 'plan'),
 ]
 BIZ = {
- 'Služby': ['Klienti a projekty','Schůzky a online objednání','Faktury a hlídání plateb','Evidence hodin týmu'],
- 'Autoservis': ['Servisní zakázky a vozidla','Online objednání na servis','Sklad dílů','Faktury za práci a díly','Mechanici a docházka'],
- 'Řemeslník': ['Zakázky se stavy a zálohami','Kalendář výjezdů','Materiál na skladě','Pracovníci a hodiny','Faktury'],
+ 'Služby': ['Klienti a projekty','Schůzky a online objednání','Faktury a hlídání plateb','E-shop pro prodej zboží k službám','Evidence hodin týmu'],
+ 'Autoservis': ['Servisní zakázky a vozidla','Online objednání na servis','Sklad dílů','E-shop s díly a doplňky (faktura a sklad sami)','Faktury za práci a díly','Mechanici a docházka'],
+ 'Řemeslník': ['Zakázky se stavy a zálohami','Kalendář výjezdů','Materiál na skladě','E-shop s materiálem a výrobky','Pracovníci a hodiny','Faktury'],
  'Restaurace': ['Rezervace stolů online','Sklad surovin','Personál, směny a docházka','Akce a catering','Příjmy a výdaje'],
- 'Kadeřnictví a krása': ['Online rezervace klientů','Klienti s poznámkami','Tým a směny','Prodej produktů ze skladu','Slevy a marketing'],
+ 'Kadeřnictví a krása': ['Online rezervace klientů','Klienti s poznámkami','Tým a směny','Prodej produktů ze skladu','E-shop s kosmetikou','Slevy a marketing'],
  'Obchod': ['Zboží a sklad pod minimem','E-shop s fakturou a odpisem ze skladu','Objednávky','Zákazníci a faktury','Slevové kódy a marketing','Více prodejen'],
- 'Jiný obor': ['CRM','Kalendář','Faktury','Úkoly'],
+ 'Jiný obor': ['CRM','Kalendář','Faktury','Úkoly','E-shop se skladem'],
 }
 PLANS = [
  # key, název, měsíčně, ročně za měsíc, ročně za rok, podtitul, hot, tlačítko, odrážky
@@ -614,7 +614,7 @@ function ico(k,s){return '<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'
 /* ===== Profily oborů: aplikace se po registraci přizpůsobí oboru ===== */
 var OB={
 'Autoservis':{
- nav:['prehled','zakazky','kalendar','online','zakaznici','sklad','faktury','zamestnanci','ukoly','finance','reporty','ceo'],
+ nav:['prehled','zakazky','kalendar','online','zakaznici','sklad','eshop','faktury','zamestnanci','ukoly','finance','reporty','ceo'],
  lab:{zakazky:'Servisní zakázky',zakaznici:'Zákazníci a vozidla',sklad:'Sklad dílů',zamestnanci:'Mechanici a docházka',online:'Online objednání'},
  jobNew:'Nová servisní zakázka',jobAct:'Aktivní servisní zakázky',
  statuses:['Přijato','Diagnostika','Čeká na díly','V opravě','Hotovo'],
@@ -624,7 +624,7 @@ var OB={
  q:[['Sezóna přezouvání','Navrhni, jak oslovit zákazníky autoservisu před sezónou přezouvání pneumatik.'],['Zkontrolovat servisní zakázky','Zkontroluj stav zakázek a termínů a řekni, co hoří.'],['Připomenout STK a servis','Napiš krátkou zprávu pro zákazníky autoservisu, kterým se blíží STK nebo pravidelný servis.'],['Přehled financí','Připrav stručný přehled financí mé firmy podle čísel.'],['Získat nové zákazníky','Navrhni 3 způsoby, jak získat nové zákazníky pro autoservis.']],
  ai:'Autoservis: servisní zakázky se stavy, vozidla (SPZ), online rezervace termínů, sklad dílů pod minimem, sezónní přezouvání, faktury za práci a díly, hodiny mechaniků.'},
 'Řemeslník':{
- nav:['prehled','zakazky','zakaznici','kalendar','sklad','faktury','zamestnanci','ukoly','finance','reporty','ceo','online'],
+ nav:['prehled','zakazky','zakaznici','kalendar','sklad','eshop','faktury','zamestnanci','ukoly','finance','reporty','ceo','online'],
  lab:{zakazky:'Zakázky a projekty',sklad:'Materiál',zamestnanci:'Pracovníci a hodiny',kalendar:'Kalendář výjezdů',online:'Online objednání'},
  jobNew:'Nová zakázka',jobAct:'Aktivní zakázky',
  statuses:['Poptávka','Nabídka odeslána','Schváleno','Realizace','Hotovo'],
@@ -654,7 +654,7 @@ var OB={
  q:[['Shrnout rozpracované projekty','Shrň rozpracované zakázky a řekni, co je potřeba dotáhnout.'],['Neuhrazené faktury','Přehledně shrň neuhrazené faktury a navrhni, koho urgovat.'],['Napsat nabídku','Připrav krátkou obchodní nabídku pro stávající klienty mé firmy.'],['Přehled financí','Připrav stručný přehled financí mé firmy podle čísel.'],['Získat nové klienty','Navrhni 3 způsoby, jak získat nové klienty pro firmu poskytující služby.']],
  ai:'Služby (poradenství, agentury, freelanceři): projekty se stavy, úkoly, schůzky v kalendáři, faktury a hlídání plateb, evidence hodin týmu.'},
 'Kadeřnictví a krása':{
- nav:['prehled','kalendar','online','zakaznici','zamestnanci','sklad','faktury','finance','marketing','ukoly','reporty','ceo','pobocky','zakazky'],
+ nav:['prehled','kalendar','online','zakaznici','zamestnanci','sklad','eshop','faktury','finance','marketing','ukoly','reporty','ceo','pobocky','zakazky'],
  lab:{kalendar:'Kalendář a rezervace',online:'Online rezervace',zakaznici:'Klienti',zamestnanci:'Tým a směny',sklad:'Produkty a sklad',pobocky:'Provozovny'},
  jobNew:'Nová objednávka',jobAct:'Aktivní objednávky',
  statuses:['Objednáno','Potvrzeno','Hotovo'],
