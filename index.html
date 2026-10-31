@@ -499,6 +499,13 @@ html.appmode body>header.nav,html.appmode body>nav.mnav,html.appmode body>main,h
 html.appmode #subCard button,html.appmode [data-app=plan],html.appmode a[href="/cenik"],html.appmode .betab button{display:none!important}
 .appsplash{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#03040a;color:#fff;text-align:center;padding:24px}
 .appsplash[hidden]{display:none}.appsplash h1{margin:0;font-size:30px}.appsplash p{margin:0;color:#aab3d9}
+.chips a.chipnew{display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;border:1px solid rgba(139,92,246,.6);background:linear-gradient(135deg,rgba(91,155,255,.22),rgba(139,92,246,.28));color:#fff;font-size:14px;text-decoration:none;font-weight:600}
+.chips a.chipnew:hover{border-color:#a78bfa}
+.how{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+.how .hs{position:relative;padding:22px 18px 20px;border-radius:18px;border:1px solid rgba(150,175,255,.22);background:linear-gradient(180deg,rgba(20,26,60,.7),rgba(8,11,30,.7))}
+.how .hs b{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#5b9bff,#8b5cf6);color:#fff;font-size:17px;margin-bottom:12px}
+.how .hs h3{margin:0 0 6px;font-size:18px}.how .hs p{margin:0;color:var(--mut,#aab3d9);font-size:15px;line-height:1.5}
+@media(max-width:900px){.how{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.how{grid-template-columns:1fr}}
 
 
 /* --- ceník --- */
@@ -628,7 +635,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 
 <header class="nav" id="nav"><div class="in">
   <a class="logo" href="#top" aria-label="Vexaronet – úvod"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>AI platforma</small></span></a>
-  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#namiru">Na míru</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a><button type="button" class="fl2" data-install="1" style="font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:8px 10px">Stáhnout aplikaci</button></nav>
+  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#namiru">Na míru</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
   <div class="nav-r">
     <button class="themeb" id="theme" type="button" aria-label="Přepnout světlý a tmavý režim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg></button>
     <button class="btn btn-ghost btn-sm" id="acc" type="button">Přihlásit</button>
@@ -646,7 +653,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
     <h1 id="h1">Celé podnikání v jednom systému. Řízené AI.</h1>
     <p class="sub fade d2">Vexaronet spojí faktury, zákazníky, zakázky, jednoduché weby, marketing a automatizaci na jednom místě. AI připravuje práci za vás, důležité kroky vždy schvalujete vy.</p>
     <div class="cta fade d3"><button class="btn btn-main btn-demo" type="button" data-demo="1">▶ Vyzkoušet bez registrace</button><button class="btn btn-ghost" type="button" data-early="">Vyzkoušet 30 dní zdarma</button><a class="btn btn-ghost" href="#funkce">Prohlédnout funkce</a><button class="btn btn-ghost" type="button" data-install="1">⬇ Stáhnout aplikaci</button></div>
-    <div class="chips fade d3"><span>30 dní zdarma</span><span>START zdarma</span><span>Světlý i tmavý režim</span></div>
+    <div class="chips fade d3"><span>30 dní zdarma</span><span>START zdarma</span><span>Světlý i tmavý režim</span><a href="#modul-shop" data-mod="shop" class="chipnew">Nově: e-shop se skladem a fakturou</a></div>
   </div>
   <div class="scene" id="scene"><div class="fit" id="fit"><div class="stage" id="stage"><div class="laptop" id="laptop">
     <div class="sh"></div>
@@ -662,6 +669,17 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
  <span>AI centrum</span><span>Faktury a účetnictví</span><span>CRM a zakázky</span><span>Jednoduché weby</span><span>Marketing</span><span>Automatizace</span>
 </div></div>
 
+<section id="jak"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Jak to funguje</span><h2>Od registrace k první zakázce <span class="grad">za pár minut</span></h2><p class="lead">Žádné školení a žádná instalace. Stačí prohlížeč nebo aplikace v telefonu.</p></div>
+  <div class="how" data-r="up">
+   <div class="hs"><b>1</b><h3>Založíte účet</h3><p>Zadáte e-mail a heslo. START je zdarma, placené tarify si můžete 30 dní vyzkoušet.</p></div>
+   <div class="hs"><b>2</b><h3>Vyberete obor</h3><p>Autoservis, kadeřnictví, řemeslník, restaurace, obchod nebo jiný. Menu, názvy a stavy se přizpůsobí.</p></div>
+   <div class="hs"><b>3</b><h3>Přidáte zákazníky a zboží</h3><p>Nahrajete je z Excelu (CSV) nebo napíšete ručně. Zakázky, sklad a termíny máte na jednom místě.</p></div>
+   <div class="hs"><b>4</b><h3>Vystavujete a prodáváte</h3><p>Faktury, docházka, online rezervace a e-shop, který sám vystaví fakturu a odečte sklad.</p></div>
+  </div>
+  <div class="cta" style="justify-content:center;margin-top:24px"><button class="btn btn-main btn-demo" type="button" data-demo="1">▶ Vyzkoušet bez registrace</button><button class="btn btn-ghost" type="button" data-install="1">⬇ Stáhnout aplikaci</button></div>
+</div></section>
+
 <section id="ucet"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Přehled v účtu</span><h2>Takhle vypadá <span class="grad">váš účet</span></h2><p class="lead">Po přihlášení uvidíte na jednom místě ukazatele firmy, doporučení AI CEO a jeho chat. Obrázek je ze skutečné aplikace, jen s ukázkovými daty. Kliknutím ho zvětšíte.</p></div>
   <button type="button" class="appshot" data-zoom="1" data-r="up" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" loading="lazy" alt="Přehled firmy ve Vexaronetu: tržby, nezaplacené faktury, aktivní zakázky, doporučení AI CEO a chat s AI CEO (ukázková data)"></button>
@@ -670,14 +688,14 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 </div></section>
 
 <section id="funkce"><div class="wrap">
-  <div class="sec-h" data-r="up"><span class="eyebrow">Funkce platformy</span><h2>Šest oblastí, <span class="grad">jeden systém</span></h2><p class="lead">Takhle je platforma navržená. Moduly se budou stavět po etapách a u každého je uvedeno, v jaké fázi je. Zatím není hotový žádný z nich, tento web je návrh úvodní stránky.</p></div>
+  <div class="sec-h" data-r="up"><span class="eyebrow">Funkce platformy</span><h2>Sedm oblastí, <span class="grad">jeden systém</span></h2><p class="lead">Takhle je platforma navržená. Moduly se budou stavět po etapách a u každého je uvedeno, v jaké fázi je. Základ už funguje (zakázky, zákazníci, kalendář, sklad, e-shop, fakturace, docházka a AI CEO), ostatní se staví po etapách.</p></div>
   <div class="svcs"><article class="svc" data-r="up" style="--d:0.00s" data-glow>
   <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3.5"/><path d="M9.5 10h.01M14.5 10h.01"/><path d="M9.5 14.5c1.4 1 3.6 1 5 0"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div><h3>AI centrum</h3><p>Poradce, účetní, obchodník, krizový manažer, Autopilot a podpora 24/7 na jednom místě.</p>
-  <div class="svc-foot"><span class="from">Etapa 5 · plánováno</span><a class="more" href="#modul-ai" data-mod="ai" aria-label="Zjistit více: AI centrum">Zjistit více <i aria-hidden="true"></i></a></div>
+  <div class="svc-foot"><span class="from">Etapa 5 · AI CEO k dispozici, zbytek plánováno</span><a class="more" href="#modul-ai" data-mod="ai" aria-label="Zjistit více: AI centrum">Zjistit více <i aria-hidden="true"></i></a></div>
 </article>
 <article class="svc" data-r="up" style="--d:0.06s" data-glow>
   <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h3"/></svg></div><h3>Finance a účetnictví</h3><p>Faktury, QR platby, výdaje, DPH, pohledávky a párování plateb.</p>
-  <div class="svc-foot"><span class="from">Etapa 4 · plánováno</span><a class="more" href="#modul-fin" data-mod="fin" aria-label="Zjistit více: Finance a účetnictví">Zjistit více <i aria-hidden="true"></i></a></div>
+  <div class="svc-foot"><span class="from">Etapa 4 · fakturace k dispozici, účetnictví plánováno</span><a class="more" href="#modul-fin" data-mod="fin" aria-label="Zjistit více: Finance a účetnictví">Zjistit více <i aria-hidden="true"></i></a></div>
 </article>
 <article class="svc" data-r="up" style="--d:0.12s" data-glow>
   <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.3 2.8-5 5.5-5s4.9 1.7 5.5 5"/><path d="M16 6.5a3 3 0 010 5.6M18 14.2c1.6.7 2.6 2.2 3 4.3"/></svg></div><h3>Řízení firmy</h3><p>CRM, zakázky, úkoly, zaměstnanci, kalendář, rezervace a sklad.</p>

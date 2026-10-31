@@ -14,9 +14,9 @@ IC = {
  'auto': '<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',
 }
 MODS = [
- dict(id='ai', stage=5, name='AI centrum', short='Poradce, účetní, obchodník, krizový manažer, Autopilot a podpora 24/7 na jednom místě.',
+ dict(id='ai', stage=5, status='AI CEO k dispozici, zbytek plánováno', name='AI centrum', short='Poradce, účetní, obchodník, krizový manažer, Autopilot a podpora 24/7 na jednom místě.',
       items=['AI podnikatelský poradce','AI účetní','AI obchodník','AI krizový manažer','AI Autopilot, který propojuje moduly a automatizuje opakované činnosti','AI zákaznická podpora 24/7','AI analýza podnikání a návrhy na zlepšení']),
- dict(id='fin', stage=4, name='Finance a účetnictví', short='Faktury, QR platby, výdaje, DPH, pohledávky a párování plateb.',
+ dict(id='fin', stage=4, status='fakturace k dispozici, účetnictví plánováno', name='Finance a účetnictví', short='Faktury, QR platby, výdaje, DPH, pohledávky a párování plateb.',
       items=['Vystavování a správa faktur','PDF faktury a QR platby','Evidence příjmů, výdajů a DPH','Pohledávky a závazky','Párování bankovních plateb','Upomínky neuhrazených faktur','Účetní deník a hlavní kniha','AI rozpoznávání faktur a účtenek','Finanční statistiky a grafy']),
  dict(id='biz', stage=3, name='Řízení firmy', short='CRM, zakázky, úkoly, zaměstnanci, kalendář, rezervace a sklad.',
       items=['CRM a databáze zákazníků','Správa zakázek, úkolů a projektů','Zaměstnanci, role, docházka a hodinová sazba s výdělkem za měsíc','Kalendář a rezervace','Připomínky a notifikace','Firemní komunikace a e-mail','Skladové hospodářství']),
@@ -105,7 +105,7 @@ def svg(k): return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
 
 mods_html = '\n'.join(f'''<article class="svc" data-r="up" style="--d:{i*0.06:.2f}s" data-glow>
   <div class="svc-ic">{svg(m['id'])}</div><h3>{esc(m['name'])}</h3><p>{esc(m['short'])}</p>
-  <div class="svc-foot"><span class="from">Etapa {m['stage']} · {'k dispozici' if m['id']=='shop' else ('základ k dispozici' if m['id']=='biz' else 'plánováno')}</span><a class="more" href="#modul-{m['id']}" data-mod="{m['id']}" aria-label="Zjistit více: {esc(m['name'])}">Zjistit více <i aria-hidden="true"></i></a></div>
+  <div class="svc-foot"><span class="from">Etapa {m['stage']} · {m.get('status') or ('k dispozici' if m['id']=='shop' else ('základ k dispozici' if m['id']=='biz' else 'plánováno'))}</span><a class="more" href="#modul-{m['id']}" data-mod="{m['id']}" aria-label="Zjistit více: {esc(m['name'])}">Zjistit více <i aria-hidden="true"></i></a></div>
 </article>''' for i, m in enumerate(MODS))
 
 def kc(n): return f'{n:,}'.replace(',', ' ')
@@ -296,7 +296,7 @@ tpl = r'''<!doctype html>
 
 <header class="nav" id="nav"><div class="in">
   <a class="logo" href="#top" aria-label="Vexaronet – úvod"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>AI platforma</small></span></a>
-  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#namiru">Na míru</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a><button type="button" class="fl2" data-install="1" style="font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:8px 10px">Stáhnout aplikaci</button></nav>
+  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#namiru">Na míru</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
   <div class="nav-r">
     <button class="themeb" id="theme" type="button" aria-label="Přepnout světlý a tmavý režim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg></button>
     <button class="btn btn-ghost btn-sm" id="acc" type="button">Přihlásit</button>
@@ -314,7 +314,7 @@ tpl = r'''<!doctype html>
     <h1 id="h1">Celé podnikání v jednom systému. Řízené AI.</h1>
     <p class="sub fade d2">Vexaronet spojí faktury, zákazníky, zakázky, jednoduché weby, marketing a automatizaci na jednom místě. AI připravuje práci za vás, důležité kroky vždy schvalujete vy.</p>
     <div class="cta fade d3"><button class="btn btn-main btn-demo" type="button" data-demo="1">▶ Vyzkoušet bez registrace</button><button class="btn btn-ghost" type="button" data-early="">Vyzkoušet 30 dní zdarma</button><a class="btn btn-ghost" href="#funkce">Prohlédnout funkce</a><button class="btn btn-ghost" type="button" data-install="1">⬇ Stáhnout aplikaci</button></div>
-    <div class="chips fade d3"><span>30 dní zdarma</span><span>START zdarma</span><span>Světlý i tmavý režim</span></div>
+    <div class="chips fade d3"><span>30 dní zdarma</span><span>START zdarma</span><span>Světlý i tmavý režim</span><a href="#modul-shop" data-mod="shop" class="chipnew">Nově: e-shop se skladem a fakturou</a></div>
   </div>
   <div class="scene" id="scene"><div class="fit" id="fit"><div class="stage" id="stage"><div class="laptop" id="laptop">
     <div class="sh"></div>
@@ -330,6 +330,17 @@ tpl = r'''<!doctype html>
  <span>AI centrum</span><span>Faktury a účetnictví</span><span>CRM a zakázky</span><span>Jednoduché weby</span><span>Marketing</span><span>Automatizace</span>
 </div></div>
 
+<section id="jak"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Jak to funguje</span><h2>Od registrace k první zakázce <span class="grad">za pár minut</span></h2><p class="lead">Žádné školení a žádná instalace. Stačí prohlížeč nebo aplikace v telefonu.</p></div>
+  <div class="how" data-r="up">
+   <div class="hs"><b>1</b><h3>Založíte účet</h3><p>Zadáte e-mail a heslo. START je zdarma, placené tarify si můžete 30 dní vyzkoušet.</p></div>
+   <div class="hs"><b>2</b><h3>Vyberete obor</h3><p>Autoservis, kadeřnictví, řemeslník, restaurace, obchod nebo jiný. Menu, názvy a stavy se přizpůsobí.</p></div>
+   <div class="hs"><b>3</b><h3>Přidáte zákazníky a zboží</h3><p>Nahrajete je z Excelu (CSV) nebo napíšete ručně. Zakázky, sklad a termíny máte na jednom místě.</p></div>
+   <div class="hs"><b>4</b><h3>Vystavujete a prodáváte</h3><p>Faktury, docházka, online rezervace a e-shop, který sám vystaví fakturu a odečte sklad.</p></div>
+  </div>
+  <div class="cta" style="justify-content:center;margin-top:24px"><button class="btn btn-main btn-demo" type="button" data-demo="1">▶ Vyzkoušet bez registrace</button><button class="btn btn-ghost" type="button" data-install="1">⬇ Stáhnout aplikaci</button></div>
+</div></section>
+
 <section id="ucet"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Přehled v účtu</span><h2>Takhle vypadá <span class="grad">váš účet</span></h2><p class="lead">Po přihlášení uvidíte na jednom místě ukazatele firmy, doporučení AI CEO a jeho chat. Obrázek je ze skutečné aplikace, jen s ukázkovými daty. Kliknutím ho zvětšíte.</p></div>
   <button type="button" class="appshot" data-zoom="1" data-r="up" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" loading="lazy" alt="Přehled firmy ve Vexaronetu: tržby, nezaplacené faktury, aktivní zakázky, doporučení AI CEO a chat s AI CEO (ukázková data)"></button>
@@ -338,7 +349,7 @@ tpl = r'''<!doctype html>
 </div></section>
 
 <section id="funkce"><div class="wrap">
-  <div class="sec-h" data-r="up"><span class="eyebrow">Funkce platformy</span><h2>Šest oblastí, <span class="grad">jeden systém</span></h2><p class="lead">Takhle je platforma navržená. Moduly se budou stavět po etapách a u každého je uvedeno, v jaké fázi je. Zatím není hotový žádný z nich, tento web je návrh úvodní stránky.</p></div>
+  <div class="sec-h" data-r="up"><span class="eyebrow">Funkce platformy</span><h2>Sedm oblastí, <span class="grad">jeden systém</span></h2><p class="lead">Takhle je platforma navržená. Moduly se budou stavět po etapách a u každého je uvedeno, v jaké fázi je. Základ už funguje (zakázky, zákazníci, kalendář, sklad, e-shop, fakturace, docházka a AI CEO), ostatní se staví po etapách.</p></div>
   <div class="svcs">@@MODS@@</div>
 </div></section>
 

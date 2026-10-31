@@ -481,3 +481,10 @@ html.appmode body>header.nav,html.appmode body>nav.mnav,html.appmode body>main,h
 html.appmode #subCard button,html.appmode [data-app=plan],html.appmode a[href="/cenik"],html.appmode .betab button{display:none!important}
 .appsplash{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#03040a;color:#fff;text-align:center;padding:24px}
 .appsplash[hidden]{display:none}.appsplash h1{margin:0;font-size:30px}.appsplash p{margin:0;color:#aab3d9}
+.chips a.chipnew{display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;border:1px solid rgba(139,92,246,.6);background:linear-gradient(135deg,rgba(91,155,255,.22),rgba(139,92,246,.28));color:#fff;font-size:14px;text-decoration:none;font-weight:600}
+.chips a.chipnew:hover{border-color:#a78bfa}
+.how{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+.how .hs{position:relative;padding:22px 18px 20px;border-radius:18px;border:1px solid rgba(150,175,255,.22);background:linear-gradient(180deg,rgba(20,26,60,.7),rgba(8,11,30,.7))}
+.how .hs b{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#5b9bff,#8b5cf6);color:#fff;font-size:17px;margin-bottom:12px}
+.how .hs h3{margin:0 0 6px;font-size:18px}.how .hs p{margin:0;color:var(--mut,#aab3d9);font-size:15px;line-height:1.5}
+@media(max-width:900px){.how{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.how{grid-template-columns:1fr}}
