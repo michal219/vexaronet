@@ -1,0 +1,5 @@
+android/app/release.keystore
+android/app/build/
+android/.gradle/
+desktop/node_modules/
+desktop/dist/

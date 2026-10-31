@@ -1,0 +1,16 @@
+{
+  "name": "vexaronet",
+  "version": "1.0.0",
+  "description": "Vexaronet pro Windows",
+  "main": "main.js",
+  "author": "Vexaronet",
+  "license": "UNLICENSED",
+  "build": {
+    "appId": "com.vexaronet.app",
+    "productName": "Vexaronet",
+    "icon": "icon.png",
+    "files": ["main.js", "icon.png"],
+    "win": { "target": ["portable"], "artifactName": "Vexaronet.exe" }
+  },
+  "devDependencies": { "electron": "31.7.7", "electron-builder": "24.13.3" }
+}
