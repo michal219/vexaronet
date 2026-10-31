@@ -449,3 +449,29 @@ header.nav .links a,header.nav .nav-r .btn{white-space:nowrap}
 /* ukázkový panel nesmí zakrývat obsah ani tlačítka na konci stránky */
 .vxapp:has(.demobar) #appMain{padding-bottom:170px}
 @media(max-width:700px){.vxapp:has(.demobar) #appMain{padding-bottom:230px}}
+/* e-shop: veřejný obchod */
+.vxshop{position:fixed;inset:0;z-index:10001;background:#f6f7fb;color:#14172b;overflow:auto;font-family:inherit;-webkit-overflow-scrolling:touch}
+.vxshop .shw{max-width:1040px;margin:0 auto;padding:24px 16px 120px}
+.vxshop .shh{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:20px}
+.vxshop h1{font-size:clamp(24px,5vw,34px);margin:0 0 6px;color:#14172b}.vxshop h2{margin:0 0 10px;color:#14172b}.vxshop h3{margin:0;color:#14172b;font-size:16px}
+.vxshop p{color:#3b4160;line-height:1.55;margin:6px 0}.vxshop .mut{color:#5b6285;font-size:14px}
+.vxshop .shgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.vxshop .shp{background:#fff;border:1px solid #dfe3f1;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.vxshop .shp img,.vxshop .shno{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;background:linear-gradient(135deg,#e9ecfb,#dbe0f6);display:block}
+.vxshop .shp p{font-size:14px;margin:0;flex:1}
+.vxshop .shpr{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.vxshop .shpr b{font-size:18px}.vxshop .shpr small{color:#5b6285}
+.vxshop .shq{display:flex;align-items:center;justify-content:center;gap:14px}.vxshop .shq.off{color:#8a90ad;font-size:14px;padding:8px}
+.vxshop .shq button{width:44px;height:44px;border-radius:12px;border:1px solid #c9cfe8;background:#fff;font-size:22px;cursor:pointer;color:#14172b}
+.vxshop .shq button:hover{border-color:#6b4eff}.vxshop .shq span{min-width:28px;text-align:center;font-weight:700;font-size:18px}
+.vxshop .shbar{position:fixed;left:0;right:0;bottom:0;background:#14172b;color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;z-index:2}
+.vxshop .shb{background:#6b4eff;color:#fff;border:0;border-radius:12px;padding:13px 20px;font-weight:700;font-size:15px;cursor:pointer;min-height:44px}.vxshop .shb:hover{background:#5a3de8}.vxshop .shb:disabled{opacity:.6}
+.vxshop .shg,.vxshop .shx{background:transparent;color:#14172b;border:1px solid #c9cfe8;border-radius:12px;padding:12px 18px;cursor:pointer;min-height:44px;font-size:15px}
+.vxshop .shbox{background:#fff;border:1px solid #dfe3f1;border-radius:16px;padding:20px;max-width:640px}
+.vxshop .shl{list-style:none;margin:0 0 12px;padding:0}.vxshop .shl li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #eceffa}.vxshop .shl li.tot{font-size:18px;border-bottom:0}
+.vxshop .shf{display:grid;gap:12px;margin-top:14px}.vxshop .shf label{display:grid;gap:5px;font-size:14px;font-weight:600;color:#14172b}.vxshop .shf label i{color:#d23;font-style:normal}
+.vxshop .shf input,.vxshop .shf textarea{font:inherit;padding:11px 12px;border:1px solid #c9cfe8;border-radius:10px;background:#fff;color:#14172b;min-height:44px}
+.vxshop .shf label.shc{display:flex;gap:10px;align-items:flex-start;font-weight:400}.vxshop .shf label.shc input{min-height:0;width:20px;height:20px;margin-top:2px}
+.vxshop .shhp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.vxshop .sherr{color:#c0182c;font-size:14px;min-height:18px}.vxshop .shact{display:flex;gap:10px;flex-wrap:wrap}
+.vxshop .shpay{background:#eef1ff;border-radius:12px;padding:6px 14px;margin:12px 0}.vxshop .shf2{margin-top:36px;color:#5b6285;font-size:13px}
+@media(max-width:520px){.vxshop .shgrid{grid-template-columns:repeat(2,1fr);gap:10px}.vxshop .shp{padding:8px}.vxshop .shp img,.vxshop .shno{aspect-ratio:1}.vxshop .shq button{width:40px;height:40px}}

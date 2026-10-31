@@ -64,3 +64,14 @@ V části Zákazníci je tlačítko "Import z CSV / Excelu": soubor se uloží j
 - private.writable() povoluje zápis i pro plan='start' ve stavu active (bez paid_until).
 - Tabulky member_rates a feedback (s rozšířenými sloupci email, page, user_agent) jsou v Supabase již vytvořené.
 - Fakturace ověřena proti skutečné databázi (profile → start → issue, v transakci s rollbackem).
+
+## E-shop (PRO a vyšší)
+
+- Menu **E-shop**: nastavení obchodu (adresa, název, doprava, texty), seznam zboží a objednávek.
+- Zboží se v obchodě zobrazí, když je ve **Skladu** zaškrtnuto „Zobrazit v e-shopu“ a má prodejní cenu. Zákazník vidí dostupné množství (nejvýše 50 ks).
+- Veřejný obchod: `https://vexaronet.com/?s=adresa-obchodu` (bez registrace zákazníka).
+- Objednávka proběhne v jedné databázové transakci (`public_shop_order`): kontrola skladu (nelze přeprodat), založení zákazníka, zakázky (stav Nová), objednávky, odpis ze skladu a vystavení faktury stejnou funkcí jako ruční fakturace (číslování, DPH).
+- Po zaplacení označíte objednávku jako zaplacenou (označí i fakturu). Zrušení objednávky vrátí zboží na sklad, vystavenou fakturu je nutné stornovat ručně.
+- Omezení (psát otevřeně): žádná platební brána (platba převodem), faktura se zákazníkovi neposílá e-mailem automaticky, bez fakturačních údajů se obchod veřejně nezobrazí.
+- Databáze: `schema_eshop.sql` (tabulky shop_settings, shop_orders, shop_order_items, funkce public_shop, public_shop_order, shop_cancel_order). Ověřeno v transakci s rollbackem na ostré DB.
+- Stavy zakázek: databáze povoluje jen kanonické kódy (new/progress/waiting/done/canceled); názvy podle oboru se ukládají do sloupce `jobs.stage`.

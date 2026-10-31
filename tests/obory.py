@@ -21,9 +21,9 @@ with sync_playwright() as p:
             nav=pg.evaluate("[...document.querySelectorAll('#vxside nav > button')].map(b=>b.textContent.trim())")
             more=pg.evaluate("[...document.querySelectorAll('#vxside nav details.more button')].map(b=>b.textContent.trim())")
             allk=pg.evaluate("document.querySelectorAll('#vxside nav [data-tab]').length")
-            chk(allk==17,f'{tag} {ob}: všech 17 modulů je dostupných (hlavní {len(nav)} + další {len(more)})')
+            chk(allk==18,f"{tag} {ob}: všech 18 modulů je dostupných (hlavní {len(nav)} + další {len(more)})")
             h=pg.inner_text('#appMain')
-            saved=pg.evaluate("(()=>{const d=__A.d;const s={c:d.customers.rows,j:d.jobs.rows,i:d.invoices.rows,b:d.booking_services.rows,p:d.products.rows,sh:d.shifts.rows,te:d.time_entries.rows,r:d.reservations.rows};d.customers.rows=[];d.jobs.rows=[];d.invoices.rows=[];d.booking_services.rows=[];d.products.rows=[];d.shifts.rows=[];d.time_entries.rows=[];d.reservations.rows=[];window.__s=s;__t('prehled');return 1})()")
+            saved=pg.evaluate("(()=>{const d=__A.d;const s={c:d.customers.rows,j:d.jobs.rows,i:d.invoices.rows,b:d.booking_services.rows,p:d.products.rows,sh:d.shifts.rows,te:d.time_entries.rows,r:d.reservations.rows,ss:d.shop_settings.rows};d.shop_settings.rows=[];d.customers.rows=[];d.jobs.rows=[];d.invoices.rows=[];d.booking_services.rows=[];d.products.rows=[];d.shifts.rows=[];d.time_entries.rows=[];d.reservations.rows=[];window.__s=s;__t('prehled');return 1})()")
             h2=pg.inner_text('#appMain');chk('Začínáme: '+ob in h2 and 'Hotovo 0 z' in h2,f'{tag} {ob}: karta Začínáme pro nový účet')
             pg.evaluate("(()=>{const d=__A.d,s=window.__s;d.customers.rows=s.c;d.jobs.rows=s.j;d.invoices.rows=s.i;d.booking_services.rows=s.b;d.products.rows=s.p;d.shifts.rows=s.sh;d.time_entries.rows=s.te;d.reservations.rows=s.r})()")
             # nová zakázka: šablona a stavy
