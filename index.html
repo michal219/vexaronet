@@ -506,6 +506,7 @@ html.appmode #subCard button,html.appmode [data-app=plan],html.appmode a[href="/
 .how .hs b{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#5b9bff,#8b5cf6);color:#fff;font-size:17px;margin-bottom:12px}
 .how .hs h3{margin:0 0 6px;font-size:18px}.how .hs p{margin:0;color:var(--mut,#aab3d9);font-size:15px;line-height:1.5}
 @media(max-width:900px){.how{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.how{grid-template-columns:1fr}}
+.upr{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}.upr .btn{cursor:pointer}
 
 
 /* --- ceník --- */
@@ -1939,15 +1940,16 @@ function webView(){
  d.hero=Object.assign(webDef().hero,d.hero);d.about=Object.assign(webDef().about,d.about);d.contact=Object.assign(webDef().contact,d.contact);d.services=d.services||[];
  var bp=APP.d.booking_profiles.rows[0],bkOn=!!(bp&&bp.enabled);
  function f(id,l,v,m,t){return '<div class="f full"><label for="'+id+'">'+l+'</label>'+(t==='ta'?'<textarea id="'+id+'" rows="3" maxlength="'+m+'">'+esc(v||'')+'</textarea>':'<input id="'+id+'" maxlength="'+m+'" value="'+esc(v||'')+'">')+'</div>'}
- var h='<div class="card2 note"><b>Jednoduchý firemní web na jedné stránce.</b> Napíšete texty (nebo si je nechte navrhnout AI), zvolíte barvu a zapnete publikování. Web se zobrazí na vašem odkazu '+esc(location.host||'vexaronet.com')+'/?w=… Vlastní doména a e-shop zatím nejsou k dispozici. AI jen navrhuje text, nic nepublikuje, o zveřejnění rozhodujete vy.</div>';
+ function fi(id,l,v){return '<div class="f full"><label for="'+id+'">'+l+'</label><input id="'+id+'" maxlength="400" value="'+esc(v||'')+'"><div class="upr"><label class="btn btn-ghost btn-sm">Nahrát obrázek<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" data-up="'+id+'" hidden></label><small class="mut">nebo vložte odkaz výše</small></div></div>'}
+ var h='<div class="card2 note"><b>Jednoduchý firemní web na jedné stránce.</b> Napíšete texty (nebo si je nechte navrhnout AI), zvolíte barvu a zapnete publikování. Web se zobrazí na vašem odkazu '+esc(location.host||'vexaronet.com')+'/?w=… Vlastní doména zatím není k dispozici. AI jen navrhuje text, nic nepublikuje, o zveřejnění rozhodujete vy.</div>';
  if(row)h+='<div class="card2 bklink"><div><small class="mut">Odkaz na váš web'+(row.enabled?'':' (zatím je vypnutý)')+'</small><b>'+esc(webUrl(row.slug))+'</b>'+(DEMO?'<small class="mut">V ukázce odkaz na internetu nefunguje, tlačítko níže otevře náhled.</small>':'')+'</div><div class="dact">'+(DEMO?'':'<button type="button" class="btn btn-ghost btn-sm" data-web="copy">Kopírovat odkaz</button>')+'</div></div>';
  h+='<div class="webw"><form id="webForm" class="card2"><h3>Obsah webu</h3>'
  +'<div class="webai"><h4>Návrh textů od AI</h4><p class="mut fine">Popište, čím se zabýváte, pro koho a co nabízíte. AI navrhne nadpis, text o firmě a služby. Návrh se jen vyplní do formuláře, zkontrolujte ho a uložte.'+(hasCeo()?'':' Tato funkce je v tarifu PRO a vyšších.')+'</p><div class="f full"><label for="w_ai">Popis firmy</label><textarea id="w_ai" rows="3" maxlength="900" placeholder="Např. Rodinný autoservis v Plzni, děláme servis, pneuservis a STK přípravu pro místní řidiče a malé firmy."></textarea></div><div class="dact"><button type="button" class="btn btn-ghost btn-sm" data-web="ai"'+(hasCeo()?'':' disabled')+'>Navrhnout texty s AI</button></div><div class="st" id="webAiSt" role="status"></div></div>'
  +'<h4 style="margin:14px 0 6px">Hlavní část</h4>'+f('w_ht','Hlavní nadpis',d.hero.title,80)+f('w_hs','Podnadpis',d.hero.subtitle,160)+f('w_hc','Text tlačítka',d.hero.cta,30)
  +'<h4 style="margin:14px 0 6px">O firmě</h4>'+f('w_at','Nadpis sekce',d.about.title,60)+f('w_ax','Text',d.about.text,700,'ta')
  +'<h4 style="margin:14px 0 6px">Služby (až '+WEBN+')</h4>'+Array.apply(null,Array(WEBN)).map(function(_,i){var x=d.services[i]||{};return '<div class="fg webs"><div class="f"><label for="w_sn'+i+'">Služba '+(i+1)+'</label><input id="w_sn'+i+'" maxlength="60" value="'+esc(x.name||'')+'"></div><div class="f"><label for="w_sp'+i+'">Cena (nepovinné)</label><input id="w_sp'+i+'" maxlength="40" value="'+esc(x.price||'')+'" placeholder="např. od 500 Kč"></div><div class="f full"><label for="w_sd'+i+'">Popis</label><input id="w_sd'+i+'" maxlength="200" value="'+esc(x.desc||'')+'"></div></div>'}).join('')
- +'<h4 style="margin:14px 0 6px">Obrázky</h4><p class="mut fine">Vložte odkaz na obrázek (musí začínat https://). Nahrávání souborů zatím není, obrázek můžete mít třeba na Google Fotkách nebo na vlastním hostingu s veřejným odkazem.</p>'+f('w_hi','Obrázek v záhlaví (nepovinné)',d.hero.image,400)+f('w_lg','Logo (nepovinné)',d.logo,400)
- +'<h4 style="margin:14px 0 6px">Galerie (až '+WEBG+' obrázků)</h4>'+Array.apply(null,Array(WEBG)).map(function(_,i){return f('w_g'+i,'Obrázek '+(i+1),(d.gallery||[])[i],400)}).join('')
+ +'<h4 style="margin:14px 0 6px">Obrázky</h4><p class="mut fine">Nahrajte obrázek (JPG, PNG, WebP nebo GIF do 3 MB) nebo vložte odkaz začínající https://. Nahrané obrázky jsou veřejné, nahrávejte jen to, co chcete zveřejnit.</p>'+fi('w_hi','Obrázek v záhlaví (nepovinné)',d.hero.image)+fi('w_lg','Logo (nepovinné)',d.logo)
+ +'<h4 style="margin:14px 0 6px">Galerie (až '+WEBG+' obrázků)</h4>'+Array.apply(null,Array(WEBG)).map(function(_,i){return fi('w_g'+i,'Obrázek '+(i+1),(d.gallery||[])[i])}).join('')
  +'<h4 style="margin:14px 0 6px">Reference (až 3)</h4><p class="mut fine">Napište jen skutečné recenze od vašich zákazníků a se souhlasem autora.</p>'+Array.apply(null,Array(3)).map(function(_,i){var x=(d.reviews||[])[i]||{};return '<div class="fg webs"><div class="f"><label for="w_rt'+i+'">Text reference '+(i+1)+'</label><input id="w_rt'+i+'" maxlength="300" value="'+esc(x.text||'')+'"></div><div class="f"><label for="w_rw'+i+'">Kdo (jméno, firma)</label><input id="w_rw'+i+'" maxlength="80" value="'+esc(x.who||'')+'"></div></div>'}).join('')
  +'<h4 style="margin:14px 0 6px">Časté otázky (až 5)</h4>'+Array.apply(null,Array(5)).map(function(_,i){var x=(d.faq||[])[i]||{};return '<div class="fg webs"><div class="f"><label for="w_fq'+i+'">Otázka '+(i+1)+'</label><input id="w_fq'+i+'" maxlength="140" value="'+esc(x.q||'')+'"></div><div class="f"><label for="w_fa'+i+'">Odpověď</label><input id="w_fa'+i+'" maxlength="400" value="'+esc(x.a||'')+'"></div></div>'}).join('')
  +'<h4 style="margin:14px 0 6px">Kontakt</h4><div class="fg"><div class="f"><label for="w_cp">Telefon</label><input id="w_cp" maxlength="40" value="'+esc(d.contact.phone)+'"></div><div class="f"><label for="w_ce">E-mail</label><input id="w_ce" maxlength="120" value="'+esc(d.contact.email)+'"></div></div>'+f('w_ca','Adresa',d.contact.address,200)+f('w_ch','Otevírací doba',d.contact.hours,200)+'<div class="f full"><label class="chk"><input type="checkbox" id="w_map"'+(d.map?' checked':'')+'><span>Přidat odkaz „Zobrazit na mapě“ (Mapy.cz) k adrese</span></label></div>'+f('w_fb','Facebook (odkaz začínající https://)',(d.social||{}).facebook,300)+f('w_ig','Instagram (odkaz začínající https://)',(d.social||{}).instagram,300)
@@ -1979,6 +1981,18 @@ function webFill(x){
  if(x.about){sv('w_at',x.about.title);sv('w_ax',x.about.text)}
  if(x.services){for(var i=0;i<WEBN;i++){var o=x.services[i];sv('w_sn'+i,o?o.name:'');sv('w_sd'+i,o?o.desc:'')}}
  webPrev()}
+async function webUp(inp){
+ var fl=inp.files&&inp.files[0];inp.value='';if(!fl)return;
+ if(DEMO){toast('V ukázce se soubory nenahrávají. V ostrém účtu tlačítko nahraje obrázek a vyplní odkaz.','err');return}
+ if(!/^image\/(jpeg|png|webp|gif)$/.test(fl.type)){toast('Povolené jsou jen obrázky JPG, PNG, WebP a GIF.','err');return}
+ if(fl.size>3145728){toast('Obrázek je větší než 3 MB. Zmenšete ho a zkuste to znovu.','err');return}
+ if(APP.busy)return;APP.busy=true;toast('Nahrávám obrázek…','ok');
+ try{var ext={'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif'}[fl.type],pth=APP.cid+'/'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)+'.'+ext,st=getSb().storage.from('site-images');
+  var u=await st.upload(pth,fl,{contentType:fl.type,upsert:false});
+  if(u.error){toast('Nahrání se nepovedlo: '+u.error.message,'err');return}
+  var pu=st.getPublicUrl(pth).data.publicUrl,t=A(inp.dataset.up);if(t){t.value=pu;webPrev()}toast('Obrázek nahrán. Nezapomeňte web uložit.','ok')
+ }catch(x){toast('Nahrání se nepovedlo. Zkuste to znovu.','err')}finally{APP.busy=false}}
+document.addEventListener('change',function(e){var t=e.target;if(t&&t.matches&&t.matches('#vxapp input[data-up]'))webUp(t)});
 async function webAI(){
  var ds=(A('w_ai').value||'').trim();if(ds.length<15){webSt('Napište aspoň pár vět o firmě.','err');return}
  if(!hasCeo()){webSt('AI návrh textů je v tarifu PRO a vyšších.','err');return}

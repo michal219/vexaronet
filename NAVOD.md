@@ -94,3 +94,4 @@ V části Zákazníci je tlačítko "Import z CSV / Excelu": soubor se uloží j
 - Obrázky se vkládají jen jako odkaz začínající https:// (nahrávání souborů zatím není). Odkazy jiného typu se při zobrazení ignorují.
 - Vše je v tabulce `sites` (sloupec `data`), žádná změna databáze nebyla potřeba. Veřejná adresa: `/?w=adresa`.
 - Vlastní doména zatím není.
+- Nahrávání obrázků: bucket `site-images` (veřejné čtení, max 3 MB, JPG/PNG/WebP/GIF), zápis jen vlastník/admin do složky své firmy (`schema_storage.sql`, už nasazeno). V ukázce se nenahrává.

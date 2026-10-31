@@ -488,3 +488,4 @@ html.appmode #subCard button,html.appmode [data-app=plan],html.appmode a[href="/
 .how .hs b{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#5b9bff,#8b5cf6);color:#fff;font-size:17px;margin-bottom:12px}
 .how .hs h3{margin:0 0 6px;font-size:18px}.how .hs p{margin:0;color:var(--mut,#aab3d9);font-size:15px;line-height:1.5}
 @media(max-width:900px){.how{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.how{grid-template-columns:1fr}}
+.upr{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}.upr .btn{cursor:pointer}
