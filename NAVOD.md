@@ -81,3 +81,10 @@ V části Zákazníci je tlačítko "Import z CSV / Excelu": soubor se uloží j
 - Tlačítko „Stáhnout aplikaci“ na úvodní stránce (hero, menu, patička) otevře výběr Android / Windows / iPhone / Mac s návodem a tlačítkem Nainstalovat.
 - Technicky: `manifest.webmanifest`, `sw.js` (síť má přednost, API se neukládá), ikony v `assets/`. Spuštění z ikony otevře `/?app=1` a rovnou aplikaci.
 - Není to soubor .apk ani .exe. Pokud bude potřeba skutečný .apk (např. pro rozeslání mimo web), lze ho vyrobit z PWA nástrojem Bubblewrap/PWABuilder; Google Play to nevyžaduje, ale podpis a zkouška na zařízení ano.
+
+## Soubory ke stažení (Android .apk, Windows .exe)
+
+- Sestavuje je GitHub Actions (`.github/workflows/apps.yml`) při změně složek `android/` nebo `desktop/` a nahrává do vydání `app-latest`. Odkazy: `https://github.com/michal219/vexaronet/releases/download/app-latest/Vexaronet.apk` a `.../Vexaronet.exe`.
+- Obě aplikace jen otevírají vexaronet.com (Android WebView, Windows Electron), takže se obsah aktualizuje sám s webem.
+- APK se podepisuje klíčem, který se vytváří při každém sestavení: novou verzi je třeba před instalací odinstalovat. EXE nemá podpis vydavatele, Windows ukáže varování SmartScreen (Další informace, Přesto spustit).
+- iPhone a Mac: jen instalace přes Safari (Přidat na plochu / do Docku), soubor ke stažení tam není možný.
