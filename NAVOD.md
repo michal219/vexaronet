@@ -75,3 +75,9 @@ V části Zákazníci je tlačítko "Import z CSV / Excelu": soubor se uloží j
 - Omezení (psát otevřeně): žádná platební brána (platba převodem), faktura se zákazníkovi neposílá e-mailem automaticky, bez fakturačních údajů se obchod veřejně nezobrazí.
 - Databáze: `schema_eshop.sql` (tabulky shop_settings, shop_orders, shop_order_items, funkce public_shop, public_shop_order, shop_cancel_order). Ověřeno v transakci s rollbackem na ostré DB.
 - Stavy zakázek: databáze povoluje jen kanonické kódy (new/progress/waiting/done/canceled); názvy podle oboru se ukládají do sloupce `jobs.stage`.
+
+## Stažení aplikace (PWA, bez Google Play)
+
+- Tlačítko „Stáhnout aplikaci“ na úvodní stránce (hero, menu, patička) otevře výběr Android / Windows / iPhone / Mac s návodem a tlačítkem Nainstalovat.
+- Technicky: `manifest.webmanifest`, `sw.js` (síť má přednost, API se neukládá), ikony v `assets/`. Spuštění z ikony otevře `/?app=1` a rovnou aplikaci.
+- Není to soubor .apk ani .exe. Pokud bude potřeba skutečný .apk (např. pro rozeslání mimo web), lze ho vyrobit z PWA nástrojem Bubblewrap/PWABuilder; Google Play to nevyžaduje, ale podpis a zkouška na zařízení ano.

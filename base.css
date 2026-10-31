@@ -475,3 +475,4 @@ header.nav .links a,header.nav .nav-r .btn{white-space:nowrap}
 .vxshop .sherr{color:#c0182c;font-size:14px;min-height:18px}.vxshop .shact{display:flex;gap:10px;flex-wrap:wrap}
 .vxshop .shpay{background:#eef1ff;border-radius:12px;padding:6px 14px;margin:12px 0}.vxshop .shf2{margin-top:36px;color:#5b6285;font-size:13px}
 @media(max-width:520px){.vxshop .shgrid{grid-template-columns:repeat(2,1fr);gap:10px}.vxshop .shp{padding:8px}.vxshop .shp img,.vxshop .shno{aspect-ratio:1}.vxshop .shq button{width:40px;height:40px}}
+#insGo[hidden]{display:none}
