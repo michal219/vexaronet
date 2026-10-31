@@ -6,7 +6,7 @@
 <title>Vexaronet – zakázky, rezervace a faktury pro malé firmy</title>
 <meta name="description" content="Česká aplikace pro živnostníky a malé firmy: zákazníci, zakázky, kalendář se směnami, online rezervace, faktury a AI asistenti na jednom místě. Vyzkoušejte demo bez registrace.">
 <meta name="theme-color" content="#03040a">
-<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Vexaronet">
+<script>(function(){try{var q=new URLSearchParams(location.search),st=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;if(q.get("app")==="1"&&!q.get("r")&&!q.get("w")&&!q.get("s")||st&&!q.get("r")&&!q.get("w")&&!q.get("s")){document.documentElement.classList.add("appmode")}}catch(e){}})()</script><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Vexaronet">
 <link rel="canonical" href="https://vexaronet.com/">
 <meta property="og:type" content="website"><meta property="og:locale" content="cs_CZ"><meta property="og:site_name" content="Vexaronet">
 <meta property="og:title" content="Vexaronet – zakázky, rezervace a faktury pro malé firmy"><meta property="og:description" content="Zákazníci, zakázky, kalendář, online rezervace a faktury na jednom místě. Vyzkoušejte demo bez registrace.">
@@ -494,6 +494,11 @@ header.nav .links a,header.nav .nav-r .btn{white-space:nowrap}
 .vxshop .shpay{background:#eef1ff;border-radius:12px;padding:6px 14px;margin:12px 0}.vxshop .shf2{margin-top:36px;color:#5b6285;font-size:13px}
 @media(max-width:520px){.vxshop .shgrid{grid-template-columns:repeat(2,1fr);gap:10px}.vxshop .shp{padding:8px}.vxshop .shp img,.vxshop .shno{aspect-ratio:1}.vxshop .shq button{width:40px;height:40px}}
 #insGo[hidden]{display:none}
+/* režim nainstalované aplikace: jen přihlášení a menu, bez webu, ceníku a předplatného */
+html.appmode body>header.nav,html.appmode body>nav.mnav,html.appmode body>main,html.appmode body>footer,html.appmode #chatFab,html.appmode #chat,html.appmode .demobar{display:none!important}
+html.appmode #subCard button,html.appmode [data-app=plan],html.appmode a[href="/cenik"],html.appmode .betab button{display:none!important}
+.appsplash{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#03040a;color:#fff;text-align:center;padding:24px}
+.appsplash[hidden]{display:none}.appsplash h1{margin:0;font-size:30px}.appsplash p{margin:0;color:#aab3d9}
 
 
 /* --- ceník --- */
@@ -835,6 +840,7 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 
 <button class="fab" id="chatFab" type="button" aria-expanded="false" aria-controls="chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span class="t">AI asistent</span><i class="pulse"></i></button>
 <div class="aichat" id="chat" role="dialog" aria-label="AI asistent Vexaronet"><div class="ch"><div><b>AI asistent</b><small>Odpovídá automaticky, jde o AI</small></div><button type="button" id="chatX" aria-label="Zavřít chat">✕</button></div><div id="chatBody" aria-live="polite"></div><div id="chatSugg"></div><form id="chatForm"><textarea id="chatIn" rows="1" placeholder="Napište dotaz…" aria-label="Vaše zpráva" maxlength="1000"></textarea><button type="submit" aria-label="Odeslat">➤</button></form><p class="ainote">Asistent může chybovat. Závazné jsou informace od týmu.</p></div>
+<div id="appSplash" class="appsplash" hidden><svg viewBox="0 0 32 32" width="72" height="72" aria-hidden="true"><defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg2)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><h1>Vexaronet</h1><p>Přihlaste se do svého účtu.</p><button class="btn btn-main" type="button" id="splashLogin">Přihlásit se</button></div>
 <dialog id="dlg" aria-labelledby="dT"><div class="dlg" id="dBody"></div></dialog>
 <noscript><style>[data-r]{opacity:1!important;transform:none!important}.hero h1 .w>span{transform:none}.fade{opacity:1;transform:none}</style></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" defer></script>
@@ -961,7 +967,7 @@ window.addEventListener('load',function(){var c=getSb();if(c)c.auth.getSession()
 function authForm(mode){
  var plans=PLAN_OPTS.map(function(p){return '<option value="'+p[0]+'">'+p[1]+'</option>'}).join('');
  var biz=Object.keys(BIZ).map(function(b){return '<option>'+esc(b)+'</option>'}).join('');
- var tabs='<div class="bar" role="tablist"><button type="button" class="chipb" data-auth="login" aria-pressed="'+(mode==='login')+'">Přihlášení</button><button type="button" class="chipb" data-auth="signup" aria-pressed="'+(mode==='signup')+'">Registrace na 30 dní zdarma</button></div>';
+ var tabs='<div class="bar" role="tablist"><button type="button" class="chipb" data-auth="login" aria-pressed="'+(mode==='login')+'">Přihlášení</button>'+(document.documentElement.classList.contains('appmode')?'':'<button type="button" class="chipb" data-auth="signup" aria-pressed="'+(mode==='signup')+'">Registrace na 30 dní zdarma</button>')+'</div>';
  if(mode==='reset')return '<span class="eyebrow">Účet</span><h2 id="dT">Obnovení hesla</h2><p>Zadejte e-mail a pošleme vám odkaz pro nastavení nového hesla.</p><form id="authForm" novalidate><div class="fg"><div class="f full"><label for="aMail">E-mail <i>*</i></label><input id="aMail" type="email" autocomplete="email" required></div><div class="f full"><button class="btn btn-main" type="submit" id="aGo">Poslat odkaz</button> <button class="btn btn-ghost" type="button" data-auth="login">Zpět na přihlášení</button></div></div><div class="st" id="aSt" role="status" aria-live="polite"></div></form>';
  if(mode==='newpw')return '<span class="eyebrow">Účet</span><h2 id="dT">Nové heslo</h2><form id="authForm" novalidate><div class="fg"><div class="f full"><label for="aPw">Nové heslo (alespoň 8 znaků) <i>*</i></label><input id="aPw" type="password" autocomplete="new-password" minlength="8" required></div><div class="f full"><button class="btn btn-main" type="submit" id="aGo">Uložit heslo</button></div></div><div class="st" id="aSt" role="status" aria-live="polite"></div></form>';
  var feats=FEATS_SU.map(function(f){return '<label class="chk"><input type="checkbox" name="aFt" value="'+f[0]+'"><span>'+f[1]+'</span></label>'}).join('');
@@ -974,7 +980,7 @@ function authForm(mode){
  +'<div class="f full"><button class="btn btn-main" type="submit" id="aGo">'+(mode==='login'?'Přihlásit se':'Založit účet na 30 dní zdarma')+'</button>'+(mode==='login'?' <button class="btn btn-ghost" type="button" data-auth="reset">Zapomenuté heslo</button>':'')+'</div></div><div class="st" id="aSt" role="status" aria-live="polite"></div></form>';
 }
 var FEATS_SU=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],['kalendar','Kalendář a rezervace'],['faktury','Faktury a finance'],['ai','AI poradce'],['zamestnanci','Zaměstnanci'],['weby','Jednoduchý web'],['marketing','Marketing'],['automatizace','Automatizace']];
-function showAuth(mode){openD(authForm(mode||'login'))}
+function showAuth(mode){if(document.documentElement.classList.contains('appmode')&&mode==='signup')mode='login';openD(authForm(mode||'login'))}
 function aMsg(t,c){var e=$('#aSt');if(e){e.className='st '+c;e.textContent=t}}
 function niceErr(e){var m=(e&&e.message)||String(e);if(/check constraint|violates/i.test(m))return 'Vybraný tarif zatím není v databázi povolený. Napište na info@vexaronet.com.';if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
 async function ensureCompany(c,user){
@@ -1234,7 +1240,7 @@ function dfetch(u,o){
   if(b.mode==='ask'){var m=b.summary||{};return new Promise(function(r){setTimeout(r,600)}).then(function(){return dresp({reply:'Ukázková odpověď z čísel v evidenci: tento měsíc máte příjmy '+(m.prijmy_tento_mesic_kc||0).toLocaleString('cs-CZ')+' Kč a výdaje '+(m.vydaje_tento_mesic_kc||0).toLocaleString('cs-CZ')+' Kč. Minulý měsíc to bylo '+(m.prijmy_minuly_mesic_kc||0).toLocaleString('cs-CZ')+' Kč příjmů a '+(m.vydaje_minuly_mesic_kc||0).toLocaleString('cs-CZ')+' Kč výdajů. Nejde o účetní ani daňovou radu.'})})}
   return new Promise(function(r){setTimeout(r,1200)}).then(function(){return dresp({doc:{document_type:'received_invoice',supplier_name:'Autodíly CZ s.r.o.',supplier_ico:'87654321',document_number:'FA-2026-0418',issue_date:new Date().toISOString().slice(0,10),total_amount:12100,vat_amount:2100,vat_rate:21,currency:'CZK',description:'Brzdové kotouče a destičky',category:'material',confidence:'high',warnings:['Ukázka: nahraný soubor se nezpracovává, jde o vzorový doklad. V ostrém účtu AI vytěží údaje z vašeho souboru.']},used:1,limit:500})})}
  return dresp({error:'demo'},400)}
-window.addEventListener('load',function(){try{var q0=new URLSearchParams(location.search);if(q0.get('app')==='1'&&!q0.get('r')&&!q0.get('w')&&!q0.get('s'))setTimeout(function(){try{openApp()}catch(e){}},400)}catch(e){}var rq=null;try{rq=new URLSearchParams(location.search).get('r')}catch(e){}if(rq&&/^[a-zA-Z0-9-]{3,41}$/.test(rq))bookOpen(rq.toLowerCase(),false);var wq=null;try{wq=new URLSearchParams(location.search).get('w')}catch(e){}if(wq&&/^[a-zA-Z0-9-]{3,41}$/.test(wq))webOpen(wq.toLowerCase(),false);var sq=null;try{sq=new URLSearchParams(location.search).get('s')}catch(e){}if(sq&&/^[a-zA-Z0-9-]{3,41}$/.test(sq))shopOpen(sq.toLowerCase(),false)});
+window.addEventListener('load',function(){try{if(document.documentElement.classList.contains('appmode')){var sp=A('appSplash');if(sp)sp.hidden=false;var sl=A('splashLogin');if(sl)sl.addEventListener('click',function(){openApp()});setTimeout(function(){try{openApp()}catch(e){}},400)}}catch(e){}var rq=null;try{rq=new URLSearchParams(location.search).get('r')}catch(e){}if(rq&&/^[a-zA-Z0-9-]{3,41}$/.test(rq))bookOpen(rq.toLowerCase(),false);var wq=null;try{wq=new URLSearchParams(location.search).get('w')}catch(e){}if(wq&&/^[a-zA-Z0-9-]{3,41}$/.test(wq))webOpen(wq.toLowerCase(),false);var sq=null;try{sq=new URLSearchParams(location.search).get('s')}catch(e){}if(sq&&/^[a-zA-Z0-9-]{3,41}$/.test(sq))shopOpen(sq.toLowerCase(),false)});
 function startDemo(){DEMO=true;DS=null;APP.betaHidden=true;openApp()}
 
 async function openApp(){
@@ -1270,7 +1276,7 @@ function appTab(t){
  [].forEach.call(el.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
  var m=A('appMain');try{m.innerHTML=!allowed(t)?lockView(t):(VIEWS[t]?VIEWS[t]():soonView(t))}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
  m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]()}
-function lockView(t){return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><button class="btn btn-ghost btn-sm" type="button" data-app="plan">Změnit tarif</button></div><p class="mut fine">Platební brána zatím není připojená. Žádost o vyšší tarif vyřídíme ručně.</p></div>'}
+function lockView(t){if(document.documentElement.classList.contains('appmode'))return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>Tarif a předplatné se spravují na webu vexaronet.com. Po změně tarifu se tato část v aplikaci odemkne.</p></div>';return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><button class="btn btn-ghost btn-sm" type="button" data-app="plan">Změnit tarif</button></div><p class="mut fine">Platební brána zatím není připojená. Žádost o vyšší tarif vyřídíme ručně.</p></div>'}
 function errBox(x){return x.err?'<div class="draft">Data se nepodařilo načíst: '+esc(x.err)+'</div>':''}
 function soonView(t){var s=SOON[t];return '<div class="card2 soonc"><span class="eyebrow">Etapa '+s[2]+' · připravujeme</span><h2>'+esc(s[0])+'</h2><p>'+esc(s[1])+'</p><div class="draft">Tento modul zatím není hotový ani připojený. Nic zde neukládáme ani nepředstíráme. Ozveme se, až bude k dispozici.</div></div>'}
 
@@ -2416,7 +2422,7 @@ document.addEventListener('click',async function(e){
   else if(k==='quick'){var q=A('qPop');if(q)q.classList.toggle('on')}
   else if(k==='theme')themeToggle();
   else if(k==='mclose')closeModal();
-  else if(k==='plan')planModal();
+  else if(k==='plan'){if(document.documentElement.classList.contains('appmode'))toast('Tarif a předplatné se spravují na webu vexaronet.com.');else planModal()}
   else if(k==='digmodal')digModal();
   else if(k==='fb')fbModal();
   else if(k==='stepsoff'){try{localStorage.setItem('vxsteps_'+(APP.cid||'x'),'1')}catch(e){}appTab(APP.tab)}

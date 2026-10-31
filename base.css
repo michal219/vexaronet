@@ -476,3 +476,8 @@ header.nav .links a,header.nav .nav-r .btn{white-space:nowrap}
 .vxshop .shpay{background:#eef1ff;border-radius:12px;padding:6px 14px;margin:12px 0}.vxshop .shf2{margin-top:36px;color:#5b6285;font-size:13px}
 @media(max-width:520px){.vxshop .shgrid{grid-template-columns:repeat(2,1fr);gap:10px}.vxshop .shp{padding:8px}.vxshop .shp img,.vxshop .shno{aspect-ratio:1}.vxshop .shq button{width:40px;height:40px}}
 #insGo[hidden]{display:none}
+/* režim nainstalované aplikace: jen přihlášení a menu, bez webu, ceníku a předplatného */
+html.appmode body>header.nav,html.appmode body>nav.mnav,html.appmode body>main,html.appmode body>footer,html.appmode #chatFab,html.appmode #chat,html.appmode .demobar{display:none!important}
+html.appmode #subCard button,html.appmode [data-app=plan],html.appmode a[href="/cenik"],html.appmode .betab button{display:none!important}
+.appsplash{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#03040a;color:#fff;text-align:center;padding:24px}
+.appsplash[hidden]{display:none}.appsplash h1{margin:0;font-size:30px}.appsplash p{margin:0;color:#aab3d9}
