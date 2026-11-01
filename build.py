@@ -358,7 +358,7 @@ tpl = r'''<!doctype html>
 <section id="jak"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Jak to funguje</span><h2>Od registrace <span class="grad">k první zakázce</span></h2><p class="lead">Stačí prohlížeč. Aplikaci si můžete přidat na plochu, ale nemusíte.</p></div>
   <div class="how" data-r="up">
-   <div class="hs"><b>1</b><h3>Založíte účet</h3><p>Jméno, firma, e-mail a heslo. START je zdarma, placené tarify si můžete 30 dní vyzkoušet bez karty.</p></div>
+   <div class="hs"><b>1</b><h3>Založíte účet</h3><p>Stačí jméno, e-mail a heslo, firmu můžete doplnit později. START je zdarma, placené tarify si můžete 30 dní vyzkoušet bez karty.</p></div>
    <div class="hs"><b>2</b><h3>Vyberete obor</h3><p>Autoservis, kadeřnictví, řemeslník, restaurace, obchod nebo jiný. Menu, názvy a stavy zakázek se přizpůsobí.</p></div>
    <div class="hs"><b>3</b><h3>Přidáte zákazníky a zboží</h3><p>Nahrajete je z Excelu (CSV) nebo napíšete ručně. Zakázky, sklad a termíny máte na jednom místě.</p></div>
    <div class="hs"><b>4</b><h3>Vystavujete a prodáváte</h3><p>Faktury, docházka, online rezervace a e-shop, který sám vystaví fakturu a odečte sklad.</p></div>
@@ -448,7 +448,7 @@ tpl = r'''<!doctype html>
       <div class="f" data-cu hidden><label for="fBiz">Typ podnikání</label><select id="fBiz" name="obor"><option value="">Vyberte</option>@@BIZOPTS@@</select></div>
       <input type="hidden" id="fPlan" name="tarif" value="">
       <div class="f full" data-cu hidden><label for="fMsg" id="fMsgL">Co by měl systém umět? Popište firmu a čeho chcete dosáhnout.</label><textarea id="fMsg" name="zprava"></textarea></div>
-      <div class="f full"><label class="chk"><input type="checkbox" name="souhlas" id="fOk" required aria-required="true"><span id="fOkT">Souhlasím, že mi Vexaronet bude na uvedený e-mail posílat novinky o vývoji. Souhlas mohu kdykoli odvolat. <a href="/ochrana-udaju" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i></span></label></div>
+      <div class="f full"><label class="chk"><input type="checkbox" name="souhlas" id="fOk" required aria-required="true"><span id="fOkT">Souhlasím, že mi Vexaronet bude na uvedený e-mail posílat novinky o vývoji. Souhlas mohu kdykoli odvolat. <a href="/ochrana-udaju/" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i></span></label></div>
       <div class="f full"><button class="btn btn-main" type="submit" id="send">Odebírat novinky</button></div>
     </div>
     <div class="st" id="st" role="status" aria-live="polite"></div>
@@ -459,7 +459,7 @@ tpl = r'''<!doctype html>
 
 <footer><div class="wrap">
   <div class="fg2">
-    <div><a class="logo" href="#top" style="padding:0"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>pro malé firmy</small></span></a><p style="color:var(--mut);margin-top:14px;max-width:320px;font-size:.93rem">pro malé firmy pro podnikatele a firmy. Připravujeme pro ČR, Slovensko a postupně celou EU.</p></div>
+    <div><a class="logo" href="#top" style="padding:0"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>pro malé firmy</small></span></a><p style="color:var(--mut);margin-top:14px;max-width:320px;font-size:.93rem">Aplikace pro podnikatele a malé firmy: zákazníci, zakázky, faktury a AI CEO na jednom místě. Zatím v beta verzi pro Česko.</p></div>
     <div><h4>Navigace</h4><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#otazky">Časté otázky</a><button type="button" class="fl2" data-install="1">Instalace aplikace</button><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></div>
     <div><h4>Informace</h4><button type="button" class="fl2" data-legal="podminky">Obchodní podmínky</button><button type="button" class="fl2" data-legal="ochrana-udaju">Ochrana osobních údajů</button><button type="button" class="fl2" data-legal="cookies">Cookies</button><a href="mailto:info@vexaronet.com">info@vexaronet.com</a></div>
   </div>
@@ -569,7 +569,7 @@ if(location.pathname.replace(/\/$/,'')==='/cenik')setTimeout(function(){var c=do
 var form=$('#form'),st=$('#st'),sendB=$('#send'),loadT=Date.now();
 function msg(t,c){st.className='st '+c;st.textContent=t}
 var custom=false;
-function setMode(c){if(typeof c!=='boolean')c=custom;custom=c;sendB.textContent=c?'Odeslat poptávku':'Odebírat novinky';[].forEach.call(document.querySelectorAll('[data-fmode]'),function(b){b.setAttribute('aria-pressed',String((b.dataset.fmode==='custom')===c))});[].forEach.call(document.querySelectorAll('#form [data-cu]'),function(x){x.hidden=!c});$('#fPlan').value=c?'Systém na míru (od 20 000 Kč)':'';$('#fNameL').textContent=c?'Jméno *':'Jméno (nepovinné)';$('#fName').required=c;$('#fPurpose').textContent=c?'Popište, co potřebujete. Údaje použijeme jen k odpovědi na poptávku a nezapíšeme vás k odběru novinek.':'Stačí e-mail. Pošleme vám jen informace o vývoji Vexaronetu a odhlásit se můžete kdykoli.';$('#fOkT').innerHTML=c?'Souhlasím se zpracováním údajů za účelem vyřízení poptávky. <a href="/ochrana-udaju" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i>':'Souhlasím, že mi Vexaronet bude na uvedený e-mail posílat novinky o vývoji. Souhlas mohu kdykoli odvolat. <a href="/ochrana-udaju" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i>'}
+function setMode(c){if(typeof c!=='boolean')c=custom;custom=c;sendB.textContent=c?'Odeslat poptávku':'Odebírat novinky';[].forEach.call(document.querySelectorAll('[data-fmode]'),function(b){b.setAttribute('aria-pressed',String((b.dataset.fmode==='custom')===c))});[].forEach.call(document.querySelectorAll('#form [data-cu]'),function(x){x.hidden=!c});$('#fPlan').value=c?'Systém na míru (od 20 000 Kč)':'';$('#fNameL').textContent=c?'Jméno *':'Jméno (nepovinné)';$('#fName').required=c;$('#fPurpose').textContent=c?'Popište, co potřebujete. Údaje použijeme jen k odpovědi na poptávku a nezapíšeme vás k odběru novinek.':'Stačí e-mail. Pošleme vám jen informace o vývoji Vexaronetu a odhlásit se můžete kdykoli.';$('#fOkT').innerHTML=c?'Souhlasím se zpracováním údajů za účelem vyřízení poptávky. <a href="/ochrana-udaju/" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i>':'Souhlasím, že mi Vexaronet bude na uvedený e-mail posílat novinky o vývoji. Souhlas mohu kdykoli odvolat. <a href="/ochrana-udaju/" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i>'}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-fmode]');if(b){setMode(b.dataset.fmode==='custom')}});
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-namiru]');if(!b)return;e.preventDefault();setMode(true);$('#early').scrollIntoView({behavior:'smooth'});setTimeout(function(){var m=$('#fMsg');if(m)m.focus({preventScroll:true})},700)});
 form.addEventListener('submit',function(e){e.preventDefault();var f=form.elements;
@@ -607,7 +607,7 @@ function authForm(mode){
  +'<div class="f '+(mode==='login'?'full':'')+'"><label for="aMail">E-mail <i aria-hidden="true">*</i></label><input id="aMail" type="email" autocomplete="email" inputmode="email" required aria-required="true"></div>'
  +'<div class="f '+(mode==='login'?'full':'')+'"><label for="aPw">Heslo'+(mode==='signup'?' (alespoň 8 znaků)':'')+' <i aria-hidden="true">*</i></label><input id="aPw" type="password" autocomplete="'+(mode==='login'?'current-password':'new-password')+'" minlength="8" required aria-required="true"></div>'
  +(mode==='signup'?'<div class="f full"><p id="aPlanTxt" class="plantxt" role="note"></p><details class="moreset"><summary>Tarif, obor a země (nepovinné)</summary><div class="fg"><div class="f full"><label for="aPlan">Tarif</label><select id="aPlan">'+plans+'</select></div><div class="f"><label for="aBiz">Obor podnikání</label><select id="aBiz"><option value="">Vyberu později</option>'+biz+'</select></div><div class="f"><label for="aCt">Stát</label><select id="aCt"><option>Česko</option><option>Slovensko</option><option>Jiná země</option></select></div></div></details></div>'
- +'<div class="f full"><label class="chk"><input type="checkbox" id="aOk" required aria-required="true"><span>Souhlasím s <a href="/podminky" data-legal-link="podminky" target="_blank" rel="noopener">obchodními podmínkami</a>. Informace o zpracování osobních údajů najdete v <a href="/ochrana-udaju" data-legal-link="ochrana-udaju" target="_blank" rel="noopener">zásadách ochrany osobních údajů</a>. <i aria-hidden="true">*</i></span></label></div>':'')
+ +'<div class="f full"><label class="chk"><input type="checkbox" id="aOk" required aria-required="true"><span>Souhlasím s <a href="/podminky/" data-legal-link="podminky" target="_blank" rel="noopener">obchodními podmínkami</a>. Informace o zpracování osobních údajů najdete v <a href="/ochrana-udaju/" data-legal-link="ochrana-udaju" target="_blank" rel="noopener">zásadách ochrany osobních údajů</a>. <i aria-hidden="true">*</i></span></label></div>':'')
  +'<div class="f full"><button class="btn btn-main" type="submit" id="aGo">'+(mode==='login'?'Přihlásit se':'Založit účet zdarma')+'</button>'+(mode==='login'?' <button class="btn btn-ghost" type="button" data-auth="reset">Zapomenuté heslo</button>':'')+'</div></div><div class="st" id="aSt" role="status" aria-live="polite"></div></form>';
 }
 function planTxt(){var p=$('#aPlan'),t=$('#aPlanTxt'),g=$('#aGo');if(!p||!t)return;var k=p.value,nm=(PLAN_OPTS.filter(function(x){return x[0]===k})[0]||[k,k])[1];
@@ -2314,3 +2314,32 @@ out = (tpl.replace('@@CSS@@', css + extra_css).replace('@@KEYS@@', keys).replace
 assert '@@' not in out
 open(D + 'index.html', 'w', encoding='utf-8').write(out)
 print('OK', len(out))
+
+# ===== Statické právní stránky (skutečné adresy /podminky/, /ochrana-udaju/, /cookies/) =====
+import subprocess, os
+_m = re.search(r"^var LEGAL=.*?;$", out, re.M)
+assert _m, 'LEGAL nenalezeno'
+_js = _m.group(0) + "\nconsole.log(JSON.stringify(LEGAL));"
+LEG = json.loads(subprocess.run(['node', '-e', _js], capture_output=True, text=True, check=True).stdout)
+LEG_T = {'podminky': ('Obchodní podmínky', 'Obchodní podmínky služby Vexaronet (návrh pro beta verzi).'),
+         'ochrana-udaju': ('Ochrana osobních údajů', 'Zásady ochrany osobních údajů služby Vexaronet (návrh pro beta verzi).'),
+         'cookies': ('Informace o cookies', 'Informace o cookies a úložišti prohlížeče na webu Vexaronet.')}
+LEG_CSS = ('*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#070a1c;color:#e8ebff}'
+  'a{color:#9db4ff}.w{max-width:760px;margin:0 auto;padding:20px 16px 56px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 0 18px;border-bottom:1px solid rgba(150,175,255,.2);margin-bottom:22px}'
+  '.top a.lg{font-weight:800;letter-spacing:.04em;color:#fff;text-decoration:none}.btn{display:inline-block;padding:10px 16px;border-radius:12px;border:1px solid rgba(150,175,255,.4);color:#fff;text-decoration:none;min-height:44px;line-height:1.4}'
+  'h1{font-size:1.9rem;line-height:1.2;margin:.3em 0 .4em}h3{margin:1.6em 0 .4em;font-size:1.1rem}.mut{color:#a9b0d6}.eyebrow{display:block;color:#9db4ff;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}'
+  '.draft{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,190,90,.55);background:rgba(255,190,90,.1);margin:14px 0}ul{padding-left:1.2em}li{margin:.4em 0}'
+  'footer{margin-top:40px;padding-top:16px;border-top:1px solid rgba(150,175,255,.2);font-size:.92rem;display:flex;gap:16px;flex-wrap:wrap}'
+  '@media(prefers-color-scheme:light){body{background:#f6f7fc;color:#14183a}a{color:#2b4bd6}.top a.lg,.btn{color:#14183a}.mut{color:#555b82}.eyebrow{color:#2b4bd6}.top,footer{border-color:#d9dcec}.btn{border-color:#b9c0e6}}')
+for _k, _body in LEG.items():
+    _t, _d = LEG_T[_k]
+    _body = _body.replace('<h2 id="dT">', '<h1 id="dT">').replace('</h2>', '</h1>', 1)
+    _nav = ''.join('<a href="/%s">%s</a>' % (k2, LEG_T[k2][0]) for k2 in LEG_T if k2 != _k)
+    _html = ('<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+      '<title>%s – Vexaronet</title><meta name="description" content="%s"><link rel="canonical" href="https://vexaronet.com/%s/">'
+      '<meta name="robots" content="index,follow"><meta name="theme-color" content="#070a1c"><style>%s</style></head><body><div class="w">'
+      '<div class="top"><a class="lg" href="/">VEXARONET</a><a class="btn" href="/">Zpět na Vexaronet</a></div><main>%s</main>'
+      '<footer><a href="/">Úvodní stránka</a>%s<a href="mailto:info@vexaronet.com">info@vexaronet.com</a></footer></div></body></html>') % (_t, _d, _k, LEG_CSS, _body, _nav)
+    os.makedirs(D + _k, exist_ok=True)
+    open(D + _k + '/index.html', 'w', encoding='utf-8').write(_html)
+print('Právní stránky:', ', '.join(LEG))
