@@ -73,7 +73,7 @@ with sync_playwright() as p:
     pg.click('.cta [data-demo]');pg.wait_for_selector('#vxapp .kpi')
     pg.evaluate("document.querySelector('#vxapp [data-tab=weby]').click()");pg.wait_for_timeout(600)
     pg.fill('#w_ai','Rodinný autoservis v Plzni, děláme servis, pneuservis a diagnostiku pro řidiče a malé firmy.')
-    pg.click('[data-web=ai]');pg.wait_for_timeout(1500)
+    pg.click('[data-web=ai]');pg.wait_for_timeout(1500);pg.fill('#w_cp','602 111 222')
     pg.click('[data-web=open]');pg.wait_for_selector('#vxsite iframe');pg.wait_for_timeout(1200)
     f=pg.query_selector('#vxsite iframe').content_frame()
     for sel,h in(('.nv a[href="#sluzby"]','#sluzby'),('.nv a[href="#kontakt"]','#kontakt')):

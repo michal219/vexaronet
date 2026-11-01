@@ -489,3 +489,35 @@ html.appmode #subCard button,html.appmode [data-app=plan],html.appmode a[href="/
 .how .hs h3{margin:0 0 6px;font-size:18px}.how .hs p{margin:0;color:var(--mut,#aab3d9);font-size:15px;line-height:1.5}
 @media(max-width:900px){.how{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.how{grid-template-columns:1fr}}
 .upr{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}.upr .btn{cursor:pointer}
+/* stavy funkcí, beta pruh, vysvětlení AI CEO */
+.stb{display:inline-block;font-weight:700;font-size:.74rem;line-height:1;padding:4px 9px;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
+.stb-now{color:#2fbf8a}.stb-lim{color:#e0a23a}.stb-soon{color:var(--mut,#9aa3c4)}
+html[data-theme=light] .stb-now{color:#0f8a5f}html[data-theme=light] .stb-lim{color:#a9690c}
+.legend{font-size:.9rem;color:var(--mut);margin:14px auto 0;max-width:860px;line-height:2}
+.soonb.limb{color:#e0a23a;border-color:currentColor}html[data-theme=light] .soonb.limb{color:#a9690c}
+.payn{margin:14px 0 0;padding:12px 16px;border-radius:12px;border:1px solid rgba(224,162,58,.55);background:rgba(224,162,58,.1);font-size:.92rem;line-height:1.5}
+.betan{margin:16px 0 0;font-size:.9rem;line-height:1.5;color:var(--mut);max-width:560px;border-left:3px solid #e0a23a;padding:2px 0 2px 12px}
+.betan b{color:var(--text)}
+.hlinks{margin:14px 0 0;font-size:.9rem;color:var(--mut)}.hlinks a,.lnkb{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.lnkb{background:none;border:0;padding:6px 2px;font:inherit;cursor:pointer;min-height:32px}
+.ceox{margin:34px auto 0;max-width:980px}.ceox h3{text-align:center;margin:0 0 16px}
+.ceoc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ceoc>div{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--glass)}
+.ceoc b{display:block;margin-bottom:6px}.ceoc p{margin:0;font-size:.93rem;line-height:1.55;color:var(--mut)}
+@media(max-width:760px){.ceoc{grid-template-columns:1fr}.hero .cta .btn{flex:1 1 100%;justify-content:center}}
+.cuh{margin:18px 0 6px;font-size:1rem}.cuol{margin:0 0 10px 20px;color:var(--mut);font-size:.93rem;line-height:1.6}
+.plantxt{font-size:.9rem;line-height:1.5;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--glass);margin:0 0 8px}
+.moreset{border:1px solid var(--line);border-radius:10px;padding:0 12px}.moreset summary{cursor:pointer;padding:12px 0;min-height:44px;font-weight:600}.moreset .fg{padding-bottom:12px}
+.f[hidden]{display:none!important}
+.demot{display:none}
+@media(max-width:700px){
+ .demobar{left:8px;right:8px;bottom:8px;transform:none;max-width:none;padding:6px 8px;gap:6px;flex-wrap:wrap;justify-content:space-between;font-size:13px}
+ .demot2{display:none}.demot{display:inline-flex}
+ .demobar .demoob{display:none;order:9;width:100%}.demobar.open .demoob{display:flex}.demobar .demoob select{flex:1;min-height:40px}
+ .demobar .btn{min-height:40px;padding:6px 10px}
+ .vxapp:has(.demobar) #appMain{padding-bottom:84px}
+}
+.vxshop .shdl{border:1px solid #d9dcec;border-radius:12px;padding:10px 14px;margin:0 0 12px}.vxshop .shdl legend{font-weight:700;padding:0 6px}.vxshop .shdl label{display:flex;gap:10px;align-items:center;min-height:44px;font-weight:600}
+.vxshop .shpm{margin:10px 0;padding:10px 12px;border-radius:10px;background:#eef1ff;font-size:.93rem;line-height:1.5}
+.vxshop input,.vxshop textarea,.vxshop button{min-height:44px}.vxshop .shw{padding-bottom:140px}
+@media(max-width:700px){.fab{height:46px;right:10px;bottom:10px;padding:0 14px;opacity:.94}.fab svg{width:21px;height:21px}footer{padding-bottom:76px}}

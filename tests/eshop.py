@@ -27,11 +27,23 @@ with sync_playwright() as p:
         pg.click('[data-sh=go]');pg.wait_for_selector('#shopOrd')
         t=pg.inner_text('#vxsite .shbox')
         chk('Doprava' in t and 'Celkem' in t,f'{tag} pokladna s dopravou a celkem')
+        import re as _re
+        def tot():
+            return int(_re.sub(r'\D','',_re.search(r'Celkem k úhradě\s*([\d\s\xa0]+)',pg.inner_text('#vxsite .shbox')).group(1)))
+        chk(pg.locator('input[name=so_d]').count()==2,f'{tag} volba doprava / osobní odběr')
+        t_ship=tot()
+        chk('Způsob platby' in pg.inner_text('#vxsite .shbox'),f'{tag} před odesláním je vidět způsob platby')
+        pg.fill('#so_n','Jan Zákazník');pg.check('input[name=so_d][value=pickup]');pg.wait_for_timeout(200)
+        chk(pg.input_value('#so_n')=='Jan Zákazník',f'{tag} údaje zůstanou při změně dodání')
+        t_pick=tot()
+        chk(t_ship-t_pick==99,f'{tag} osobní odběr odečte dopravu 99 Kč ({t_ship} -> {t_pick})')
+        chk('zdarma' in pg.inner_text('#vxsite .shl'),f'{tag} řádek odběru je zdarma')
         # prázdné údaje - validace prohlížeče, vyplníme
         pg.fill('#so_n','Jan Zákazník');pg.fill('#so_e','jan@example.cz');pg.fill('#so_a','Hlavní 5, Brno 60200');pg.check('#so_c')
         pg.click('#shopOrd button[type=submit]');pg.wait_for_selector('#vxsite h2:has-text("Děkujeme")')
         t=pg.inner_text('#vxsite .shbox')
         chk('Děkujeme za objednávku č. 1' in t and 'Variabilní symbol' in t,f'{tag} potvrzení s údaji k platbě')
+        chk(str(t_pick) in _re.sub(r'\D','',t.split('Celkem k úhradě')[1][:30]) ,f'{tag} potvrzená částka odpovídá osobnímu odběru')
         pg.screenshot(path=f'/tmp/eshop_{tag}_3.png')
         pg.click('[data-sh=close]');pg.wait_for_timeout(200)
         pg.evaluate("document.querySelector('#vxapp [data-tab=eshop]').click()");pg.wait_for_timeout(400)
