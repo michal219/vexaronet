@@ -17,7 +17,7 @@ with sync_playwright() as p:
         pg.goto('file:///tmp/ob_index.html');pg.wait_for_timeout(500)
         pg.click('.cta [data-demo]');pg.wait_for_selector('#vxapp .kpi')
         for ob in OBS:
-            pg.select_option('#demoOb',ob);pg.wait_for_timeout(500)
+            (pg.click('.demot') if not pg.is_visible('#demoOb') else None);pg.select_option('#demoOb',ob);pg.wait_for_timeout(500)
             nav=pg.evaluate("[...document.querySelectorAll('#vxside nav > button')].map(b=>b.textContent.trim())")
             more=pg.evaluate("[...document.querySelectorAll('#vxside nav details.more button')].map(b=>b.textContent.trim())")
             allk=pg.evaluate("document.querySelectorAll('#vxside nav [data-tab]').length")

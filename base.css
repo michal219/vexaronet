@@ -513,9 +513,9 @@ html[data-theme=light] .stb-now{color:#0f8a5f}html[data-theme=light] .stb-lim{co
 @media(max-width:700px){
  .demobar{left:8px;right:8px;bottom:8px;transform:none;max-width:none;padding:6px 8px;gap:6px;flex-wrap:wrap;justify-content:space-between;font-size:13px}
  .demot2{display:none}.demot{display:inline-flex}
- .demobar .demoob{display:none;order:9;width:100%}.demobar.open .demoob{display:flex}.demobar .demoob select{flex:1;min-height:40px}
+ .demobar .demoob{display:none!important;order:9;width:100%}.demobar.open .demoob{display:flex!important}.demobar .demoob select{flex:1;min-height:40px}
  .demobar .btn{min-height:40px;padding:6px 10px}
- .vxapp:has(.demobar) #appMain{padding-bottom:84px}
+ .vxapp:has(.demobar) #appMain{padding-bottom:130px}
 }
 .vxshop .shdl{border:1px solid #d9dcec;border-radius:12px;padding:10px 14px;margin:0 0 12px}.vxshop .shdl legend{font-weight:700;padding:0 6px}.vxshop .shdl label{display:flex;gap:10px;align-items:center;min-height:44px;font-weight:600}
 .vxshop .shpm{margin:10px 0;padding:10px 12px;border-radius:10px;background:#eef1ff;font-size:.93rem;line-height:1.5}
