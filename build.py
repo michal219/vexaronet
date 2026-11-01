@@ -325,11 +325,11 @@ tpl = r'''<!doctype html>
     <button class="themeb" id="theme" type="button" aria-label="Přepnout světlý a tmavý režim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg></button>
     <button class="btn btn-ghost btn-sm" id="acc" type="button">Přihlásit</button>
     <button class="btn btn-ghost btn-sm" type="button" data-early="start">Založit účet zdarma</button>
-    <button class="btn btn-main btn-sm btn-demo" type="button" data-demo="1">▶ Vyzkoušet demo</button>
+    <button class="btn btn-main btn-sm btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button>
     <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="mnav"><i></i></button>
   </div>
 </div></header>
-<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Ceník</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#namiru" style="--i:5">Systém na míru</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a><a href="#demo" data-demo="1" style="--i:7">▶ Vyzkoušet demo</a><a href="#stahnout" data-install="1" style="--i:8">Instalace aplikace</a></nav>
+<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Ceník</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#namiru" style="--i:5">Systém na míru</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a><a href="#demo" data-demo="1" style="--i:7" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</a><a href="#stahnout" data-install="1" style="--i:8">Instalace aplikace</a></nav>
 
 <main id="obsah">
 <section class="hero" id="top"><div class="wrap">
@@ -337,7 +337,7 @@ tpl = r'''<!doctype html>
     <span class="eyebrow fade">Beta verze pro OSVČ a malé firmy</span>
     <h1 id="h1">Zákazníci, zakázky a faktury malé firmy na jednom místě.</h1>
     <p class="sub fade d2">Vexaronet je česká aplikace pro OSVČ a malé firmy, které řídí práci v Excelu a v poznámkách. Už dnes: zákazníci, zakázky, kalendář a online rezervace, sklad, faktury a e-shop. AI CEO ukazuje, co sledovat, a navrhuje další kroky. Změny dat potvrzujete vy.</p>
-    <div class="cta fade d3"><button class="btn btn-main btn-demo" type="button" data-demo="1">▶ Vyzkoušet demo</button><button class="btn btn-ghost btn-acc" type="button" data-early="start">Založit účet zdarma</button></div>
+    <div class="cta fade d3"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button><button class="btn btn-ghost btn-acc" type="button" data-early="start">Založit účet zdarma</button></div>
     <p class="betan fade d3"><b>Beta verze.</b> Základ funguje se skutečnými daty, další části doplňujeme a jsou označené „připravujeme“. Platby zatím nejsou spuštěné, tarif START je zdarma.</p>
     <p class="hlinks fade d3"><a href="#funkce">Co už funguje</a> · <a href="#cenik">Ceník</a> · <button type="button" class="lnkb" data-install="1">Instalace aplikace</button></p>
   </div>
@@ -363,13 +363,13 @@ tpl = r'''<!doctype html>
    <div class="hs"><b>3</b><h3>Přidáte zákazníky a zboží</h3><p>Nahrajete je z Excelu (CSV) nebo napíšete ručně. Zakázky, sklad a termíny máte na jednom místě.</p></div>
    <div class="hs"><b>4</b><h3>Vystavujete a prodáváte</h3><p>Faktury, docházka, online rezervace a e-shop, který sám vystaví fakturu a odečte sklad.</p></div>
   </div>
-  <div class="cta" style="justify-content:center;margin-top:24px"><button class="btn btn-main btn-demo" type="button" data-demo="1">▶ Vyzkoušet demo</button><button class="btn btn-ghost" type="button" data-early="start">Založit účet zdarma</button></div>
+  <div class="cta" style="justify-content:center;margin-top:24px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button><button class="btn btn-ghost" type="button" data-early="start">Založit účet zdarma</button></div>
 </div></section>
 
 <section id="ucet"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Přehled v účtu</span><h2>Takhle vypadá <span class="grad">váš účet</span></h2><p class="lead">Po přihlášení uvidíte na jednom místě ukazatele firmy, doporučení AI CEO a jeho chat. Obrázek je ze skutečné aplikace, jen s ukázkovými daty. Kliknutím ho zvětšíte.</p></div>
   <button type="button" class="appshot" data-zoom="1" data-r="up" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" loading="lazy" alt="Přehled firmy ve Vexaronetu: tržby, nezaplacené faktury, aktivní zakázky, doporučení AI CEO a chat s AI CEO (ukázková data)"></button>
-  <div class="cta" style="justify-content:center;margin-top:22px"><button class="btn btn-main btn-demo" type="button" data-demo="1">▶ Vyzkoušet demo</button></div>
+  <div class="cta" style="justify-content:center;margin-top:22px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button></div>
   <p class="mut fine" style="text-align:center;margin-top:12px">Ukázková data. Aplikace je v beta verzi, hotové části fungují se skutečnými daty, nehotové jsou označené „připravujeme“.</p>
   <div class="ceox" data-r="up"><h3>Co je AI CEO, běžnou řečí</h3><div class="ceoc">
    <div><b>Kontroluje</b><p>Čte data, která ve Vexaronetu máte: faktury po splatnosti, zakázky, rezervace, sklad, příjmy a výdaje. Z nich skládá zdraví firmy, platby od zákazníků a výhled na 30 dní.</p></div>
@@ -2334,7 +2334,7 @@ LEG_CSS = ('*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{marg
 for _k, _body in LEG.items():
     _t, _d = LEG_T[_k]
     _body = _body.replace('<h2 id="dT">', '<h1 id="dT">').replace('</h2>', '</h1>', 1)
-    _nav = ''.join('<a href="/%s">%s</a>' % (k2, LEG_T[k2][0]) for k2 in LEG_T if k2 != _k)
+    _nav = ''.join('<a href="/%s/">%s</a>' % (k2, LEG_T[k2][0]) for k2 in LEG_T if k2 != _k)
     _html = ('<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
       '<title>%s – Vexaronet</title><meta name="description" content="%s"><link rel="canonical" href="https://vexaronet.com/%s/">'
       '<meta name="robots" content="index,follow"><meta name="theme-color" content="#070a1c"><style>%s</style></head><body><div class="w">'

@@ -521,3 +521,4 @@ html[data-theme=light] .stb-now{color:#0f8a5f}html[data-theme=light] .stb-lim{co
 .vxshop .shpm{margin:10px 0;padding:10px 12px;border-radius:10px;background:#eef1ff;font-size:.93rem;line-height:1.5}
 .vxshop input,.vxshop textarea,.vxshop button{min-height:44px}.vxshop .shw{padding-bottom:140px}
 @media(max-width:700px){.fab{height:46px;right:10px;bottom:10px;padding:0 14px;opacity:.94}.fab svg{width:21px;height:21px}footer{padding-bottom:76px}}
+@media(max-width:480px){.btn-demo{white-space:normal;text-align:center;line-height:1.3}}

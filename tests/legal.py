@@ -17,6 +17,16 @@ with sync_playwright() as p:
             pg.reload();chk(pg.locator('h1').count()==1 and pg.locator('h1').first.inner_text().startswith(h),f'{w} /{k}/ po obnovení')
             chk(not pg.evaluate("document.documentElement.scrollWidth>innerWidth"),f'{w} /{k}/ bez vodorovného posunu')
         pg.close()
+    pg=b.new_page(viewport={'width':390,'height':800})
+    for k,(t,h) in DOCS.items():
+        pg.goto(B+'/'+k+'/')
+        for o in [x for x in DOCS if x!=k]:
+            hr=pg.eval_on_selector_all('a','e=>e.map(x=>x.getAttribute("href"))')
+            chk(('/'+o+'/') in hr and ('/'+o) not in hr,f'/{k}/ obsahuje odkaz na /{o}/ (s lomítkem)')
+            pg.click(f'main ~ footer a[href="/{o}/"], footer a[href="/{o}/"]');pg.wait_for_load_state()
+            chk(pg.url.rstrip('/').endswith('/'+o) and pg.locator('h1').first.inner_text().startswith(DOCS[o][1]),f'klik /{k}/ -> /{o}/ zobrazí dokument, ne úvod')
+            pg.goto(B+'/'+k+'/')
+    pg.close()
     pg=b.new_page(viewport={'width':390,'height':800});pg.on('dialog',lambda d:d.accept())
     pg.route('**/supabase.js',lambda r:r.fulfill(body='',content_type='text/javascript'));pg.route('**/fonts.g*',lambda r:r.abort())
     pg.goto(B+'/');pg.wait_for_timeout(500);t0=pg.title()
