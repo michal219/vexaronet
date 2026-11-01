@@ -63,7 +63,7 @@ PLANS = [
  ('start','VEXARONET START',0,0,0,'Pro začínající OSVČ a malé podnikatele.',False,'Založit účet zdarma',
   ['CRM do 50 zákazníků','Až 10 faktur měsíčně','Až 10 zakázek v evidenci najednou','Kalendář, úkoly a online rezervace','Jednoduchý finanční přehled','1 uživatel','Bez AI CEO a AI Účetní']),
  ('accountant','VEXARONET AI ÚČETNÍ',399,339,4068,'Evidence a AI Účetní pro OSVČ a s.r.o. Účetnictví a DPH připravujeme.',False,'Vyzkoušet 30 dní zdarma',
-  ['Neomezené vystavování faktur','Evidence příjmů a výdajů','AI Účetní: vytěžení dokladů a dotazy k evidenci (100 dokladů měsíčně, s omezením)','Import bankovních výpisů (CSV)','Účetnictví a DPH (připravujeme)','1 uživatel, přístup externího účetního (připravujeme)','Bez CRM a AI CEO']),
+  ['Neomezené vystavování faktur','Evidence příjmů a výdajů','AI Účetní: vytěžení dokladů a dotazy k evidenci (100 dokladů měsíčně, s omezením)','Import bankovních výpisů (CSV)','Účetnictví a DPH (připravujeme)','1 uživatel','Přístup externího účetního (připravujeme)','Bez CRM a AI CEO']),
  ('pro','VEXARONET PRO',699,594,7128,'Řízení malé firmy: zákazníci, zakázky, sklad, e-shop a AI CEO.',True,'Vyzkoušet 30 dní zdarma',
   ['Vše z AI Účetní','Neomezené CRM, zakázky a kalendář','AI CEO: doporučení a chat nad daty (s omezením)','E-shop se skladem a fakturami (platba převodem)','1 jednoduchý web','3 uživatelé, 1 firma','150 AI dokladů měsíčně','500 AI akcí měsíčně (připravujeme)']),
  ('business','VEXARONET BUSINESS',1199,1019,12228,'Pro rostoucí firmy s týmem.',False,'Vyzkoušet 30 dní zdarma',
@@ -140,14 +140,15 @@ def plan_card(k,n,m,ym,yy,d,hot,btn,bul):
          else f'<button class="btn {"btn-main" if hot else "btn-ghost"}" type="button" data-early="{k}">{btn}</button>')
     return f'''<article class="plan{' hot' if hot else ''}" data-glow>{'<span class="ribbon">Nejvýhodnější</span>' if hot else ''}
   <h3>{n.replace('VEXARONET ','')}</h3><p class="note">{esc(d)}</p><div class="price">{price} <span class="per">Kč / měsíc</span></div>{sub}
-  <ul class="ticks">{''.join('<li>'+esc(b)+'</li>' for b in bul)}</ul>{cta}</article>'''.replace(' <span class="per">Kč / měsíc</span>','')
+  <ul class="ticks">{''.join(('<li class="soonli"><s>'+esc(b[:-len(' (připravujeme)')])+'</s> <em class="soonb">ve vývoji</em></li>') if b.endswith(' (připravujeme)') else '<li>'+esc(b)+'</li>' for b in bul)}</ul>{cta}</article>'''.replace(' <span class="per">Kč / měsíc</span>','')
 cards='\n'.join(plan_card(*x) for x in PLANS)
 def cell(v): return f'<td>{v}</td>'
 rows=''
 for lab,vals,st in CMP:
     if vals is None: rows+=f'<tr class="grp"><th colspan="6">{esc(lab)}</th></tr>'; continue
     badge={'now':'','lim':' <em class="soonb limb">s omezením</em>','soon':' <em class="soonb">připravujeme</em>'}[st]
-    rows+=f'<tr><th scope="row">{esc(lab)}{badge}</th>'+''.join(cell(esc(v)) for v in vals)+'</tr>'
+    lab_h = f'<s>{esc(lab)}</s>' if st=='soon' else esc(lab)
+    rows+=f'<tr><th scope="row">{lab_h}{badge}</th>'+''.join(cell(esc(v)) for v in vals)+'</tr>'
 plans_html=f'''<div class="bill" role="group" aria-label="Způsob platby"><button type="button" class="chipb" data-bill="m" aria-pressed="true">Měsíčně</button><button type="button" class="chipb" data-bill="y" aria-pressed="false">Ročně <small>plánovaná cena</small></button></div>
   <p class="payn" role="note"><b>Platby zatím nejsou spuštěné.</b> Placené tarify můžete 30 dní zdarma vyzkoušet bez platební karty, předplatné ale zatím nejde zaplatit ani sjednat na rok. Roční ceny jsou plánované. Tarif START je zdarma bez časového omezení.</p>
   <div class="plans5">{cards}</div>

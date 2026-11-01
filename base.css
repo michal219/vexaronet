@@ -522,3 +522,5 @@ html[data-theme=light] .stb-now{color:#0f8a5f}html[data-theme=light] .stb-lim{co
 .vxshop input,.vxshop textarea,.vxshop button{min-height:44px}.vxshop .shw{padding-bottom:140px}
 @media(max-width:700px){.fab{height:46px;right:10px;bottom:10px;padding:0 14px;opacity:.94}.fab svg{width:21px;height:21px}footer{padding-bottom:76px}}
 @media(max-width:480px){.btn-demo{white-space:normal;text-align:center;line-height:1.3}}
+
+.soonli s,.cmp th s,table th s{text-decoration-thickness:1.5px;opacity:.8}.soonli .soonb{white-space:nowrap}
