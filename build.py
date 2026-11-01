@@ -31,7 +31,7 @@ MODS = [
       items=['Veřejný obchod s vlastním odkazem, bez registrace zákazníka','Objednávka vytvoří zákazníka, zakázku a fakturu','Zboží se hned odepíše ze skladu, nelze prodat víc, než je skladem','Faktura s údaji k platbě převodem a správným číslováním','Zrušení objednávky vrátí zboží na sklad','Platba kartou a online platební brána (připravujeme)','Odesílání faktur zákazníkovi e-mailem (připravujeme)']),
  dict(id='web', stage=6, state='lim', note='Editor, AI návrh textů (PRO a vyšší), obrázky a veřejný odkaz fungují. Každá firma má zatím jeden web a vlastní doména není k dispozici.',
       name='Jednoduché weby', short='Jednostránkový firemní web s editorem, galerií a AI návrhem textů na veřejném odkazu vexaronet.com.',
-      items=['Editor jednostránkového webu: texty, služby, galerie, reference, časté otázky a kontakt','AI návrh textů podle vašeho popisu, vy ho upravíte a schválíte','Úprava barvy, vzhledu (světlý, tmavý, teplý), písma a obrázků včetně nahrání','Odkazy na rezervace, e-shop, sociální sítě a mapu','Veřejný odkaz a zobrazení na mobilu','Vlastní doména (připravujeme)','Více webů na jednu firmu (připravujeme)']),
+      items=['Editor jednostránkového webu: texty, služby, galerie, reference, časté otázky a kontakt','AI návrh textů podle vašeho popisu, vy ho upravíte a schválíte','Úprava barvy, vzhledu (světlý, tmavý, teplý), písma a obrázků včetně nahrání','Odkazy na rezervace, e-shop, sociální sítě a mapu','Veřejný odkaz a zobrazení na mobilu','Import objednávek z jiného e-shopu z CSV (faktura se vystaví po vašem potvrzení)','Automatické napojení na Shoptet, WooCommerce a další e-shopy (připravujeme)','Vlastní doména (připravujeme)','Více webů na jednu firmu (připravujeme)']),
  dict(id='mkt', stage=7, state='lim', note='Funguje AI návrh příspěvků, newsletterů a reklam (PRO a vyšší) a plán obsahu. Nic se samo nepublikuje ani neodesílá. Zbytek modulu ještě není.',
       name='Marketing', short='AI navrhne text příspěvku, newsletteru nebo reklamy a pomůže naplánovat obsah. Publikujete sami.',
       items=['AI návrhy příspěvků, e-mailů, reklam a odpovědí na recenze','Plán obsahu a evidence příspěvků','Slevové kódy (připravujeme)','Veřejné firemní profily (připravujeme)','Hodnocení a recenze zákazníků (připravujeme)','Statistiky návštěvnosti (připravujeme)']),
@@ -90,6 +90,8 @@ CMP = [
  ('Sklad a produkty', [N,N,Y,Y,Y], 'now'),
  ('Zaměstnanci, docházka a hodinová sazba', [N,N,Y,Y,Y], 'now'),
  ('E-shop: objednávka vytvoří fakturu a odepíše sklad (platba převodem)', [N,N,Y,Y,Y], 'lim'),
+ ('Import objednávek z jiného e-shopu (CSV) do faktur', [N,N,Y,Y,Y], 'now'),
+ ('Automatické napojení cizího e-shopu (Shoptet, WooCommerce)', [N,N,N,N,N], 'soon'),
  ('Platba kartou v e-shopu', [N,N,Y,Y,Y], 'soon'),
  ('Finance a účetnictví', None, None),
  ('Vystavování faktur', ['10 měsíčně','neomezeně','neomezeně','neomezeně','neomezeně'], 'now'),
@@ -1207,9 +1209,65 @@ function shopView(){
   +'</div><div class="st" id="shopSt" role="status"></div><div class="dact"><button class="pri" type="submit">Uložit nastavení</button>'+(c.slug?'<button type="button" class="btn btn-ghost" data-shop="open">Prohlédnout obchod</button><button type="button" class="btn btn-ghost" data-shop="copy">Kopírovat odkaz</button>':'')+'</div></form></section>';
  h+='<section class="card2"><div class="bar2"><h3>Zboží v e-shopu ('+vis.length+')</h3><button type="button" class="btn btn-ghost btn-sm" data-tab="sklad">Otevřít sklad</button></div><p class="mut fine">Zboží se v obchodě zobrazí, když je ve skladu zaškrtnuté „Zobrazit v e-shopu“ a má prodejní cenu. Zákazník vidí jen dostupné množství (nejvýše 50 ks).</p>'
   +(vis.length?'<ul class="rows">'+vis.map(function(p){var q=st[p.id]||0;return '<li data-edit="products:'+esc(p.id)+'"><div><b>'+esc(p.name)+'</b><small>'+(q>0?'skladem '+skN(q)+' '+esc(p.unit||'ks'):'vyprodáno')+'</small></div><span>'+fM(p.price)+'</span></li>'}).join('')+'</ul>':'<p class="mut">Zatím žádné zboží v obchodě. Ve skladu otevřete kartu zboží, vyplňte prodejní cenu a zaškrtněte „Zobrazit v e-shopu“.</p>')+'</section>';
+ h+='<section class="card2"><h3>Import objednávek z jiného e-shopu (CSV)</h3><p class="mut fine">Máte e-shop jinde (Shoptet, WooCommerce a další)? Stáhněte z něj export objednávek jako CSV a nahrajte ho sem. Pro každou objednávku se založí zákazník (podle e-mailu), zakázka a faktura na celkovou částku. Položky objednávky se nepřenášejí a sklad se nemění. Nejde o automatické propojení, import spouštíte vy. Před vystavením uvidíte náhled.</p><div class="f full"><label for="eiFile">Export objednávek (CSV)</label><input id="eiFile" type="file" accept=".csv,.txt,text/csv"></div><div class="dact"><button class="pri" type="button" data-ei="load">Načíst a zobrazit náhled</button></div><div class="st" id="eiSt" role="status"></div><div id="eiRes">'+eiView()+'</div></section>';
  var os=(O&&O.rows||[]).slice().sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at)});
  h+='<section class="card2"><h3>Objednávky ('+os.length+')</h3>'+(os.length?'<ul class="rows big">'+os.map(function(o){var iv=shopInvOf(o),b=o.buyer||{};return '<li data-shop="ord:'+esc(o.id)+'"><div><b>č. '+esc(o.order_no)+' · '+esc(b.name||'')+'</b><small>'+fD(o.created_at,1)+(iv&&iv.number?' · faktura '+esc(iv.number):(o.invoice_error?' · faktura se nevystavila':''))+'</small></div><span>'+fM(o.total)+' · <em class="stt">'+esc(SHST[o.status]||o.status)+'</em></span></li>'}).join('')+'</ul>':'<p class="mut">Zatím žádné objednávky.</p>')+'</section>';
  return h}
+/* ===== Import objednávek z jiného e-shopu (CSV) ===== */
+function eiSt(t,k){var e=A('eiSt');if(e){e.className='st'+(k?' '+k:'');e.textContent=t||''}}
+function eiParse(text){
+ text=String(text||'').replace(/^﻿/,'');var ls=text.split(/\r?\n/).filter(function(l){return l.trim()});
+ if(ls.length<2)return {err:'Soubor je prázdný nebo v něm chybí řádky s objednávkami.'};
+ var dl=';',bn=-1;[';',',','\t'].forEach(function(d){var n=bkSplit(ls[0],d).length;if(n>bn){bn=n;dl=d}});
+ var H=bkSplit(ls[0],dl).map(bkNorm);
+ function find(re,not){for(var i=0;i<H.length;i++)if(re.test(H[i])&&!(not&&not.test(H[i])))return i;return -1}
+ function all(re){var o=[];H.forEach(function(h,i){if(re.test(h))o.push(i)});return o}
+ var c={no:find(/^(cislo objednavky|c\. objednavky|cislo obj|order number|order id|order no|id objednavky|objednavka|order|cislo|number)$/),
+  name:find(/(jmeno a prijmeni|^jmeno$|^name$|^zakaznik$|^customer$|billing name|fakturacni jmeno|billing full name|full name)/),
+  fn:find(/^(jmeno|first name|billing first name)$/),ln:find(/^(prijmeni|last name|billing last name)$/),
+  mail:find(/e-?mail/),
+  total:find(/(celkem|total|castka|amount)/,/(bez dph|excl|tax|doprava|shipping|polozk|item|zbozi)/),
+  cur:find(/^(mena|currency)/),date:find(/(datum|date)/)};
+ var ad=all(/(ulice|street|address 1|^adresa|billing address)/).concat(all(/(^mesto|city)/),all(/(^psc|zip|postcode|postal)/));
+ if(c.name<0&&c.fn<0)return {err:'Nepodařilo se najít sloupec se jménem zákazníka (např. „Jméno a příjmení“ nebo „Jméno“ a „Příjmení“).'};
+ if(c.total<0)return {err:'Nepodařilo se najít sloupec s celkovou cenou objednávky (např. „Celkem“ nebo „Total“).'};
+ var seen={},rows=[];
+ for(var i=1;i<ls.length;i++){var p=bkSplit(ls[i],dl);function g(j){return j>=0&&j<p.length?String(p[j]).trim():''}
+  var nm=c.name>=0?g(c.name):[g(c.fn),g(c.ln)].filter(Boolean).join(' '),no=g(c.no)||('r'+i),tt=bkNum(g(c.total)),
+   cu=(g(c.cur)||'CZK').toUpperCase().slice(0,3),r={no:no,name:nm,email:g(c.mail).toLowerCase(),addr:ad.map(g).filter(Boolean).join(', '),total:tt,cur:/^(CZK|EUR)$/.test(cu)?cu:'CZK',skip:''};
+  if(!nm)r.skip='chybí jméno';else if(!(tt>0))r.skip='chybí kladná částka';else if(r.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.email))r.skip='neplatný e-mail';
+  else if(seen[no])r.skip='duplicitní číslo objednávky v souboru';
+  else if(APP.d.jobs.rows.some(function(j){return j.title==='E-shop import č. '+no}))r.skip='už naimportováno dříve';
+  seen[no]=1;rows.push(r)}
+ return {rows:rows,cols:c}}
+function eiView(){var E=APP.ei;if(!E||!E.rows)return '';
+ var ok=E.rows.filter(function(r){return !r.skip}),sk=E.rows.length-ok.length,sum=ok.reduce(function(a,r){return a+r.total},0);
+ return '<div class="draft"><b>Náhled importu.</b> K vystavení: <b>'+ok.length+'</b> faktur, celkem '+fM(sum)+(sk?', přeskočeno '+sk:'')+'. Zatím se nic neuložilo ani nevystavilo.</div>'
+ +'<ul class="rows">'+E.rows.slice(0,50).map(function(r){return '<li'+(r.skip?' class="off"':'')+'><div><b>č. '+esc(r.no)+' · '+esc(r.name||'–')+'</b><small>'+esc(r.email||'bez e-mailu')+(r.skip?' · přeskočeno: '+esc(r.skip):'')+'</small></div><span>'+(r.total>0?fM(r.total):'–')+' '+esc(r.cur)+'</span></li>'}).join('')+'</ul>'+(E.rows.length>50?'<p class="mut fine">Zobrazeno prvních 50 z '+E.rows.length+' řádků.</p>':'')
+ +(ok.length?'<div class="f"><label for="eiVat">Sazba DPH v cenách objednávek (ceny jsou s DPH)</label><select id="eiVat"><option>21</option><option>12</option><option>0</option></select></div><div class="dact"><button class="pri" type="button" data-ei="run">Vystavit '+ok.length+' faktur</button><button class="btn btn-ghost" type="button" data-ei="clear">Zrušit</button></div>':'<div class="dact"><button class="btn btn-ghost" type="button" data-ei="clear">Zavřít náhled</button></div>')}
+async function eiLoad(){var fi=A('eiFile'),f=fi&&fi.files&&fi.files[0];if(!f){eiSt('Vyberte soubor CSV z exportu objednávek.','err');return}
+ if(f.size>3e6){eiSt('Soubor je příliš velký (nejvýše 3 MB).','err');return}
+ var t;try{t=await f.text()}catch(x){eiSt('Soubor se nepodařilo přečíst.','err');return}
+ var r=eiParse(t);if(r.err){eiSt(r.err,'err');return}
+ if(r.rows.length>200){eiSt('Soubor má '+r.rows.length+' řádků. Najednou lze naimportovat nejvýše 200 objednávek.','err');return}
+ APP.ei=r;eiSt('','');A('eiRes').innerHTML=eiView()}
+async function eiRun(){var E=APP.ei;if(!E)return;var ok=E.rows.filter(function(r){return !r.skip});if(!ok.length)return;
+ var vat=parseFloat((A('eiVat')||{}).value);if(isNaN(vat))vat=21;
+ if(!confirm('Vystavit '+ok.length+' faktur? Každé faktuře se přidělí číslo a vystavenou fakturu už nelze vzít zpět.'))return;
+ var done=0,btn=document.querySelector('[data-ei=run]');if(btn)btn.disabled=true;
+ for(var i=0;i<ok.length;i++){var o=ok[i],lm=limitMsg('invoices');if(lm){eiSt('Zastaveno po '+done+' fakturách: '+lm,'err');break}
+  eiSt('Vystavuji '+(i+1)+' z '+ok.length+' ...','');
+  try{var cu=o.email?APP.d.customers.rows.filter(function(x){return String(x.email||'').toLowerCase()===o.email})[0]:null;
+   if(!cu){var cr=await getSb().from('customers').insert({company_id:APP.cid,name:o.name,email:o.email||null,billing_address:o.addr||null,notes:'Import z e-shopu'}).select('*');if(cr.error)throw cr.error;cu=cr.data[0];APP.d.customers.rows.push(cu)}
+   var jr=await getSb().from('jobs').insert({company_id:APP.cid,customer_id:cu.id,title:'E-shop import č. '+o.no,price:Math.round(o.total*100)/100,status:'done',stage:'Hotovo'}).select('id');
+   if(jr.error)throw jr.error;var jid=jr.data&&jr.data[0]&&jr.data[0].id;if(!jid)throw new Error('Nepodařilo se založit zakázku.');
+   var sr=await rpcInv('start',{job_id:jid});if(sr.error)throw sr.error;var d0=sr.data||{};if(!d0.id)throw new Error('Nepodařilo se založit fakturu.');
+   var td=locD(new Date()),du=locD(new Date(Date.now()+14*864e5));
+   var ir=await rpcInv('issue',{id:d0.id,job_id:jid,customer:{id:cu.id,name:cu.name,email:cu.email||null,billing_address:cu.billing_address||null,address_text:cu.billing_address||o.addr||null,country_code:cu.country_code||null},items:[{description:'Objednávka č. '+o.no+' z e-shopu',quantity:1,unit:'ks',unit_gross:Math.round(o.total*100)/100,vat_rate:vat}],issued_on:td,taxable_supply_on:td,due_on:du,currency:o.cur,language:'cs'});
+   if(ir.error)throw ir.error;done++;o.skip='vystaveno'}
+  catch(ex){if(/fakturační údaje/i.test(ex.message||'')){toast('Nejdřív vyplňte fakturační údaje dodavatele (vaše firma) a import spusťte znovu.','err');profForm();return}
+   eiSt('Zastaveno po '+done+' fakturách. Objednávka č. '+o.no+': '+(ex.message||ex),'err');break}}
+ APP.ei=null;await refresh();appTab('eshop');if(done)toast('Vystaveno faktur: '+done+'.','ok')}
 async function shopProfCheck(){var e=A('shopProf');if(!e)return;if(DEMO){e.innerHTML='';return}
  var r=await getSb().from('user_business_profiles').select('company_id').eq('company_id',APP.cid).limit(1);APP.hasProf=!!(r.data&&r.data[0]);
  e=A('shopProf');if(e)e.innerHTML=APP.hasProf?'':'<div class="draft">Nejdřív vyplňte <b>fakturační údaje</b> (část Fakturace). Bez nich se obchod veřejně nezobrazí, protože k objednávkám se vystavují faktury. <button type="button" class="btn btn-ghost btn-sm" data-shop="prof">Vyplnit údaje</button></div>'}
@@ -2152,6 +2210,7 @@ document.addEventListener('click',async function(e){
  var rx=e.target.closest('#vxapp [data-rp]');if(rx){var rk=rx.dataset.rp;if(rk==='csv')rpCsv();else if(rk==='print')rpPrint();else if(rk==='ai')rpAI();return}
  var mx=e.target.closest('#vxapp [data-mk]');if(mx){var mk=mx.dataset.mk;if(mk==='gen')mkGen();else if(mk==='save')mkSave();else if(mk==='copy'){var mo=A('mk_out');try{navigator.clipboard.writeText(mo.value);toast('Text zkopírován.','ok')}catch(x){mo.select();toast('Označeno, zkopírujte ručně (Ctrl+C).','ok')}}return}
  var wx=e.target.closest('#vxapp [data-web]');if(wx){var wk=wx.dataset.web;if(wk==='ai')webAI();else if(wk==='open')webOpen('',true);else if(wk==='copy'){var wr=APP.d.sites.rows[0];if(wr){try{navigator.clipboard.writeText(webUrl(wr.slug));toast('Odkaz zkopírován.','ok')}catch(x){toast(webUrl(wr.slug),'ok')}}}return}
+ var ex0=e.target.closest('#vxapp [data-ei]');if(ex0){var ek=ex0.dataset.ei;if(ek==='load')eiLoad();else if(ek==='run')eiRun();else if(ek==='clear'){APP.ei=null;A('eiRes').innerHTML='';eiSt('','')}return}
  var ax=e.target.closest('#vxapp [data-acc]');if(ax){var ak=ax.dataset.acc;if(ak==='process')accProcess();else if(ak==='discard'){A('accRes').innerHTML='';accSt('','')}else if(ak==='csv-ent')accExport('ent');else if(ak==='csv-inv')accExport('inv');else if(ak==='bk-file')bkFile();else if(ak==='bk-demo')bkDemo();else if(ak==='bk-apply')bkApply();else if(ak==='bk-clear'){BK.rows=[];A('bkRes').innerHTML='';bkSt('','')}return}
  var ck=e.target.closest('#vxapp [data-clock]');if(ck){if(ck.disabled)return;ck.disabled=true;await clockDo(ck.dataset.clock,ck.dataset.uid);return}
  if(e.target.closest('#vxapp [data-invnew]')){inviteModal();return}
