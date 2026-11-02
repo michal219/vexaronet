@@ -524,3 +524,21 @@ html[data-theme=light] .stb-now{color:#0f8a5f}html[data-theme=light] .stb-lim{co
 @media(max-width:480px){.btn-demo{white-space:normal;text-align:center;line-height:1.3}}
 
 .soonli s,.cmp th s,table th s{text-decoration-thickness:1.5px;opacity:.8}.soonli .soonb{white-space:nowrap}
+/* ===== Fakturační modul ===== */
+.vxapp .amodal .mbox.wide{max-width:1180px;width:calc(100% - 24px)}
+.vxapp .ied{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.vxapp .ies{border:1px solid var(--line);border-radius:14px;padding:10px 12px 12px;margin:0 0 12px}.vxapp .ies legend{padding:0 6px;font-weight:700;font-size:.9rem}
+.vxapp .iedp{position:sticky;top:0;max-height:78vh;overflow:auto;border-radius:12px}
+.vxapp .ierows{display:grid;gap:8px;margin-bottom:8px}
+.vxapp .ier{display:grid;grid-template-columns:minmax(0,2.2fr) 54px 48px minmax(92px,1.4fr) 58px minmax(80px,1.1fr) 22px;gap:6px;align-items:center}
+.vxapp .ier input,.vxapp .ier select{width:100%;min-width:0}.vxapp .ier output{text-align:right;font-size:.85rem;color:var(--mut);white-space:nowrap}
+.vxapp .ivprod select{padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg2,#10152e);color:var(--text)}
+.vxapp .ivkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:10px 0}
+.vxapp .ivkpi>div{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(110,140,255,.06)}.vxapp .ivkpi small{display:block;color:var(--mut);font-size:.78rem}.vxapp .ivkpi b{display:block;font-size:1.2rem;margin:2px 0}.vxapp .ivkpi em{font-style:normal;color:var(--mut);font-size:.78rem}.vxapp .ivkpi .bad b{color:#ff8a8a}
+.vxapp .ivfl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}.vxapp .ivq{margin-left:auto;flex:1 1 220px;max-width:340px}.vxapp .ivq input{width:100%}
+.vxapp .ivl li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 12px;align-items:center}.vxapp .ivl li small{display:block}.vxapp .ivac{grid-column:1/-1;display:flex;gap:14px;flex-wrap:wrap}
+.vxapp .ivst{font-size:.78rem;font-weight:700;padding:3px 9px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}.vxapp .ivst-paid{color:#58d6a0;border-color:#58d6a0}.vxapp .ivst-late{color:#ff8a8a;border-color:#ff8a8a}.vxapp .ivst-open{color:#ffc46b;border-color:#ffc46b}
+.vxapp .ivam{font-weight:700;white-space:nowrap}
+.vxapp .ivwrap{max-height:70vh;overflow:auto;border-radius:10px}
+@media(max-width:900px){.vxapp .ied{grid-template-columns:1fr}.vxapp .iedp{position:static;max-height:none}.vxapp .ier{grid-template-columns:1fr 1fr 1fr 1fr;}.vxapp .ier .id{grid-column:1/-1}.vxapp .ier output{grid-column:span 2;text-align:left}}
+.vxapp .ies textarea{min-height:0;height:64px}
