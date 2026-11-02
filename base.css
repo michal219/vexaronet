@@ -542,3 +542,8 @@ html[data-theme=light] .stb-now{color:#0f8a5f}html[data-theme=light] .stb-lim{co
 .vxapp .ivwrap{max-height:70vh;overflow:auto;border-radius:10px}
 @media(max-width:900px){.vxapp .ied{grid-template-columns:1fr}.vxapp .iedp{position:static;max-height:none}.vxapp .ier{grid-template-columns:1fr 1fr 1fr 1fr;}.vxapp .ier .id{grid-column:1/-1}.vxapp .ier output{grid-column:span 2;text-align:left}}
 .vxapp .ies textarea{min-height:0;height:64px}
+/* ===== CRM ===== */
+.vxapp .kbn{display:grid;grid-template-columns:repeat(6,minmax(190px,1fr));gap:10px;overflow-x:auto;padding-bottom:8px}
+.vxapp .kbc{border:1px solid var(--line);border-radius:14px;padding:10px;background:rgba(110,140,255,.05);min-height:120px}.vxapp .kbc h4{margin:0;font-size:.9rem;display:flex;justify-content:space-between}.vxapp .kbc h4 em{font-style:normal;color:var(--mut)}
+.vxapp .kbd{border:1px solid var(--line);border-radius:12px;padding:9px 10px;margin-top:8px;background:var(--bg2,#10152e);display:grid;gap:3px}.vxapp .kbd b{cursor:pointer}.vxapp .kbd small,.vxapp .kbd span{color:var(--mut);font-size:.8rem}.vxapp .kbm{display:flex;gap:10px;justify-content:flex-end}.vxapp .kbm .lnk{font-size:1.05rem}
+.vxapp .tl li{display:grid;grid-template-columns:minmax(90px,.4fr) 1fr;gap:10px}
