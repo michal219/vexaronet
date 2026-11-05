@@ -64,7 +64,29 @@ function crmTimeline(cid){var c=crmCust(cid);if(!c)return;APP.crmC=cid;var ev=[]
 function crmAfterForm(ent,id){if(ent!=='customers'||!id)return;var da=document.querySelector('#entForm .dact');if(da)da.insertAdjacentHTML('afterbegin','<button class="btn btn-ghost" type="button" data-crm="th:'+esc(id)+'">Historie klienta</button>')}
 async function crmMove(id,dir){var d=APP.d.deals.rows.filter(function(x){return x.id===id})[0];if(!d)return;var i=CRMST.findIndex(function(s){return s[0]===d.stage})+dir;if(i<0||i>=CRMST.length)return;
  var r=await getSb().from('deals').update({stage:CRMST[i][0],probability:CRMST[i][2],updated_at:new Date().toISOString()}).eq('id',id);if(r.error){toast('Případ se nepodařilo posunout: '+r.error.message,'err');return}await refresh();appTab('pripady')}
+/* ---- duplicity zákazníků a slučování ---- */
+var CRMDR={ico:'IČO',email:'e-mail',phone:'telefon'};
+function crmDupCount(id){var d=APP.d,f=function(t){return ((d[t]&&d[t].rows)||[]).filter(function(r){return r.customer_id===id}).length};return f('jobs')+f('deals')+f('quotes')+f('client_notes')+f('reservations')}
+function crmDupRow(id,g,i){var cu=crmCust(id);return '<label class="cdr" style="display:flex;gap:12px;align-items:flex-start;justify-content:flex-start;text-align:left;padding:8px 0;cursor:pointer"><input type="radio" name="cdk'+g+'" value="'+esc(id)+'"'+(i===0?' checked':'')+' style="flex:none;width:18px;height:18px;min-height:0;padding:0;margin:3px 0 0"><span style="flex:1;min-width:0;text-align:left"><b>'+esc(custName(cu))+'</b><br><small class="mut">'+[cu.email,cu.phone,cu.ico?'IČO '+cu.ico:''].filter(Boolean).map(esc).join(' · ')+(crmDupCount(id)?' · záznamů: '+crmDupCount(id):'')+'</small></span></label>'}
+async function crmDup(){
+ modal('<h3>Duplicitní zákazníci</h3><p class="mut" id="cdSt">Hledám duplicity…</p><div id="cdBox"></div><div class="dact"><button class="btn btn-ghost btn-sm" type="button" data-app="mclose">Zavřít</button></div>');
+ var r;try{r=await getSb().rpc('crm_find_duplicates',{p_company:APP.cid})}catch(ex){r={error:ex}}
+ var st=A('cdSt'),bx=A('cdBox');if(!st||!bx)return;
+ if(r.error){st.innerHTML='<span class="draft">Duplicity se nepodařilo načíst: '+esc(String(r.error.message||r.error))+' Tato část vyžaduje aktualizaci databáze (schema_crm_duplicity.sql), která zatím nebyla provedena.</span>';return}
+ var seen={},gs=[];(r.data||[]).forEach(function(g){var ids=(g.customer_ids||[]).filter(crmCust);if(ids.length<2)return;var key=ids.slice().sort().join(',');if(!seen[key]){seen[key]={ids:ids,why:[]};gs.push(seen[key])}if(seen[key].why.indexOf(CRMDR[g.reason]||g.reason)<0)seen[key].why.push(CRMDR[g.reason]||g.reason)});
+ APP.crmDG=gs;
+ if(!gs.length){st.textContent='Žádné duplicity jsme nenašli. Porovnáváme IČO, e-mail a telefon.';return}
+ st.textContent='Nalezeno skupin: '+gs.length+'. U každé zvolte záznam, který se má zachovat. Ostatní se do něj sloučí (zakázky, rezervace, obchody, nabídky i poznámky se přesunou, prázdné údaje se doplní). Sloučený záznam se nesmaže, jen se archivuje a jeho původní údaje zůstanou uložené.';
+ bx.innerHTML=gs.map(function(g,i){return '<section class="card2" style="margin:10px 0"><h4 style="margin:0 0 4px">Shoda: '+esc(g.why.join(', '))+'</h4>'+g.ids.map(function(id,j){return crmDupRow(id,i,j)}).join('')+'<div class="dact"><button type="button" class="btn btn-main btn-sm" data-crm="mg:'+i+'">Sloučit do vybraného</button></div><div class="st" id="cdS'+i+'" role="status"></div></section>'}).join('')}
+async function crmDupMerge(btn,i){var g=(APP.crmDG||[])[i];if(!g)return;
+ if(!btn.dataset.sure){btn.dataset.sure='1';btn.textContent='Potvrdit sloučení';return}
+ var ck=document.querySelector('input[name="cdk'+i+'"]:checked'),keep=ck&&ck.value,s=A('cdS'+i);if(!keep)return;btn.disabled=true;
+ for(var j=0;j<g.ids.length;j++){if(g.ids[j]===keep)continue;var r;try{r=await getSb().rpc('crm_merge_customers',{p_keep:keep,p_merge:g.ids[j]})}catch(ex){r={error:ex}}
+  if(r.error){btn.disabled=false;delete btn.dataset.sure;btn.textContent='Sloučit do vybraného';if(s)s.textContent='Sloučení se nepodařilo: '+String(r.error.message||r.error);return}}
+ await refresh();toast('Zákazníci byli sloučeni.','ok');crmDup()}
 document.addEventListener('click',async function(e){var t=e.target.closest('#vxapp [data-crm]');if(!t)return;var p=t.dataset.crm.split(':'),k=p[0],q;
+ if(k==='dup')return crmDup();
+ if(k==='mg')return crmDupMerge(t,Number(p[1]));
  function Q(i){return APP.d.quotes.rows.filter(function(x){return x.id===i})[0]}
  if(k==='mv')return crmMove(p[1],Number(p[2]));
  if(k==='qn')return quoteEditor();
