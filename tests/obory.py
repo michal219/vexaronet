@@ -21,7 +21,7 @@ with sync_playwright() as p:
             nav=pg.evaluate("[...document.querySelectorAll('#vxside nav > button')].map(b=>b.textContent.trim())")
             more=pg.evaluate("[...document.querySelectorAll('#vxside nav details.more button')].map(b=>b.textContent.trim())")
             allk=pg.evaluate("document.querySelectorAll('#vxside nav [data-tab]').length")
-            chk(allk==20,f"{tag} {ob}: všech 20 modulů je dostupných (hlavní {len(nav)} + další {len(more)})")
+            chk(allk==21,f"{tag} {ob}: všech 21 modulů je dostupných (hlavní {len(nav)} + další {len(more)})")
             h=pg.inner_text('#appMain')
             saved=pg.evaluate("(()=>{const d=__A.d;const s={c:d.customers.rows,j:d.jobs.rows,i:d.invoices.rows,b:d.booking_services.rows,p:d.products.rows,sh:d.shifts.rows,te:d.time_entries.rows,r:d.reservations.rows,ss:d.shop_settings.rows};d.shop_settings.rows=[];d.customers.rows=[];d.jobs.rows=[];d.invoices.rows=[];d.booking_services.rows=[];d.products.rows=[];d.shifts.rows=[];d.time_entries.rows=[];d.reservations.rows=[];window.__s=s;__t('prehled');return 1})()")
             h2=pg.inner_text('#appMain');chk('Začínáme: '+ob in h2 and 'Hotovo 0 z' in h2,f'{tag} {ob}: karta Začínáme pro nový účet')
