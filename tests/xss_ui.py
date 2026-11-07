@@ -77,7 +77,7 @@ with sync_playwright() as p:
         pg.evaluate("document.querySelector('#vxapp [data-tab=%s]').click()" % t); pg.wait_for_timeout(450)
         x = pg.evaluate(PROBE)
         check(x[0] == 0 and x[1] == 0, '%s: žádný vložený kód se nespustil ani nevznikl v DOM %s' % (t, x[:2]))
-        if t in ('zakaznici', 'zakazky', 'ukoly', 'pripady', 'autopilot'):
+        if t in ('zakaznici', 'zakazky', 'ukoly', 'pripady') or (t == 'autopilot' and pg.locator('#apd').count()):
             check('<img src=x onerror' in pg.inner_text('#appMain'), '%s: útočný řetězec se opravdu vykreslil, ale jako text' % t)
     # detail zákazníka, náhled příspěvku, chat s AI CEO (odpověď AI obsahuje HTML)
     pg.evaluate("document.querySelector('#vxapp [data-tab=zakaznici]').click()"); pg.wait_for_timeout(300)

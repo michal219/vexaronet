@@ -34,7 +34,12 @@ Edge funkce pracují se `service_role` nebo s tokenem uživatele, takže se jich
 **Návrat:** `db/migrations/20261109100000_zprisneni_prav_rollback.sql`. Vrátí práva, obě politiky a `search_path` ze záloh. Data se nemění.
 Kdy vrátit: formulář nebo veřejné RPC vrací 401/403, nebo druhá aplikace hlásí chybu oprávnění.
 
-## 2) Kód: Cloudflare funkce, `_headers` a SRI (merge větve do `main`)
+## 2) Kód: Cloudflare funkce, `_headers` a SRI
+
+**Pozor:** větev `claude/happy-bell-5266nk` obsahuje i nenasazený dashboard AI Marketing Autopilota (commit `8d586f0`).
+Merge celé větve by nasadil i dashboard. Bezpečnostní commit `01fcaff` je proto potřeba přenést samostatně:
+nová větev z `main` a `git cherry-pick 01fcaff`. Přenese se i `index.html` (jen přidaný `integrity`), protože se generuje z `build.py`.
+Před mergem: `python3 build.py` a kontrola, že rozdíl `index.html` proti `main` obsahuje jen atribut `integrity`.
 
 | Změna | Dopad na uživatele | Riziko | Návrat |
 |---|---|---|---|
