@@ -42,6 +42,39 @@ var VXGUARD=(function(){
    var sr=s.ok?await s.json():[];sub=sr&&sr[0]}catch(e){return fail(403,'plan')}
   if(!planOk(sub,o.plans,now))return fail(403,'plan');
   return {ok:true,uid:uid,role:role,plan:String(sub.plan).toLowerCase(),cid:o.cid}}
- return {guardAi:guardAi,planOk:planOk,UUID:UUID}
+ /* Serverový limit AI v databázi (public.reserve_ai -> private.reserve_ai_core): atomicky (zámek) hlídá
+    denní limit platformy, denní a měsíční limit firmy a 3 volání za minutu na uživatele, a znovu ověří členství,
+    zapisovatelnost a tarif hlavní firmy. Volá se s tokenem uživatele těsně před voláním poskytovatele AI.
+    Selže-li cokoli (i nedostupná DB), AI se nezavolá (fail closed).
+    opts: {fetchFn, sbUrl, sbKey, token, cid} */
+ async function reserveAi(o){
+  if(!o.token)return fail(401,'auth');
+  if(typeof o.cid!=='string'||!UUID.test(o.cid))return fail(400,'bad_request');
+  var r,j=null;
+  try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_ai',{method:'POST',headers:{apikey:o.sbKey,authorization:'Bearer '+o.token,'content-type':'application/json'},body:JSON.stringify({cid:o.cid})})}
+  catch(e){return fail(503,'limit_unavailable')}
+  if(r.ok)return {ok:true};
+  try{j=await r.json()}catch(e){j=null}
+  var msg=String(j&&j.message||''),code=String(j&&j.code||'');
+  if(/limit|Zkuste AI znovu/i.test(msg))return {ok:false,status:429,error:'limit',message:msg.slice(0,200)};
+  if(/Starter|tarif/i.test(msg))return fail(403,'plan');
+  if(/Forbidden/i.test(msg)||code==='42501'||r.status===401||r.status===403)return fail(403,'forbidden');
+  return fail(503,'limit_unavailable')}
+ /* Veřejný chat bez přihlášení: limit v databázi pro celou platformu (public.reserve_help_chat: 200 denně celkem,
+    20 za hodinu na jednoho návštěvníka). Návštěvník se pozná jen podle otisku SHA-256(IP|tajemství|den), IP se neukládá.
+    Funkce je jen pro service_role, proto potřebuje SUPABASE_SERVICE_KEY v Cloudflare. Bez klíče nebo při chybě DB
+    se AI nezavolá (fail closed). opts: {fetchFn, sbUrl, serviceKey, ip, now?} */
+ async function reservePublicChat(o){
+  if(!o.serviceKey)return fail(503,'not_configured');
+  var day=(o.now||new Date()).toISOString().slice(0,10),hex;
+  try{var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(o.ip||'unknown').slice(0,100)+'|'+o.serviceKey+'|'+day));
+   hex=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}catch(e){return fail(503,'limit_unavailable')}
+  var r;
+  try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_help_chat',{method:'POST',headers:{apikey:o.serviceKey,authorization:'Bearer '+o.serviceKey,'content-type':'application/json'},body:JSON.stringify({p_actor:hex})})}
+  catch(e){return fail(503,'limit_unavailable')}
+  if(!r.ok)return fail(503,'limit_unavailable');
+  var v=null;try{v=await r.json()}catch(e){v=null}
+  return v===true?{ok:true}:fail(429,'rate')}
+ return {guardAi:guardAi,reserveAi:reserveAi,reservePublicChat:reservePublicChat,planOk:planOk,UUID:UUID}
 })();
 if(typeof module!=='undefined')module.exports=VXGUARD;

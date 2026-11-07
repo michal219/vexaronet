@@ -63,8 +63,9 @@ export const onRequest = async ({ request: req, env }) => {
         headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
         body: JSON.stringify({ from: env.INVITE_FROM || 'Vexaronet <info@vexaronet.com>', to: [email], reply_to: user.email, subject, html, text }),
       });
-      mail = m.ok ? 'sent' : `failed ${m.status}: ${(await m.text()).slice(0, 160)}`;
-    } catch (e) { mail = `error ${String(e).slice(0, 100)}`; }
+      if (!m.ok) console.error('invite mail', m.status, (await m.text()).slice(0, 300));
+      mail = m.ok ? 'sent' : 'failed';
+    } catch (e) { console.error('invite mail', e); mail = 'failed'; }
   }
   return json({ ok: true, mail });
 };

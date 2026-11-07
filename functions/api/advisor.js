@@ -57,6 +57,8 @@ export const onRequest = async ({ request: req, env }) => {
   while (msgs.length && msgs[0].role !== 'user') msgs.shift();
   if (!msgs.length || msgs[msgs.length - 1].role !== 'user') return json({ error: 'bad_request' }, 400);
 
+  const rv = await VXGUARD.reserveAi({ fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid: g.cid });
+  if (!rv.ok) return json({ error: rv.error, ...(rv.message ? { message: rv.message } : {}) }, rv.status);
   const model = env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
   try {
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {

@@ -474,7 +474,7 @@ tpl = r'''<!doctype html>
 <div id="appSplash" class="appsplash" hidden><svg viewBox="0 0 32 32" width="72" height="72" aria-hidden="true"><defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg2)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><h1>Vexaronet</h1><p>Přihlaste se do svého účtu.</p><button class="btn btn-main" type="button" id="splashLogin">Přihlásit se</button></div>
 <dialog id="dlg" aria-labelledby="dT"><div class="dlg" id="dBody"></div></dialog>
 <noscript><style>[data-r]{opacity:1!important;transform:none!important}.hero h1 .w>span{transform:none}.fade{opacity:1;transform:none}</style></noscript>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" integrity="sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o" crossorigin="anonymous" defer></script>
 <script type="application/json" id="modData">@@MODDATA@@</script>
 <script type="application/json" id="bizData">@@BIZDATA@@</script>
 <script>

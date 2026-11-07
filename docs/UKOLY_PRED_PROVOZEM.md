@@ -17,6 +17,9 @@ se před ostrým provozem nesmí zapnout, dokud nejsou položky označené „bl
 
 ## Ú2. Bezpečnostní nálezy z auditu (blokují provoz, dokud nejsou vyřešené nebo vyhodnocené)
 
+**Aktualizace 2026-11-09:** a, b, d jsou **aplikované na produkci** (2026-11-07). Úplný a aktuální přehled všech nálezů, včetně nových
+(AI limity, přehled e-mailem, CSP, zálohy, edge funkce mimo repozitář), je v `docs/SECURITY_STATUS.md`; tabulka níže je historická.
+
 **Aktualizace 2026-11-08:** nálezy a, b, d mají připravenou migraci `db/migrations/20261108100000_bezpecnostni_opravy.sql` s ověřenými dopady (`docs/BEZPECNOSTNI_OPRAVY.md`), nález e je vyhodnocen jako neopravovaný, nález c je nastavení v dashboardu.
 Nic z toho není aplikované na produkci. Před aplikací je nutný váš souhlas a zkouška na testovacím projektu.
 
@@ -31,7 +34,7 @@ Nic z toho není aplikované na produkci. Před aplikací je nutný váš souhla
 
 ## Ú3. Další otevřené věci (neblokují)
 
-- Zjistit, zda nad touto databází běží ještě jiná aplikace (tabulky `suite_*`, `ai_workspace`, `business_web_*` v repozitáři nejsou použité).
+- ~~Zjistit, zda nad touto databází běží ještě jiná aplikace~~ **Ověřeno 2026-11-09:** ano, 13 Supabase edge funkcí jiné aplikace (viz `docs/SECURITY_STATUS.md`, B-7).
 - Pořídit úplný zálohovatelný dump schématu a ověřit obnovu v testovacím projektu (snapshot v `db/snapshot/` je zatím jen dokumentace).
 - Zdokumentovat, jak se spouštějí existující cron úlohy (adresy, tajemství) před implementací workeru AI.
 - Pět starších testů selhává už před touto prací: `smoke`, `fakt`, `legal`, `demo_btn` a `faktury_qr` (chybí modul `cv2`). Nesouvisí se změnami profilu.

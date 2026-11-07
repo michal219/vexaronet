@@ -1,5 +1,8 @@
 // Serverová funkce pro AI chat Vexaronet (Google Gemini).
 // API klíč se NIKDY nedává do webu. Je uložený v Cloudflare jako proměnná prostředí GEMINI_API_KEY.
+// Veřejný endpoint bez přihlášení: náklady hlídá limit v databázi (reserve_help_chat), viz src/ai_guard.js.
+import VXGUARD from '../../src/ai_guard.js';
+const SB_URL = 'https://micymdbqgzeckiqyvvkn.supabase.co';
 
 const SYSTEM = `Jsi AI asistent webu Vexaronet a odpovídáš návštěvníkům 24 hodin denně.
 
@@ -67,6 +70,9 @@ export const onRequest = async ({ request: req, env, ...context }) => {
   if (!msgs.length || msgs[msgs.length - 1].role !== 'user') {
     return json({ error: 'bad_request' }, 400);
   }
+
+  const cap = await VXGUARD.reservePublicChat({ fetchFn: fetch, sbUrl: SB_URL, serviceKey: env.SUPABASE_SERVICE_KEY, ip });
+  if (!cap.ok) return json({ error: cap.error }, cap.status);
 
   const model = env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;

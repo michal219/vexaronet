@@ -56,6 +56,9 @@ export const onRequest = async ({ request: req, env }) => {
   const H = { apikey: SB_KEY, authorization: `Bearer ${token}`, 'content-type': 'application/json' };
   if (limited(uid)) return json({ error: 'rate' }, 429);
 
+  // Serverový limit AI (reserve_ai) platí pro tarify PRO a vyšší. Tarif "accountant" ho zatím nemá (reserve_ai ho odmítá);
+  // pro něj zůstává měsíční limit dokladů níže. Viz docs/SECURITY_STATUS.md.
+  const reserve = async () => (['pro', 'business', 'enterprise'].includes(plan) ? VXGUARD.reserveAi({ fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid }) : { ok: true });
   const model = env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
   const call = async (payload) => {
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
@@ -78,6 +81,8 @@ export const onRequest = async ({ request: req, env }) => {
       .map((m) => ({ role: m.role, content: m.content.slice(0, 600) }));
     while (msgs.length && msgs[0].role !== 'user') msgs.shift();
     if (!msgs.length || msgs[msgs.length - 1].role !== 'user') return json({ error: 'bad_request' }, 400);
+    const rv = await reserve();
+    if (!rv.ok) return json({ error: rv.error, ...(rv.message ? { message: rv.message } : {}) }, rv.status);
     try {
       const t = await call({
         systemInstruction: { parts: [{ text: SYSTEM_ASK(clean) }] },
@@ -103,6 +108,8 @@ export const onRequest = async ({ request: req, env }) => {
     used = parseInt((cr.headers.get('content-range') || '').split('/')[1], 10) || 0;
   } catch { return json({ error: 'usage_table' }, 503); }
   if (used >= limit) return json({ error: 'limit', used, limit }, 429);
+  const rv = await reserve();
+  if (!rv.ok) return json({ error: rv.error, ...(rv.message ? { message: rv.message } : {}) }, rv.status);
 
   let txt;
   try {
