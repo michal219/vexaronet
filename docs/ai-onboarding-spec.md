@@ -2,6 +2,16 @@
 
 Stav: **návrh k implementaci**, 2026-11-07. Zatím nebyl změněn funkční kód, databáze ani nasazení.
 
+> **Stav implementace (fáze 1a, větev `claude/happy-bell-5266nk`, nenasazeno):** hotový je ruční profil firmy, tedy část kroků 1–5
+> a oddílů 4, 5, 8 a 10 této specifikace, bez AI. Rozdíly oproti návrhu v oddílu 4:
+> - Místo `onboarding_sessions` / `onboarding_answers` / `profile_versions` / `profile_field_evidence` jsou zatím 4 tabulky
+>   `private.company_profile_drafts`, `_versions`, `_active_profile`, `_events`. Koncept má revizi, potvrzená verze je neměnná a nese otisk obsahu.
+>   Původní odpovědi a evidence zdrojů přijdou s AI částí (fáze 2), dnes jsou všechny údaje ručně zadané uživatelem.
+> - Profil má dvě části: `shared` (patří hlavní firmě) a `local` (lokalita a odlišnosti, má ji i pobočka).
+> - Role: potvrdit smí `owner` i `admin`, Editor se nezavádí. Ruční profil je ve všech tarifech, AI část bude jen PRO a vyšší.
+> - Konflikt revize = SQLSTATE `PT409` (HTTP 409), neplatná data `PT422`, jiná verze schématu `PT412`.
+> - Popis, důkazy a otevřené body: `docs/ai-onboarding-faze1-technicke-body.md`, `docs/TESTOVACI_PROSTREDI.md`, `docs/UKOLY_PRED_PROVOZEM.md`.
+
 Vychází z dodané specifikace („Implementační specifikace AI onboardingu“) a je přizpůsobená
 **skutečnému stacku**. Projekt se nepřepisuje do Next.js a nevzniká druhý systém firem.
 
