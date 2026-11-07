@@ -50,7 +50,7 @@ export const onRequest = async ({ request: req, env }) => {
   if (!token) return json({ error: 'auth' }, 401);
   let body;
   try { body = await req.json(); } catch { return json({ error: 'bad_request' }, 400); }
-  const g = await VXGUARD.guardAi({ fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid: body?.cid, plans: Object.keys(DOC_LIMIT) });
+  const g = await VXGUARD.guardAi({ legacyResolve: true, fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid: body?.cid, plans: Object.keys(DOC_LIMIT) });
   if (!g.ok) return json({ error: g.error }, g.status);
   const uid = g.uid, cid = g.cid, plan = g.plan;
   const H = { apikey: SB_KEY, authorization: `Bearer ${token}`, 'content-type': 'application/json' };

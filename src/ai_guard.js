@@ -17,10 +17,22 @@ var VXGUARD=(function(){
  async function guardAi(o){
   var f=o.fetchFn,now=o.now||new Date();
   if(!o.token)return fail(401,'auth');
-  if(typeof o.cid!=='string'||!UUID.test(o.cid))return fail(400,'bad_request');
+  var missing=o.cid===undefined||o.cid===null||o.cid==='';
+  if(!missing&&(typeof o.cid!=='string'||!UUID.test(o.cid)))return fail(400,'bad_request');
+  if(missing&&!o.legacyResolve)return fail(400,'bad_request');
   var H={apikey:o.sbKey,authorization:'Bearer '+o.token},uid;
   try{var u=await f(o.sbUrl+'/auth/v1/user',{headers:H});if(!u.ok)return fail(401,'auth');uid=(await u.json()).id}catch(e){return fail(401,'auth')}
   if(!uid||!UUID.test(String(uid)))return fail(401,'auth');
+  /* PŘECHODNÉ (staré otevřené stránky a PWA neposílají cid): firmu určí server, ale jen když je uživatel vlastníkem nebo správcem
+     právě JEDNÉ firmy. Jinak 400 (více firem) nebo 403 (žádná). Role, členství a tarif se ověřují stejně jako s cid.
+     Odstranit, až se stará verze přestane používat (docs/NASAZENI_2026-11-07.md). */
+  if(missing){
+   var cands=[];
+   try{var r0=await f(o.sbUrl+'/rest/v1/company_members?select=company_id,role&user_id=eq.'+uid,{headers:H});var rr=r0.ok?await r0.json():[];
+    cands=(Array.isArray(rr)?rr:[]).filter(function(x){return x&&(x.role==='owner'||x.role==='admin')&&UUID.test(String(x.company_id))})}catch(e){return fail(403,'forbidden')}
+   if(cands.length===0)return fail(403,'forbidden');
+   if(cands.length>1)return fail(400,'bad_request');
+   o=Object.assign({},o,{cid:cands[0].company_id})}
   var role=null;
   try{var m=await f(o.sbUrl+'/rest/v1/company_members?select=role&company_id=eq.'+o.cid+'&user_id=eq.'+uid+'&limit=1',{headers:H});
    var rows=m.ok?await m.json():[];role=rows&&rows[0]&&rows[0].role}catch(e){return fail(403,'forbidden')}

@@ -29,7 +29,7 @@ globalThis.fetch = async (url, opts = {}) => {
   const q = new URL(url).searchParams;
   if (url.includes('/rest/v1/company_members')) {
     const c = (q.get('company_id') || '').replace('eq.', ''), u = (q.get('user_id') || '').replace('eq.', '');
-    return J(members.filter((m) => m.c === c && m.u === u && u === uid).map((m) => ({ role: m.r })));   // RLS: vidí jen své řádky
+    return J(members.filter((m) => (!c || m.c === c) && m.u === u && u === uid).map((m) => ({ company_id: m.c, role: m.r })));   // RLS: vidí jen své řádky
   }
   if (url.includes('/rest/v1/subscriptions')) {
     const c = (q.get('company_id') || '').replace('eq.', '');
@@ -56,6 +56,14 @@ for (const ep of Object.keys(EP)) {
   await t(ep + ': bez cid nebo s cizím řetězcem 400', async () => {
     for (const cid of [undefined, '', 'abc', C1 + 'x', "x' or '1'='1", 5, null]) { const r = await call(ep, bodies[ep](cid), 'owner'); assert.equal(r.status, 400, String(cid)); }
     assert.equal(calls.gemini, 0);
+  });
+  await t(ep + ': přechodné pravidlo pro staré stránky: bez cid projde jen správce právě jedné firmy', async () => {
+    const noCid = (b) => { const { cid, ...rest } = b; return rest; };
+    let r = await call(ep, noCid(bodies[ep](C1)), 'adm'); assert.equal(r.status, 200, await r.clone().text()); assert.equal(calls.gemini, 1);   // správce jediné firmy (C2)
+    reset(); r = await call(ep, noCid(bodies[ep](C1)), 'owner'); assert.equal(r.status, 400); assert.equal(calls.gemini, 0);                      // majitel dvou firem: nejednoznačné
+    r = await call(ep, noCid(bodies[ep](C1)), 'emp'); assert.equal(r.status, 403); assert.equal(calls.gemini, 0);                                  // jen zaměstnanec
+    r = await call(ep, noCid(bodies[ep](C1)), 'out'); assert.equal(r.status, 403); assert.equal(calls.gemini, 0);                                  // bez členství
+    subs[C2] = { plan: 'start', status: 'active', trial_end: null }; r = await call(ep, noCid(bodies[ep](C1)), 'adm'); assert.equal(r.status, 403); assert.equal((await r.json()).error, 'plan'); assert.equal(calls.gemini, 0);   // tarif se kontroluje i tady
   });
   await t(ep + ': zaměstnanec firmy 403 (role), Gemini se nevolá', async () => { const r = await call(ep, bodies[ep](C1), 'emp'); assert.equal(r.status, 403); assert.equal((await r.json()).error, 'forbidden'); assert.equal(calls.gemini, 0); });
   await t(ep + ': cizí uživatel a podvržené cid cizí firmy 403', async () => { const r = await call(ep, bodies[ep](C1), 'out'); assert.equal(r.status, 403); assert.equal(calls.gemini, 0); });
