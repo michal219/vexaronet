@@ -37,8 +37,8 @@ Kdy vrátit: formulář nebo veřejné RPC vrací 401/403, nebo druhá aplikace 
 ## 2) Kód: Cloudflare funkce, `_headers` a SRI
 
 **Pozor:** větev `claude/happy-bell-5266nk` obsahuje i nenasazený dashboard AI Marketing Autopilota (commit `8d586f0`).
-Merge celé větve by nasadil i dashboard. Bezpečnostní commit `01fcaff` je proto potřeba přenést samostatně:
-nová větev z `main` a `git cherry-pick 01fcaff`. Přenese se i `index.html` (jen přidaný `integrity`), protože se generuje z `build.py`.
+Merge celé větve by nasadil i dashboard. Bezpečnostní commity `01fcaff` a `98bacf4` je proto potřeba přenést samostatně:
+nová větev z `main` a `git cherry-pick 01fcaff 98bacf4` (ověřeno: bez konfliktů, testy endpointů, XSS a UI prošly). Přenese se i `index.html` (jen přidaný `integrity`), protože se generuje z `build.py`.
 Před mergem: `python3 build.py` a kontrola, že rozdíl `index.html` proti `main` obsahuje jen atribut `integrity`.
 
 | Změna | Dopad na uživatele | Riziko | Návrat |
