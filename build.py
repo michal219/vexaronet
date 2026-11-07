@@ -758,9 +758,13 @@ function tabLab(k){var P=prof();return (P.lab&&P.lab[k])||((NAV.filter(function(
 function jobNewL(){return prof().jobNew||'Nová zakázka'}
 function jobActL(){return prof().jobAct||'Aktivní zakázky'}
 function navBtn(k){return '<button type="button" data-tab="'+k+'">'+ico(k)+'<span>'+esc(tabLab(k))+'</span></button>'}
-function navHtml(){var all=NAV.map(function(n){return n[0]}),P=prof(),ord=P.nav?P.nav.filter(function(k){return all.indexOf(k)>=0}):all,rest=all.filter(function(k){return ord.indexOf(k)<0});
- return ord.map(navBtn).join('')+(rest.length?'<details class="more"'+(rest.indexOf(APP.tab)>=0?' open':'')+'><summary>'+ico('menu',18)+'<span>Další moduly</span></summary>'+rest.map(navBtn).join('')+'</details>':'')}
-function renderNav(){var n=document.querySelector('#vxside nav');if(!n)return;n.innerHTML=navHtml();[].forEach.call(document.querySelectorAll('#vxapp [data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===APP.tab)})}
+var APGRP=['autopilot','marketing','ceo','ucetni','weby','automatizace'];
+function apGroupHtml(){if(APP.role==='employee')return '';var open=APD.menu===null?(APGRP.concat(['pripady','nabidky']).indexOf(APP.tab)>=0):APD.menu,
+ it=[['autopilot','AI Marketing','marketing'],['pripady','AI Obchodník','zakaznici'],['ceo','AI CEO','ceo'],['ucetni','AI Účetnictví','ucetni'],['weby','AI Weby a e-shopy','weby'],['automatizace','AI Automatizace','automatizace']];
+ return '<div class="apg'+(open?' ad-open':'')+'"><button type="button" class="ad-hdr" data-apgrp="1" aria-expanded="'+(open?'true':'false')+'">'+ico('autopilot',20)+'<span>AI Autopilot</span><span class="ad-chv">'+ico('chev',16)+'</span></button><div class="ad-sub">'+it.map(function(x){return '<button type="button" data-tab="'+x[0]+'">'+ico(x[2],16)+'<span>'+x[1]+'</span></button>'}).join('')+'</div></div>'}
+function navHtml(){var all=NAV.map(function(n){return n[0]}).filter(function(k){return APGRP.indexOf(k)<0}),P=prof(),ord=P.nav?P.nav.filter(function(k){return all.indexOf(k)>=0}):all,rest=all.filter(function(k){return ord.indexOf(k)<0}),first=ord.indexOf('prehled')===0;
+ return (first?navBtn('prehled'):'')+apGroupHtml()+(first?ord.slice(1):ord).map(navBtn).join('')+(rest.length?'<details class="more"'+(rest.indexOf(APP.tab)>=0?' open':'')+'><summary>'+ico('menu',18)+'<span>Další moduly</span></summary>'+rest.map(navBtn).join('')+'</details>':'')}
+function renderNav(){var n=document.querySelector('#vxside nav');if(!n)return;n.innerHTML=navHtml();[].forEach.call(document.querySelectorAll('#vxapp [data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===APP.tab||(b.dataset.tab==='autopilot'&&APP.tab==='marketing'))})}
 function stepDone(k){var d=APP.d||{},n=function(x){return x&&x.rows?x.rows.length:0};
  return k==='cust'?n(d.customers)>0:k==='jobs'?n(d.jobs)>0:k==='svc'?n(d.booking_services)>0:k==='prod'?n(d.products)>0:k==='team'?(n(d.shifts)>0||n(d.time_entries)>0||(APP.team&&APP.team.length>1)):k==='inv'?n(d.invoices)>0:k==='cal'?n(d.reservations)>0:k==='shop'?!!(d.shop_settings&&d.shop_settings.rows&&d.shop_settings.rows[0]&&d.shop_settings.rows[0].enabled):false}
 function stepsCard(){if(APP.role==='employee')return '';var P=prof(),sk='vxsteps_'+(APP.cid||'x');try{if(localStorage.getItem(sk)==='1')return ''}catch(e){}
@@ -897,7 +901,7 @@ async function openApp(){
  el=document.createElement('div');el.id='vxapp';el.className='vxapp';
  var nm=(APP.meta.full_name||u.email||'').trim(),ini=nm.split(/\s+/).map(function(w){return w.charAt(0)}).join('').slice(0,2).toUpperCase()||'V';
  function nb(t){return '<button type="button" data-tab="'+t[0]+'">'+ico(t[0])+'<span>'+t[1]+'</span></button>'}
- el.innerHTML='<aside id="vxside"><div class="vlogo"><svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><path d="M5 7l11 19L27 7" fill="none" stroke="#8b6cff" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/></svg><div><b>VEXARONET</b><small>AI CEO <span class="beta">BETA</span></small></div></div><nav>'+navHtml()+Object.keys(SOON).map(function(k){return '<button type="button" data-tab="'+k+'" class="soon">'+ico(k)+'<span>'+SOON[k][0]+'</span><em>brzy</em></button>'}).join('')+'</nav><div class="sfoot"><button type="button" data-app="fb">'+ico('fb')+'<span>Něco nefunguje?</span></button><button type="button" data-tab="profil">'+ico('profil')+'<span>Nastavení</span></button><div class="subc" id="subCard"></div></div></aside><div class="scrim" data-app="side"></div>'
+ el.innerHTML='<aside id="vxside"><div class="vlogo"><svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><path d="M5 7l11 19L27 7" fill="none" stroke="#8b6cff" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/></svg><div><b>VEXARONET</b><small>AI CEO <span class="beta">BETA</span></small></div></div><nav>'+navHtml()+Object.keys(SOON).map(function(k){return '<button type="button" data-tab="'+k+'" class="soon">'+ico(k)+'<span>'+SOON[k][0]+'</span><em>brzy</em></button>'}).join('')+'</nav><div class="sfoot">'+(typeof apAgentsHtml==='function'?apAgentsHtml():'')+'<button type="button" data-app="fb">'+ico('fb')+'<span>Něco nefunguje?</span></button><button type="button" data-tab="profil">'+ico('profil')+'<span>Nastavení</span></button><div class="subc" id="subCard"></div></div></aside><div class="scrim" data-app="side"></div>'
  +'<div class="vxmain"><header><button type="button" class="ib burger" data-app="side" aria-label="Menu">'+ico('menu')+'</button><form class="gs" id="gsForm" autocomplete="off"><span class="si">'+ico('search',18)+'</span><input id="gsIn" placeholder="Zeptejte se AI CEO nebo napište, co potřebujete…" maxlength="400" aria-label="Zeptat se AI CEO"><kbd>Ctrl + K</kbd></form><div class="bellw"><button type="button" class="ib" data-app="bell" aria-label="Notifikace">'+ico('bell')+'<i class="bdg" id="appBdg"></i></button><div class="pop" id="appBell"></div></div><button type="button" class="ib" data-app="theme" aria-label="Světlý a tmavý režim">'+ico('sun')+'</button><button type="button" class="usr" data-tab="profil"><span class="ib av">'+esc(ini)+'</span><span class="un"><b>'+esc(nm.split('@')[0])+'</b><small>'+esc(APP.co)+'</small></span></button><button type="button" class="btn btn-ghost btn-sm webb" data-app="close">Web</button></header><main id="appMain"></main></div><div class="toast" id="appToast" role="status"></div>';
  if(DEMO)el.insertAdjacentHTML('beforeend','<div class="demobar" role="region" aria-label="Ukázka aplikace"><span><b>DEMO</b><i class="demot2"> ukázková data, nic se neukládá</i></span><button type="button" class="btn btn-ghost btn-sm demot" aria-expanded="false" aria-controls="demoOb">Obor</button><label class="demoob">Obor: <select id="demoOb" aria-label="Zobrazit aplikaci pro obor">'+Object.keys(OB).map(function(k){return '<option'+(k===obKey(APP.ind)?' selected':'')+'>'+esc(k)+'</option>'}).join('')+'</select></label><button type="button" class="btn btn-main btn-sm" data-demo-signup="1">Založit účet zdarma</button><button type="button" class="btn btn-ghost btn-sm" data-app="close">Ukončit ukázku</button></div>');document.body.appendChild(el);document.documentElement.style.overflow='hidden';
  await refresh(true);if(!allowed(APP.tab))APP.tab='profil';appTab(APP.tab)}
@@ -917,7 +921,7 @@ function appTab(t){
  APP.tab=t;var el=A('vxapp');if(!el)return;el.classList.remove('side');
  [].forEach.call(el.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
  var m=A('appMain');try{m.innerHTML=!allowed(t)?lockView(t):(VIEWS[t]?VIEWS[t]():soonView(t))}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
- m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]();if(typeof apBar==='function')apBar()}
+ m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]();if(typeof apBar==='function')apBar();if(typeof apNavSync==='function')apNavSync()}
 function lockView(t){if(document.documentElement.classList.contains('appmode'))return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>Tarif a předplatné se spravují na webu vexaronet.com. Po změně tarifu se tato část v aplikaci odemkne.</p></div>';return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><button class="btn btn-ghost btn-sm" type="button" data-app="plan">Změnit tarif</button></div><p class="mut fine">Platební brána zatím není připojená. Žádost o vyšší tarif vyřídíme ručně.</p></div>'}
 function errBox(x){return x.err?'<div class="draft">Data se nepodařilo načíst: '+esc(x.err)+'</div>':''}
 function soonView(t){var s=SOON[t];return '<div class="card2 soonc"><span class="eyebrow">Etapa '+s[2]+' · připravujeme</span><h2>'+esc(s[0])+'</h2><p>'+esc(s[1])+'</p><div class="draft">Tento modul zatím není hotový ani připojený. Nic zde neukládáme ani nepředstíráme. Ozveme se, až bude k dispozici.</div></div>'}
@@ -2317,6 +2321,7 @@ cf.addEventListener('submit',function(e){e.preventDefault();var t=cin.value.trim
 @@CRM@@
 @@PROFIL@@
 @@AUTOPILOT@@
+@@APDASH@@
 })();
 </script>
 </body>
@@ -2333,6 +2338,7 @@ out = out.replace('@@PROFIL@@', _nm(open('src/jsonschema_mini.js',encoding='utf-
     + '\nvar VXPSCHEMA=' + json.dumps(json.load(open('src/onboarding_schema.json',encoding='utf-8')), ensure_ascii=False, separators=(',', ':')) + ';\n'
     + open('src/profile_ui.js',encoding='utf-8').read())
 out = out.replace('@@AUTOPILOT@@', _nm(open('src/autopilot_core.js',encoding='utf-8').read()) + '\n' + open('src/autopilot_ui.js',encoding='utf-8').read())
+out = out.replace('@@APDASH@@', open('src/autopilot_dash.js',encoding='utf-8').read())
 assert '@@' not in out
 open(D + 'index.html', 'w', encoding='utf-8').write(out)
 print('OK', len(out))
