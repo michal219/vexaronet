@@ -15,8 +15,11 @@ Větev `claude/happy-bell-5266nk` obsahuje tři nezávislé sady:
 - **právní soulad** (commit s tímto dokumentem).
 
 Právní soulad staví na bezpečnostních opravách: `_headers`, SRI a `src/ai_guard.js`. Postup na samostatné větvi z `main`:
-1. `git cherry-pick 01fcaff 98bacf4 b0d47ad <commit právního souladu>`. Dashboard nepřenášet.
-2. `python3 build.py`. Rozdíl `index.html` proti `main` nesmí obsahovat dashboard (`apd`).
+1. `git cherry-pick 01fcaff 98bacf4 b0d47ad b429fff`. Dashboard nepřenášet.
+2. U `b429fff` vznikne **jeden konflikt** v `build.py`: řádek pro `@@APDASH@@`, který na `main` neexistuje. Ponechat jen řádek `@@CONSENT@@`.
+3. `python3 build.py`, pak commitnout `build.py` a `index.html` a `git cherry-pick --continue`.
+
+Tento postup jsem 10. 11. ověřil v dočasné kopii `main`. `index.html` neobsahoval dashboard a prošly `legal_ui`, `xss_ui`, `eshop`, `autopilot_ui`, `profile_ui`, `legal_e2e`, `ai_endpoints` i `run_legal_local.sh`.
 
 Doporučené pořadí: **(1) DB DSA → (2) web a funkce → (3) DB marketing, až budou údaje odesílatele.**
 Části 1 a 3 jsou na sobě nezávislé. Když se nasadí web (2) bez DSA migrace (1), formulář `/nahlasit/` vrátí „nepodařilo se, napište na info@…“. Funguje to tedy, jen bez evidence.
