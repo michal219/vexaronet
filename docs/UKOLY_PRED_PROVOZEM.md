@@ -17,7 +17,8 @@ se před ostrým provozem nesmí zapnout, dokud nejsou položky označené „bl
 
 ## Ú2. Bezpečnostní nálezy z auditu (blokují provoz, dokud nejsou vyřešené nebo vyhodnocené)
 
-Žádný z návrhů SQL jsem nespustil. Každý je třeba nejdřív vyzkoušet na testovacím projektu.
+**Aktualizace 2026-11-08:** nálezy a, b, d mají připravenou migraci `db/migrations/20261108100000_bezpecnostni_opravy.sql` s ověřenými dopady (`docs/BEZPECNOSTNI_OPRAVY.md`), nález e je vyhodnocen jako neopravovaný, nález c je nastavení v dashboardu.
+Nic z toho není aplikované na produkci. Před aplikací je nutný váš souhlas a zkouška na testovacím projektu.
 
 | # | Nález [OVĚŘENO v živé DB] | Dopad | Návrh | Rizika změny |
 |---|---|---|---|---|

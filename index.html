@@ -1228,14 +1228,14 @@ function stepsCard(){if(APP.role==='employee')return '';var P=prof(),sk='vxsteps
  var st=(P.steps||[]).map(function(s){return {t:s[0],go:s[1],done:stepDone(s[2])}}),dn=st.filter(function(x){return x.done}).length;if(!st.length||dn===st.length)return '';
  return '<section class="card2 steps"><div class="bar2"><div><h3>Začínáme: '+esc(obKey(APP.ind))+'</h3><p class="mut">Postup přizpůsobený vašemu oboru. Hotovo '+dn+' z '+st.length+'.</p></div><button type="button" class="btn btn-ghost btn-sm" data-app="stepsoff">Skrýt</button></div><ul class="stl">'+st.map(function(x){return '<li class="'+(x.done?'ok':'')+'"><button type="button" data-tab="'+x.go+'"><i aria-hidden="true">'+(x.done?'✓':'')+'</i><span>'+esc(x.t)+'</span></button></li>'}).join('')+'</ul></section>'}
 function ceoQs(){var P=prof();return P.q||CEOQ}
-var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['pripady','Obchodní případy'],['nabidky','Nabídky'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['sklad','Sklad a produkty'],['eshop','E-shop'],['pobocky','Pobočky'],['zamestnanci','Zaměstnanci'],['firmaprofil','Profil firmy']];
+var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['pripady','Obchodní případy'],['nabidky','Nabídky'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['sklad','Sklad a produkty'],['eshop','E-shop'],['pobocky','Pobočky'],['zamestnanci','Zaměstnanci'],['firmaprofil','Profil firmy'],['autopilot','Autopilot']];
 var SOON={};
 var PLANN={start:'START',starter:'START',accountant:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet BUSINESS',enterprise:'ENTERPRISE'},STATN={demo:'ukázka',trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
 var PLANLIM={start:'CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel. Bez AI CEO.',accountant:'1 uživatel, 100 AI vytěžených dokladů měsíčně.',pro:'3 uživatelé, 150 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',business:'10 uživatelů, 500 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',enterprise:'Individuální limity podle dohody.'};
 function effPlan(){var s=APP.sub;if(!s)return 'start';var p=String(s.plan||'').toLowerCase();if(p==='starter')p='start';if(p==='ucetni')p='accountant';if(p==='start')return p;var ended=(s.status==='trial'&&s.trial_end&&new Date(s.trial_end)<new Date())||s.status==='expired'||s.status==='canceled';return ended?'start':p}
 function hasCeo(){return ['pro','business','enterprise'].indexOf(effPlan())>=0}
 var TEAMLIM={start:1,accountant:2,pro:3,business:10,enterprise:1000},ROLEN={owner:'Majitel',admin:'Správce',employee:'Zaměstnanec'};
-function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','zamestnanci','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','pripady','nabidky','zakazky','ukoly','faktury','finance','kalendar','online','reporty','automatizace','firmaprofil','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','firmaprofil','profil'].indexOf(t)>=0;return true}
+function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','zamestnanci','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','pripady','nabidky','zakazky','ukoly','faktury','finance','kalendar','online','reporty','automatizace','firmaprofil','autopilot','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','firmaprofil','autopilot','profil'].indexOf(t)>=0;return true}
 function limitMsg(k){if(effPlan()!=='start')return '';var d=APP.d;if(k==='customers'&&d.customers.rows.length>=50)return 'Tarif START umožňuje nejvýše 50 zákazníků.';if(k==='jobs'&&d.jobs.rows.length>=10)return 'Tarif START umožňuje evidovat nejvýše 10 zakázek.';if(k==='invoices'){var m=new Date(new Date().getFullYear(),new Date().getMonth(),1);if(d.invoices.rows.filter(function(x){return new Date(x.issued_on||x.created_at)>=m}).length>=10)return 'Tarif START umožňuje nejvýše 10 faktur měsíčně.'}return ''}
 function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
 function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ',{maximumFractionDigits:2})+' '+esc(!cur||cur==='CZK'?'Kč':cur)}
@@ -1378,7 +1378,7 @@ function appTab(t){
  APP.tab=t;var el=A('vxapp');if(!el)return;el.classList.remove('side');
  [].forEach.call(el.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
  var m=A('appMain');try{m.innerHTML=!allowed(t)?lockView(t):(VIEWS[t]?VIEWS[t]():soonView(t))}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
- m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]()}
+ m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]();if(typeof apBar==='function')apBar()}
 function lockView(t){if(document.documentElement.classList.contains('appmode'))return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>Tarif a předplatné se spravují na webu vexaronet.com. Po změně tarifu se tato část v aplikaci odemkne.</p></div>';return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><button class="btn btn-ghost btn-sm" type="button" data-app="plan">Změnit tarif</button></div><p class="mut fine">Platební brána zatím není připojená. Žádost o vyšší tarif vyřídíme ručně.</p></div>'}
 function errBox(x){return x.err?'<div class="draft">Data se nepodařilo načíst: '+esc(x.err)+'</div>':''}
 function soonView(t){var s=SOON[t];return '<div class="card2 soonc"><span class="eyebrow">Etapa '+s[2]+' · připravujeme</span><h2>'+esc(s[0])+'</h2><p>'+esc(s[1])+'</p><div class="draft">Tento modul zatím není hotový ani připojený. Nic zde neukládáme ani nepředstíráme. Ozveme se, až bude k dispozici.</div></div>'}
@@ -2165,7 +2165,7 @@ async function webAI(){
  if(!hasCeo()){webSt('AI návrh textů je v tarifu PRO a vyšších.','err');return}
  if(APP.busy)return;APP.busy=true;webSt('AI píše návrh, bývá to pár sekund…','ok');
  try{var ses=(await getSb().auth.getSession()).data.session;
-  var r=await dfetch('/api/web-ai',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({name:APP.co,description:ds})});
+  var r=await dfetch('/api/web-ai',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,name:APP.co,description:ds})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.site){var c=j&&j.error;webSt(r.status===403?'AI návrh textů je v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':c==='not_configured'?'AI zatím není na serveru zapnutá. Napište nám na info@vexaronet.com.':'Návrh se nepodařilo vytvořit. Zkuste to znovu.','err');return}
   webFill(j.site);webSt((j.demo?'Ukázkový návrh (v ostrém účtu ho píše AI podle vašeho popisu). ':'')+'Návrh je ve formuláři, ještě není uložený. Zkontrolujte texty a upravte je podle sebe.','ok')
@@ -2209,7 +2209,7 @@ async function mkGen(){
  if(!hasCeo()){mkSt('Návrhy od AI jsou v tarifu PRO a vyšších.','err');return}
  if(APP.busy)return;APP.busy=true;mkSt('AI píše návrh, bývá to pár sekund…','ok');A('mkRes').innerHTML='';
  try{var ses=(await getSb().auth.getSession()).data.session;
-  var r=await dfetch('/api/marketing',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({kind:A('mk_kind').value,tone:A('mk_tone').value,topic:tp,name:APP.co})});
+  var r=await dfetch('/api/marketing',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,kind:A('mk_kind').value,tone:A('mk_tone').value,topic:tp,name:APP.co})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.text){var c=j&&j.error;mkSt(r.status===403?'Návrhy od AI jsou v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':c==='not_configured'?'AI zatím není na serveru zapnutá. Napište nám na info@vexaronet.com.':'Návrh se nepodařilo vytvořit. Zkuste to znovu.','err');return}
   mkSt((j.demo?'Ukázkový návrh (v ostrém účtu ho píše AI podle vašeho zadání). ':'')+'Zkontrolujte text a doplňte údaje ve značkách [doplnit].','ok');
@@ -2262,7 +2262,7 @@ function rpPrint(){var k=APP.rpP||'m0',rows=rpRows(k,rpData(k)),fr=document.crea
 async function rpAI(){
  if(!hasCeo()){return}if(APP.busy)return;APP.busy=true;var k=APP.rpP||'m0',x=rpData(k),st=A('rpSt');st.className='st ok';st.textContent='AI čte čísla, bývá to pár sekund…';A('rpAi').innerHTML='';
  try{var ses=(await getSb().auth.getSession()).data.session,sm={obdobi:(RPP.filter(function(p){return p[0]===k})[0]||[0,''])[1],fakturovano_kc:x.issS,faktur_vystaveno:x.issN,zaplaceno_kc:x.paidS,po_splatnosti_kc:x.overS,po_splatnosti_pocet:x.overN,nezaplaceno_kc:x.unpS,prijmy_evidence_kc:x.feI,vydaje_evidence_kc:x.feE,nove_zakazky:x.jobsNew,otevrene_zakazky:x.jobsOpen,novi_zakaznici:x.custNew,rezervace:x.resN,rezervace_zrusene:x.resC};
-  var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({messages:[{role:'user',content:'Shrň stručně tento report za zvolené období a upozorni na největší rizika a doporuč 2 až 3 další kroky.'}],summary:sm})});
+  var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,messages:[{role:'user',content:'Shrň stručně tento report za zvolené období a upozorni na největší rizika a doporuč 2 až 3 další kroky.'}],summary:sm})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.reply){st.className='st err';st.textContent=r.status===403?'Shrnutí je v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':'Shrnutí se nepodařilo vytvořit. Zkuste to znovu.';return}
   st.textContent='';A('rpAi').innerHTML='<div class="draft" style="white-space:pre-wrap">'+esc(j.reply)+'</div>'
@@ -2631,7 +2631,7 @@ async function delEnt(form){
 function themeToggle(){var r=document.documentElement,n=r.getAttribute('data-theme')==='light'?'dark':'light';r.setAttribute('data-theme',n);try{localStorage.setItem('vx-theme',n)}catch(e){}}
 async function askAI(msgs,out){
  var ses=(await getSb().auth.getSession()).data.session;if(!ses){out('Přihlášení vypršelo. Přihlaste se znovu.');return null}
- try{var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify({messages:msgs,summary:summary()})});
+ try{var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify({cid:APP.cid,messages:msgs,summary:summary()})});
   if(r.status===403){out('AI CEO je součástí tarifu Vexaronet PRO a vyšších.');return null}
   if(r.status===429){out('Příliš mnoho dotazů. Zkuste to za chvíli.');return null}
   if(!r.ok)throw new Error(r.status);var d=await r.json();if(!d.reply)throw new Error('e');return d.reply}catch(e){out('AI poradce teď není dostupný. Zkuste to později.');return null}}
@@ -3459,6 +3459,115 @@ document.addEventListener('submit',function(e){
  if(!e.target||e.target.id!=='coForm')return;e.preventDefault();
  var v=A('coSel').value;try{localStorage.setItem('vx_active_company_'+APP.user.id,v)}catch(x){}
  if(v!==APP.cid)openApp()});
+
+/* Vexaronet AI Autopilot: čistá logika (bez DOM) pro přepínač režimů a nastavení limitu.
+   Peníze se převádějí celočíselně (nanodolary), nikdy přes desetinná čísla. */
+var VXAP=(function(){
+ var MAX_NUSD=50000000000n; /* 50 USD, stejný strop jako databáze */
+ /* "0,25" nebo "0.25" -> "250000000" (nUSD, text). Neplatné vstupy vrací null. */
+ function usdToNusd(s){
+  s=String(s==null?'':s).trim().replace(/\s/g,'').replace(',','.');
+  var m=/^(\d{1,3})(?:\.(\d{1,9}))?$/.exec(s);if(!m)return null;
+  var n=BigInt(m[1])*1000000000n+BigInt((m[2]||'').padEnd(9,'0'));
+  return n>MAX_NUSD?null:n.toString()}
+ function nusdToUsd(n){return Number(n)/1e9}
+ function fmtUsd(n,max){if(n==null)return '–';return nusdToUsd(n).toLocaleString('cs-CZ',{minimumFractionDigits:2,maximumFractionDigits:max==null?4:max})+' USD'}
+ /* cena za 1 M tokenů v USD z ceny za jeden token v nUSD (300 nUSD/token = 0,30 USD / 1 M) */
+ function perMillionUsd(nusdPerToken){return Number(nusdPerToken)/1000}
+ var MODES=[
+  {id:'marketing',name:'AI Marketing',tab:'marketing',tabs:['marketing','zakaznici'],state:'lim',needs:'pro',text:'Návrhy příspěvků, newsletterů a reklam a plán obsahu. Nic se samo nepublikuje ani neodesílá.'},
+  {id:'obchodnik',name:'AI Obchodník',tab:'pripady',tabs:['pripady','nabidky','zakaznici'],state:'soon',needs:'pro',text:'Obchodní případy a nabídky (CRM) fungují. Samotný AI obchodník zatím není hotový.'},
+  {id:'ceo',name:'AI CEO',tab:'ceo',tabs:['ceo','reporty','finance'],state:'lim',needs:'pro',text:'Zdraví firmy, doporučení a chat nad vašimi daty. Radí, nic neprovádí.'},
+  {id:'ucetnictvi',name:'AI Účetnictví',tab:'ucetni',tabs:['ucetni','faktury','finance','reporty'],state:'lim',needs:'accountant',text:'Vytěžení dokladů ke kontrole a odpovědi z vaší evidence. Účetní a daňové věci ověřte s odborníkem.'},
+  {id:'weby_eshopy',name:'AI Weby a e-shopy',tab:'weby',tabs:['weby','eshop','sklad','online'],state:'lim',needs:'pro',text:'AI návrh textů webu. E-shop, sklad a online rezervace fungují bez AI.'},
+  {id:'automatizace',name:'AI Automatizace',tab:'automatizace',tabs:['automatizace'],state:'lim',needs:'start',text:'Pravidla navrhují úkoly, které potvrdíte vy. Běh na pozadí a automatické zprávy zákazníkům zatím nejsou.'}];
+ var STATE={on:'dostupné',lim:'omezeně',soon:'připravujeme'};
+ /* Některé záložky (zákazníci, finance, reporty) patří do více režimů. Když je otevřená záložka v preferovaném
+    (naposledy zvoleném) režimu, zůstane ten; jinak se vezme první režim, který ji obsahuje. */
+ function modeOfTab(tab,prefer){var i;if(tab==='autopilot')return 'home';
+  for(i=0;i<MODES.length;i++)if(MODES[i].id===prefer&&MODES[i].tabs.indexOf(tab)>=0)return prefer;
+  for(i=0;i<MODES.length;i++)if(MODES[i].tabs.indexOf(tab)>=0)return MODES[i].id;return null}
+ /* Připravenost k placeným AI během: každý bod musí platit. Vrací seznam {ok,text}. */
+ function readiness(st,profileOk){
+  return [
+   {ok:!!st.plan_allowed,text:'Tarif hlavní firmy je PRO nebo vyšší'},
+   {ok:profileOk===true,text:profileOk==null?'Profil firmy potvrzen (nelze zjistit)':'Profil firmy je potvrzený'},
+   {ok:st.monthly_limit_nusd!=null&&Number(st.monthly_limit_nusd)>0,text:'Měsíční limit je nastaven'},
+   {ok:!!st.platform_paid_runs_enabled,text:'Placené běhy povolil provozovatel platformy'}]}
+ return {usdToNusd:usdToNusd,fmtUsd:fmtUsd,perMillionUsd:perMillionUsd,MODES:MODES,STATE:STATE,modeOfTab:modeOfTab,readiness:readiness,MAX_NUSD:MAX_NUSD}
+})();
+if(0&&typeof module!=='undefined')module.exports=VXAP;
+
+/* ===== AI Autopilot: horní přepínač režimů a přehled stavu a bezpečnosti =====
+   Tato část NESPOUŠTÍ žádné volání AI. Přepínač jen otevírá existující moduly a přehled zobrazuje a nastavuje
+   měsíční limit (RPC autopilot_status / autopilot_set_budget). Vynucování limitu probíhá v databázi. */
+IC.autopilot='M12 2l2.2 5.4L20 9l-4.4 3.6L17 19l-5-3-5 3 1.4-6.4L4 9l5.8-1.6z';
+var APS={mode:null};
+function apStyle(){if(document.getElementById('apCss'))return;var s=document.createElement('style');s.id='apCss';
+ s.textContent='.apbar{display:flex;gap:8px;overflow-x:auto;padding:6px 20px 8px;white-space:nowrap;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.apbar .apb{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid rgba(139,108,255,.35);background:rgba(139,108,255,.08);color:inherit;font:inherit;font-size:.92rem;cursor:pointer}.apbar .apb:hover{background:rgba(139,108,255,.18)}.apbar .apb.on{background:rgba(139,108,255,.34);border-color:rgba(139,108,255,.9);font-weight:600}.apbar .apb:focus-visible{outline:2px solid #8b6cff;outline-offset:2px}.apbar .apt{font-style:normal;font-size:.72rem;padding:2px 7px;border-radius:999px;background:rgba(128,128,160,.22)}.apbar .apt.soon{background:rgba(255,190,80,.22)}.apbar .apt.lock{background:rgba(220,60,80,.2)}.apsub{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:0 20px 8px;font-size:.88rem}.apsub .mut{flex:1 1 280px}.apsub button{font:inherit;font-size:.85rem}.ap .apgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.ap .apcard{padding:14px;border-radius:14px;border:1px solid rgba(128,128,160,.3)}.ap .apcard h4{margin:0 0 6px}.ap .apmeter{height:10px;border-radius:999px;background:rgba(128,128,160,.25);overflow:hidden;margin:8px 0}.ap .apmeter i{display:block;height:100%;background:#8b6cff}.ap .apchk{list-style:none;padding:0;margin:8px 0}.ap .apchk li{padding:4px 0}.ap .apchk b{display:inline-block;width:1.4em}.ap .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.ap .apok{color:#5fd18a}.ap .apno{color:#ff9aa8}@media(max-width:640px){.apbar,.apsub{padding-left:12px;padding-right:12px}}';
+ document.head.appendChild(s)}
+function apNeedsOk(m){var p=effPlan();if(m.needs==='start')return true;if(m.needs==='accountant')return ['accountant','pro','business','enterprise'].indexOf(p)>=0;return ['pro','business','enterprise'].indexOf(p)>=0}
+function apBar(){
+ var main=A('appMain'),root=A('vxapp');if(!main||!root)return;
+ var bar=A('apBar'),sub=A('apSub');
+ if(APP.role==='employee'){if(bar)bar.remove();if(sub)sub.remove();return}
+ apStyle();
+ if(!bar){bar=document.createElement('nav');bar.id='apBar';bar.className='apbar';bar.setAttribute('aria-label','Režimy AI Autopilota');main.parentNode.insertBefore(bar,main)}
+ if(!sub){sub=document.createElement('div');sub.id='apSub';sub.className='apsub';main.parentNode.insertBefore(sub,main)}
+ var cur=VXAP.modeOfTab(APP.tab,APS.mode);if(cur&&cur!=='home')APS.mode=cur;
+ bar.innerHTML='<button type="button" class="apb'+(cur==='home'?' on':'')+'" data-tab="autopilot" data-ap="home"'+(cur==='home'?' aria-current="page"':'')+'>'+ico('autopilot',16)+'<span>Autopilot</span></button>'
+  +VXAP.MODES.map(function(m){var locked=!apNeedsOk(m)||!allowed(m.tab),tag=locked?'<i class="apt lock">'+(m.needs==='accountant'?'AI Účetní+':'PRO+')+'</i>':'<i class="apt '+m.state+'">'+VXAP.STATE[m.state]+'</i>';
+   return '<button type="button" class="apb'+(cur===m.id?' on':'')+'" data-tab="'+m.tab+'" data-ap="'+m.id+'"'+(cur===m.id?' aria-current="page"':'')+'><span>'+esc(m.name)+'</span>'+tag+'</button>'}).join('');
+ var m=VXAP.MODES.filter(function(x){return x.id===cur})[0];
+ if(!m){sub.innerHTML=cur==='home'?'<span class="mut">Přehled Autopilota: stav, limit a bezpečnost. Autopilot zatím nespouští žádné placené volání.</span>':'';sub.style.display=cur==='home'?'':'none';return}
+ sub.style.display='';
+ sub.innerHTML='<span class="mut"><b>'+esc(m.name)+'</b> ('+esc(VXAP.STATE[m.state])+'): '+esc(m.text)+'</span>'
+  +m.tabs.map(function(t){return '<button type="button" class="btn btn-ghost btn-sm" data-tab="'+t+'">'+esc(tabLab(t))+'</button>'}).join('')}
+/* ---- přehled Autopilota ---- */
+function apCard(m){var ok=apNeedsOk(m)&&allowed(m.tab);
+ return '<div class="apcard"><h4>'+esc(m.name)+' <small class="mut">· '+esc(VXAP.STATE[m.state])+'</small></h4><p class="mut">'+esc(m.text)+'</p>'
+  +(ok?'<button type="button" class="btn btn-ghost btn-sm" data-tab="'+m.tab+'">Otevřít</button>':'<small class="mut">Součástí vyššího tarifu.</small>')+'</div>'}
+function apErr(res,what){
+ var e=res.error,c=String(e.code||''),msg=String(e.message||'');
+ if(c==='42501'||/forbidden|read_only/.test(msg))return 'K nastavení nemáte oprávnění, nebo je účet jen pro čtení.';
+ if(/function|schema cache|does not exist|PGRST20/i.test(msg+c))return what+' vyžaduje aktualizaci databáze, která zatím nebyla provedena.';
+ return what+' se nepodařilo načíst ('+msg+').'}
+async function apLoad(){
+ var root=A('apRoot');if(!root)return;
+ if(DEMO){root.innerHTML='<div class="draft">V ukázce se stav limitu nezobrazuje.</div>'+apModesHtml();return}
+ var c=getSb(),cid=APP.cid,st=await c.rpc('autopilot_status',{cid:cid}),pr=await c.rpc('profile_get',{cid:cid});
+ if(!A('apRoot'))return;
+ var h='';
+ if(st.error){root.innerHTML='<div class="draft">'+esc(apErr(st,'Stav limitu'))+'</div>'+apModesHtml();return}
+ var s=st.data,profileOk=pr.error?null:(pr.data.is_root?!!pr.data.active:!!pr.data.shared_from_root),
+  lim=s.monthly_limit_nusd,spent=Number(s.spent_nusd||0),pct=lim?Math.min(100,Math.round(spent/Number(lim)*100)):0,rd=VXAP.readiness(s,profileOk),all=rd.every(function(r){return r.ok});
+ h+='<section class="card2"><h3>Placené AI běhy</h3><p>'+(all?'<b class="apok">Podmínky jsou splněné.</b> I tak Autopilot zatím žádné placené volání nespouští; funkce se zapínají postupně.':'<b class="apno">Placené AI běhy jsou vypnuté.</b> Autopilot zatím nespouští žádné placené volání.')+'</p><ul class="apchk">'
+  +rd.map(function(r){return '<li><b class="'+(r.ok?'apok':'apno')+'" aria-hidden="true">'+(r.ok?'✓':'✗')+'</b>'+esc(r.text)+'<span class="sr">'+(r.ok?' splněno':' nesplněno')+'</span></li>'}).join('')+'</ul></section>';
+ h+='<section class="card2"><h3>Měsíční limit nákladů na AI</h3>'
+  +'<p>'+(lim==null?'Limit zatím <b>není nastaven</b>, placené běhy se proto odmítnou.':'Limit: <b>'+esc(VXAP.fmtUsd(lim))+'</b> měsíčně pro celou firmu včetně poboček.')+'</p>'
+  +(lim!=null?'<div class="apmeter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'" aria-label="Využití měsíčního limitu"><i style="width:'+pct+'%"></i></div><p class="mut">Tento měsíc: '+esc(VXAP.fmtUsd(spent))+' ('+pct+' %), zbývá '+esc(VXAP.fmtUsd(s.remaining_nusd))+'. Rezervace za běžící operace se počítají v plné výši.</p>':'')
+  +(s.is_root?'<form id="apBudgetForm" class="fg"><div class="f"><label for="apLimit">Limit na měsíc (USD, nejvýše 50)</label><input id="apLimit" inputmode="decimal" autocomplete="off" value="'+(lim==null?'':esc(String(Number(lim)/1e9).replace('.',',')))+'" placeholder="0,25"><small class="fe" id="apLimitErr" style="display:block;color:#ff9aa8"></small></div>'
+   +'<div class="f"><button class="btn btn-main btn-sm" type="submit">Uložit limit</button> <button class="btn btn-ghost btn-sm" type="button" data-ap-act="preset">Doporučených 0,25 USD</button> '+(lim!=null?'<button class="btn btn-ghost btn-sm" type="button" data-ap-act="clear">Zrušit limit</button>':'')+'</div></form><p class="mut fine">Uložení limitu nespustí žádné volání AI. Hlídá ho databáze: před každým během se rezervuje nejvyšší možná cena a při překročení se běh odmítne.</p>':'<p class="mut">Limit nastavuje a vidí hlavní firma.</p>')
+  +'<div id="apBudgetMsg" class="st" role="status" aria-live="polite"></div></section>';
+ h+='<section class="card2"><h3>Ceník modelu</h3>'+((s.models||[]).length?'<ul class="rows">'+s.models.map(function(m){return '<li><b>'+esc(m.model)+'</b><span>vstup '+esc(VXAP.perMillionUsd(m.input_nusd_per_token).toFixed(2).replace('.',','))+' USD, výstup '+esc(VXAP.perMillionUsd(m.output_nusd_per_token).toFixed(2).replace('.',','))+' USD za 1 M tokenů · ověřeno '+esc(String(m.verified_on))+'</span></li>'}).join('')+'</ul><p class="mut fine">Zdroj: oficiální ceník Google (Standard). Model bez ověřené ceny se odmítne.</p>':'<p class="mut">Žádný model nemá ověřenou cenu, placené běhy nejsou možné.</p>')+'</section>';
+ root.innerHTML=h+apModesHtml()}
+function apModesHtml(){return '<h3 style="margin:18px 0 8px">Režimy</h3><div class="apgrid">'+VXAP.MODES.map(apCard).join('')+'</div><section class="card2" style="margin-top:14px"><h3>Jak je to zabezpečené</h3><ul class="ticks"><li>AI jen navrhuje. Nic nepublikuje, neodesílá ani neplatí bez vašeho potvrzení.</li><li>Potvrzovat smí jen vlastník nebo správce, vždy pod svou přihlášenou identitou.</li><li>Náklady hlídá databáze (rezervace před během, vypořádání po něm), ne prohlížeč.</li><li>Data firem jsou oddělená; AI dostane jen údaje potřebné pro danou úlohu.</li></ul></section>'}
+async function apSaveLimit(nusd){
+ var msg=A('apBudgetMsg');if(msg){msg.className='st';msg.textContent='Ukládám…'}
+ var r=await getSb().rpc('autopilot_set_budget',{cid:APP.cid,p_limit_nusd:nusd==null?null:Number(nusd)});
+ if(r.error){var m=VXPCORE.mapRpcError(r.error),t=m.kind==='validation'?'Limit musí být od 0 do 50 USD.':(String(r.error.message||'')==='only_root'?'Limit nastavuje hlavní firma.':m.message);if(msg){msg.className='st err';msg.textContent=t}return}
+ toast(nusd==null?'Limit zrušen.':'Limit uložen.','ok');await apLoad()}
+VIEWS.autopilot=function(){apStyle();if(APP.role==='employee')return '<div class="card2 soonc"><h2>Autopilot</h2><p>Autopilot spravuje vlastník nebo správce.</p></div>';
+ return '<div class="ap" id="apRoot"><p class="mut">Načítám stav Autopilota…</p></div>'};
+AFTER.autopilot=function(){if(APP.role!=='employee')apLoad()};
+if(!window.__apBound){window.__apBound=true;
+ document.addEventListener('submit',function(e){if(e.target.id!=='apBudgetForm')return;e.preventDefault();
+  var v=A('apLimit').value,n=VXAP.usdToNusd(v),er=A('apLimitErr');
+  if(n==null){er.textContent='Zadejte částku od 0 do 50 USD, např. 0,25.';return}
+  er.textContent='';apSaveLimit(n)});
+ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-ap-act]');if(!b)return;var a=b.getAttribute('data-ap-act');
+  if(a==='preset'){A('apLimit').value='0,25';A('apLimitErr').textContent=''}
+  if(a==='clear'){apSaveLimit(null)}})}
 
 })();
 </script>
