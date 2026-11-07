@@ -19,7 +19,7 @@ q -f db/test/00_local_supabase_shim.sql
 q -f db/test/01_base_stub.sql
 
 echo "== Věrnost základu: otisk funkcí opsaných z živé databáze musí odpovídat snapshotu"
-for fn in "member_role(cid uuid)" "writable(cid uuid)" "business_root(cid uuid)"; do
+for fn in "member_role(cid uuid)" "writable(cid uuid)" "business_root(cid uuid)" "booking_plan_allowed(cid uuid)"; do
   want=$(grep -F "private.$fn " db/snapshot/2026-11-07_manifest.txt | awk '{print $NF}')
   got=$(qa -c "select md5(pg_get_functiondef(p.oid)) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='private' and p.proname='${fn%%(*}'")
   [ "$want" = "$got" ] && echo "   ok  private.${fn%%(*}  $got" || { echo "   CHYBA private.${fn%%(*}: snapshot=$want lokálně=$got"; exit 1; }

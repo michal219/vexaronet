@@ -74,7 +74,16 @@ CREATE OR REPLACE FUNCTION private.business_root(cid uuid)
  SET search_path TO ''
 AS $function$select coalesce(parent_company_id,id) from public.companies where id=cid$function$;
 
-revoke all on function private.member_role(uuid), private.writable(uuid), private.business_root(uuid) from public, anon, authenticated, service_role;
+CREATE OR REPLACE FUNCTION private.booking_plan_allowed(cid uuid)
+ RETURNS boolean
+ LANGUAGE sql
+ STABLE
+ SET search_path TO ''
+AS $function$
+ select exists(select 1 from public.subscriptions s where s.company_id=private.business_root(cid) and s.plan in ('pro','business','enterprise') and ((s.status='trial' and s.trial_end>now()) or (s.status='active' and s.paid_until>now())));
+$function$;
+
+revoke all on function private.member_role(uuid), private.writable(uuid), private.business_root(uuid), private.booking_plan_allowed(uuid) from public, anon, authenticated, service_role;
 grant execute on function private.member_role(uuid), private.writable(uuid) to authenticated;
 
 drop policy if exists members_read on public.companies;

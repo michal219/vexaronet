@@ -1,0 +1,23 @@
+-- Zpět k 20261108110000_autopilot_limity.sql. POZOR: smaže ceník, rozpočty, rezervace a události Autopilota (nevratně).
+begin;
+drop function if exists public.autopilot_expire_stale();
+drop function if exists public.autopilot_settle(uuid, integer, integer, boolean);
+drop function if exists public.autopilot_reserve(uuid, text, text, integer, integer, text);
+drop function if exists public.autopilot_set_budget(uuid, bigint);
+drop function if exists public.autopilot_status(uuid);
+drop function if exists private.autopilot_expire_core();
+drop function if exists private.autopilot_settle_core(uuid, integer, integer, boolean);
+drop function if exists private.autopilot_reserve_core(uuid, text, text, integer, integer, text);
+drop function if exists private.autopilot_set_budget_core(uuid, bigint);
+drop function if exists private.autopilot_status_core(uuid);
+drop table if exists private.autopilot_events;
+drop table if exists private.autopilot_runs;
+drop table if exists private.autopilot_budgets;
+drop table if exists private.autopilot_platform;
+drop table if exists private.ai_model_prices;
+drop function if exists private.ap_expire_stale(uuid);
+drop function if exists private.ap_spent(uuid);
+drop function if exists private.ap_month_start();
+drop function if exists private.ap_raise(text, text, jsonb);
+notify pgrst, 'reload schema';
+commit;
