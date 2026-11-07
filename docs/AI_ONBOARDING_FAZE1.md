@@ -1,6 +1,10 @@
 # AI onboarding – databázový podklad a plán 1. fáze
 
 Stav: **návrh**, 2026-11-07. Zatím nebyl změněn funkční kód, databáze ani nasazení.
+
+> **Aktualizace:** datový model a kroky onboardingu (oddíly 2 a 4, tabulka `company_onboarding`)
+> nahrazuje `docs/ai-onboarding-spec.md`. Platí dál: ověřená zjištění (oddíl 1), oprava aktivní
+> firmy a tarifu v AI funkcích (oddíl 3) a otevřené otázky (oddíl 5).
 Podklad: snapshot `db/snapshot/` (pouze čtení živé DB `micymdbqgzeckiqyvvkn`).
 Specifikace onboardingu zatím nebyla dodána. Tento plán připravuje základ, na který se napojí.
 
