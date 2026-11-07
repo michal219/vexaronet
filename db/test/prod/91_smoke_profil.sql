@@ -89,4 +89,4 @@ select pg_temp.expect_as(null, 'postgres', $q$ update private.company_profile_ve
 select pg_temp.ok((pg_temp.call_as('deadbeef-0000-4000-8000-000000000004', 'authenticated', $q$ select public.profile_save_draft('deadbeef-0000-4000-8000-0000000000c2', 0, 1, '{"shared":{"identity":{"displayName":"SMOKE start"}},"local":{}}'::jsonb) $q$) ->> 'revision') = '1', 'tarif START může profil ukládat (ruční profil je ve všech tarifech)');
 select pg_temp.not_denied('deadbeef-0000-4000-8000-000000000001', 'authenticated', $q$ select public.dashboard_summary('deadbeef-0000-4000-8000-0000000000c1') $q$, 'stávající dashboard_summary dál funguje');
 select pg_temp.not_denied('deadbeef-0000-4000-8000-000000000001', 'authenticated', $q$ select to_jsonb(count(*)) from public.company_team('deadbeef-0000-4000-8000-0000000000c1') $q$, 'stávající company_team dál funguje');
-do $$ begin raise exception 'SMOKE_OK %'; end $$;
+do $$ begin raise exception 'SMOKE_OK'; end $$;

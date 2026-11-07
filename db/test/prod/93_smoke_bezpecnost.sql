@@ -83,4 +83,4 @@ select pg_temp.expect_as('deadbeef-0000-4000-8000-000000000003', 'authenticated'
 select pg_temp.not_denied(null, 'anon', $q$ select public.public_shop('neexistujici-smoke-slug') $q$, 'veřejný e-shop pro anon dál funguje');
 select pg_temp.not_denied(null, 'anon', $q$ select public.public_site('neexistujici-smoke-slug') $q$, 'veřejný web pro anon dál funguje');
 select pg_temp.ok(has_function_privilege('service_role', 'public.claim_push_reminders(text)', 'execute') and has_function_privilege('service_role', 'public.claim_welcome_mail(text)', 'execute') and has_function_privilege('service_role', 'public.claim_care_mail(text)', 'execute'), 'plánovače (service_role) mají dál právo na claim_* funkce');
-do $$ begin raise exception 'SMOKE_OK %'; end $$;
+do $$ begin raise exception 'SMOKE_OK'; end $$;

@@ -84,4 +84,4 @@ select pg_temp.expect_as('deadbeef-0000-4000-8000-000000000001', 'authenticated'
 select pg_temp.expect_as(null, 'service_role', $q$ select public.autopilot_settle('00000000-0000-0000-0000-00000000dead', 1, 1, true) $q$, 'PT404', 'service_role smí vypořádávat (neexistující běh = PT404)');
 select pg_temp.expect_as('deadbeef-0000-4000-8000-000000000001', 'authenticated', $q$ update private.autopilot_platform set paid_runs_enabled = true returning to_jsonb(1) $q$, '42501', 'žádná API role nezapne placené běhy přímým zápisem');
 select pg_temp.ok((select paid_runs_enabled = false from private.autopilot_platform), 'vypínač je po testech stále vypnutý');
-do $$ begin raise exception 'SMOKE_OK %'; end $$;
+do $$ begin raise exception 'SMOKE_OK'; end $$;
