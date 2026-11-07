@@ -1,6 +1,8 @@
 // AI poradce Vexaronet pro přihlášené uživatele (Google Gemini).
 // Klíč GEMINI_API_KEY je jen v Cloudflare. Volající musí být přihlášený (ověřuje se přes Supabase).
 
+import VXGUARD from '../../src/ai_guard.js';
+
 let SB_URL = 'https://micymdbqgzeckiqyvvkn.supabase.co';
 let SB_KEY = 'sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW';
 
@@ -37,28 +39,13 @@ export const onRequest = async ({ request: req, env }) => {
 
   const token = (req.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
   if (!token) return json({ error: 'auth' }, 401);
-  let uid;
-  try {
-    const u = await fetch(`${SB_URL}/auth/v1/user`, { headers: { apikey: SB_KEY, authorization: `Bearer ${token}` } });
-    if (!u.ok) return json({ error: 'auth' }, 401);
-    uid = (await u.json()).id;
-  } catch {
-    return json({ error: 'auth' }, 401);
-  }
-  if (!uid) return json({ error: 'auth' }, 401);
-  try {
-    const sr = await fetch(`${SB_URL}/rest/v1/subscriptions?select=plan,status,trial_end&limit=1`, { headers: { apikey: SB_KEY, authorization: `Bearer ${token}` } });
-    const sub = sr.ok ? (await sr.json())[0] : null;
-    const plan = String(sub?.plan || '').toLowerCase();
-    const ended = sub && ((sub.status === 'trial' && sub.trial_end && new Date(sub.trial_end) < new Date()) || sub.status === 'expired' || sub.status === 'canceled');
-    if (!sub || ended || !['pro', 'business', 'enterprise'].includes(plan)) return json({ error: 'plan' }, 403);
-  } catch {
-    return json({ error: 'plan' }, 403);
-  }
-  if (limited(uid)) return json({ error: 'rate' }, 429);
-
   let body;
   try { body = await req.json(); } catch { return json({ error: 'bad_request' }, 400); }
+  const g = await VXGUARD.guardAi({ legacyResolve: true, fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid: body?.cid, plans: ['pro', 'business', 'enterprise'] });
+  if (!g.ok) return json({ error: g.error }, g.status);
+  const uid = g.uid;
+  if (limited(uid)) return json({ error: 'rate' }, 429);
+
   const summary = body?.summary && typeof body.summary === 'object' ? body.summary : {};
   const clean = {};
   for (const [k, v] of Object.entries(summary).slice(0, 60)) {

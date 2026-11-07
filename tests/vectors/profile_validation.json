@@ -1,0 +1,2093 @@
+[
+{
+"name": "prázdný dokument",
+"kind": "validate",
+"root": true,
+"doc": {}
+},
+{
+"name": "plný platný dokument",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis Konina",
+"activity": "autoservis a výfuky",
+"website": "https://konina.example"
+},
+"services": {
+"items": [
+{
+"name": "Výměna a úpravy výfuků",
+"priority": "high"
+}
+],
+"notes": "x"
+},
+"audience": {
+"description": "Řidiči v okolí Prahy",
+"segments": [
+"řidiči"
+]
+},
+"positioning": {
+"claims": [
+{
+"text": "rychlost, cena, kvalita",
+"evidence": "owner_statement"
+}
+]
+},
+"brand": {
+"tone": "přátelský",
+"forbidden": [
+"chiptuning"
+]
+},
+"financialContext": {
+"revenueMinor": 14600000,
+"revenueCurrency": "CZK",
+"revenuePeriod": "month",
+"budgetMinor": 500000,
+"budgetCurrency": "CZK",
+"budgetPeriod": "month",
+"budgetIncludes": [
+"ads",
+"content"
+]
+},
+"goals": [
+{
+"metric": "revenue",
+"baselineMinor": 14600000,
+"growthBp": 3500,
+"targetMinor": 19710000,
+"targetSource": "calc",
+"startDate": "2026-11-07",
+"dueDate": "2027-05-07"
+}
+],
+"channels": [
+{
+"channel": "facebook"
+},
+{
+"channel": "instagram",
+"note": "zatím nepřipojeno"
+}
+],
+"constraints": {
+"notes": "bez slev"
+},
+"unknowns": [
+{
+"field": "web",
+"question": "Je to váš web?",
+"blocking": false
+}
+]
+},
+"local": {
+"geography": {
+"city": "Praha",
+"address": "Ulice 1",
+"serviceArea": "okolí Prahy",
+"radiusKm": 30
+},
+"localNotes": "x"
+}
+}
+},
+{
+"name": "displayName 1 znak",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "a"
+}
+}
+}
+},
+{
+"name": "displayName 2 znaky",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "ab"
+}
+}
+}
+},
+{
+"name": "displayName 120 znaků",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+}
+}
+},
+{
+"name": "displayName 121 znaků",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+}
+}
+},
+{
+"name": "displayName 1 emoji = 1 bod",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "😀"
+}
+}
+}
+},
+{
+"name": "displayName 2 emoji",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "😀😀"
+}
+}
+}
+},
+{
+"name": "displayName 120 emoji",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+}
+}
+}
+},
+{
+"name": "displayName 121 emoji",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+}
+}
+}
+},
+{
+"name": "web 'https://x.cz'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://x.cz"
+}
+}
+}
+},
+{
+"name": "web 'http://x.cz:8080/a?b=1#c'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "http://x.cz:8080/a?b=1#c"
+}
+}
+}
+},
+{
+"name": "web 'ftp://x.cz'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "ftp://x.cz"
+}
+}
+}
+},
+{
+"name": "web 'https://'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://"
+}
+}
+}
+},
+{
+"name": "web 'https://user:pw@x.cz'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://user:pw@x.cz"
+}
+}
+}
+},
+{
+"name": "web 'https://x.cz/a b'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://x.cz/a b"
+}
+}
+}
+},
+{
+"name": "web 'https://x.cz/ž'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://x.cz/ž"
+}
+}
+}
+},
+{
+"name": "web 'https://x.cz?q=1'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://x.cz?q=1"
+}
+}
+}
+},
+{
+"name": "web 'https://x.cz#a'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://x.cz#a"
+}
+}
+}
+},
+{
+"name": "web 'https://@x.cz'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://@x.cz"
+}
+}
+}
+},
+{
+"name": "web 'https://x.cz/path@x'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https://x.cz/path@x"
+}
+}
+}
+},
+{
+"name": "web 'HTTPS://x.cz'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "HTTPS://x.cz"
+}
+}
+}
+},
+{
+"name": "web ''",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": ""
+}
+}
+}
+},
+{
+"name": "web None",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": null
+}
+}
+}
+},
+{
+"name": "web 'https:///x'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"website": "https:///x"
+}
+}
+}
+},
+{
+"name": "datum '2026-02-30'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2026-02-30"
+}
+]
+}
+}
+},
+{
+"name": "datum '2026-02-28'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2026-02-28"
+}
+]
+}
+}
+},
+{
+"name": "datum '1899-01-01'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "1899-01-01"
+}
+]
+}
+}
+},
+{
+"name": "datum '2100-12-31'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2100-12-31"
+}
+]
+}
+}
+},
+{
+"name": "datum '2026-2-3'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2026-2-3"
+}
+]
+}
+}
+},
+{
+"name": "datum '2024-02-29'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2024-02-29"
+}
+]
+}
+}
+},
+{
+"name": "datum '2025-02-29'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2025-02-29"
+}
+]
+}
+}
+},
+{
+"name": "datum '2026-13-01'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2026-13-01"
+}
+]
+}
+}
+},
+{
+"name": "datum '2026-00-10'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2026-00-10"
+}
+]
+}
+}
+},
+{
+"name": "datum 'abcd-ef-gh'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "abcd-ef-gh"
+}
+]
+}
+}
+},
+{
+"name": "datum None",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": null
+}
+]
+}
+}
+},
+{
+"name": "datum '2026-11-07T10:00:00Z'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"dueDate": "2026-11-07T10:00:00Z"
+}
+]
+}
+}
+},
+{
+"name": "částka 1.0",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": 1.0
+}
+}
+}
+},
+{
+"name": "částka 1.5",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": 1.5
+}
+}
+}
+},
+{
+"name": "částka -1",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": -1
+}
+}
+}
+},
+{
+"name": "částka 0",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": 0
+}
+}
+}
+},
+{
+"name": "částka 1000000000000",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": 1000000000000
+}
+}
+}
+},
+{
+"name": "částka 1000000000001",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": 1000000000001
+}
+}
+}
+},
+{
+"name": "částka '5'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": "5"
+}
+}
+}
+},
+{
+"name": "částka True",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": true
+}
+}
+}
+},
+{
+"name": "částka None",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": null
+}
+}
+}
+},
+{
+"name": "částka []",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": []
+}
+}
+}
+},
+{
+"name": "částka {}",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": {}
+}
+}
+}
+},
+{
+"name": "částka 1000.0",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": 1000.0
+}
+}
+}
+},
+{
+"name": "částka 12345678901",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueMinor": 12345678901
+}
+}
+}
+},
+{
+"name": "měna 'CZK'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueCurrency": "CZK"
+}
+}
+}
+},
+{
+"name": "měna 'EUR'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueCurrency": "EUR"
+}
+}
+}
+},
+{
+"name": "měna 'USD'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueCurrency": "USD"
+}
+}
+}
+},
+{
+"name": "měna None",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueCurrency": null
+}
+}
+}
+},
+{
+"name": "měna 'czk'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueCurrency": "czk"
+}
+}
+}
+},
+{
+"name": "měna 1",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"financialContext": {
+"revenueCurrency": 1
+}
+}
+}
+},
+{
+"name": "kanál 'facebook'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"channels": [
+{
+"channel": "facebook"
+}
+]
+}
+}
+},
+{
+"name": "kanál 'tiktok'",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"channels": [
+{
+"channel": "tiktok"
+}
+]
+}
+}
+},
+{
+"name": "kanál None",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"channels": [
+{
+"channel": null
+}
+]
+}
+}
+},
+{
+"name": "služba bez názvu",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"services": {
+"items": [
+{
+"description": "x"
+}
+]
+}
+}
+}
+},
+{
+"name": "služba navíc pole",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"services": {
+"items": [
+{
+"name": "ok"
+},
+{
+"name": "ok2",
+"x": 1
+}
+]
+}
+}
+}
+},
+{
+"name": "31 služeb",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"services": {
+"items": [
+{
+"name": "s00"
+},
+{
+"name": "s01"
+},
+{
+"name": "s02"
+},
+{
+"name": "s03"
+},
+{
+"name": "s04"
+},
+{
+"name": "s05"
+},
+{
+"name": "s06"
+},
+{
+"name": "s07"
+},
+{
+"name": "s08"
+},
+{
+"name": "s09"
+},
+{
+"name": "s10"
+},
+{
+"name": "s11"
+},
+{
+"name": "s12"
+},
+{
+"name": "s13"
+},
+{
+"name": "s14"
+},
+{
+"name": "s15"
+},
+{
+"name": "s16"
+},
+{
+"name": "s17"
+},
+{
+"name": "s18"
+},
+{
+"name": "s19"
+},
+{
+"name": "s20"
+},
+{
+"name": "s21"
+},
+{
+"name": "s22"
+},
+{
+"name": "s23"
+},
+{
+"name": "s24"
+},
+{
+"name": "s25"
+},
+{
+"name": "s26"
+},
+{
+"name": "s27"
+},
+{
+"name": "s28"
+},
+{
+"name": "s29"
+},
+{
+"name": "s30"
+}
+]
+}
+}
+}
+},
+{
+"name": "30 služeb",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"services": {
+"items": [
+{
+"name": "s00"
+},
+{
+"name": "s01"
+},
+{
+"name": "s02"
+},
+{
+"name": "s03"
+},
+{
+"name": "s04"
+},
+{
+"name": "s05"
+},
+{
+"name": "s06"
+},
+{
+"name": "s07"
+},
+{
+"name": "s08"
+},
+{
+"name": "s09"
+},
+{
+"name": "s10"
+},
+{
+"name": "s11"
+},
+{
+"name": "s12"
+},
+{
+"name": "s13"
+},
+{
+"name": "s14"
+},
+{
+"name": "s15"
+},
+{
+"name": "s16"
+},
+{
+"name": "s17"
+},
+{
+"name": "s18"
+},
+{
+"name": "s19"
+},
+{
+"name": "s20"
+},
+{
+"name": "s21"
+},
+{
+"name": "s22"
+},
+{
+"name": "s23"
+},
+{
+"name": "s24"
+},
+{
+"name": "s25"
+},
+{
+"name": "s26"
+},
+{
+"name": "s27"
+},
+{
+"name": "s28"
+},
+{
+"name": "s29"
+}
+]
+}
+}
+}
+},
+{
+"name": "6 cílů",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "jobs"
+},
+{
+"metric": "jobs"
+},
+{
+"metric": "jobs"
+},
+{
+"metric": "jobs"
+},
+{
+"metric": "jobs"
+},
+{
+"metric": "jobs"
+}
+]
+}
+}
+},
+{
+"name": "neznámý cíl metrika",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "fame"
+}
+]
+}
+}
+},
+{
+"name": "chybí metrika",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{}
+]
+}
+}
+},
+{
+"name": "blocking text",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"unknowns": [
+{
+"field": "a",
+"blocking": "ano"
+}
+]
+}
+}
+},
+{
+"name": "radius 501",
+"kind": "validate",
+"root": true,
+"doc": {
+"local": {
+"geography": {
+"radiusKm": 501
+}
+}
+}
+},
+{
+"name": "radius 0 a null",
+"kind": "validate",
+"root": true,
+"doc": {
+"local": {
+"geography": {
+"radiusKm": 0
+}
+}
+}
+},
+{
+"name": "radius -1",
+"kind": "validate",
+"root": true,
+"doc": {
+"local": {
+"geography": {
+"radiusKm": -1
+}
+}
+}
+},
+{
+"name": "radius null",
+"kind": "validate",
+"root": true,
+"doc": {
+"local": {
+"geography": {
+"radiusKm": null
+}
+}
+}
+},
+{
+"name": "neznámá sekce",
+"kind": "validate",
+"root": true,
+"doc": {
+"x": 1
+}
+},
+{
+"name": "shared není objekt",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": "a"
+}
+},
+{
+"name": "local je null",
+"kind": "validate",
+"root": true,
+"doc": {
+"local": null
+}
+},
+{
+"name": "dokument je pole",
+"kind": "validate",
+"root": true,
+"doc": []
+},
+{
+"name": "více chyb najednou",
+"kind": "validate",
+"root": true,
+"doc": {
+"zz": 1,
+"shared": {
+"identity": {
+"displayName": "x",
+"website": "ftp:",
+"k": 1
+},
+"financialContext": {
+"revenueMinor": -1
+},
+"channels": [
+{
+"channel": "x"
+},
+{
+"y": 1
+}
+]
+},
+"local": {
+"geography": {
+"city": 5
+}
+}
+}
+},
+{
+"name": "česká klávesa jako klíč",
+"kind": "validate",
+"root": true,
+"doc": {
+"shared": {
+"žluťoučký": 1,
+"identity": {
+"displayName": "x"
+}
+}
+}
+},
+{
+"name": "pobočka: shared prázdný",
+"kind": "validate",
+"root": false,
+"doc": {
+"shared": {},
+"local": {
+"geography": {
+"city": "Beroun"
+}
+}
+}
+},
+{
+"name": "pobočka: shared neprázdný",
+"kind": "validate",
+"root": false,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Xx"
+}
+}
+}
+},
+{
+"name": "pobočka: shared řetězec",
+"kind": "validate",
+"root": false,
+"doc": {
+"shared": "a"
+}
+},
+{
+"name": "pobočka: jen local",
+"kind": "validate",
+"root": false,
+"doc": {
+"local": {
+"geography": {
+"city": "Beroun"
+}
+}
+}
+},
+{
+"name": "pobočka: neplatný local",
+"kind": "validate",
+"root": false,
+"doc": {
+"local": {
+"geography": {
+"city": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+}
+}
+}
+},
+{
+"name": "úplnost: prázdný kořen",
+"kind": "incomplete",
+"root": true,
+"doc": {}
+},
+{
+"name": "úplnost: plný kořen",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis Konina",
+"activity": "autoservis a výfuky",
+"website": "https://konina.example"
+},
+"services": {
+"items": [
+{
+"name": "Výměna a úpravy výfuků",
+"priority": "high"
+}
+],
+"notes": "x"
+},
+"audience": {
+"description": "Řidiči v okolí Prahy",
+"segments": [
+"řidiči"
+]
+},
+"positioning": {
+"claims": [
+{
+"text": "rychlost, cena, kvalita",
+"evidence": "owner_statement"
+}
+]
+},
+"brand": {
+"tone": "přátelský",
+"forbidden": [
+"chiptuning"
+]
+},
+"financialContext": {
+"revenueMinor": 14600000,
+"revenueCurrency": "CZK",
+"revenuePeriod": "month",
+"budgetMinor": 500000,
+"budgetCurrency": "CZK",
+"budgetPeriod": "month",
+"budgetIncludes": [
+"ads",
+"content"
+]
+},
+"goals": [
+{
+"metric": "revenue",
+"baselineMinor": 14600000,
+"growthBp": 3500,
+"targetMinor": 19710000,
+"targetSource": "calc",
+"startDate": "2026-11-07",
+"dueDate": "2027-05-07"
+}
+],
+"channels": [
+{
+"channel": "facebook"
+},
+{
+"channel": "instagram",
+"note": "zatím nepřipojeno"
+}
+],
+"constraints": {
+"notes": "bez slev"
+},
+"unknowns": [
+{
+"field": "web",
+"question": "Je to váš web?",
+"blocking": false
+}
+]
+},
+"local": {
+"geography": {
+"city": "Praha",
+"address": "Ulice 1",
+"serviceArea": "okolí Prahy",
+"radiusKm": 30
+},
+"localNotes": "x"
+}
+}
+},
+{
+"name": "úplnost: pobočka prázdná",
+"kind": "incomplete",
+"root": false,
+"doc": {
+"local": {}
+}
+},
+{
+"name": "úplnost: pobočka jen oblast",
+"kind": "incomplete",
+"root": false,
+"doc": {
+"local": {
+"geography": {
+"serviceArea": "Berounsko"
+}
+}
+}
+},
+{
+"name": "úplnost: pobočka prázdné město",
+"kind": "incomplete",
+"root": false,
+"doc": {
+"local": {
+"geography": {
+"city": ""
+}
+}
+}
+},
+{
+"name": "úplnost: služby jen položkami",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+}
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: činnost místo položek",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis",
+"activity": "opravy"
+},
+"services": {
+"items": []
+},
+"audience": {
+"description": "Řidiči"
+}
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: tržby bez měny a období",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"financialContext": {
+"revenueMinor": 100
+}
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: tržby nula bez měny",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"financialContext": {
+"revenueMinor": 0
+}
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: tržby null",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"financialContext": {
+"revenueMinor": null
+}
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: rozpočet bez periody",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"financialContext": {
+"budgetMinor": 5000,
+"budgetCurrency": "CZK"
+}
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: cíl bez termínu",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"goals": [
+{
+"metric": "jobs",
+"targetMinor": 10
+}
+]
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: růst bez základu",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"goals": [
+{
+"metric": "jobs",
+"growthBp": 500,
+"dueDate": "2027-01-01"
+}
+]
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: cíl bez čísel je v pořádku",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"goals": [
+{
+"metric": "jobs"
+}
+]
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: druhý cíl vadný (index)",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"goals": [
+{
+"metric": "jobs"
+},
+{
+"metric": "revenue",
+"baselineMinor": 1
+}
+]
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: blokující nejasnost",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"unknowns": [
+{
+"field": "a",
+"blocking": true
+},
+{
+"field": "b",
+"blocking": true
+}
+]
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "úplnost: neblokující nejasnost",
+"kind": "incomplete",
+"root": true,
+"doc": {
+"shared": {
+"identity": {
+"displayName": "Autoservis"
+},
+"services": {
+"items": [
+{
+"name": "Výfuky"
+}
+]
+},
+"audience": {
+"description": "Řidiči"
+},
+"unknowns": [
+{
+"field": "a",
+"blocking": false
+},
+{
+"field": "b"
+}
+]
+},
+"local": {
+"geography": {
+"city": "Praha"
+}
+}
+}
+},
+{
+"name": "odvození: základ+růst",
+"kind": "derive",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "revenue",
+"baselineMinor": 14600000,
+"growthBp": 3500,
+"targetMinor": 1
+}
+]
+}
+}
+},
+{
+"name": "odvození: jen cíl od uživatele",
+"kind": "derive",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "jobs",
+"targetMinor": 40
+}
+]
+}
+}
+},
+{
+"name": "odvození: calc bez vstupů, cíl zůstane user",
+"kind": "derive",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "jobs",
+"targetMinor": 40,
+"targetSource": "calc"
+}
+]
+}
+}
+},
+{
+"name": "odvození: calc bez vstupů a bez cíle",
+"kind": "derive",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "jobs",
+"targetSource": "calc"
+}
+]
+}
+}
+},
+{
+"name": "odvození: nulový růst",
+"kind": "derive",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "jobs",
+"baselineMinor": 100,
+"growthBp": 0
+}
+]
+}
+}
+},
+{
+"name": "odvození: null vstupy",
+"kind": "derive",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "jobs",
+"baselineMinor": null,
+"growthBp": 5,
+"targetMinor": null
+}
+]
+}
+}
+},
+{
+"name": "odvození: prázdné cíle",
+"kind": "derive",
+"root": true,
+"doc": {
+"shared": {
+"goals": []
+}
+}
+},
+{
+"name": "odvození: bez shared",
+"kind": "derive",
+"root": true,
+"doc": {
+"local": {}
+}
+},
+{
+"name": "odvození: více cílů",
+"kind": "derive",
+"root": true,
+"doc": {
+"shared": {
+"goals": [
+{
+"metric": "a",
+"baselineMinor": 1,
+"growthBp": 5000
+},
+{
+"metric": "b",
+"targetMinor": 3
+},
+{
+"metric": "c"
+}
+]
+}
+}
+},
+{
+"name": "ořez: mezery tab a nové řádky",
+"kind": "trim",
+"root": true,
+"doc": {
+"a": "  x\t\n",
+"b": [
+"\n y ",
+{
+"c": " z "
+}
+],
+"d": 1,
+"e": null,
+"f": true,
+" klíč ": " v "
+}
+},
+{
+"name": "ořez: NBSP se neořezává",
+"kind": "trim",
+"root": true,
+"doc": {
+"a": " x "
+}
+},
+{
+"name": "ořez: jen mezery",
+"kind": "trim",
+"root": true,
+"doc": {
+"a": " \t\r\n "
+}
+},
+{
+"name": "ořez: uvnitř zůstane",
+"kind": "trim",
+"root": true,
+"doc": {
+"a": "a  b"
+}
+},
+{
+"name": "cíl 14600000 3500",
+"kind": "target",
+"root": true,
+"b": 14600000,
+"bp": 3500,
+"ref": 19710000
+},
+{
+"name": "cíl 1 5000",
+"kind": "target",
+"root": true,
+"b": 1,
+"bp": 5000,
+"ref": 2
+},
+{
+"name": "cíl 0 0",
+"kind": "target",
+"root": true,
+"b": 0,
+"bp": 0,
+"ref": 0
+},
+{
+"name": "cíl 0 3500",
+"kind": "target",
+"root": true,
+"b": 0,
+"bp": 3500,
+"ref": 0
+},
+{
+"name": "cíl 3 1500",
+"kind": "target",
+"root": true,
+"b": 3,
+"bp": 1500,
+"ref": 3
+},
+{
+"name": "cíl 999999999999 100000",
+"kind": "target",
+"root": true,
+"b": 999999999999,
+"bp": 100000,
+"ref": 10999999999989
+},
+{
+"name": "cíl 1000000000000 100000",
+"kind": "target",
+"root": true,
+"b": 1000000000000,
+"bp": 100000,
+"ref": 11000000000000
+},
+{
+"name": "cíl 7 1",
+"kind": "target",
+"root": true,
+"b": 7,
+"bp": 1,
+"ref": 7
+},
+{
+"name": "cíl 5 5000",
+"kind": "target",
+"root": true,
+"b": 5,
+"bp": 5000,
+"ref": 8
+},
+{
+"name": "cíl 14599999 3500",
+"kind": "target",
+"root": true,
+"b": 14599999,
+"bp": 3500,
+"ref": 19709999
+}
+]

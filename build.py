@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-import json, html, re
-D = '/tmp/vexaronet-saas/'
+import json, html, re, os
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+os.chdir(ROOT_DIR)  # relativní cesty (src/…) se berou od adresáře skriptu
+D = os.environ.get('VX_BUILD_DIR', ROOT_DIR).rstrip('/') + '/'
 css = open(D + 'base.css', encoding='utf-8').read()
 esc = lambda s: html.escape(s, quote=True)
 
@@ -620,9 +622,10 @@ document.addEventListener('change',function(e){if(e.target&&e.target.id==='aPlan
 function aMsg(t,c){var e=$('#aSt');if(e){e.className='st '+c;e.textContent=t}}
 function niceErr(e){var m=(e&&e.message)||String(e);if(/check constraint|violates/i.test(m))return 'Vybraný tarif zatím není v databázi povolený. Napište na info@vexaronet.com.';if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
 async function ensureCompany(c,user){
- var r=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);
+ var r=await c.from('company_members').select('company_id,role,companies(id,name,parent_company_id,created_at)').eq('user_id',user.id);
+ if(r.error)r=await c.from('company_members').select('company_id,role').eq('user_id',user.id);
  if(r.error)throw r.error;
- if(r.data&&r.data.length)return r.data[0].company_id;
+ if(r.data&&r.data.length){APP.mships=r.data;var stc=null;try{stc=localStorage.getItem('vx_active_company_'+user.id)}catch(x){}return VXPCORE.pickCompany(r.data,stc)}
  try{var ai=await c.rpc('accept_company_invites');if(!ai.error&&ai.data>0){var r3=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);if(r3.data&&r3.data.length)return r3.data[0].company_id}}catch(x){}
  var md=user.user_metadata||{};if(!md.company_name)return null;
  var a=await c.rpc('record_registration_acceptance',{version:TERMS_VERSION,accepted:true});if(a.error)throw a.error;
@@ -764,14 +767,14 @@ function stepsCard(){if(APP.role==='employee')return '';var P=prof(),sk='vxsteps
  var st=(P.steps||[]).map(function(s){return {t:s[0],go:s[1],done:stepDone(s[2])}}),dn=st.filter(function(x){return x.done}).length;if(!st.length||dn===st.length)return '';
  return '<section class="card2 steps"><div class="bar2"><div><h3>Začínáme: '+esc(obKey(APP.ind))+'</h3><p class="mut">Postup přizpůsobený vašemu oboru. Hotovo '+dn+' z '+st.length+'.</p></div><button type="button" class="btn btn-ghost btn-sm" data-app="stepsoff">Skrýt</button></div><ul class="stl">'+st.map(function(x){return '<li class="'+(x.done?'ok':'')+'"><button type="button" data-tab="'+x.go+'"><i aria-hidden="true">'+(x.done?'✓':'')+'</i><span>'+esc(x.t)+'</span></button></li>'}).join('')+'</ul></section>'}
 function ceoQs(){var P=prof();return P.q||CEOQ}
-var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['pripady','Obchodní případy'],['nabidky','Nabídky'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['sklad','Sklad a produkty'],['eshop','E-shop'],['pobocky','Pobočky'],['zamestnanci','Zaměstnanci']];
+var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['pripady','Obchodní případy'],['nabidky','Nabídky'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['sklad','Sklad a produkty'],['eshop','E-shop'],['pobocky','Pobočky'],['zamestnanci','Zaměstnanci'],['firmaprofil','Profil firmy'],['autopilot','Autopilot']];
 var SOON={};
 var PLANN={start:'START',starter:'START',accountant:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet BUSINESS',enterprise:'ENTERPRISE'},STATN={demo:'ukázka',trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
 var PLANLIM={start:'CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel. Bez AI CEO.',accountant:'1 uživatel, 100 AI vytěžených dokladů měsíčně.',pro:'3 uživatelé, 150 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',business:'10 uživatelů, 500 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',enterprise:'Individuální limity podle dohody.'};
 function effPlan(){var s=APP.sub;if(!s)return 'start';var p=String(s.plan||'').toLowerCase();if(p==='starter')p='start';if(p==='ucetni')p='accountant';if(p==='start')return p;var ended=(s.status==='trial'&&s.trial_end&&new Date(s.trial_end)<new Date())||s.status==='expired'||s.status==='canceled';return ended?'start':p}
 function hasCeo(){return ['pro','business','enterprise'].indexOf(effPlan())>=0}
 var TEAMLIM={start:1,accountant:2,pro:3,business:10,enterprise:1000},ROLEN={owner:'Majitel',admin:'Správce',employee:'Zaměstnanec'};
-function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','zamestnanci','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','pripady','nabidky','zakazky','ukoly','faktury','finance','kalendar','online','reporty','automatizace','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','profil'].indexOf(t)>=0;return true}
+function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','zamestnanci','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','pripady','nabidky','zakazky','ukoly','faktury','finance','kalendar','online','reporty','automatizace','firmaprofil','autopilot','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','firmaprofil','autopilot','profil'].indexOf(t)>=0;return true}
 function limitMsg(k){if(effPlan()!=='start')return '';var d=APP.d;if(k==='customers'&&d.customers.rows.length>=50)return 'Tarif START umožňuje nejvýše 50 zákazníků.';if(k==='jobs'&&d.jobs.rows.length>=10)return 'Tarif START umožňuje evidovat nejvýše 10 zakázek.';if(k==='invoices'){var m=new Date(new Date().getFullYear(),new Date().getMonth(),1);if(d.invoices.rows.filter(function(x){return new Date(x.issued_on||x.created_at)>=m}).length>=10)return 'Tarif START umožňuje nejvýše 10 faktur měsíčně.'}return ''}
 function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
 function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ',{maximumFractionDigits:2})+' '+esc(!cur||cur==='CZK'?'Kč':cur)}
@@ -914,7 +917,7 @@ function appTab(t){
  APP.tab=t;var el=A('vxapp');if(!el)return;el.classList.remove('side');
  [].forEach.call(el.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
  var m=A('appMain');try{m.innerHTML=!allowed(t)?lockView(t):(VIEWS[t]?VIEWS[t]():soonView(t))}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
- m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]()}
+ m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]();if(typeof apBar==='function')apBar()}
 function lockView(t){if(document.documentElement.classList.contains('appmode'))return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>Tarif a předplatné se spravují na webu vexaronet.com. Po změně tarifu se tato část v aplikaci odemkne.</p></div>';return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><button class="btn btn-ghost btn-sm" type="button" data-app="plan">Změnit tarif</button></div><p class="mut fine">Platební brána zatím není připojená. Žádost o vyšší tarif vyřídíme ručně.</p></div>'}
 function errBox(x){return x.err?'<div class="draft">Data se nepodařilo načíst: '+esc(x.err)+'</div>':''}
 function soonView(t){var s=SOON[t];return '<div class="card2 soonc"><span class="eyebrow">Etapa '+s[2]+' · připravujeme</span><h2>'+esc(s[0])+'</h2><p>'+esc(s[1])+'</p><div class="draft">Tento modul zatím není hotový ani připojený. Nic zde neukládáme ani nepředstíráme. Ozveme se, až bude k dispozici.</div></div>'}
@@ -1442,6 +1445,7 @@ var VIEWS={
  profil:function(){
   var s=APP.sub,m=APP.meta,fs=m.features||[];
   return '<div class="two"><section class="card2"><h3>Firma a účet</h3><ul class="rows"><li><b>E-mail</b><span>'+esc(APP.user.email)+'</span></li><li><b>Jméno</b><span>'+esc(m.full_name||'–')+'</span></li><li><b>Firma</b><span>'+esc(APP.co)+'</span></li><li><b>Obor</b><span>'+esc(APP.ind||'–')+'</span></li><li><b>Stát</b><span>'+esc(m.country||'–')+'</span></li><li><b>Role</b><span>'+esc(APP.role||'–')+'</span></li></ul></section><section class="card2"><h3>Předplatné</h3>'+(s?'<ul class="rows"><li><b>Tarif</b><span>'+esc(PLANN[String(s.plan).toLowerCase()]||s.plan)+'</span></li><li><b>Stav</b><span>'+esc(STATN[s.status]||s.status)+'</span></li>'+(s.trial_end?'<li><b>Zkušební období do</b><span>'+fD(s.trial_end)+'</span></li>':'')+(effPlan()!==String(s.plan).toLowerCase()?'<li><b>Aktuálně platí</b><span>'+esc(PLANN[effPlan()])+'</span></li>':'')+'</ul><p class="mut">'+esc(PLANLIM[effPlan()]||'')+'</p><p class="mut fine">Ceny jsou měsíční bez DPH. Platební brána zatím není připojená, nic vám neúčtujeme a nic se automaticky nestrhává. Přechod na START je okamžitý, vyšší tarif nastavíme po vaší žádosti ručně.</p><div class="dact"><a class="btn btn-ghost btn-sm" href="/cenik">Zobrazit ceník</a><button class="pri sm" type="button" data-app="plan">Změnit tarif</button></div>':'<p class="mut">Předplatné nenalezeno.</p>')+'</section></div>'
+  +(APP.role!=='employee'?fpSettingsCards():'')
   +'<section class="card2"><h3>Zaměření aplikace podle oboru</h3><p class="mut">Menu, názvy, šablony zakázek, doporučené služby i první kroky se přizpůsobí oboru. Žádná data se tím nemažou, ostatní moduly zůstávají v části Další moduly.</p><form id="obForm"><div class="f"><label for="obSel">Obor</label><select id="obSel">'+Object.keys(OB).map(function(k){return '<option'+(k===obKey(APP.ind)?' selected':'')+'>'+esc(k)+'</option>'}).join('')+'</select></div><button class="btn btn-main btn-sm" type="submit">Použít</button></form></section>'
   +'<section class="card2"><h3>Použité funkce</h3><form id="featForm"><div class="fg"><div class="f"><label for="pC">Stát</label><select id="pC">'+COUNTRIES.map(function(x){return '<option'+(x===m.country?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div></div><div class="chks">'+FEATS.map(function(f){return '<label class="chk"><input type="checkbox" name="ft" value="'+f[0]+'"'+(fs.indexOf(f[0])>=0?' checked':'')+'><span>'+f[1]+'</span></label>'}).join('')+'</div><button class="btn btn-main btn-sm" type="submit">Uložit</button></form></section><div class="dact"><button class="btn btn-ghost" type="button" data-app="logout">Odhlásit se</button></div>'}
 };
@@ -1700,7 +1704,7 @@ async function webAI(){
  if(!hasCeo()){webSt('AI návrh textů je v tarifu PRO a vyšších.','err');return}
  if(APP.busy)return;APP.busy=true;webSt('AI píše návrh, bývá to pár sekund…','ok');
  try{var ses=(await getSb().auth.getSession()).data.session;
-  var r=await dfetch('/api/web-ai',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({name:APP.co,description:ds})});
+  var r=await dfetch('/api/web-ai',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,name:APP.co,description:ds})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.site){var c=j&&j.error;webSt(r.status===403?'AI návrh textů je v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':c==='not_configured'?'AI zatím není na serveru zapnutá. Napište nám na info@vexaronet.com.':'Návrh se nepodařilo vytvořit. Zkuste to znovu.','err');return}
   webFill(j.site);webSt((j.demo?'Ukázkový návrh (v ostrém účtu ho píše AI podle vašeho popisu). ':'')+'Návrh je ve formuláři, ještě není uložený. Zkontrolujte texty a upravte je podle sebe.','ok')
@@ -1744,7 +1748,7 @@ async function mkGen(){
  if(!hasCeo()){mkSt('Návrhy od AI jsou v tarifu PRO a vyšších.','err');return}
  if(APP.busy)return;APP.busy=true;mkSt('AI píše návrh, bývá to pár sekund…','ok');A('mkRes').innerHTML='';
  try{var ses=(await getSb().auth.getSession()).data.session;
-  var r=await dfetch('/api/marketing',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({kind:A('mk_kind').value,tone:A('mk_tone').value,topic:tp,name:APP.co})});
+  var r=await dfetch('/api/marketing',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,kind:A('mk_kind').value,tone:A('mk_tone').value,topic:tp,name:APP.co})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.text){var c=j&&j.error;mkSt(r.status===403?'Návrhy od AI jsou v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':c==='not_configured'?'AI zatím není na serveru zapnutá. Napište nám na info@vexaronet.com.':'Návrh se nepodařilo vytvořit. Zkuste to znovu.','err');return}
   mkSt((j.demo?'Ukázkový návrh (v ostrém účtu ho píše AI podle vašeho zadání). ':'')+'Zkontrolujte text a doplňte údaje ve značkách [doplnit].','ok');
@@ -1797,7 +1801,7 @@ function rpPrint(){var k=APP.rpP||'m0',rows=rpRows(k,rpData(k)),fr=document.crea
 async function rpAI(){
  if(!hasCeo()){return}if(APP.busy)return;APP.busy=true;var k=APP.rpP||'m0',x=rpData(k),st=A('rpSt');st.className='st ok';st.textContent='AI čte čísla, bývá to pár sekund…';A('rpAi').innerHTML='';
  try{var ses=(await getSb().auth.getSession()).data.session,sm={obdobi:(RPP.filter(function(p){return p[0]===k})[0]||[0,''])[1],fakturovano_kc:x.issS,faktur_vystaveno:x.issN,zaplaceno_kc:x.paidS,po_splatnosti_kc:x.overS,po_splatnosti_pocet:x.overN,nezaplaceno_kc:x.unpS,prijmy_evidence_kc:x.feI,vydaje_evidence_kc:x.feE,nove_zakazky:x.jobsNew,otevrene_zakazky:x.jobsOpen,novi_zakaznici:x.custNew,rezervace:x.resN,rezervace_zrusene:x.resC};
-  var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({messages:[{role:'user',content:'Shrň stručně tento report za zvolené období a upozorni na největší rizika a doporuč 2 až 3 další kroky.'}],summary:sm})});
+  var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,messages:[{role:'user',content:'Shrň stručně tento report za zvolené období a upozorni na největší rizika a doporuč 2 až 3 další kroky.'}],summary:sm})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.reply){st.className='st err';st.textContent=r.status===403?'Shrnutí je v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':'Shrnutí se nepodařilo vytvořit. Zkuste to znovu.';return}
   st.textContent='';A('rpAi').innerHTML='<div class="draft" style="white-space:pre-wrap">'+esc(j.reply)+'</div>'
@@ -2166,7 +2170,7 @@ async function delEnt(form){
 function themeToggle(){var r=document.documentElement,n=r.getAttribute('data-theme')==='light'?'dark':'light';r.setAttribute('data-theme',n);try{localStorage.setItem('vx-theme',n)}catch(e){}}
 async function askAI(msgs,out){
  var ses=(await getSb().auth.getSession()).data.session;if(!ses){out('Přihlášení vypršelo. Přihlaste se znovu.');return null}
- try{var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify({messages:msgs,summary:summary()})});
+ try{var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify({cid:APP.cid,messages:msgs,summary:summary()})});
   if(r.status===403){out('AI CEO je součástí tarifu Vexaronet PRO a vyšších.');return null}
   if(r.status===429){out('Příliš mnoho dotazů. Zkuste to za chvíli.');return null}
   if(!r.ok)throw new Error(r.status);var d=await r.json();if(!d.reply)throw new Error('e');return d.reply}catch(e){out('AI poradce teď není dostupný. Zkuste to později.');return null}}
@@ -2311,6 +2315,8 @@ cf.addEventListener('submit',function(e){e.preventDefault();var t=cin.value.trim
  fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:hist.slice(-12)})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){if(!d.reply)throw new Error('e');w.textContent=d.reply;hist.push({role:'assistant',content:d.reply});save();body.scrollTop=body.scrollHeight}).catch(function(){w.className='msg bot err';w.textContent='AI asistent zatím není dostupný nebo se nepodařilo spojit. Napište nám prosím na info@vexaronet.com.';hist.pop();save()})});
 @@FAKT@@
 @@CRM@@
+@@PROFIL@@
+@@AUTOPILOT@@
 })();
 </script>
 </body>
@@ -2322,6 +2328,11 @@ out = (tpl.replace('@@CSS@@', css + extra_css).replace('@@KEYS@@', keys).replace
        .replace('@@BIZDATA@@', json.dumps(BIZ, ensure_ascii=False)))
 out = out.replace('@@FAKT@@', open('src/qr.js',encoding='utf-8').read().replace('if(typeof module','if(0&&typeof module')+'\n'+open('src/inv.js',encoding='utf-8').read().replace('if(typeof module','if(0&&typeof module')+'\n'+open('src/faktury_ui.js',encoding='utf-8').read())
 out = out.replace('@@CRM@@', open('src/crm_ui.js',encoding='utf-8').read())
+_nm = lambda t: t.replace('if(typeof module', 'if(0&&typeof module')
+out = out.replace('@@PROFIL@@', _nm(open('src/jsonschema_mini.js',encoding='utf-8').read()) + '\n' + _nm(open('src/profile_core.js',encoding='utf-8').read())
+    + '\nvar VXPSCHEMA=' + json.dumps(json.load(open('src/onboarding_schema.json',encoding='utf-8')), ensure_ascii=False, separators=(',', ':')) + ';\n'
+    + open('src/profile_ui.js',encoding='utf-8').read())
+out = out.replace('@@AUTOPILOT@@', _nm(open('src/autopilot_core.js',encoding='utf-8').read()) + '\n' + open('src/autopilot_ui.js',encoding='utf-8').read())
 assert '@@' not in out
 open(D + 'index.html', 'w', encoding='utf-8').write(out)
 print('OK', len(out))

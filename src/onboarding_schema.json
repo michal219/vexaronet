@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "title": "Profil firmy Vexaronet (ruční vyplnění, MVP)",
+  "shared": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "identity": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "displayName": { "type": "string", "minLength": 2, "maxLength": 120 },
+          "activity": { "type": "string", "maxLength": 1000 },
+          "website": { "type": ["string", "null"], "format": "http-url", "maxLength": 300 }
+        }
+      },
+      "services": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "maxItems": 30,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name"],
+              "properties": {
+                "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+                "description": { "type": "string", "maxLength": 500 },
+                "priority": { "type": "string", "enum": ["low", "normal", "high"] }
+              }
+            }
+          },
+          "notes": { "type": "string", "maxLength": 1000 }
+        }
+      },
+      "audience": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": { "type": "string", "maxLength": 1000 },
+          "segments": {
+            "type": "array",
+            "maxItems": 10,
+            "items": { "type": "string", "minLength": 2, "maxLength": 120 }
+          }
+        }
+      },
+      "positioning": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claims": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["text"],
+              "properties": {
+                "text": { "type": "string", "minLength": 2, "maxLength": 300 },
+                "evidence": { "type": "string", "enum": ["none", "owner_statement", "documented"] }
+              }
+            }
+          }
+        }
+      },
+      "brand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tone": { "type": "string", "maxLength": 200 },
+          "ordering": { "type": "string", "maxLength": 500 },
+          "assets": { "type": "string", "maxLength": 500 },
+          "forbidden": {
+            "type": "array",
+            "maxItems": 20,
+            "items": { "type": "string", "minLength": 2, "maxLength": 120 }
+          }
+        }
+      },
+      "financialContext": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "revenueMinor": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000000000000 },
+          "revenueCurrency": { "type": ["string", "null"], "enum": ["CZK", "EUR", null] },
+          "revenuePeriod": { "type": ["string", "null"], "enum": ["month", "year", null] },
+          "budgetMinor": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000000000000 },
+          "budgetCurrency": { "type": ["string", "null"], "enum": ["CZK", "EUR", null] },
+          "budgetPeriod": { "type": ["string", "null"], "enum": ["month", "quarter", "year", "one_time", null] },
+          "budgetIncludes": {
+            "type": "array",
+            "maxItems": 4,
+            "items": { "type": "string", "enum": ["ads", "content", "tools", "other"] }
+          }
+        }
+      },
+      "goals": {
+        "type": "array",
+        "maxItems": 5,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["metric"],
+          "properties": {
+            "metric": { "type": "string", "enum": ["revenue", "jobs", "new_customers", "leads", "other"] },
+            "label": { "type": "string", "maxLength": 120 },
+            "baselineMinor": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000000000000 },
+            "growthBp": { "type": ["integer", "null"], "minimum": 0, "maximum": 100000 },
+            "targetMinor": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000000000000 },
+            "targetSource": { "type": "string", "enum": ["user", "calc"] },
+            "startDate": { "type": ["string", "null"], "format": "date" },
+            "dueDate": { "type": ["string", "null"], "format": "date" }
+          }
+        }
+      },
+      "channels": {
+        "type": "array",
+        "maxItems": 10,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["channel"],
+          "properties": {
+            "channel": { "type": "string", "enum": ["facebook", "instagram", "google_business", "web", "email", "other"] },
+            "note": { "type": "string", "maxLength": 200 }
+          }
+        }
+      },
+      "constraints": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "notes": { "type": "string", "maxLength": 1000 }
+        }
+      },
+      "unknowns": {
+        "type": "array",
+        "maxItems": 30,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["field"],
+          "properties": {
+            "field": { "type": "string", "minLength": 1, "maxLength": 80 },
+            "question": { "type": "string", "maxLength": 300 },
+            "blocking": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  },
+  "local": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "geography": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "city": { "type": "string", "maxLength": 120 },
+          "address": { "type": "string", "maxLength": 300 },
+          "serviceArea": { "type": "string", "maxLength": 300 },
+          "radiusKm": { "type": ["integer", "null"], "minimum": 0, "maximum": 500 }
+        }
+      },
+      "localNotes": { "type": "string", "maxLength": 1000 }
+    }
+  }
+}

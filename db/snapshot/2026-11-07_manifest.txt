@@ -1,0 +1,296 @@
+# Vexaronet – manifest živé databáze (projekt micymdbqgzeckiqyvvkn), stav 2026-11-07
+# Jen metadata: názvy migrací a otisky md5(pg_get_functiondef(...)). Žádná data, žádná tajemství.
+# Slouží ke zjištění změn: když se otisk liší, funkce byla od tohoto dne upravena.
+
+## A) Záznamy v supabase_migrations.schema_migrations (65; jen verze a název, obsah SQL nebyl čten)
+20261017144237 vexaronet_initial_platform
+20261017144903 vexaronet_limits_and_summary
+20261017144955 fix_capacity_trigger_record_fields
+20261017145200 vexaronet_indexes_and_display_names
+20261017145352 vexaronet_full_database_financial_summaries
+20261017152631 vexaronet_feedback_and_ai_limits
+20261017171959 server_subscription_clock_and_feedback_delivery
+20261017172102 mobile_push_subscriptions_and_reminder_queue
+20261017172506 authenticated_push_dispatch_schedule
+20261017173827 fix_push_subscription_quota_rls_recursion
+20261017210902 ai_atomic_save
+20261017212358 ai_create_customer_with_job
+20261017214531 team_invitation_email_delivery
+20261018064331 registration_welcome_outbox
+20261018065032 ai_pro_business_entitlement
+20261018070347 daily_company_backups
+20261018073228 invoicing_domestic_czk
+20261018073735 invoice_daily_backup
+20261018073912 invoice_profile_consistency_checks
+20261018074023 invoice_customer_billing
+20261018082552 public_booking_services_and_verification
+20261018083114 booking_request_qualified_columns
+20261018083139 booking_request_local_scope
+20261018083331 booking_tables_daily_backup
+20261018085420 public_booking_calendar_and_task
+20261018085456 booking_profile_atomic_publication
+20261018085649 booking_task_title_length
+20261018092423 booking_create_linked_job
+20261018093345 business_public_profile_and_starter_invoice_limit
+20261018094530 business_branches_reports_and_pro_booking
+20261018094653 business_customer_care_consent_and_outbox
+20261018095053 cross_branch_calendar_collision_prevention
+20261018095118 shared_invoice_sequence_for_branches
+20261018095450 business_exports_backups_and_care_schedule
+20261018095601 care_recipient_change_revocation_and_contact_footer
+20261018095945 branch_access_for_existing_head_office_managers
+20261018100102 care_rescheduled_appointments_and_visible_paused_status
+20261018130134 preferences_and_scoped_terms_acceptance
+20261018132059 tested_international_invoices_cz_sk_eu
+20261018132205 booking_currency_labels
+20261018142721 employee_shifts_with_scoped_access
+20261018142728 include_shifts_in_daily_backups
+20261018150730 business_records_without_plan_caps
+20261018150742 business_branches_without_plan_cap
+20261018150802 restrict_shifts_to_pro_business
+20261018162243 selected_trial_plan_feature_guards
+20261018162249 explicit_trial_plan_selection
+20261018162254 ai_requires_pro_or_business_during_trial
+20261018162259 ai_save_requires_selected_plan
+20261019153935 slovakia_invoice_defaults_and_supply_date
+20261019160415 slovak_language_preferences_and_websites
+20261020091448 public_help_chat_limits
+20261021191707 ai_workspace_review_and_invoice_queue
+20261021193008 bank_csv_review_and_invoice_reconciliation
+20261021193730 fix_ai_workspace_job_alias_collision
+20261021195050 fix_booking_request_currency_alias
+20261031091652 trial_30_days_start_free
+20261031091815 member_rates
+20261031091842 feedback_extra_columns
+20261031104457 writable_allows_free_start_plan
+20261031115537 eshop_orders_invoice_stock
+20261031115648 jobs_stage_label
+20261031120043 eshop_order_job_status_fix
+20261031164752 site_images_storage
+20261102162539 crm_deals_quotes_notes
+
+# Pozn.: některé objekty používané aplikací (např. company_invites, ai_usage, shifts, sites,
+# products, marketing_posts, automation_rules, shop_*) nemají v seznamu migrací zjevný záznam.
+# Podle NAVOD.md byly zřejmě vytvořeny ručně v SQL Editoru ze souborů schema_*.sql.
+# Historie migrací tedy sama o sobě nestačí k obnově databáze (předpoklad, neověřeno).
+
+## B) Funkce ve schématech public a private: md5(pg_get_functiondef)
+private.accept_invitation_core(invite_token uuid) 12cc52ea6ec012ff96cd1bad4186e5a2
+private.admin_campaign_core(p_name text, p_address text) eb2f1160d3633c356ebc40521ee507fb
+private.ai_design_finish(rid uuid, p_lease uuid, p_output jsonb, p_error text) 45892f44c8a88124871263f8ea3420dd
+private.ai_design_result(cid uuid, rid uuid) 1a0ded6f850a8d84c14211ed3796472e
+private.ai_design_start(cid uuid, rid uuid, p_kind text, p_document jsonb, p_brief text) fff56f9538cfe2ba0eb9b0c85876d810
+private.ai_invoice_queue() 98476ef1423bcba0402790ae23df1d5c
+private.ai_workspace(cid uuid, op text, doc jsonb) 1f43d244d89024413a9bc44e90de389b
+private.ai_workspace_finish(rid uuid, p_lease uuid, p_output jsonb, p_error text) 8b8b8d232faf5d64f014628553c40caa
+private.bank_reconciliation(cid uuid, op text, doc jsonb) 008b7e7b0755d1a025afc5506c4792cf
+private.booking_configure(cid uuid, doc jsonb) 534f384707ec6ec40c0c83f556438087
+private.booking_confirm(challenge uuid, code_hash text) 30b404be99534f5e012fcb45b06395be
+private.booking_info(slug text) da111199006da57d8a00d171dcee8b55
+private.booking_mail_sent(challenge uuid, message_id text) 93396bda47218208916c04b62773d144
+private.booking_plan_allowed(cid uuid) 920722792bd7de21035d99eee15307d7
+private.booking_public_slots(slug text, sid uuid, on_day date) 13ed629c45e167cf1b5ca3bd18cac75b
+private.booking_request(doc jsonb) 28c8176ba9325549d52e153a2bde30ed
+private.booking_slots(cid uuid, sid uuid, on_day date) 006525078e782c18361685be244bfbeb
+private.branch_action(cid uuid, action text, doc jsonb) 329fbb3dd6667561c73713a0ddf3c3fa
+private.branch_preferences_inherit() f20ab5b4ae2dee463ea0c07f28cbc1ff
+private.branch_reservation_guard() 93eb73f43140695057b72c0a985e1bc8
+private.business_allowed(cid uuid) f2b78e056280303d8948b6c5e2230eb6
+private.business_report(cid uuid, period date, doc jsonb) 8a2ea1533aaf28fe3cb1fc19cdc2a60d
+private.business_root(cid uuid) 0c2ba18974fd719f90ae715915c3bd85
+private.business_web_action(cid uuid, op text, payload jsonb) 33dc91d0651cfb16d56099d80c347b3f
+private.business_web_asset(p_id uuid) 57f0953d86b30d2bd9c55ee586bb0d75
+private.business_web_finish(rid uuid, p_lease uuid, p_output jsonb, p_error text, p_model text) a1279ffea7658d2d9f967149add2cf5b
+private.business_web_generate(cid uuid, rid uuid, p_brief text, p_version integer) e93ccf4e53c7fbd868de8ba0abfef248
+private.business_web_job(cid uuid, rid uuid) fa15a168572b0d7ba79dc13fb755d761
+private.business_web_public(p_slug text) 7c40305e8058b6975aee88d61355769a
+private.campaign_config_core() ee6ddf111a42251cc8ce31a618915475
+private.capture_booking_care_choice() d58226ce1cb1ba7dd33c06c81885a79b
+private.capture_campaign_core(p_email text, p_plan text, p_consent boolean, p_source text) 9dcb5f539d9e6b96117de87aabca6def
+private.care_mail_allowed(mid uuid) a22391736b519feb88a40c34e04012cb
+private.care_public(action text, token uuid, doc jsonb) 4a4f8bfd2e232239a7f2daf8a02eb2ae
+private.care_settings_action(cid uuid, doc jsonb) 77a41905439bacbcc3082c5218f384a4
+private.choose_trial_plan(cid uuid, selected_plan text) 99e15bbd5228af403be18baf0932d3ea
+private.claim_campaign_core() b2f23373511d8674f74cc31490cf001f
+private.claim_care_mail(dispatch_token text) c171669cb1748336e3f65d1157acd076
+private.claim_push_core(dispatch_token text) 2170e1969824e59b4693146b0f57185a
+private.claim_welcome_mail(dispatch_token text) 6aa792d3bf078a47b4648e1211a5b552
+private.create_company_core(company_name text, company_industry text) 93b85e0b3a824e1c17bf8d4c7088ed42
+private.create_company_for_plan(company_name text, company_industry text, selected_plan text) 77b09d2cd5871cde67c32010dd17ed19
+private.create_daily_company_backups() b1954c7ac33eeb3f59959d21a7aa7a4f
+private.dashboard_commerce(cid uuid) a12e80acf81e67cc0b100cd0fdc71761
+private.design_public_surfaces(d jsonb) c0e8b7202281391469522f46a9c18bfc
+private.employee_status_core(entity text, record_id uuid, new_status text) 87462a8c653eea582f54ff1725e25b80
+private.enforce_capacity() a73fecc2fc9d2d134e5b4a516f1b960d
+private.enforce_team_capacity() c024257bd3b0136050a7f7f5a8c6b70b
+private.enqueue_completed_job_care() 26889f4aa5eae26b124c8cc1badbddb8
+private.enqueue_welcome_mail() cc1decc2b58ed60635ccea066123f8e9
+private.export_customer_care(cid uuid) 65bc7f54227e74f2ef18d2c66460f639
+private.feedback_limit() 26486c318a99580ac2219e6bc94e6f1f
+private.finish_care_mail(mid uuid, lease timestamp with time zone, message_id text) 3252d2df24f0835a82c7af734f16c839
+private.finish_push_core(delivery uuid, status_code integer) cf5a25e96fdce8834b03b45cbbe03bda
+private.finish_welcome_mail(recipient uuid, lease timestamp with time zone, message_id text) bb603eb3572d4eccdc2f7995a224f897
+private.invoice_account_to_iban(account text, country text) b0df7c3f8dff8035ddcd2f74cb4ae63a
+private.invoice_action_core(cid uuid, action text, doc jsonb) ec8dc7d75ceee5f0d302783eb596d32a
+private.invoice_buyer_check() cc0575f28306e4e76e72d515bd2445dd
+private.invoice_customer_prefill() 353cda22640cf26717025668521aeb83
+private.invoice_iban_valid(v text) d163ff9fa25ba7411d42348973c681b7
+private.invoice_ico_valid(v text) 689b49bfa2d6d3aec6d32b48cffb2976
+private.invoice_immutable() 58e8cf2235158b559bac2a43fb74c2db
+private.invoice_monthly_plan_guard() f4fe77fc3312c1aacc906308746950b8
+private.invoice_profile_check() 1fb6f3081dc4ae227d15bae83b9174bd
+private.invoice_slovak_buyer_tax_id() 288383159ebc59aafcebe3a8b907fe82
+private.job_automation() b862b0db0d4da5581199cb7a0cb306e8
+private.log_change() 43b422ca3513518f7652cd6c3603fa2c
+private.member_role(cid uuid) 31427af0881383993c23a0c2f3ec2e72
+private.platform_admin_core(extend_company uuid, extra_days integer) 5f31425b20c85fda83c53b126120abf0
+private.platform_feedback_core() 6a4f6f9ebb72c73a4486a1ac0f12d59d
+private.profile_plan_guard() d35ef45bc21679b93fee80f8e777502a
+private.public_profile_allowed(cid uuid) 2cacabbba55528b5edf4f4d86993d94f
+private.push_device_limit() 1cb8eb9df0e2d6fc1e1d21a80fc8cba7
+private.push_public_key_core() cb545fc21bc674a02fb46d72dee0a9ea
+private.record_registration_acceptance(version text, accepted boolean) f7b3bc02757994866e3f180d114e7a05
+private.reserve_ai_core(cid uuid) 11bbe51e9ac91e0413fb2057f2cbd9b8
+private.revoke_care_on_contact_change() 2b0aaed85bf10270cd4f77221ac5c15f
+private.run_workspace_rules(cid uuid, p_event text, p_key text, p_label text, p_assigned uuid, p_oldstock integer, p_stock integer) 524834380c0059f80f9f98d86b977a07
+private.set_member_role_core(cid uuid, uid uuid, new_role text) 63d2fdf680d9af6ce8c97a4e7e2586e3
+private.shift_action(cid uuid, action text, doc jsonb) cf0ad875575edf1aac74a6bb02b50659
+private.shifts_in_plan(cid uuid) fe707fcb19e89fab2e1260443d55864a
+private.shop_design_action(cid uuid, op text, doc jsonb) d9ad4c2525a7c1d341eef597054992a2
+private.shop_design_images(d jsonb) 8b93ae061906139ce62b5b44dd919dcb
+private.shop_design_valid(cid uuid, d jsonb) f47ea7bbe3fd0d41cfab9d2709729df7
+private.shop_public_design(d jsonb) e94a85ea6b89d690fbb21625c59b4624
+private.suite_action(cid uuid, op text, doc jsonb) 76c866406f2586386743821e98f7c785
+private.suite_gmail(actor uuid, cid uuid, op text, doc jsonb) cfea92560374d3bfe63f3cd9ce1c8997
+private.suite_job_completed() 4cc1f8a4dec88997681cd6bfbc015c11
+private.suite_mail(actor uuid, cid uuid, op text, doc jsonb) 4c86a831bfbc89140ba9fccc63cf23b5
+private.suite_plan(cid uuid) 3f93395eee9b1faa3e6a33741bf438b2
+private.suite_product_asset(cid uuid) 74c6e39cc81d1fd5afc31bf3617547a6
+private.suite_product_file_allowed(p_path text, p_write boolean) 152efef0d3f4740c514a53be83ca0010
+private.suite_product_image(aid uuid) ab669454d89c57ef15e18e53c0e0117f
+private.suite_product_save(cid uuid, rid uuid, doc jsonb) 864f0fa5fef762c03ba663febfef71a2
+private.suite_public(op text, doc jsonb) 5a37c58ba7edaabb36d97b647ddc02a2
+private.sync_branch_subscription() 8046a783ee89cb8c12ec83471c5ad1bc
+private.web_allowed(cid uuid) ccad7bbbc31c957306123cbb94124e49
+private.web_allowed_for_public(cid uuid) 7a068bf96c8909934328101fe8af161b
+private.web_asset_registered(p_path text) 00a6577324e80ea3b70f5128e097950a
+private.web_canvas_tree_valid(nodes jsonb) e09fcec92461de6ae27c7a071e902775
+private.web_document_assets(doc jsonb) a921f99affc08b613d5e9f46021946de
+private.web_document_assets_v1(doc jsonb) ad135ba60c23117676bb458a27907be7
+private.web_public_document(doc jsonb) 8d08973c2cab926655ed34e435558d5d
+private.web_validate(doc jsonb, cid uuid) 86cd2ccca2394e589c6162b353e4df15
+private.withdraw_campaign_core(p_token uuid) 900daae373950cff7010cc78567fc9c6
+private.workspace_automation_active(cid uuid) 012de4d43e0d5a9fdda6ab174108fe96
+private.workspace_event_trigger() a003ebe78bec167f94809a5c143382dd
+private.workspace_rule_action(cid uuid, op text, doc jsonb) 528c09dc639234cb46562f972366337d
+private.workspace_settings(cid uuid, doc jsonb) 66810523fbcdc46122f63e9febb3f974
+private.writable(cid uuid) f1ea69bdf169fef908a2c4ad2a2a7d8c
+public.accept_company_invites() 0f2a93c70d6ee3c06a3905078e6b6266
+public.accept_invitation(invite_token uuid) 9ac3bae68e655d0e285f1693501f553e
+public.admin_campaign(p_name text, p_address text) 64a08e3d918d144b22dc27d4c1707c7b
+public.ai_design_finish(rid uuid, p_lease uuid, p_output jsonb, p_error text) fe5250fb114b9179b8d26d037f2bf104
+public.ai_design_result(cid uuid, rid uuid) 1f2b31fe0fc76cad915d15f4bf093850
+public.ai_design_start(cid uuid, rid uuid, p_kind text, p_document jsonb, p_brief text) 05ac9a4aad755521639e16be4c64dcee
+public.ai_workspace(cid uuid, op text, doc jsonb) 9807ce12fd7091f5396eeab7c11cbe0a
+public.ai_workspace_finish(rid uuid, p_lease uuid, p_output jsonb, p_error text) 415dfb64d29f020ba9f8bb7b13508b90
+public.bank_reconciliation(cid uuid, op text, doc jsonb) 15fff7a44e6d8374d89c83ead33d2e73
+public.booking_confirm(challenge uuid, code_hash text) 382a3256cefa1130cc663cab6708800c
+public.booking_mail_sent(challenge uuid, message_id text) cc9227ad1faf7cae5fe4990175b3aaeb
+public.booking_public_info(slug text) 3d625e88c267b08eb26f1b85dfe56324
+public.booking_public_slots(slug text, sid uuid, on_day date) bd4f7475069de97136bef2ee9f4c10c7
+public.booking_request(doc jsonb) 35255b6f900f13a9ff19763a0d658ee1
+public.branch_action(cid uuid, action text, doc jsonb) 20893aa716334195af36fd7d22368706
+public.business_report(cid uuid, period date, doc jsonb) b73df09604096afae01c414ae189755c
+public.business_web_action(cid uuid, op text, payload jsonb) 873ea98d9cc79a281eaf927f2a7380d0
+public.business_web_asset(p_id uuid) 9900683a71a89cfa7e7f3bb4802c3cad
+public.business_web_enquiry(doc jsonb, visitor text) 050c4bc93ea68ffca10f09daf88d358a
+public.business_web_finish(rid uuid, p_lease uuid, p_output jsonb, p_error text, p_model text) bcc933912139adf76e152a3b9a0f77b2
+public.business_web_generate(cid uuid, rid uuid, p_brief text, p_version integer) 5356e2cfbb6428055ed8270265a42029
+public.business_web_job(cid uuid, rid uuid) e7a3f3bdbbf109b9599c1af22dd73222
+public.business_web_public(p_slug text) cbecb6350ca629e2171ea91c02d3effc
+public.campaign_config() 6a71340550a9bbdd2f5b874e3363fc90
+public.cancel_invite(invite_id uuid) c2c07aa6fee1e7bad9f996519fe23e82
+public.capture_campaign(p_email text, p_plan text, p_consent boolean, p_source text) bf2cbdbe021460d883022b84b083ee45
+public.care_mail_allowed(mid uuid) 5643321b34c33e5f502866699f318f28
+public.care_public(action text, token uuid, doc jsonb) 33a199cf1e2b7e5cfe3a0fd0ab17bdb6
+public.care_settings_action(cid uuid, doc jsonb) e047b1ac9ea977901db6f290cada5282
+public.choose_trial_plan(cid uuid, selected_plan text) c1acc1a674d0af2326865c7bf3ef1310
+public.claim_campaign() 1e619704feb4067a8f660eb429fd06e1
+public.claim_care_mail(dispatch_token text) 282dc65960832debbcbcfb499737a3a9
+public.claim_push_reminders(dispatch_token text) 1588e7dbfdc935e31c52f288514482d8
+public.claim_welcome_mail(dispatch_token text) da870d130ac98a7faac1e5f6b2749533
+public.clock_in(cid uuid, sid uuid) e413211b065e5d4c59eb24c451724b05
+public.clock_out(cid uuid, target uuid) f51e1eac0a2f50b0b247109e4f532717
+public.company_team(cid uuid) cd78f24e470c14eb05a0d926211fed16
+public.configure_booking(cid uuid, doc jsonb) d1caeb6128cb994cd6eb64c76b198912
+public.create_company(company_name text, company_industry text) c3e1903e2d6391595d5f801cd94eaafa
+public.create_company_for_plan(company_name text, company_industry text, selected_plan text) 0fe7383574d9f4c012cc68ac81eb687a
+public.crm_same_company() 0908f557feef7691b5bbbaadb41b03fe
+public.dashboard_commerce(cid uuid) 2dbb25f316d168ce165e628570bb8b95
+public.dashboard_summary(cid uuid) 8abbb3d2768903ee3fa358bfcf81dfee
+public.employee_status(entity text, record_id uuid, new_status text) 2292110468cc54aa407abab16ad2ed02
+public.export_customer_care(cid uuid) 3f74af3e9d8716858eac9b0bb61ad359
+public.finance_summary(cid uuid, period_start date) d7fd0024a02f13191762fccbd19c22f8
+public.finish_care_mail(mid uuid, lease timestamp with time zone, message_id text) 4e3568f4d635867851cc984faff3dde1
+public.finish_push_reminder(delivery uuid, status_code integer) 9cbfcc405d5e7b4bf1729d534afd7b4a
+public.finish_welcome_mail(recipient uuid, lease timestamp with time zone, message_id text) 5f3ac1b0999b2c5ad5079e459453bb1a
+public.invite_member(cid uuid, invite_email text, invite_role text) 537fd743b527bec81a17c2256353c398
+public.invoice_action(cid uuid, action text, doc jsonb) 24c8a0fcb7860397bfcdd4b42bc60d39
+public.platform_admin(extend_company uuid, extra_days integer) e0b2097d7292dab94dfc28ecb4eb3fe5
+public.platform_feedback() ae75d4e1cc447c826a8649e8fa73a388
+public.public_book(p_slug text, p_service uuid, p_start timestamp with time zone, p_name text, p_email text, p_phone text) 1cb97f24def2ce282a92d55d892ed799
+public.public_booking_info(p_slug text) d2ba9c5854c266c37cc71742acdff4ee
+public.public_shop(p_slug text) 900b3e4d34d588595593df738c200403
+public.public_shop_order(p_slug text, p_items jsonb, p_buyer jsonb, p_note text, p_hp text) 066bcfc7d1dce8fd716bd5114205d818
+public.public_site(p_slug text) d75a2443d7b3f355d5771b0c1004b7a1
+public.public_slots(p_slug text, p_service uuid, p_day date) ca2822ad170bec609871ecce1269d464
+public.push_public_key() 30769927fdf788c028dc6959e4b274c1
+public.quotes_same_deal() 9419abfec700e942a037ac212203162c
+public.quotes_set_number() d513e1c4e182fc50f15356540ff7f978
+public.record_invoice_vat_check(cid uuid, vat text, is_valid boolean) 1ed80f878104ba16b38dea6eabd5be92
+public.record_registration_acceptance(version text, accepted boolean) 7f6e2fdf0f8975a6ed1be8d1b8e2ce0c
+public.remove_member(cid uuid, member_id uuid) 8bccb2944d6e23f5d9573e2caea44956
+public.reserve_ai(cid uuid) 6d4fec46b1e9b7d651ca1000e6f31083
+public.reserve_help_chat(p_actor text) 1e13206b2cc124388ca85bdedac3c5b9
+public.save_ai_action(cid uuid, rid uuid, draft jsonb) 5802b58e8c988c2a6e3b788979126e11
+public.set_member_role(cid uuid, uid uuid, new_role text) 262b3f94a22a0c40141f62c0702579c7
+public.shift_action(cid uuid, action text, doc jsonb) 3e61d0f5dc50af3b6607e6a378dc9bc6
+public.shop_cancel_order(p_order uuid) 4286f8b39b95c0c55662c0dfd6a5af54
+public.shop_design_action(cid uuid, op text, doc jsonb) 2acd5b14b7ce3a3c0aa445fc1e658d63
+public.subscription_clock(cid uuid) 69e31aeff4b641a25c609ad38f6ad64e
+public.suite_action(cid uuid, op text, doc jsonb) 931579000c15ca3847c20af3d38d7579
+public.suite_gmail(actor uuid, cid uuid, op text, doc jsonb) 1b432aaf5b5cd46a1cd22fa88964ec5f
+public.suite_mail(actor uuid, cid uuid, op text, doc jsonb) 7bc9e98e2bdb30320733c7756bf1afc3
+public.suite_product_asset(cid uuid) fd1d6f04c7742254783fad503dd24ab6
+public.suite_product_image(aid uuid) 356236d34f8e291408e5db11c19f49aa
+public.suite_product_save(cid uuid, rid uuid, doc jsonb) 8157a5f10d49dfebf92ff85eff1669cf
+public.suite_public(op text, doc jsonb) 0761ed9a2a198839f1a8123c943c1ce2
+public.withdraw_campaign(p_token uuid) ce858ee32593ec69630083c7963942e4
+public.workspace_rule_action(cid uuid, op text, doc jsonb) cd2b5d48da2e0c2806abf5a257ebcc6d
+public.workspace_settings(cid uuid, doc jsonb) 6f20b77283ad95e43bd64ba0f234f238
+
+## C) Tabulky ve schématech public a private (100; stav RLS)
+# RLS VYPNUTÉ: private.platform_admins, private.ai_requests, private.feedback_mail_delivery,
+#              private.push_deliveries (anon/authenticated k nim nemají práva na tabulku –
+#              ověřeno pro platform_admins a ai_requests; feedback_mail_delivery a
+#              push_deliveries v dotazu na práva nevrátily žádný řádek).
+# Ostatní tabulky mají RLS zapnuté.
+public: profiles companies company_members subscriptions customers jobs tasks reservations
+  financial_entries public_profiles invitations audit_logs feedback push_subscriptions
+  ai_saved_actions invitation_mail_delivery company_daily_backups user_business_profiles
+  invoice_sequences invoices invoice_items invoice_mail_delivery booking_settings booking_services
+  booking_hours booking_closures business_capacity customer_care_settings customer_reviews
+  user_preferences employee_shifts dashboard_layouts newsletter_subscribers plan_requests
+  company_invites ai_usage shifts booking_profiles sites marketing_posts automation_rules products
+  stock_moves time_entries custom_inquiries member_rates shop_settings shop_orders shop_order_items
+  deals quotes client_notes
+private: platform_admins ai_requests feedback_mail_delivery push_deliveries welcome_mail_delivery
+  booking_challenges customer_care_consent care_consent_events customer_care_mail
+  registration_acceptance invoice_vat_checks campaign_settings campaign_leads business_websites
+  business_web_revisions business_web_assets business_web_jobs business_web_events suite_products
+  suite_stock_moves suite_shops suite_orders suite_contacts suite_campaigns suite_campaign_delivery
+  suite_apps suite_records suite_processes suite_runs suite_enquiries suite_public_attempts
+  suite_gmail_states suite_gmail_connections suite_gmail_sends suite_product_assets
+  suite_product_saves help_chat_limits web_enquiries workspace_rules workspace_rule_runs
+  shop_designs ai_design_jobs ai_operations ai_proposals ai_invoice_rules bank_imports
+  bank_transactions bank_review_events

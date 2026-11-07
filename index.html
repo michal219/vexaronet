@@ -1083,9 +1083,10 @@ document.addEventListener('change',function(e){if(e.target&&e.target.id==='aPlan
 function aMsg(t,c){var e=$('#aSt');if(e){e.className='st '+c;e.textContent=t}}
 function niceErr(e){var m=(e&&e.message)||String(e);if(/check constraint|violates/i.test(m))return 'Vybraný tarif zatím není v databázi povolený. Napište na info@vexaronet.com.';if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
 async function ensureCompany(c,user){
- var r=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);
+ var r=await c.from('company_members').select('company_id,role,companies(id,name,parent_company_id,created_at)').eq('user_id',user.id);
+ if(r.error)r=await c.from('company_members').select('company_id,role').eq('user_id',user.id);
  if(r.error)throw r.error;
- if(r.data&&r.data.length)return r.data[0].company_id;
+ if(r.data&&r.data.length){APP.mships=r.data;var stc=null;try{stc=localStorage.getItem('vx_active_company_'+user.id)}catch(x){}return VXPCORE.pickCompany(r.data,stc)}
  try{var ai=await c.rpc('accept_company_invites');if(!ai.error&&ai.data>0){var r3=await c.from('company_members').select('company_id').eq('user_id',user.id).limit(1);if(r3.data&&r3.data.length)return r3.data[0].company_id}}catch(x){}
  var md=user.user_metadata||{};if(!md.company_name)return null;
  var a=await c.rpc('record_registration_acceptance',{version:TERMS_VERSION,accepted:true});if(a.error)throw a.error;
@@ -1227,14 +1228,14 @@ function stepsCard(){if(APP.role==='employee')return '';var P=prof(),sk='vxsteps
  var st=(P.steps||[]).map(function(s){return {t:s[0],go:s[1],done:stepDone(s[2])}}),dn=st.filter(function(x){return x.done}).length;if(!st.length||dn===st.length)return '';
  return '<section class="card2 steps"><div class="bar2"><div><h3>Začínáme: '+esc(obKey(APP.ind))+'</h3><p class="mut">Postup přizpůsobený vašemu oboru. Hotovo '+dn+' z '+st.length+'.</p></div><button type="button" class="btn btn-ghost btn-sm" data-app="stepsoff">Skrýt</button></div><ul class="stl">'+st.map(function(x){return '<li class="'+(x.done?'ok':'')+'"><button type="button" data-tab="'+x.go+'"><i aria-hidden="true">'+(x.done?'✓':'')+'</i><span>'+esc(x.t)+'</span></button></li>'}).join('')+'</ul></section>'}
 function ceoQs(){var P=prof();return P.q||CEOQ}
-var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['pripady','Obchodní případy'],['nabidky','Nabídky'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['sklad','Sklad a produkty'],['eshop','E-shop'],['pobocky','Pobočky'],['zamestnanci','Zaměstnanci']];
+var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['pripady','Obchodní případy'],['nabidky','Nabídky'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['sklad','Sklad a produkty'],['eshop','E-shop'],['pobocky','Pobočky'],['zamestnanci','Zaměstnanci'],['firmaprofil','Profil firmy'],['autopilot','Autopilot']];
 var SOON={};
 var PLANN={start:'START',starter:'START',accountant:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet BUSINESS',enterprise:'ENTERPRISE'},STATN={demo:'ukázka',trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
 var PLANLIM={start:'CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel. Bez AI CEO.',accountant:'1 uživatel, 100 AI vytěžených dokladů měsíčně.',pro:'3 uživatelé, 150 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',business:'10 uživatelů, 500 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',enterprise:'Individuální limity podle dohody.'};
 function effPlan(){var s=APP.sub;if(!s)return 'start';var p=String(s.plan||'').toLowerCase();if(p==='starter')p='start';if(p==='ucetni')p='accountant';if(p==='start')return p;var ended=(s.status==='trial'&&s.trial_end&&new Date(s.trial_end)<new Date())||s.status==='expired'||s.status==='canceled';return ended?'start':p}
 function hasCeo(){return ['pro','business','enterprise'].indexOf(effPlan())>=0}
 var TEAMLIM={start:1,accountant:2,pro:3,business:10,enterprise:1000},ROLEN={owner:'Majitel',admin:'Správce',employee:'Zaměstnanec'};
-function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','zamestnanci','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','pripady','nabidky','zakazky','ukoly','faktury','finance','kalendar','online','reporty','automatizace','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','profil'].indexOf(t)>=0;return true}
+function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','zamestnanci','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','pripady','nabidky','zakazky','ukoly','faktury','finance','kalendar','online','reporty','automatizace','firmaprofil','autopilot','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','firmaprofil','autopilot','profil'].indexOf(t)>=0;return true}
 function limitMsg(k){if(effPlan()!=='start')return '';var d=APP.d;if(k==='customers'&&d.customers.rows.length>=50)return 'Tarif START umožňuje nejvýše 50 zákazníků.';if(k==='jobs'&&d.jobs.rows.length>=10)return 'Tarif START umožňuje evidovat nejvýše 10 zakázek.';if(k==='invoices'){var m=new Date(new Date().getFullYear(),new Date().getMonth(),1);if(d.invoices.rows.filter(function(x){return new Date(x.issued_on||x.created_at)>=m}).length>=10)return 'Tarif START umožňuje nejvýše 10 faktur měsíčně.'}return ''}
 function fD(s,t){if(!s)return '–';var d=new Date(s);if(isNaN(d))return esc(s);return t?d.toLocaleString('cs-CZ',{day:'numeric',month:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('cs-CZ')}
 function fM(n,cur){if(n==null||n==='')return '–';return Number(n).toLocaleString('cs-CZ',{maximumFractionDigits:2})+' '+esc(!cur||cur==='CZK'?'Kč':cur)}
@@ -1377,7 +1378,7 @@ function appTab(t){
  APP.tab=t;var el=A('vxapp');if(!el)return;el.classList.remove('side');
  [].forEach.call(el.querySelectorAll('[data-tab]'),function(b){b.setAttribute('aria-pressed',b.dataset.tab===t)});
  var m=A('appMain');try{m.innerHTML=!allowed(t)?lockView(t):(VIEWS[t]?VIEWS[t]():soonView(t))}catch(e){m.innerHTML='<div class="draft">Stránku se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
- m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]()}
+ m.scrollTop=0;if(allowed(t)&&AFTER[t])AFTER[t]();if(typeof apBar==='function')apBar()}
 function lockView(t){if(document.documentElement.classList.contains('appmode'))return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>Tarif a předplatné se spravují na webu vexaronet.com. Po změně tarifu se tato část v aplikaci odemkne.</p></div>';return '<div class="card2 soonc"><span class="eyebrow">Váš tarif: '+esc(PLANN[effPlan()]||effPlan())+'</span><h2>Tato část není součástí vašeho tarifu</h2><p>AI CEO a rozšířené moduly jsou ve Vexaronet PRO (699 Kč měsíčně bez DPH) a vyšších tarifech.</p><div class="dact"><a class="btn btn-main btn-sm" href="/cenik">Zobrazit ceník</a><button class="btn btn-ghost btn-sm" type="button" data-app="plan">Změnit tarif</button></div><p class="mut fine">Platební brána zatím není připojená. Žádost o vyšší tarif vyřídíme ručně.</p></div>'}
 function errBox(x){return x.err?'<div class="draft">Data se nepodařilo načíst: '+esc(x.err)+'</div>':''}
 function soonView(t){var s=SOON[t];return '<div class="card2 soonc"><span class="eyebrow">Etapa '+s[2]+' · připravujeme</span><h2>'+esc(s[0])+'</h2><p>'+esc(s[1])+'</p><div class="draft">Tento modul zatím není hotový ani připojený. Nic zde neukládáme ani nepředstíráme. Ozveme se, až bude k dispozici.</div></div>'}
@@ -1905,6 +1906,7 @@ var VIEWS={
  profil:function(){
   var s=APP.sub,m=APP.meta,fs=m.features||[];
   return '<div class="two"><section class="card2"><h3>Firma a účet</h3><ul class="rows"><li><b>E-mail</b><span>'+esc(APP.user.email)+'</span></li><li><b>Jméno</b><span>'+esc(m.full_name||'–')+'</span></li><li><b>Firma</b><span>'+esc(APP.co)+'</span></li><li><b>Obor</b><span>'+esc(APP.ind||'–')+'</span></li><li><b>Stát</b><span>'+esc(m.country||'–')+'</span></li><li><b>Role</b><span>'+esc(APP.role||'–')+'</span></li></ul></section><section class="card2"><h3>Předplatné</h3>'+(s?'<ul class="rows"><li><b>Tarif</b><span>'+esc(PLANN[String(s.plan).toLowerCase()]||s.plan)+'</span></li><li><b>Stav</b><span>'+esc(STATN[s.status]||s.status)+'</span></li>'+(s.trial_end?'<li><b>Zkušební období do</b><span>'+fD(s.trial_end)+'</span></li>':'')+(effPlan()!==String(s.plan).toLowerCase()?'<li><b>Aktuálně platí</b><span>'+esc(PLANN[effPlan()])+'</span></li>':'')+'</ul><p class="mut">'+esc(PLANLIM[effPlan()]||'')+'</p><p class="mut fine">Ceny jsou měsíční bez DPH. Platební brána zatím není připojená, nic vám neúčtujeme a nic se automaticky nestrhává. Přechod na START je okamžitý, vyšší tarif nastavíme po vaší žádosti ručně.</p><div class="dact"><a class="btn btn-ghost btn-sm" href="/cenik">Zobrazit ceník</a><button class="pri sm" type="button" data-app="plan">Změnit tarif</button></div>':'<p class="mut">Předplatné nenalezeno.</p>')+'</section></div>'
+  +(APP.role!=='employee'?fpSettingsCards():'')
   +'<section class="card2"><h3>Zaměření aplikace podle oboru</h3><p class="mut">Menu, názvy, šablony zakázek, doporučené služby i první kroky se přizpůsobí oboru. Žádná data se tím nemažou, ostatní moduly zůstávají v části Další moduly.</p><form id="obForm"><div class="f"><label for="obSel">Obor</label><select id="obSel">'+Object.keys(OB).map(function(k){return '<option'+(k===obKey(APP.ind)?' selected':'')+'>'+esc(k)+'</option>'}).join('')+'</select></div><button class="btn btn-main btn-sm" type="submit">Použít</button></form></section>'
   +'<section class="card2"><h3>Použité funkce</h3><form id="featForm"><div class="fg"><div class="f"><label for="pC">Stát</label><select id="pC">'+COUNTRIES.map(function(x){return '<option'+(x===m.country?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div></div><div class="chks">'+FEATS.map(function(f){return '<label class="chk"><input type="checkbox" name="ft" value="'+f[0]+'"'+(fs.indexOf(f[0])>=0?' checked':'')+'><span>'+f[1]+'</span></label>'}).join('')+'</div><button class="btn btn-main btn-sm" type="submit">Uložit</button></form></section><div class="dact"><button class="btn btn-ghost" type="button" data-app="logout">Odhlásit se</button></div>'}
 };
@@ -2163,7 +2165,7 @@ async function webAI(){
  if(!hasCeo()){webSt('AI návrh textů je v tarifu PRO a vyšších.','err');return}
  if(APP.busy)return;APP.busy=true;webSt('AI píše návrh, bývá to pár sekund…','ok');
  try{var ses=(await getSb().auth.getSession()).data.session;
-  var r=await dfetch('/api/web-ai',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({name:APP.co,description:ds})});
+  var r=await dfetch('/api/web-ai',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,name:APP.co,description:ds})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.site){var c=j&&j.error;webSt(r.status===403?'AI návrh textů je v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':c==='not_configured'?'AI zatím není na serveru zapnutá. Napište nám na info@vexaronet.com.':'Návrh se nepodařilo vytvořit. Zkuste to znovu.','err');return}
   webFill(j.site);webSt((j.demo?'Ukázkový návrh (v ostrém účtu ho píše AI podle vašeho popisu). ':'')+'Návrh je ve formuláři, ještě není uložený. Zkontrolujte texty a upravte je podle sebe.','ok')
@@ -2207,7 +2209,7 @@ async function mkGen(){
  if(!hasCeo()){mkSt('Návrhy od AI jsou v tarifu PRO a vyšších.','err');return}
  if(APP.busy)return;APP.busy=true;mkSt('AI píše návrh, bývá to pár sekund…','ok');A('mkRes').innerHTML='';
  try{var ses=(await getSb().auth.getSession()).data.session;
-  var r=await dfetch('/api/marketing',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({kind:A('mk_kind').value,tone:A('mk_tone').value,topic:tp,name:APP.co})});
+  var r=await dfetch('/api/marketing',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,kind:A('mk_kind').value,tone:A('mk_tone').value,topic:tp,name:APP.co})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.text){var c=j&&j.error;mkSt(r.status===403?'Návrhy od AI jsou v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':c==='not_configured'?'AI zatím není na serveru zapnutá. Napište nám na info@vexaronet.com.':'Návrh se nepodařilo vytvořit. Zkuste to znovu.','err');return}
   mkSt((j.demo?'Ukázkový návrh (v ostrém účtu ho píše AI podle vašeho zadání). ':'')+'Zkontrolujte text a doplňte údaje ve značkách [doplnit].','ok');
@@ -2260,7 +2262,7 @@ function rpPrint(){var k=APP.rpP||'m0',rows=rpRows(k,rpData(k)),fr=document.crea
 async function rpAI(){
  if(!hasCeo()){return}if(APP.busy)return;APP.busy=true;var k=APP.rpP||'m0',x=rpData(k),st=A('rpSt');st.className='st ok';st.textContent='AI čte čísla, bývá to pár sekund…';A('rpAi').innerHTML='';
  try{var ses=(await getSb().auth.getSession()).data.session,sm={obdobi:(RPP.filter(function(p){return p[0]===k})[0]||[0,''])[1],fakturovano_kc:x.issS,faktur_vystaveno:x.issN,zaplaceno_kc:x.paidS,po_splatnosti_kc:x.overS,po_splatnosti_pocet:x.overN,nezaplaceno_kc:x.unpS,prijmy_evidence_kc:x.feI,vydaje_evidence_kc:x.feE,nove_zakazky:x.jobsNew,otevrene_zakazky:x.jobsOpen,novi_zakaznici:x.custNew,rezervace:x.resN,rezervace_zrusene:x.resC};
-  var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({messages:[{role:'user',content:'Shrň stručně tento report za zvolené období a upozorni na největší rizika a doporuč 2 až 3 další kroky.'}],summary:sm})});
+  var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+(ses?ses.access_token:'')},body:JSON.stringify({cid:APP.cid,messages:[{role:'user',content:'Shrň stručně tento report za zvolené období a upozorni na největší rizika a doporuč 2 až 3 další kroky.'}],summary:sm})});
   var j=await r.json().catch(function(){return null});
   if(!r.ok||!j||!j.reply){st.className='st err';st.textContent=r.status===403?'Shrnutí je v tarifu PRO a vyšších.':r.status===429?'Příliš mnoho požadavků. Zkuste to za chvíli.':'Shrnutí se nepodařilo vytvořit. Zkuste to znovu.';return}
   st.textContent='';A('rpAi').innerHTML='<div class="draft" style="white-space:pre-wrap">'+esc(j.reply)+'</div>'
@@ -2629,7 +2631,7 @@ async function delEnt(form){
 function themeToggle(){var r=document.documentElement,n=r.getAttribute('data-theme')==='light'?'dark':'light';r.setAttribute('data-theme',n);try{localStorage.setItem('vx-theme',n)}catch(e){}}
 async function askAI(msgs,out){
  var ses=(await getSb().auth.getSession()).data.session;if(!ses){out('Přihlášení vypršelo. Přihlaste se znovu.');return null}
- try{var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify({messages:msgs,summary:summary()})});
+ try{var r=await dfetch('/api/advisor',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify({cid:APP.cid,messages:msgs,summary:summary()})});
   if(r.status===403){out('AI CEO je součástí tarifu Vexaronet PRO a vyšších.');return null}
   if(r.status===429){out('Příliš mnoho dotazů. Zkuste to za chvíli.');return null}
   if(!r.ok)throw new Error(r.status);var d=await r.json();if(!d.reply)throw new Error('e');return d.reply}catch(e){out('AI poradce teď není dostupný. Zkuste to později.');return null}}
@@ -3097,6 +3099,475 @@ document.addEventListener('submit',async function(e){var f=e.target;if(f.id==='q
 document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#qeForm'))qeSync()});
 document.addEventListener('change',function(e){if(e.target.closest&&e.target.closest('#qeForm'))qeSync()});
 document.addEventListener('click',function(e){var t=e.target.closest('#qeForm [data-ie="del"]');if(!t)return;e.stopPropagation();var rw=t.closest('.ier');if(document.querySelectorAll('#qeRows .ier').length>1){rw.remove();qeSync()}else toast('Nabídka musí mít alespoň jednu položku.','err')},true);
+
+/* Vexaronet: malý validátor podmnožiny JSON Schema. Stejnou podmnožinu a stejné chybové kódy
+   implementuje databázová funkce private.vx_json_validate (db/migrations/*_profil_firmy.sql).
+   Shoda obou implementací se hlídá testem tests/profile_parity.py nad společnými vektory.
+   Podporováno: type (vč. seznamu a "integer"), enum, minLength, maxLength (v kódových bodech),
+   minimum, maximum, minItems, maxItems, items, properties, required, additionalProperties:false,
+   format: "date" | "http-url". Nic jiného (žádné $ref, pattern, oneOf…); nepodporované klíčové slovo
+   ve schématu vyvolá výjimku, aby se rozdíl neprojevil až v provozu.
+   Chyba má tvar "cesta:pravidlo", např. "$.shared.identity.displayName:minLength". */
+var VXJS=(function(){
+ var KNOWN={type:1,enum:1,minLength:1,maxLength:1,minimum:1,maximum:1,minItems:1,maxItems:1,items:1,properties:1,required:1,additionalProperties:1,format:1,title:1,version:1};
+ function cpLen(s){var n=0;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);if(c>=0xD800&&c<=0xDBFF&&i+1<s.length){var d=s.charCodeAt(i+1);if(d>=0xDC00&&d<=0xDFFF)i++}n++}return n}
+ function typeOf(v){return v===null?'null':Array.isArray(v)?'array':typeof v}
+ function isDate(s){
+  if(!/^(19|20|21)[0-9]{2}-[0-9]{2}-[0-9]{2}$/.test(s))return false;
+  var d=new Date(s+'T00:00:00Z');return !isNaN(d.getTime())&&d.toISOString().slice(0,10)===s}
+ function isHttpUrl(s){
+  if(!/^[!-~]+$/.test(s)||!/^https?:\/\//.test(s))return false;
+  var m=/^https?:\/\/([^\/?#]*)/.exec(s),a=m?m[1]:'';
+  return a!==''&&a.indexOf('@')<0}
+ function sameScalar(a,b){return a===b}
+ function walk(sch,v,p,out){
+  var k;for(k in sch)if(!KNOWN[k])throw new Error('Nepodporované klíčové slovo schématu: '+k);
+  var t=typeOf(v);
+  if(sch.type!==undefined){
+   var allowed=Array.isArray(sch.type)?sch.type:[sch.type],ok=false;
+   allowed.forEach(function(a){if(a===t||(a==='integer'&&t==='number'&&Number.isInteger(v)))ok=true});
+   if(!ok){out.push(p+':type');return}}
+  if(sch.enum!==undefined){
+   var inEnum=false;sch.enum.forEach(function(e){if(sameScalar(e,v))inEnum=true});
+   if(!inEnum){out.push(p+':enum');return}}
+  if(t==='string'){
+   var n=cpLen(v);
+   if(sch.minLength!==undefined&&n<sch.minLength)out.push(p+':minLength');
+   if(sch.maxLength!==undefined&&n>sch.maxLength)out.push(p+':maxLength');
+   if(sch.format==='date'&&!isDate(v))out.push(p+':format');
+   if(sch.format==='http-url'&&!isHttpUrl(v))out.push(p+':format')}
+  else if(t==='number'){
+   if(sch.minimum!==undefined&&v<sch.minimum)out.push(p+':minimum');
+   if(sch.maximum!==undefined&&v>sch.maximum)out.push(p+':maximum')}
+  else if(t==='array'){
+   if(sch.minItems!==undefined&&v.length<sch.minItems)out.push(p+':minItems');
+   if(sch.maxItems!==undefined&&v.length>sch.maxItems)out.push(p+':maxItems');
+   if(sch.items)v.forEach(function(x,i){walk(sch.items,x,p+'['+i+']',out)})}
+  else if(t==='object'){
+   (sch.required||[]).forEach(function(r){if(!Object.prototype.hasOwnProperty.call(v,r))out.push(p+'.'+r+':required')});
+   Object.keys(v).forEach(function(key){
+    var has=sch.properties&&Object.prototype.hasOwnProperty.call(sch.properties,key);
+    if(has)walk(sch.properties[key],v[key],p+'.'+key,out);
+    else if(sch.additionalProperties===false)out.push(p+'.'+key+':additional')})}}
+ function validate(sch,v,p){var out=[];walk(sch,v,p||'$',out);return out.sort()}
+ return {validate:validate,cpLen:cpLen,isDate:isDate,isHttpUrl:isHttpUrl}
+})();
+if(0&&typeof module!=='undefined')module.exports=VXJS;
+
+/* Vexaronet: čistá logika profilu firmy (bez DOM), použitá v aplikaci a v testech.
+   Pravidla zde mají přesné protějšky v databázi (db/migrations/*_profil_firmy.sql):
+   normalizace (trim), validace dokumentu, odvozený cíl, kontrola úplnosti.
+   Závazná je vždy databáze; tento kód slouží pro rychlou odezvu ve formuláři.
+   Shodu hlídá tests/profile_parity.py. */
+var VXPCORE=(function(){
+ var J=(typeof VXJS!=='undefined')?VXJS:require('./jsonschema_mini.js');
+ function trimStr(s){return s.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g,'')}
+ function trimDeep(v){
+  if(typeof v==='string')return trimStr(v);
+  if(Array.isArray(v))return v.map(trimDeep);
+  if(v&&typeof v==='object'){var o={};Object.keys(v).forEach(function(k){o[k]=trimDeep(v[k])});return o}
+  return v}
+ function isObj(v){return v!==null&&typeof v==='object'&&!Array.isArray(v)}
+ /* Dokument = {shared:{…}, local:{…}}. Pobočka smí mít jen local. */
+ function validateDoc(schema,doc,isRoot){
+  if(!isObj(doc))return ['$:type'];
+  var out=[];
+  Object.keys(doc).forEach(function(k){if(k!=='shared'&&k!=='local')out.push('$.'+k+':additional')});
+  if(doc.shared!==undefined){
+   if(!isRoot&&isObj(doc.shared)&&Object.keys(doc.shared).length>0)out.push('$.shared:branch_not_allowed');
+   else out=out.concat(J.validate(schema.shared,doc.shared,'$.shared'))}
+  if(doc.local!==undefined)out=out.concat(J.validate(schema.local,doc.local,'$.local'));
+  return out.sort()}
+ /* Cíl = základ × (10 000 + bp) / 10 000, zaokrouhleno půl nahoru, v nejmenších jednotkách. BigInt kvůli > 2^53. */
+ function goalTarget(baselineMinor,growthBp){
+  var r=(BigInt(baselineMinor)*(10000n+BigInt(growthBp))+5000n)/10000n;return Number(r)}
+ function applyDerived(doc){
+  var d=JSON.parse(JSON.stringify(doc));
+  if(d.shared&&Array.isArray(d.shared.goals))d.shared.goals=d.shared.goals.map(function(g){
+   var o=Object.assign({},g);
+   if(o.baselineMinor!=null&&o.growthBp!=null){o.targetMinor=goalTarget(o.baselineMinor,o.growthBp);o.targetSource='calc'}
+   else if(o.targetMinor!=null)o.targetSource='user';
+   else delete o.targetSource;
+   return o});
+  return d}
+ function nonEmpty(s){return typeof s==='string'&&s!==''}
+ /* Co chybí k potvrzení profilu. Prázdné pole = lze potvrdit. */
+ function incomplete(doc,isRoot){
+  var out=[],sh=(doc&&doc.shared)||{},lo=(doc&&doc.local)||{},geo=lo.geography||{};
+  if(!nonEmpty(geo.city)&&!nonEmpty(geo.serviceArea))out.push('local.geography:required');
+  if(isRoot){
+   var id=sh.identity||{},sv=sh.services||{},au=sh.audience||{},fc=sh.financialContext||{};
+   if(!nonEmpty(id.displayName))out.push('shared.identity.displayName:required');
+   if(!nonEmpty(id.activity)&&!(Array.isArray(sv.items)&&sv.items.length>0))out.push('shared.services:required');
+   if(!nonEmpty(au.description))out.push('shared.audience.description:required');
+   if(fc.revenueMinor!=null){
+    if(fc.revenueCurrency==null)out.push('shared.financialContext.revenueCurrency:required');
+    if(fc.revenuePeriod==null)out.push('shared.financialContext.revenuePeriod:required')}
+   if(fc.budgetMinor!=null){
+    if(fc.budgetCurrency==null)out.push('shared.financialContext.budgetCurrency:required');
+    if(fc.budgetPeriod==null)out.push('shared.financialContext.budgetPeriod:required')}
+   (sh.goals||[]).forEach(function(g,i){
+    var has=g.baselineMinor!=null||g.growthBp!=null||g.targetMinor!=null;
+    if(has&&g.dueDate==null)out.push('shared.goals['+i+'].dueDate:required');
+    if(g.growthBp!=null&&g.baselineMinor==null)out.push('shared.goals['+i+'].baselineMinor:required')});
+   (sh.unknowns||[]).forEach(function(u){if(u.blocking===true&&out.indexOf('shared.unknowns:blocking')<0)out.push('shared.unknowns:blocking')})}
+  return out.sort()}
+ /* Aktivní firma. rows: členství s připojenou firmou {company_id, role, companies:{id,name,parent_company_id,created_at}}.
+    1) uložená volba, pokud je pořád mezi členstvími; 2) hlavní firma, kde je uživatel majitel; 3) jakákoli hlavní firma;
+    4) nejstarší členství. Při shodě rozhoduje created_at, pak id, takže výsledek nezávisí na pořadí řádků z databáze. */
+ function pickCompany(rows,stored){
+  rows=(rows||[]).filter(function(r){return r&&r.company_id});
+  if(!rows.length)return null;
+  if(stored&&rows.some(function(r){return r.company_id===stored}))return stored;
+  function c(r){return r.companies||{}}
+  function isRoot(r){return !c(r).parent_company_id}
+  function rank(r){return (isRoot(r)&&r.role==='owner')?0:isRoot(r)?1:2}
+  rows=rows.slice().sort(function(a,b){
+   return rank(a)-rank(b)||String(c(a).created_at||'').localeCompare(String(c(b).created_at||''))||String(a.company_id).localeCompare(String(b.company_id))});
+  return rows[0].company_id}
+ /* Převod chyby z RPC na druh chyby. Konflikt revize se rozpozná explicitně (kód PT409, HTTP 409 nebo text),
+    nespoléháme se jen na jednu z těchto vlastností. */
+ function mapRpcError(e){
+  e=e||{};var code=String(e.code||''),st=Number(e.status||0),msg=String(e.message||''),det=e.details||e.detail||'',parsed=null;
+  try{parsed=typeof det==='string'&&det?JSON.parse(det):(det&&typeof det==='object'?det:null)}catch(x){}
+  if(code==='PT409'||st===409||/revision_conflict/.test(msg))return {kind:'conflict',current:parsed&&parsed.current_revision!=null?Number(parsed.current_revision):null,message:'Profil mezitím změnil někdo jiný.'};
+  if(code==='PT412'||st===412||/schema_mismatch/.test(msg))return {kind:'schema',message:'Aplikace má starší verzi formuláře. Obnovte stránku.'};
+  if(code==='PT422'||st===422||/validation_failed/.test(msg))return {kind:'validation',errors:Array.isArray(parsed)?parsed:(parsed&&Array.isArray(parsed.errors)?parsed.errors:[]),message:'Některé údaje nejsou ve správném tvaru.'};
+  if(code==='42501'||st===401||st===403)return {kind:'forbidden',message:'K tomuto profilu nemáte oprávnění nebo je účet jen pro čtení.'};
+  return {kind:'other',message:msg||'Operace se nepodařila.'}}
+ function emptyDoc(isRoot){return isRoot?{shared:{},local:{}}:{local:{}}}
+ /* Překlad kódů chyb na text u pole. */
+ var RULE={required:'Toto pole je potřeba vyplnit.',minLength:'Text je příliš krátký.',maxLength:'Text je příliš dlouhý.',type:'Nesprávný typ hodnoty.',enum:'Nepovolená hodnota.',format:'Nesprávný formát.',minimum:'Hodnota je příliš malá.',maximum:'Hodnota je příliš velká.',minItems:'Málo položek.',maxItems:'Příliš mnoho položek.',additional:'Neznámé pole.',blocking:'Zbývá nevyřešená nejasnost.',branch_not_allowed:'Společné údaje patří hlavní firmě.'};
+ function explain(code){var i=code.lastIndexOf(':'),r=code.slice(i+1);return RULE[r]||'Neplatná hodnota.'}
+ return {trimDeep:trimDeep,validateDoc:validateDoc,goalTarget:goalTarget,applyDerived:applyDerived,incomplete:incomplete,pickCompany:pickCompany,mapRpcError:mapRpcError,emptyDoc:emptyDoc,explain:explain}
+})();
+if(0&&typeof module!=='undefined')module.exports=VXPCORE;
+
+var VXPSCHEMA={"version":1,"title":"Profil firmy Vexaronet (ruční vyplnění, MVP)","shared":{"type":"object","additionalProperties":false,"properties":{"identity":{"type":"object","additionalProperties":false,"properties":{"displayName":{"type":"string","minLength":2,"maxLength":120},"activity":{"type":"string","maxLength":1000},"website":{"type":["string","null"],"format":"http-url","maxLength":300}}},"services":{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","maxItems":30,"items":{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string","minLength":2,"maxLength":120},"description":{"type":"string","maxLength":500},"priority":{"type":"string","enum":["low","normal","high"]}}}},"notes":{"type":"string","maxLength":1000}}},"audience":{"type":"object","additionalProperties":false,"properties":{"description":{"type":"string","maxLength":1000},"segments":{"type":"array","maxItems":10,"items":{"type":"string","minLength":2,"maxLength":120}}}},"positioning":{"type":"object","additionalProperties":false,"properties":{"claims":{"type":"array","maxItems":10,"items":{"type":"object","additionalProperties":false,"required":["text"],"properties":{"text":{"type":"string","minLength":2,"maxLength":300},"evidence":{"type":"string","enum":["none","owner_statement","documented"]}}}}}},"brand":{"type":"object","additionalProperties":false,"properties":{"tone":{"type":"string","maxLength":200},"ordering":{"type":"string","maxLength":500},"assets":{"type":"string","maxLength":500},"forbidden":{"type":"array","maxItems":20,"items":{"type":"string","minLength":2,"maxLength":120}}}},"financialContext":{"type":"object","additionalProperties":false,"properties":{"revenueMinor":{"type":["integer","null"],"minimum":0,"maximum":1000000000000},"revenueCurrency":{"type":["string","null"],"enum":["CZK","EUR",null]},"revenuePeriod":{"type":["string","null"],"enum":["month","year",null]},"budgetMinor":{"type":["integer","null"],"minimum":0,"maximum":1000000000000},"budgetCurrency":{"type":["string","null"],"enum":["CZK","EUR",null]},"budgetPeriod":{"type":["string","null"],"enum":["month","quarter","year","one_time",null]},"budgetIncludes":{"type":"array","maxItems":4,"items":{"type":"string","enum":["ads","content","tools","other"]}}}},"goals":{"type":"array","maxItems":5,"items":{"type":"object","additionalProperties":false,"required":["metric"],"properties":{"metric":{"type":"string","enum":["revenue","jobs","new_customers","leads","other"]},"label":{"type":"string","maxLength":120},"baselineMinor":{"type":["integer","null"],"minimum":0,"maximum":1000000000000},"growthBp":{"type":["integer","null"],"minimum":0,"maximum":100000},"targetMinor":{"type":["integer","null"],"minimum":0,"maximum":1000000000000},"targetSource":{"type":"string","enum":["user","calc"]},"startDate":{"type":["string","null"],"format":"date"},"dueDate":{"type":["string","null"],"format":"date"}}}},"channels":{"type":"array","maxItems":10,"items":{"type":"object","additionalProperties":false,"required":["channel"],"properties":{"channel":{"type":"string","enum":["facebook","instagram","google_business","web","email","other"]},"note":{"type":"string","maxLength":200}}}},"constraints":{"type":"object","additionalProperties":false,"properties":{"notes":{"type":"string","maxLength":1000}}},"unknowns":{"type":"array","maxItems":30,"items":{"type":"object","additionalProperties":false,"required":["field"],"properties":{"field":{"type":"string","minLength":1,"maxLength":80},"question":{"type":"string","maxLength":300},"blocking":{"type":"boolean"}}}}}},"local":{"type":"object","additionalProperties":false,"properties":{"geography":{"type":"object","additionalProperties":false,"properties":{"city":{"type":"string","maxLength":120},"address":{"type":"string","maxLength":300},"serviceArea":{"type":"string","maxLength":300},"radiusKm":{"type":["integer","null"],"minimum":0,"maximum":500}}},"localNotes":{"type":"string","maxLength":1000}}}};
+/* ===== Profil firmy pro AI: ruční vyplnění, automatické ukládání, verze, potvrzení =====
+   Datové operace jdou přes RPC public.profile_* (oprávnění, konflikty revize a validaci vynucuje databáze).
+   Tento kód řeší jen formulář a rychlou odezvu. Nic zde nevolá placenou AI. */
+IC.firmaprofil='M5 4h14v16H5zM8 8h8M8 12h8M8 16h5';
+var PS={cid:null,info:null,doc:null,rev:0,hash:null,dirty:false,saving:false,timer:null,status:'',conflict:null,schemaOk:true,errors:[],loadedCid:null};
+var FP_METRIC=[['revenue','Tržby'],['jobs','Počet zakázek'],['new_customers','Noví zákazníci'],['leads','Poptávky'],['other','Jiná metrika']];
+var FP_CH=[['facebook','Facebook'],['instagram','Instagram'],['google_business','Firma na Googlu'],['web','Web'],['email','E-mail'],['other','Jiný kanál']];
+var FP_INC=[['ads','Reklama'],['content','Tvorba obsahu'],['tools','Nástroje'],['other','Jiné']];
+var FP_LAB={'local.geography:required':'Město nebo obsluhovaná oblast','shared.identity.displayName:required':'Název firmy','shared.services:required':'Popis činnosti nebo alespoň jedna služba','shared.audience.description:required':'Popis zákazníků',
+ 'shared.financialContext.revenueCurrency:required':'Měna tržeb','shared.financialContext.revenuePeriod:required':'Období tržeb','shared.financialContext.budgetCurrency:required':'Měna rozpočtu','shared.financialContext.budgetPeriod:required':'Perioda rozpočtu','shared.unknowns:blocking':'Nevyřešená nejasnost'};
+function fpLabel(code){if(FP_LAB[code])return FP_LAB[code];var m=/^shared\.goals\[(\d+)\]\.(dueDate|baselineMinor):required$/.exec(code);if(m)return 'Cíl '+(Number(m[1])+1)+': '+(m[2]==='dueDate'?'termín':'výchozí hodnota');return code}
+function fpStyle(){if(document.getElementById('fpCss'))return;var s=document.createElement('style');s.id='fpCss';s.textContent='.fp .fe{display:block;color:#ff9aa8;font-size:.82rem;margin-top:4px}.fp .fsec{margin-bottom:18px}.fp .frow{display:grid;grid-template-columns:2fr 3fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px}.fp .frow2{display:grid;grid-template-columns:3fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px}.fp .fst{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.82rem;background:rgba(139,108,255,.16)}.fp .fst.ok{background:rgba(60,200,120,.16)}.fp .fst.bad{background:rgba(220,60,80,.18)}.fp .fcalc{padding:10px 14px;border-radius:12px;background:rgba(139,108,255,.1);margin-top:8px;font-size:.92rem}.fp .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.fp textarea{min-height:76px}@media(max-width:640px){.fp .frow,.fp .frow2{grid-template-columns:1fr}}';document.head.appendChild(s)}
+function fpId(p){return 'fp_'+p.replace(/[^a-zA-Z0-9]/g,'_')}
+function fpGet(o,p){var k=p.split('.'),i;for(i=0;i<k.length;i++){if(o==null)return undefined;o=o[k[i]]}return o}
+function fpSet(o,p,v){var k=p.split('.'),i,c=o;for(i=0;i<k.length-1;i++){var key=k[i],nx=/^\d+$/.test(k[i+1]);if(c[key]==null)c[key]=nx?[]:{};c=c[key]}c[k[k.length-1]]=v}
+function fpMinor(s){s=String(s==null?'':s).replace(/\s/g,'').replace(',','.');if(s==='')return undefined;var n=Number(s);if(!isFinite(n)||n<0)return NaN;return Math.round(n*100)}
+function fpBp(s){s=String(s==null?'':s).replace(/\s/g,'').replace(',','.').replace('%','');if(s==='')return undefined;var n=Number(s);if(!isFinite(n)||n<0)return NaN;return Math.round(n*100)}
+function fpShowMinor(m){return m==null?'':String(m/100).replace('.',',')}
+function fpShowBp(b){return b==null?'':String(b/100).replace('.',',')}
+function fpCanon(o){if(Array.isArray(o))return '['+o.map(fpCanon).join(',')+']';if(o&&typeof o==='object')return '{'+Object.keys(o).sort().map(function(k){return JSON.stringify(k)+':'+fpCanon(o[k])}).join(',')+'}';return JSON.stringify(o)}
+function fpField(p,label,o){o=o||{};var v=fpGet(PS.doc,p),id=fpId(p),ro=o.ro?' disabled':'',t=o.t||'text',val=o.fmt?o.fmt(v):(v==null?'':v),inp;
+ if(t==='textarea')inp='<textarea id="'+id+'" data-p="'+p+'" data-t="text" data-dt="text" maxlength="'+(o.max||1000)+'"'+ro+'>'+esc(val)+'</textarea>';
+ else if(t==='select')inp='<select id="'+id+'" data-p="'+p+'" data-t="select"'+ro+'><option value="">– nevyplněno –</option>'+o.opts.map(function(x){return '<option value="'+esc(x[0])+'"'+(x[0]===v?' selected':'')+'>'+esc(x[1])+'</option>'}).join('')+'</select>';
+ else inp='<input id="'+id+'" data-p="'+p+'" data-t="text" data-dt="'+(o.dt||'text')+'" type="'+(t==='date'?'date':'text')+'" value="'+esc(val)+'" maxlength="'+(o.max||300)+'"'+(o.ph?' placeholder="'+esc(o.ph)+'"':'')+ro+'>';
+ return '<div class="f'+(o.full?' full':'')+'"><label for="'+id+'">'+label+'</label>'+inp+(o.help?'<small class="mut">'+o.help+'</small>':'')+'<small class="fe" data-fe="'+p+'"></small></div>'}
+function fpRows(base,items,cols,max,addLab){var h='';(items||[]).forEach(function(it,i){h+='<div class="'+(cols.length===3?'frow':'frow2')+'" data-row="'+base+'.'+i+'">'+cols.map(function(c){return fpField(base+'.'+i+'.'+c[0],c[1],c[2]||{})}).join('')+'<button type="button" class="btn btn-ghost btn-sm" data-fp="del" data-base="'+base+'" data-i="'+i+'" aria-label="Odebrat řádek">×</button></div>'});
+ if((items||[]).length<max)h+='<button type="button" class="btn btn-ghost btn-sm" data-fp="add" data-base="'+base+'">'+addLab+'</button>';return h}
+function fpChecks(p,opts,cur,key){return '<div class="chks">'+opts.map(function(o){var on=(cur||[]).some(function(c){return (key?c[key]:c)===o[0]});return '<label class="chk"><input type="checkbox" data-multi="'+p+'" data-key="'+(key||'')+'" value="'+o[0]+'"'+(on?' checked':'')+'><span>'+o[1]+'</span></label>'}).join('')+'</div>'}
+function fpShared(ro){
+ var d=PS.doc.shared||{},h='';
+ h+='<section class="card2 fsec"><h3>1. Firma a služby</h3><div class="fg">'
+  +fpField('shared.identity.displayName','Název firmy <i>*</i>',{ro:ro,max:120,help:'Tak, jak se má objevit v textech od AI.'})
+  +fpField('shared.identity.website','Web firmy',{ro:ro,ph:'https://…',help:'Nechte prázdné, pokud web nemáte. Zadejte adresu vašeho webu, ne adresu Vexaronetu.'})
+  +fpField('shared.identity.activity','Čím se firma zabývá',{t:'textarea',full:true,ro:ro,help:'Vlastními slovy. Nic nevymýšlejte, AI vychází jen z toho, co zde napíšete.'})
+  +'</div><h4>Služby</h4>'+(ro?'':'')+fpRows('shared.services.items',(d.services||{}).items,[['name','Název',{max:120,ro:ro}],['description','Popis',{max:500,ro:ro}],['priority','Priorita',{t:'select',ro:ro,opts:[['high','Vysoká'],['normal','Běžná'],['low','Nízká']]}]],30,'+ Služba')
+  +'</section>';
+ h+='<section class="card2 fsec"><h3>2. Zákazníci</h3><div class="fg">'
+  +fpField('shared.audience.description','Kdo jsou vaši zákazníci <i>*</i>',{t:'textarea',full:true,ro:ro})
+  +fpField('shared.audience.segments','Skupiny zákazníků',{t:'text',full:true,ro:ro,dt:'list',fmt:function(v){return (v||[]).join(', ')},help:'Oddělte čárkou, např. řidiči osobních aut, firemní vozový park.'})
+  +'</div></section>';
+ var fc=d.financialContext||{},g=(d.goals||[])[0]||{};
+ h+='<section class="card2 fsec"><h3>3. Výchozí situace a cíl</h3><p class="mut">Čísla jsou nepovinná. Kde si nejste jistí, nechte prázdné, AI si hodnotu nedomyslí. Částky v celých korunách, měnu a období vyberte vždy.</p><div class="fgrid">'
+  +fpField('shared.financialContext.revenueMinor','Tržby firmy',{dt:'money',ro:ro,fmt:fpShowMinor})
+  +fpField('shared.financialContext.revenueCurrency','Měna tržeb',{t:'select',ro:ro,opts:[['CZK','Kč'],['EUR','Euro']]})
+  +fpField('shared.financialContext.revenuePeriod','Za jaké období',{t:'select',ro:ro,opts:[['month','Měsíc'],['year','Rok']]})
+  +fpField('shared.financialContext.budgetMinor','Marketingový rozpočet',{dt:'money',ro:ro,fmt:fpShowMinor})
+  +fpField('shared.financialContext.budgetCurrency','Měna rozpočtu',{t:'select',ro:ro,opts:[['CZK','Kč'],['EUR','Euro']]})
+  +fpField('shared.financialContext.budgetPeriod','Perioda rozpočtu',{t:'select',ro:ro,opts:[['month','Měsíc'],['quarter','Čtvrtletí'],['year','Rok'],['one_time','Jednorázově']]})
+  +'</div><p class="mut" style="margin-top:10px">Co rozpočet zahrnuje:</p>'+fpChecks('shared.financialContext.budgetIncludes',FP_INC,fc.budgetIncludes)
+  +'<h4>Hlavní cíl</h4><div class="fgrid">'
+  +fpField('shared.goals.0.metric','Co chcete zvýšit',{t:'select',ro:ro,opts:FP_METRIC})
+  +fpField('shared.goals.0.baselineMinor','Výchozí hodnota',{dt:'money',ro:ro,fmt:fpShowMinor,help:'U tržeb v korunách, u počtů v kusech.'})
+  +fpField('shared.goals.0.growthBp','Zvýšit o (%)',{dt:'pct',ro:ro,fmt:fpShowBp})
+  +fpField('shared.goals.0.startDate','Začátek',{t:'date',ro:ro})
+  +fpField('shared.goals.0.dueDate','Termín',{t:'date',ro:ro})
+  +'</div><div class="fcalc" id="fpCalc" aria-live="polite"></div></section>';
+ h+='<section class="card2 fsec"><h3>4. Kanály, značka a omezení</h3><p class="mut">Kanály jsou jen vaše přání. Žádný účet se tím nepropojuje a nic se nepublikuje.</p>'+fpChecks('shared.channels',FP_CH,d.channels,'channel')
+  +'<div class="fg" style="margin-top:12px">'
+  +fpField('shared.brand.tone','Tón komunikace',{ro:ro,max:200,ph:'např. přátelský, věcný'})
+  +fpField('shared.brand.ordering','Jak si zákazník objedná',{ro:ro,max:500,ph:'telefon, online rezervace…'})
+  +fpField('shared.brand.assets','Dostupné fotografie a logo',{ro:ro,max:500})
+  +fpField('shared.brand.forbidden','Co nenabízíme nebo se nemá zmiňovat',{dt:'list',ro:ro,fmt:function(v){return (v||[]).join(', ')},help:'Oddělte čárkou. AI to nepoužije.'})
+  +'</div><h4>Čím se chlubíte</h4><p class="mut">Jsou to vaše tvrzení. AI je nepovažuje za doložené a nevytvoří z nich srovnání s konkurencí ani záruky.</p>'
+  +fpRows('shared.positioning.claims',(d.positioning||{}).claims,[['text','Tvrzení',{max:300,ro:ro}],['evidence','Doložení',{t:'select',ro:ro,opts:[['none','Nedoloženo'],['owner_statement','Tvrzení majitele'],['documented','Doloženo']]}]],10,'+ Tvrzení')
+  +'<div class="fg" style="margin-top:12px">'+fpField('shared.constraints.notes','Další omezení nabídky',{t:'textarea',full:true,ro:ro,help:'Slevy, ceny, služby, které nechcete propagovat.'})+'</div></section>';
+ return h}
+function fpLocal(ro){
+ return '<section class="card2 fsec"><h3>Lokalita'+(PS.info.is_root?'':' této pobočky')+'</h3><div class="fg">'
+  +fpField('local.geography.city','Město <i>*</i>',{ro:ro,max:120})
+  +fpField('local.geography.address','Adresa provozovny',{ro:ro,help:'Nepovinné. „Okolí Prahy“ není adresa.'})
+  +fpField('local.geography.serviceArea','Obsluhovaná oblast',{ro:ro,help:'Např. okolí Prahy.'})
+  +fpField('local.geography.radiusKm','Dojezd (km)',{dt:'int',ro:ro,max:3})
+  +fpField('local.localNotes','Lokální odlišnosti',{t:'textarea',full:true,ro:ro,help:'Čím se tato provozovna liší od ostatních.'})
+  +'</div></section>'}
+function fpSharedSummary(){
+ var s=PS.info.shared_from_root;if(!s)return '<div class="draft">Hlavní firma zatím nemá potvrzený profil. Společné údaje (služby, zákazníci, značka) vyplní a potvrdí vlastník nebo správce hlavní firmy.</div>';
+ var d=s.data||{},id=d.identity||{};
+ return '<section class="card2 fsec"><h3>Společné údaje hlavní firmy</h3><p class="mut">Jen ke čtení, spravuje je hlavní firma (potvrzená verze '+esc(s.version)+').</p><ul class="rows"><li><b>Název</b><span>'+esc(id.displayName||'–')+'</span></li><li><b>Činnost</b><span>'+esc(id.activity||'–')+'</span></li><li><b>Služby</b><span>'+esc(((d.services||{}).items||[]).map(function(x){return x.name}).join(', ')||'–')+'</span></li><li><b>Zákazníci</b><span>'+esc((d.audience||{}).description||'–')+'</span></li></ul></section>'}
+function fpHead(){
+ var i=PS.info,a=i.active,st='<span class="fst'+(a?' ok':'')+'" id="fpState">'+(a?'Potvrzeno: verze '+esc(a.version):'Zatím nepotvrzeno')+'</span>';
+ var h='<div class="bar2"><div><h2 style="margin:0">Profil firmy pro AI</h2><p class="mut" style="margin:4px 0 0">Údaje, ze kterých bude AI vycházet. Vyplňujete ručně a vy je potvrzujete. AI nic nepublikuje a neutrácí.</p></div><div>'+st+' <span class="fst" id="fpSave" role="status" aria-live="polite"></span></div></div>';
+ if(!i.can_write)h+='<div class="draft">Účet je teď jen pro čtení (skončila zkušební doba nebo předplatné). Profil si můžete prohlédnout, ukládat půjde po obnovení tarifu.</div>';
+ if(!PS.schemaOk)h+='<div class="draft"><b>Aplikace a databáze mají jinou verzi formuláře.</b> Aby se nic nepoškodilo, ukládání je vypnuté. Obnovte stránku (Ctrl+F5).</div>';
+ h+='<div id="fpConflict"></div>';return h}
+function fpFoot(ro){
+ var v=(PS.info.versions||[]);
+ return '<section class="card2 fsec"><h3>Potvrzení profilu</h3><p class="mut">Potvrdit smí vlastník nebo správce. Potvrzuje se přesně ta verze, kterou vidíte. Pozdější úpravy vytvoří novou verzi a ta stará zůstane v historii.</p><div id="fpMissing"></div><div class="dact"><button type="button" class="pri" id="fpConfirm" data-fp="confirm"'+(ro?' disabled':'')+'>Potvrdit profil</button></div>'
+  +(v.length?'<h4>Historie verzí</h4><ul class="rows">'+v.map(function(x){return '<li><b>Verze '+esc(x.version)+(PS.info.active&&PS.info.active.version===x.version?' (platná)':'')+'</b><span>'+fD(x.confirmed_at,true)+(x.by_me?' · potvrdili jste vy':'')+'</span></li>'}).join('')+'</ul>':'')+'</section>'}
+function fpRender(){
+ var root=A('fpRoot');if(!root)return;var ro=!PS.info.can_write||!PS.schemaOk;
+ root.innerHTML=fpHead()+(PS.info.is_root?fpShared(ro):fpSharedSummary())+fpLocal(ro)+fpFoot(ro);
+ fpUpdateStatus();fpUpdateDerived()}
+/* ---- čtení formuláře ----
+   Základem je kopie uloženého dokumentu: pole, která formulář nezobrazuje (např. doplní je pozdější krok), zůstanou.
+   Pole zobrazená ve formuláři jsou závazná: prázdné pole se z dokumentu odstraní. Seznamy se přestaví od nuly. */
+function fpDel(o,p){var k=p.split('.'),i,c=o;for(i=0;i<k.length-1;i++){c=c[k[i]];if(c==null)return}delete c[k[k.length-1]]}
+function fpReadForm(){
+ var root=A('fpRoot'),isRoot=PS.info.is_root,doc=JSON.parse(JSON.stringify(PS.doc||VXPCORE.emptyDoc(isRoot))),bad=[],restG=[];
+ if(!doc.local)doc.local={};if(isRoot&&!doc.shared)doc.shared={};
+ if(isRoot){var sh=doc.shared;if(sh.services)delete sh.services.items;if(sh.positioning)delete sh.positioning.claims;delete sh.channels;if(sh.financialContext)delete sh.financialContext.budgetIncludes;restG=(sh.goals||[]).slice(1);delete sh.goals}
+ [].forEach.call(root.querySelectorAll('[data-p]'),function(el){
+  var p=el.getAttribute('data-p'),t=el.getAttribute('data-t'),dt=el.getAttribute('data-dt')||'text',val=el.value,out;
+  if(t==='select'){out=val===''?undefined:val}
+  else if(dt==='money'){out=fpMinor(val);if(out!==out){bad.push(p);out=undefined}}
+  else if(dt==='pct'){out=fpBp(val);if(out!==out){bad.push(p);out=undefined}}
+  else if(dt==='int'){var s=String(val).replace(/\s/g,'');if(s===''){out=undefined}else if(!/^\d+$/.test(s)){bad.push(p);out=undefined}else out=Number(s)}
+  else if(dt==='list'){out=val.split(',').map(function(x){return x.trim()}).filter(Boolean);if(!out.length)out=undefined}
+  else{out=val===''?undefined:val}
+  if(out===undefined)fpDel(doc,p);else fpSet(doc,p,out)});
+ [].forEach.call(root.querySelectorAll('input[data-multi]:checked'),function(el){var p=el.getAttribute('data-multi'),k=el.getAttribute('data-key'),cur=fpGet(doc,p)||[];cur.push(k?(function(){var o={};o[k]=el.value;return o})():el.value);fpSet(doc,p,cur)});
+ if(isRoot){
+  var sv=(doc.shared.services||{}).items;if(sv){sv=sv.filter(function(x){return x&&x.name});if(sv.length)doc.shared.services.items=sv;else delete doc.shared.services.items}
+  var cl=(doc.shared.positioning||{}).claims;if(cl){cl=cl.filter(function(x){return x&&x.text}).map(function(x){if(!x.evidence)x.evidence='owner_statement';return x});if(cl.length)doc.shared.positioning.claims=cl;else delete doc.shared.positioning.claims}
+  var g=(doc.shared.goals||[])[0],gl=[];if(g&&Object.keys(g).length){if(!g.metric)g.metric='revenue';gl.push(g)}
+  gl=gl.concat(restG);if(gl.length)doc.shared.goals=gl;else delete doc.shared.goals}
+ return {doc:doc,bad:bad}}
+function fpErrors(codes){
+ var root=A('fpRoot');if(!root)return;[].forEach.call(root.querySelectorAll('[data-fe]'),function(e){e.textContent=''});var other=[];
+ codes.forEach(function(c){var path=c.slice(0,c.lastIndexOf(':')).replace(/^\$\./,'').replace(/\[(\d+)\]/g,'.$1'),el=root.querySelector('[data-fe="'+path+'"]');if(el)el.textContent=VXPCORE.explain(c);else other.push(c)});
+ if(other.length)fpSetStatus('Některé údaje nejsou ve správném tvaru ('+other.length+').','bad')}
+function fpSetStatus(t,cls){PS.status=t;var e=A('fpSave');if(e){e.textContent=t;e.className='fst'+(cls?' '+cls:'')}}
+function fpUpdateStatus(){fpSetStatus(PS.dirty?'Neuložené změny…':(PS.rev?'Uloženo (revize '+PS.rev+')':'Zatím nic uloženo'),PS.dirty?'':'ok')}
+function fpUpdateDerived(){
+ var root=A('fpRoot');if(!root||!PS.info)return;
+ var r=fpReadForm(),doc=r.doc,isRoot=PS.info.is_root,calc=A('fpCalc');
+ if(calc&&isRoot){var g=((doc.shared||{}).goals||[])[0],cur=(((doc.shared||{}).financialContext||{}).revenueCurrency)||'CZK',un=(g&&g.metric==='revenue')?(cur==='EUR'?' €':' Kč'):'';
+  if(g&&g.baselineMinor!=null&&g.growthBp!=null){var t=VXPCORE.goalTarget(g.baselineMinor,g.growthBp),isM=g.metric==='revenue',f=function(m){return isM?(m/100).toLocaleString('cs-CZ',{maximumFractionDigits:2}):String(m/100)};
+   calc.innerHTML='Cílová hodnota (výpočet): <b>'+esc(f(t))+esc(un)+'</b>, rozdíl <b>'+esc(f(t-g.baselineMinor))+esc(un)+'</b>. Jde o scénář, ne slib. Bez ceny zakázky, kapacity a údajů o poptávkách nelze říct, kolik zákazníků je k tomu potřeba.'}
+  else calc.textContent='Vyplňte výchozí hodnotu a o kolik procent ji chcete zvýšit, cíl se dopočítá.'}
+ var miss=VXPCORE.incomplete(doc,isRoot).map(fpLabel),m=A('fpMissing'),b=A('fpConfirm');
+ if(m)m.innerHTML=miss.length?'<div class="draft">K potvrzení ještě chybí: '+miss.map(esc).join('; ')+'.</div>':'<p class="mut">Vše potřebné je vyplněno.</p>';
+ if(b)b.disabled=!!miss.length||!PS.info.can_write||!PS.schemaOk||(!PS.rev&&!PS.dirty)}
+/* ---- ukládání ---- */
+function fpFormCanon(){var r=fpReadForm();return fpCanon(VXPCORE.trimDeep(r.doc))+'|'+r.bad.join(',')}
+function fpSchedule(){if(!PS.dirty&&fpFormCanon()===PS.lastSent){fpUpdateDerived();return}PS.dirty=true;fpUpdateStatus();fpUpdateDerived();clearTimeout(PS.timer);PS.timer=setTimeout(fpSave,1500)}
+async function fpSave(force){
+ if(!PS.info||!A('fpRoot')||!PS.schemaOk||!PS.info.can_write||PS.conflict&&!force)return false;
+ if(PS.saving){PS.again=true;return false}
+ clearTimeout(PS.timer);var r=fpReadForm();
+ if(r.bad.length){fpErrors(r.bad.map(function(p){return '$.'+p+':type'}));fpSetStatus('Zkontrolujte vyznačená pole.','bad');return false}
+ var doc=VXPCORE.trimDeep(r.doc),errs=VXPCORE.validateDoc(VXPSCHEMA,doc,PS.info.is_root);
+ if(errs.length){fpErrors(errs);fpSetStatus('Zkontrolujte vyznačená pole.','bad');return false}
+ fpErrors([]);PS.saving=true;fpSetStatus('Ukládám…','');
+ var res=await getSb().rpc('profile_save_draft',{cid:PS.cid,expected_revision:PS.rev,schema_version:VXPSCHEMA.version,doc:doc});
+ PS.saving=false;
+ if(res.error){var m=VXPCORE.mapRpcError(res.error);
+  if(m.kind==='conflict'){PS.conflict=m;fpShowConflict(m);fpSetStatus('Konflikt verzí','bad')}
+  else if(m.kind==='validation'){fpErrors(m.errors);fpSetStatus(m.message,'bad')}
+  else if(m.kind==='schema'){PS.schemaOk=false;fpRender();toast(m.message,'err')}
+  else fpSetStatus(m.message,'bad');
+  return false}
+ var d=res.data;PS.rev=d.revision;PS.hash=d.hash;PS.doc=d.data;PS.dirty=false;PS.conflict=null;PS.lastSent=fpFormCanon();fpUpdateStatus();fpUpdateDerived();
+ if(PS.again){PS.again=false;PS.dirty=true;setTimeout(fpSave,50)}
+ return true}
+function fpShowConflict(m){var e=A('fpConflict');if(!e)return;
+ e.innerHTML='<div class="draft"><b>Profil mezitím změnil někdo jiný</b>'+(m.current!=null?' (už je revize '+m.current+', vy máte '+PS.rev+')':'')+'. Nic jsme nepřepsali. Vyberte, jak pokračovat:<div class="dact"><button type="button" class="btn btn-main btn-sm" data-fp="reload">Načíst novější verzi (moje neuložené změny se zahodí)</button> <button type="button" class="btn btn-ghost btn-sm" data-fp="overwrite">Přepsat mojí verzí</button></div></div>'}
+async function fpConfirm(){
+ if(PS.dirty||PS.saving){var ok=await fpSave();if(!ok)return}
+ var b=A('fpConfirm');if(b)b.disabled=true;
+ var res=await getSb().rpc('profile_confirm',{cid:PS.cid,expected_revision:PS.rev,expected_hash:PS.hash});
+ if(res.error){var m=VXPCORE.mapRpcError(res.error);
+  if(m.kind==='conflict'){PS.conflict=m;fpShowConflict(m)}
+  else if(m.kind==='validation'){toast('K potvrzení ještě něco chybí: '+m.errors.map(fpLabel).join('; '),'err')}
+  else toast(m.message,'err');
+  fpUpdateDerived();return}
+ toast(res.data.unchanged?'Profil je beze změny, platí verze '+res.data.version+'.':'Profil potvrzen, platí verze '+res.data.version+'.','ok');
+ await fpLoad(true)}
+/* ---- načtení ---- */
+async function fpLoad(keepScroll){
+ var root=A('fpRoot');if(!root)return;
+ if(DEMO){root.innerHTML='<div class="draft">V ukázce se profil neukládá. Po založení účtu ho zde vyplníte.</div>';return}
+ var c=getSb(),cid=APP.cid;PS.cid=cid;PS.conflict=null;PS.dirty=false;
+ var si=await c.rpc('profile_schema_info');
+ if(si.error){root.innerHTML='<div class="draft">Profil firmy se nepodařilo načíst. Tato část vyžaduje aktualizaci databáze, která zatím nebyla provedena nebo na ni nemáte oprávnění ('+esc(si.error.message||'')+').</div>';return}
+ PS.schemaOk=fpCanon(si.data.schema)===fpCanon(VXPSCHEMA)&&si.data.version===VXPSCHEMA.version;
+ var r=await c.rpc('profile_get',{cid:cid});
+ if(r.error){var m=VXPCORE.mapRpcError(r.error);root.innerHTML='<div class="draft">'+esc(m.message)+'</div>';return}
+ PS.info=r.data;var d=r.data.draft;
+ PS.rev=d?d.revision:0;PS.hash=d?d.hash:null;
+ PS.doc=d?d.data:(r.data.active?r.data.active.data:VXPCORE.emptyDoc(r.data.is_root));
+ if(!PS.doc.local)PS.doc.local={};if(r.data.is_root&&!PS.doc.shared)PS.doc.shared={};
+ /* nic uloženého, ale existuje platná verze: formulář vychází z ní; první úprava založí koncept */
+ fpRender();PS.lastSent=fpFormCanon()}
+VIEWS.firmaprofil=function(){fpStyle();if(APP.role!=='owner'&&APP.role!=='admin')return '<div class="card2 soonc"><h2>Profil firmy</h2><p>Profil firmy upravuje vlastník nebo správce.</p></div>';
+ return '<div class="fp" id="fpRoot"><p class="mut">Načítám profil firmy…</p></div>'};
+AFTER.firmaprofil=function(){if(APP.role==='owner'||APP.role==='admin')fpLoad()};
+if(!window.__fpBound){window.__fpBound=true;
+ document.addEventListener('click',function(e){if(PS.dirty&&A('fpRoot')&&e.target.closest&&e.target.closest('[data-tab],[data-app]')&&!e.target.closest('#fpRoot'))fpSave()},true);
+ document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#fpRoot')&&(e.target.hasAttribute('data-p')))fpSchedule()});
+ document.addEventListener('change',function(e){if(e.target.closest&&e.target.closest('#fpRoot')&&(e.target.hasAttribute('data-p')||e.target.hasAttribute('data-multi')))fpSchedule()});
+ document.addEventListener('click',async function(e){
+  var b=e.target.closest&&e.target.closest('#fpRoot [data-fp]');if(!b)return;var a=b.getAttribute('data-fp');
+  if(a==='add'||a==='del'){var r=fpReadForm();PS.doc=VXPCORE.trimDeep(r.doc);if(!PS.info.is_root){}
+   var base=b.getAttribute('data-base'),arr=fpGet(PS.doc,base)||[];
+   if(a==='add')arr.push({});else arr.splice(Number(b.getAttribute('data-i')),1);fpSet(PS.doc,base,arr);
+   /* prázdný řádek se do dokumentu nedostane, proto ho při překreslení jen přidáme do zobrazení */
+   fpRender();fpSchedule();return}
+  if(a==='confirm'){fpConfirm();return}
+  if(a==='reload'){await fpLoad(true);return}
+  if(a==='overwrite'){PS.rev=PS.conflict&&PS.conflict.current!=null?PS.conflict.current:PS.rev;PS.conflict=null;A('fpConflict').innerHTML='';await fpSave(true);return}})}
+
+/* ---- Nastavení: aktivní firma a odkaz na profil ---- */
+function fpSettingsCards(){
+ var ms=APP.mships||[],h='';
+ if(ms.length>1){
+  var rows=ms.map(function(m){var c=m.companies||{};return {id:m.company_id,name:c.name||m.company_id,branch:!!c.parent_company_id,role:m.role,at:c.created_at||''}}).sort(function(a,b){return String(a.at).localeCompare(String(b.at))||String(a.id).localeCompare(String(b.id))});
+  h+='<section class="card2"><h3>Aktivní firma</h3><p class="mut">Účet patří do více firem nebo poboček. Vyberte, se kterou právě pracujete. Oprávnění se vždy ověřují na serveru podle vybrané firmy.</p><form id="coForm" class="fg"><div class="f"><label for="coSel">Firma</label><select id="coSel">'
+   +rows.map(function(r){return '<option value="'+esc(r.id)+'"'+(r.id===APP.cid?' selected':'')+'>'+esc(r.name)+(r.branch?' (pobočka)':'')+' – '+esc(ROLEN[r.role]||r.role)+'</option>'}).join('')
+   +'</select></div><div class="f"><button class="btn btn-main btn-sm" type="submit">Přepnout</button></div></form></section>'}
+ h+='<section class="card2"><h3>Profil firmy pro AI</h3><p class="mut">Společný profil firmy (služby, zákazníci, cíle, značka). Vyplňujete a potvrzujete ho ručně, AI z něj bude vycházet. Dostupné ve všech tarifech.</p><div class="dact"><button type="button" class="btn btn-main btn-sm" data-tab="firmaprofil">Otevřít profil firmy</button></div></section>';
+ return h}
+document.addEventListener('submit',function(e){
+ if(!e.target||e.target.id!=='coForm')return;e.preventDefault();
+ var v=A('coSel').value;try{localStorage.setItem('vx_active_company_'+APP.user.id,v)}catch(x){}
+ if(v!==APP.cid)openApp()});
+
+/* Vexaronet AI Autopilot: čistá logika (bez DOM) pro přepínač režimů a nastavení limitu.
+   Peníze se převádějí celočíselně (nanodolary), nikdy přes desetinná čísla. */
+var VXAP=(function(){
+ var MAX_NUSD=50000000000n; /* 50 USD, stejný strop jako databáze */
+ /* "0,25" nebo "0.25" -> "250000000" (nUSD, text). Neplatné vstupy vrací null. */
+ function usdToNusd(s){
+  s=String(s==null?'':s).trim().replace(/\s/g,'').replace(',','.');
+  var m=/^(\d{1,3})(?:\.(\d{1,9}))?$/.exec(s);if(!m)return null;
+  var n=BigInt(m[1])*1000000000n+BigInt((m[2]||'').padEnd(9,'0'));
+  return n>MAX_NUSD?null:n.toString()}
+ function nusdToUsd(n){return Number(n)/1e9}
+ function fmtUsd(n,max){if(n==null)return '–';return nusdToUsd(n).toLocaleString('cs-CZ',{minimumFractionDigits:2,maximumFractionDigits:max==null?4:max})+' USD'}
+ /* cena za 1 M tokenů v USD z ceny za jeden token v nUSD (300 nUSD/token = 0,30 USD / 1 M) */
+ function perMillionUsd(nusdPerToken){return Number(nusdPerToken)/1000}
+ var MODES=[
+  {id:'marketing',name:'AI Marketing',tab:'marketing',tabs:['marketing','zakaznici'],state:'lim',needs:'pro',text:'Návrhy příspěvků, newsletterů a reklam a plán obsahu. Nic se samo nepublikuje ani neodesílá.'},
+  {id:'obchodnik',name:'AI Obchodník',tab:'pripady',tabs:['pripady','nabidky','zakaznici'],state:'soon',needs:'pro',text:'Obchodní případy a nabídky (CRM) fungují. Samotný AI obchodník zatím není hotový.'},
+  {id:'ceo',name:'AI CEO',tab:'ceo',tabs:['ceo','reporty','finance'],state:'lim',needs:'pro',text:'Zdraví firmy, doporučení a chat nad vašimi daty. Radí, nic neprovádí.'},
+  {id:'ucetnictvi',name:'AI Účetnictví',tab:'ucetni',tabs:['ucetni','faktury','finance','reporty'],state:'lim',needs:'accountant',text:'Vytěžení dokladů ke kontrole a odpovědi z vaší evidence. Účetní a daňové věci ověřte s odborníkem.'},
+  {id:'weby_eshopy',name:'AI Weby a e-shopy',tab:'weby',tabs:['weby','eshop','sklad','online'],state:'lim',needs:'pro',text:'AI návrh textů webu. E-shop, sklad a online rezervace fungují bez AI.'},
+  {id:'automatizace',name:'AI Automatizace',tab:'automatizace',tabs:['automatizace'],state:'lim',needs:'start',text:'Pravidla navrhují úkoly, které potvrdíte vy. Běh na pozadí a automatické zprávy zákazníkům zatím nejsou.'}];
+ var STATE={on:'dostupné',lim:'omezeně',soon:'připravujeme'};
+ /* Některé záložky (zákazníci, finance, reporty) patří do více režimů. Když je otevřená záložka v preferovaném
+    (naposledy zvoleném) režimu, zůstane ten; jinak se vezme první režim, který ji obsahuje. */
+ function modeOfTab(tab,prefer){var i;if(tab==='autopilot')return 'home';
+  for(i=0;i<MODES.length;i++)if(MODES[i].id===prefer&&MODES[i].tabs.indexOf(tab)>=0)return prefer;
+  for(i=0;i<MODES.length;i++)if(MODES[i].tabs.indexOf(tab)>=0)return MODES[i].id;return null}
+ /* Připravenost k placeným AI během: každý bod musí platit. Vrací seznam {ok,text}. */
+ function readiness(st,profileOk){
+  return [
+   {ok:!!st.plan_allowed,text:'Tarif hlavní firmy je PRO nebo vyšší'},
+   {ok:profileOk===true,text:profileOk==null?'Profil firmy potvrzen (nelze zjistit)':'Profil firmy je potvrzený'},
+   {ok:st.monthly_limit_nusd!=null&&Number(st.monthly_limit_nusd)>0,text:'Měsíční limit je nastaven'},
+   {ok:!!st.platform_paid_runs_enabled,text:'Placené běhy povolil provozovatel platformy'}]}
+ return {usdToNusd:usdToNusd,fmtUsd:fmtUsd,perMillionUsd:perMillionUsd,MODES:MODES,STATE:STATE,modeOfTab:modeOfTab,readiness:readiness,MAX_NUSD:MAX_NUSD}
+})();
+if(0&&typeof module!=='undefined')module.exports=VXAP;
+
+/* ===== AI Autopilot: horní přepínač režimů a přehled stavu a bezpečnosti =====
+   Tato část NESPOUŠTÍ žádné volání AI. Přepínač jen otevírá existující moduly a přehled zobrazuje a nastavuje
+   měsíční limit (RPC autopilot_status / autopilot_set_budget). Vynucování limitu probíhá v databázi. */
+IC.autopilot='M12 2l2.2 5.4L20 9l-4.4 3.6L17 19l-5-3-5 3 1.4-6.4L4 9l5.8-1.6z';
+var APS={mode:null};
+function apStyle(){if(document.getElementById('apCss'))return;var s=document.createElement('style');s.id='apCss';
+ s.textContent='.apbar{display:flex;gap:8px;overflow-x:auto;padding:6px 20px 8px;white-space:nowrap;scrollbar-width:thin;-webkit-overflow-scrolling:touch}.apbar .apb{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid rgba(139,108,255,.35);background:rgba(139,108,255,.08);color:inherit;font:inherit;font-size:.92rem;cursor:pointer}.apbar .apb:hover{background:rgba(139,108,255,.18)}.apbar .apb.on{background:rgba(139,108,255,.34);border-color:rgba(139,108,255,.9);font-weight:600}.apbar .apb:focus-visible{outline:2px solid #8b6cff;outline-offset:2px}.apbar .apt{font-style:normal;font-size:.72rem;padding:2px 7px;border-radius:999px;background:rgba(128,128,160,.22)}.apbar .apt.soon{background:rgba(255,190,80,.22)}.apbar .apt.lock{background:rgba(220,60,80,.2)}.apsub{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:0 20px 8px;font-size:.88rem}.apsub .mut{flex:1 1 280px}.apsub button{font:inherit;font-size:.85rem}.ap .apgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.ap .apcard{padding:14px;border-radius:14px;border:1px solid rgba(128,128,160,.3)}.ap .apcard h4{margin:0 0 6px}.ap .apmeter{height:10px;border-radius:999px;background:rgba(128,128,160,.25);overflow:hidden;margin:8px 0}.ap .apmeter i{display:block;height:100%;background:#8b6cff}.ap .apchk{list-style:none;padding:0;margin:8px 0}.ap .apchk li{padding:4px 0}.ap .apchk b{display:inline-block;width:1.4em}.ap .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.ap .apok{color:#5fd18a}.ap .apno{color:#ff9aa8}@media(max-width:640px){.apbar,.apsub{padding-left:12px;padding-right:12px}}';
+ document.head.appendChild(s)}
+function apNeedsOk(m){var p=effPlan();if(m.needs==='start')return true;if(m.needs==='accountant')return ['accountant','pro','business','enterprise'].indexOf(p)>=0;return ['pro','business','enterprise'].indexOf(p)>=0}
+function apBar(){
+ var main=A('appMain'),root=A('vxapp');if(!main||!root)return;
+ var bar=A('apBar'),sub=A('apSub');
+ if(APP.role==='employee'){if(bar)bar.remove();if(sub)sub.remove();return}
+ apStyle();
+ if(!bar){bar=document.createElement('nav');bar.id='apBar';bar.className='apbar';bar.setAttribute('aria-label','Režimy AI Autopilota');main.parentNode.insertBefore(bar,main)}
+ if(!sub){sub=document.createElement('div');sub.id='apSub';sub.className='apsub';main.parentNode.insertBefore(sub,main)}
+ var cur=VXAP.modeOfTab(APP.tab,APS.mode);if(cur&&cur!=='home')APS.mode=cur;
+ bar.innerHTML='<button type="button" class="apb'+(cur==='home'?' on':'')+'" data-tab="autopilot" data-ap="home"'+(cur==='home'?' aria-current="page"':'')+'>'+ico('autopilot',16)+'<span>Autopilot</span></button>'
+  +VXAP.MODES.map(function(m){var locked=!apNeedsOk(m)||!allowed(m.tab),tag=locked?'<i class="apt lock">'+(m.needs==='accountant'?'AI Účetní+':'PRO+')+'</i>':'<i class="apt '+m.state+'">'+VXAP.STATE[m.state]+'</i>';
+   return '<button type="button" class="apb'+(cur===m.id?' on':'')+'" data-tab="'+m.tab+'" data-ap="'+m.id+'"'+(cur===m.id?' aria-current="page"':'')+'><span>'+esc(m.name)+'</span>'+tag+'</button>'}).join('');
+ var m=VXAP.MODES.filter(function(x){return x.id===cur})[0];
+ if(!m){sub.innerHTML=cur==='home'?'<span class="mut">Přehled Autopilota: stav, limit a bezpečnost. Autopilot zatím nespouští žádné placené volání.</span>':'';sub.style.display=cur==='home'?'':'none';return}
+ sub.style.display='';
+ sub.innerHTML='<span class="mut"><b>'+esc(m.name)+'</b> ('+esc(VXAP.STATE[m.state])+'): '+esc(m.text)+'</span>'
+  +m.tabs.map(function(t){return '<button type="button" class="btn btn-ghost btn-sm" data-tab="'+t+'">'+esc(tabLab(t))+'</button>'}).join('')}
+/* ---- přehled Autopilota ---- */
+function apCard(m){var ok=apNeedsOk(m)&&allowed(m.tab);
+ return '<div class="apcard"><h4>'+esc(m.name)+' <small class="mut">· '+esc(VXAP.STATE[m.state])+'</small></h4><p class="mut">'+esc(m.text)+'</p>'
+  +(ok?'<button type="button" class="btn btn-ghost btn-sm" data-tab="'+m.tab+'">Otevřít</button>':'<small class="mut">Součástí vyššího tarifu.</small>')+'</div>'}
+function apErr(res,what){
+ var e=res.error,c=String(e.code||''),msg=String(e.message||'');
+ if(c==='42501'||/forbidden|read_only/.test(msg))return 'K nastavení nemáte oprávnění, nebo je účet jen pro čtení.';
+ if(/function|schema cache|does not exist|PGRST20/i.test(msg+c))return what+' vyžaduje aktualizaci databáze, která zatím nebyla provedena.';
+ return what+' se nepodařilo načíst ('+msg+').'}
+async function apLoad(){
+ var root=A('apRoot');if(!root)return;
+ if(DEMO){root.innerHTML='<div class="draft">V ukázce se stav limitu nezobrazuje.</div>'+apModesHtml();return}
+ var c=getSb(),cid=APP.cid,st=await c.rpc('autopilot_status',{cid:cid}),pr=await c.rpc('profile_get',{cid:cid});
+ if(!A('apRoot'))return;
+ var h='';
+ if(st.error){root.innerHTML='<div class="draft">'+esc(apErr(st,'Stav limitu'))+'</div>'+apModesHtml();return}
+ var s=st.data,profileOk=pr.error?null:(pr.data.is_root?!!pr.data.active:!!pr.data.shared_from_root),
+  lim=s.monthly_limit_nusd,spent=Number(s.spent_nusd||0),pct=lim?Math.min(100,Math.round(spent/Number(lim)*100)):0,rd=VXAP.readiness(s,profileOk),all=rd.every(function(r){return r.ok});
+ h+='<section class="card2"><h3>Placené AI běhy</h3><p>'+(all?'<b class="apok">Podmínky jsou splněné.</b> I tak Autopilot zatím žádné placené volání nespouští; funkce se zapínají postupně.':'<b class="apno">Placené AI běhy jsou vypnuté.</b> Autopilot zatím nespouští žádné placené volání.')+'</p><ul class="apchk">'
+  +rd.map(function(r){return '<li><b class="'+(r.ok?'apok':'apno')+'" aria-hidden="true">'+(r.ok?'✓':'✗')+'</b>'+esc(r.text)+'<span class="sr">'+(r.ok?' splněno':' nesplněno')+'</span></li>'}).join('')+'</ul></section>';
+ h+='<section class="card2"><h3>Měsíční limit nákladů na AI</h3>'
+  +'<p>'+(lim==null?'Limit zatím <b>není nastaven</b>, placené běhy se proto odmítnou.':'Limit: <b>'+esc(VXAP.fmtUsd(lim))+'</b> měsíčně pro celou firmu včetně poboček.')+'</p>'
+  +(lim!=null?'<div class="apmeter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'" aria-label="Využití měsíčního limitu"><i style="width:'+pct+'%"></i></div><p class="mut">Tento měsíc: '+esc(VXAP.fmtUsd(spent))+' ('+pct+' %), zbývá '+esc(VXAP.fmtUsd(s.remaining_nusd))+'. Rezervace za běžící operace se počítají v plné výši.</p>':'')
+  +(s.is_root?'<form id="apBudgetForm" class="fg"><div class="f"><label for="apLimit">Limit na měsíc (USD, nejvýše 50)</label><input id="apLimit" inputmode="decimal" autocomplete="off" value="'+(lim==null?'':esc(String(Number(lim)/1e9).replace('.',',')))+'" placeholder="0,25"><small class="fe" id="apLimitErr" style="display:block;color:#ff9aa8"></small></div>'
+   +'<div class="f"><button class="btn btn-main btn-sm" type="submit">Uložit limit</button> <button class="btn btn-ghost btn-sm" type="button" data-ap-act="preset">Doporučených 0,25 USD</button> '+(lim!=null?'<button class="btn btn-ghost btn-sm" type="button" data-ap-act="clear">Zrušit limit</button>':'')+'</div></form><p class="mut fine">Uložení limitu nespustí žádné volání AI. Hlídá ho databáze: před každým během se rezervuje nejvyšší možná cena a při překročení se běh odmítne.</p>':'<p class="mut">Limit nastavuje a vidí hlavní firma.</p>')
+  +'<div id="apBudgetMsg" class="st" role="status" aria-live="polite"></div></section>';
+ h+='<section class="card2"><h3>Ceník modelu</h3>'+((s.models||[]).length?'<ul class="rows">'+s.models.map(function(m){return '<li><b>'+esc(m.model)+'</b><span>vstup '+esc(VXAP.perMillionUsd(m.input_nusd_per_token).toFixed(2).replace('.',','))+' USD, výstup '+esc(VXAP.perMillionUsd(m.output_nusd_per_token).toFixed(2).replace('.',','))+' USD za 1 M tokenů · ověřeno '+esc(String(m.verified_on))+'</span></li>'}).join('')+'</ul><p class="mut fine">Zdroj: oficiální ceník Google (Standard). Model bez ověřené ceny se odmítne.</p>':'<p class="mut">Žádný model nemá ověřenou cenu, placené běhy nejsou možné.</p>')+'</section>';
+ root.innerHTML=h+apModesHtml()}
+function apModesHtml(){return '<h3 style="margin:18px 0 8px">Režimy</h3><div class="apgrid">'+VXAP.MODES.map(apCard).join('')+'</div><section class="card2" style="margin-top:14px"><h3>Jak je to zabezpečené</h3><ul class="ticks"><li>AI jen navrhuje. Nic nepublikuje, neodesílá ani neplatí bez vašeho potvrzení.</li><li>Potvrzovat smí jen vlastník nebo správce, vždy pod svou přihlášenou identitou.</li><li>Náklady hlídá databáze (rezervace před během, vypořádání po něm), ne prohlížeč.</li><li>Data firem jsou oddělená; AI dostane jen údaje potřebné pro danou úlohu.</li></ul></section>'}
+async function apSaveLimit(nusd){
+ var msg=A('apBudgetMsg');if(msg){msg.className='st';msg.textContent='Ukládám…'}
+ var r=await getSb().rpc('autopilot_set_budget',{cid:APP.cid,p_limit_nusd:nusd==null?null:Number(nusd)});
+ if(r.error){var m=VXPCORE.mapRpcError(r.error),t=m.kind==='validation'?'Limit musí být od 0 do 50 USD.':(String(r.error.message||'')==='only_root'?'Limit nastavuje hlavní firma.':m.message);if(msg){msg.className='st err';msg.textContent=t}return}
+ toast(nusd==null?'Limit zrušen.':'Limit uložen.','ok');await apLoad()}
+VIEWS.autopilot=function(){apStyle();if(APP.role==='employee')return '<div class="card2 soonc"><h2>Autopilot</h2><p>Autopilot spravuje vlastník nebo správce.</p></div>';
+ return '<div class="ap" id="apRoot"><p class="mut">Načítám stav Autopilota…</p></div>'};
+AFTER.autopilot=function(){if(APP.role!=='employee')apLoad()};
+if(!window.__apBound){window.__apBound=true;
+ document.addEventListener('submit',function(e){if(e.target.id!=='apBudgetForm')return;e.preventDefault();
+  var v=A('apLimit').value,n=VXAP.usdToNusd(v),er=A('apLimitErr');
+  if(n==null){er.textContent='Zadejte částku od 0 do 50 USD, např. 0,25.';return}
+  er.textContent='';apSaveLimit(n)});
+ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-ap-act]');if(!b)return;var a=b.getAttribute('data-ap-act');
+  if(a==='preset'){A('apLimit').value='0,25';A('apLimitErr').textContent=''}
+  if(a==='clear'){apSaveLimit(null)}})}
 
 })();
 </script>

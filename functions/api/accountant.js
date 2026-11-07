@@ -2,6 +2,8 @@
 // Vysledek vytezeni je jen NAVRH, uzivatel ho musi zkontrolovat a potvrdit. Nic se neuklada automaticky.
 // Klic GEMINI_API_KEY je jen v nastaveni Cloudflare. Volajici musi byt prihlaseny a mit tarif s AI Ucetni.
 
+import VXGUARD from '../../src/ai_guard.js';
+
 let SB_URL = 'https://micymdbqgzeckiqyvvkn.supabase.co';
 let SB_KEY = 'sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW';
 const DOC_LIMIT = { accountant: 100, pro: 150, business: 500, enterprise: 5000 };
@@ -46,30 +48,12 @@ export const onRequest = async ({ request: req, env }) => {
   if (!key) return json({ error: 'not_configured' }, 503);
   const token = (req.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
   if (!token) return json({ error: 'auth' }, 401);
-  const H = { apikey: SB_KEY, authorization: `Bearer ${token}`, 'content-type': 'application/json' };
-
-  let uid;
-  try {
-    const u = await fetch(`${SB_URL}/auth/v1/user`, { headers: H });
-    if (!u.ok) return json({ error: 'auth' }, 401);
-    uid = (await u.json()).id;
-  } catch { return json({ error: 'auth' }, 401); }
-  if (!uid) return json({ error: 'auth' }, 401);
-
   let body;
   try { body = await req.json(); } catch { return json({ error: 'bad_request' }, 400); }
-  const cid = String(body?.cid || '');
-  if (!/^[0-9a-f-]{36}$/i.test(cid)) return json({ error: 'bad_request' }, 400);
-
-  // tarif firmy (clen firmy ho vidi pres RLS)
-  let plan = '';
-  try {
-    const sr = await fetch(`${SB_URL}/rest/v1/subscriptions?select=plan,status,trial_end&company_id=eq.${cid}&limit=1`, { headers: H });
-    const sub = sr.ok ? (await sr.json())[0] : null;
-    plan = String(sub?.plan || '').toLowerCase();
-    const ended = sub && ((sub.status === 'trial' && sub.trial_end && new Date(sub.trial_end) < new Date()) || sub.status === 'expired' || sub.status === 'canceled');
-    if (!sub || ended || !DOC_LIMIT[plan]) return json({ error: 'plan' }, 403);
-  } catch { return json({ error: 'plan' }, 403); }
+  const g = await VXGUARD.guardAi({ legacyResolve: true, fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid: body?.cid, plans: Object.keys(DOC_LIMIT) });
+  if (!g.ok) return json({ error: g.error }, g.status);
+  const uid = g.uid, cid = g.cid, plan = g.plan;
+  const H = { apikey: SB_KEY, authorization: `Bearer ${token}`, 'content-type': 'application/json' };
   if (limited(uid)) return json({ error: 'rate' }, 429);
 
   const model = env.GEMINI_MODEL || 'gemini-3.5-flash-lite';

@@ -95,3 +95,24 @@ V části Zákazníci je tlačítko "Import z CSV / Excelu": soubor se uloží j
 - Vše je v tabulce `sites` (sloupec `data`), žádná změna databáze nebyla potřeba. Veřejná adresa: `/?w=adresa`.
 - Vlastní doména zatím není.
 - Nahrávání obrázků: bucket `site-images` (veřejné čtení, max 3 MB, JPG/PNG/WebP/GIF), zápis jen vlastník/admin do složky své firmy (`schema_storage.sql`, už nasazeno). V ukázce se nenahrává.
+
+## Profil firmy pro AI (větev ve vývoji, zatím nenasazeno)
+
+Ruční profil firmy (služby, zákazníci, cíl, značka) s automatickým ukládáním, verzemi a potvrzením. Dostupný ve všech tarifech vlastníkovi a správci
+(v menu Další moduly → Profil firmy a v Nastavení). Společné údaje spravuje hlavní firma, pobočka má vlastní lokalitu.
+1. V Supabase SQL Editoru jednou spusťte `db/migrations/20261107120000_profil_firmy.sql` (jen přidává objekty; zpět `..._rollback.sql`).
+   Před tím vyzkoušejte na testovacím projektu podle `docs/TESTOVACI_PROSTREDI.md`.
+2. Žádné nové proměnné prostředí ani AI klíč nejsou potřeba. Bez migrace aplikace u profilu zobrazí upozornění, nic se nerozbije.
+3. Schéma formuláře je v `src/onboarding_schema.json`. Po jeho změně spusťte `python3 tools/sync_profile_schema.py`, `python3 build.py` a `tests/db/run_local.sh`.
+4. Aplikace si pamatuje aktivní firmu v prohlížeči (Nastavení → Aktivní firma, jen když účet patří do více firem).
+
+## AI Autopilot a bezpečnostní opravy (větev ve vývoji, zatím nenasazeno)
+
+Podrobnosti: `docs/AUTOPILOT.md`, `docs/BEZPECNOSTNI_OPRAVY.md`. Žádná část nespouští placené volání AI.
+1. Migrace v tomto pořadí, každou nejdřív na testovacím projektu (`docs/TESTOVACI_PROSTREDI.md`), na produkci až po výslovném souhlasu:
+   `20261107120000_profil_firmy.sql`, `20261108100000_bezpecnostni_opravy.sql`, `20261108110000_autopilot_limity.sql` (všechny mají `_rollback.sql`).
+2. Cloudflare funkce `advisor`, `web-ai`, `marketing`, `accountant` nově vyžadují `cid` firmy. Nasazujte je **spolu s novým `index.html`**;
+   stará stránka v prohlížeči (cache, PWA) AI nepoužije, dokud se neobnoví.
+3. Platformní vypínač placených AI běhů je po migraci vypnutý a zapíná se až po ověření (`docs/AUTOPILOT.md`, oddíl 4).
+4. Před sestavením: `python3 build.py`. Testy: `tests/db/run_all_local.sh`, `node tests/*.test.mjs`, `python3 tests/profile_ui.py`, `python3 tests/autopilot_ui.py`.
+
