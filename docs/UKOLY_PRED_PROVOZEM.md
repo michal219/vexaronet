@@ -38,3 +38,9 @@ Nic z toho není aplikované na produkci. Před aplikací je nutný váš souhla
 - Pořídit úplný zálohovatelný dump schématu a ověřit obnovu v testovacím projektu (snapshot v `db/snapshot/` je zatím jen dokumentace).
 - Zdokumentovat, jak se spouštějí existující cron úlohy (adresy, tajemství) před implementací workeru AI.
 - Pět starších testů selhává už před touto prací: `smoke`, `fakt`, `legal`, `demo_btn` a `faktury_qr` (chybí modul `cv2`). Nesouvisí se změnami profilu.
+
+## Ú4. Právní soulad (2026-11-10)
+
+Audit a opravy šesti oblastí (věk, fonty, cookies a nahrávání, marketingové e-maily, placené objednávky, DSA) jsou v `docs/PRAVNI_SOULAD.md`,
+nasazení v `docs/NASAZENI_PRAVNI_SOULAD.md`. Před ostrým provozem je potřeba hlavně: identifikace provozovatele, potvrzení kontaktního místa DSA,
+určení správce platformy (`private.platform_admins` je v produkci prázdná) a právní posouzení míst označených ⚖.
