@@ -21,7 +21,7 @@ export const onRequest = async ({ request: req, env }) => {
   if (doc.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(doc.email)) errs.push('identity');
   if (!doc.good_faith) errs.push('good_faith');
   if (errs.length) return L.json({ error: 'invalid', fields: [...new Set(errs)] }, 400);
-  const SK = env.SUPABASE_SERVICE_KEY;
+  const SK = String(env.SUPABASE_SERVICE_KEY || '').replace(/[\s\u200B-\u200D\u2060\uFEFF]+/g, '');
   if (!SK) return L.json({ error: 'not_configured', contact: L.dsaContact(env) }, 503);
   const r = await L.rpc(fetch, 'dsa_submit', { doc, p_ip_hash: await L.ipHash(req, SK) }, SK).catch(() => null);
   if (!r || !r.ok) {

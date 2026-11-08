@@ -45,5 +45,10 @@ for (const r of seen) {
 const svc = seen.filter((r) => r.h.apikey === SK);
 assert.ok(svc.length >= 2 && svc.every((r) => !r.h.authorization), 'tajný klíč jen v apikey, bez Authorization');
 assert.ok(seen.some((r) => r.h.authorization === 'Bearer ' + USER), 'token přihlášeného uživatele se dál posílá v Authorization');
-console.log(`OK   ${seen.length} požadavků na Supabase: klíče jen v apikey, Authorization nese jen JWT uživatele (tajný klíč ve ${svc.length} požadavcích)`);
+// klíč vložený v Cloudflare se zalomením řádku / neviditelným znakem se před použitím očistí
+const total = seen.length; seen.length = 0; env.SUPABASE_SERVICE_KEY = '\n ' + SK + '\u200b\r\n';
+await run('chat', post('/api/chat', { messages: [{ role: 'user', content: 'Ahoj' }] }));
+assert.equal(seen[0]?.h.apikey, SK, 'očištěný klíč v apikey');
+console.log('OK   klíč se zalomením řádku a neviditelným znakem se před použitím očistí');
+console.log(`OK   ${total} požadavků na Supabase: klíče jen v apikey, Authorization nese jen JWT uživatele (tajný klíč ve ${svc.length} požadavcích)`);
 console.log('VŠECHNY KONTROLY PROŠLY');

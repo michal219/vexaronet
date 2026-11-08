@@ -72,7 +72,7 @@ export const onRequest = async ({ request: req, env, ...context }) => {
   }
 
   const cap = await VXGUARD.reservePublicChat({ fetchFn: fetch, sbUrl: SB_URL, serviceKey: env.SUPABASE_SERVICE_KEY, ip });
-  if (!cap.ok) return json({ error: cap.error }, cap.status);
+  if (!cap.ok) return json({ error: cap.error, ...(cap.stage ? { stage: cap.stage } : {}) }, cap.status);
 
   const model = env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;

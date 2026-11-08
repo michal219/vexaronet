@@ -7,7 +7,9 @@
    Pravidlo tarifu zůstává jako dosud: povolený tarif a ne prošlá zkušební doba, ne expired/canceled. */
 var VXGUARD=(function(){
  var UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
- function fail(status,error){return {ok:false,status:status,error:error}}
+ function fail(status,error,stage){var f={ok:false,status:status,error:error};if(stage)f.stage=stage;return f}
+ /* Hodnota klíče z nastavení Cloudflare bez bílých a neviditelných znaků (vložení se zalomením řádku apod.). Platný klíč je neobsahuje. */
+ function cleanKey(k){return String(k==null?'':k).replace(/[\s\u200B-\u200D\u2060\uFEFF]+/g,'')}
  function planOk(sub,plans,now){
   if(!sub)return false;var p=String(sub.plan||'').toLowerCase();if(plans.indexOf(p)<0)return false;
   if(sub.status==='expired'||sub.status==='canceled')return false;
@@ -65,16 +67,17 @@ var VXGUARD=(function(){
     Funkce je jen pro service_role, proto potřebuje SUPABASE_SERVICE_KEY v Cloudflare. Bez klíče nebo při chybě DB
     se AI nezavolá (fail closed). opts: {fetchFn, sbUrl, serviceKey, ip, now?} */
  async function reservePublicChat(o){
-  if(!o.serviceKey)return fail(503,'not_configured');
+  var sk=cleanKey(o.serviceKey);
+  if(!sk)return fail(503,'not_configured');
   var day=(o.now||new Date()).toISOString().slice(0,10),hex;
-  try{var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(o.ip||'unknown').slice(0,100)+'|'+o.serviceKey+'|'+day));
-   hex=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}catch(e){return fail(503,'limit_unavailable')}
+  try{var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(o.ip||'unknown').slice(0,100)+'|'+sk+'|'+day));
+   hex=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}catch(e){return fail(503,'limit_unavailable','hash')}
   var r;
-  try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_help_chat',{method:'POST',headers:{apikey:o.serviceKey,'content-type':'application/json'},body:JSON.stringify({p_actor:hex})})}
-  catch(e){return fail(503,'limit_unavailable')}
-  if(!r.ok)return fail(503,'limit_unavailable');
+  try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_help_chat',{method:'POST',headers:{apikey:sk,'content-type':'application/json'},body:JSON.stringify({p_actor:hex})})}
+  catch(e){return fail(503,'limit_unavailable','fetch')}
+  if(!r.ok)return fail(503,'limit_unavailable','http_'+r.status);
   var v=null;try{v=await r.json()}catch(e){v=null}
   return v===true?{ok:true}:fail(429,'rate')}
- return {guardAi:guardAi,reserveAi:reserveAi,reservePublicChat:reservePublicChat,planOk:planOk,UUID:UUID}
+ return {guardAi:guardAi,reserveAi:reserveAi,reservePublicChat:reservePublicChat,planOk:planOk,UUID:UUID,cleanKey:cleanKey}
 })();
 if(typeof module!=='undefined')module.exports=VXGUARD;
