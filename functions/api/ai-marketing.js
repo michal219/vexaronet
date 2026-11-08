@@ -18,7 +18,7 @@ const cut = (s, n) => String(s ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 const ymd = (d) => d.toISOString().slice(0, 10);
 
 async function rpc(name, args, key, token) {
-  const r = await fetch(`${SB_URL}/rest/v1/rpc/${name}`, { method: 'POST', headers: { apikey: key, authorization: `Bearer ${token || key}`, 'content-type': 'application/json' }, body: JSON.stringify(args) });
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${name}`, { method: 'POST', headers: { apikey: key, 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify(args) });
   let d = null; try { d = await r.json(); } catch { d = null; }
   return { ok: r.ok, status: r.status, data: d };
 }

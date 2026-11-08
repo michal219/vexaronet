@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /*?app=
+
+Sitemap: https://vexaronet.com/sitemap.xml

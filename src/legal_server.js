@@ -15,7 +15,7 @@ var VXLEGAL=(function(){
     body:JSON.stringify(Object.assign({from:(env.INVITE_FROM||'Vexaronet <info@vexaronet.com>'),to:[m.to],subject:m.subject,text:m.text},m.html?{html:m.html}:{},m.headers?{headers:m.headers}:{},m.reply_to?{reply_to:m.reply_to}:{}))});
    if(!r.ok){console.error('mail',r.status);return {ok:false,reason:'failed'}}var j=await r.json().catch(function(){return {}});return {ok:true,id:j&&j.id||null}}
   catch(e){console.error('mail',e);return {ok:false,reason:'failed'}}}
- async function rpc(fetchFn,name,args,key,token){var r=await fetchFn(SB_URL+'/rest/v1/rpc/'+name,{method:'POST',headers:{apikey:key,authorization:'Bearer '+(token||key),'content-type':'application/json'},body:JSON.stringify(args||{})});
+ async function rpc(fetchFn,name,args,key,token){var r=await fetchFn(SB_URL+'/rest/v1/rpc/'+name,{method:'POST',headers:Object.assign({apikey:key,'content-type':'application/json'},token?{authorization:'Bearer '+token}:{}),body:JSON.stringify(args||{})});
   var j=null;try{j=await r.json()}catch(e){}return {ok:r.ok,status:r.status,data:j}}
  return {SB_URL:SB_URL,SB_KEY:SB_KEY,SITE:SITE,PUBLIC_CONTACT:PUBLIC_CONTACT,json:json,sha256hex:sha256hex,ipHash:ipHash,esc:esc,dsaContact:dsaContact,sendMail:sendMail,rpc:rpc}
 })();

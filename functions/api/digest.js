@@ -171,7 +171,7 @@ export const onRequest = async ({ request: req, env }) => {
     if (!env.DIGEST_SECRET || secret !== env.DIGEST_SECRET) return json({ error: 'auth' }, 401);
     const SK = env.SUPABASE_SERVICE_KEY;
     if (!SK) return json({ error: 'not_configured', message: 'Chybi SUPABASE_SERVICE_KEY.' }, 503);
-    const H = { apikey: SK, authorization: `Bearer ${SK}` };
+    const H = { apikey: SK };
     const { ymd, hour } = pragueNow();
     let rows = [];
     try {
