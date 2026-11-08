@@ -2471,4 +2471,11 @@ for _f in PUBLIC_FILES:
     shutil.copy2(D + _f, _P + _f)
 for _d in PUBLIC_DIRS:
     shutil.copytree(D + _d, _P + _d)
+# _routes.json: serverové funkce se volají jen pro /api/* a pro interní cesty z kořene repozitáře
+# (functions/_middleware.js na nich vrátí 404 i tehdy, když Cloudflare drží starou kopii v mezipaměti).
+_pub = set(PUBLIC_FILES + PUBLIC_DIRS + ['public'])
+_internal = sorted(x for x in os.listdir(D) if not x.startswith('.') and x not in _pub)
+_routes = ['/api/*'] + ['/public/*'] + [('/%s/*' % x) if os.path.isdir(D + x) else ('/' + x) for x in _internal]
+assert len(_routes) <= 100, 'Cloudflare dovoluje nejvýše 100 pravidel v _routes.json'
+open(_P + '_routes.json', 'w', encoding='utf-8').write(json.dumps({'version': 1, 'include': _routes, 'exclude': []}, ensure_ascii=False, indent=1) + '\n')
 print('Veřejný výstup public/:', ', '.join(PUBLIC_FILES + [d + '/' for d in PUBLIC_DIRS]))

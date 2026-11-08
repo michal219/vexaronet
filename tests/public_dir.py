@@ -26,7 +26,7 @@ def same(a, b):
 check(same(PUB, tmp + '/public'), 'public/ v repozitáři odpovídá čerstvému sestavení (po změně spusťte build.py a commitněte public/)')
 
 # 2) allowlist
-TOP = {'index.html', '404.html', 'sw.js', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', '_headers', '_redirects',
+TOP = {'index.html', '404.html', 'sw.js', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', '_headers', '_redirects', '_routes.json',
        'assets', 'podminky', 'ochrana-udaju', 'cookies', 'dsa', 'nahlasit', 'odhlasit'}
 check(set(os.listdir(PUB)) == TOP, 'nejvyšší úroveň public/ je přesně allowlist: %s' % sorted(set(os.listdir(PUB)) ^ TOP))
 files = [os.path.relpath(os.path.join(d, f), PUB) for d, _, fs in os.walk(PUB) for f in fs]
