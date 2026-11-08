@@ -91,7 +91,7 @@ export const onRequest = async ({ request: req, env }) => {
   if (!['strategy', 'posts'].includes(action) || !/^[A-Za-z0-9_-]{8,120}$/.test(key)) return json({ error: 'bad_request' }, 400);
   const g = await VXGUARD.guardAi({ fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid: b?.cid, plans: ['pro', 'business', 'enterprise'] });
   if (!g.ok) return json({ error: g.error }, g.status);
-  const cid = g.cid, SK = env.SUPABASE_SERVICE_KEY;
+  const cid = g.cid, SK = VXGUARD.cleanKey(env.SUPABASE_SERVICE_KEY);
   if (!env.GEMINI_API_KEY || !SK) return json({ error: 'not_configured' }, 503);
 
   // 2) data firmy z DB

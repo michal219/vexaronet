@@ -169,7 +169,7 @@ export const onRequest = async ({ request: req, env }) => {
   const secret = req.headers.get('x-cron-secret');
   if (secret) {
     if (!env.DIGEST_SECRET || secret !== env.DIGEST_SECRET) return json({ error: 'auth' }, 401);
-    const SK = env.SUPABASE_SERVICE_KEY;
+    const SK = String(env.SUPABASE_SERVICE_KEY || '').replace(/[\s\u200B-\u200D\u2060\uFEFF]+/g, '');
     if (!SK) return json({ error: 'not_configured', message: 'Chybi SUPABASE_SERVICE_KEY.' }, 503);
     const H = { apikey: SK };
     const { ymd, hour } = pragueNow();

@@ -37,7 +37,7 @@ export const onRequest = async ({ request: req, env }) => {
     if (!env.MARKETING_DISPATCH_SECRET || req.headers.get('x-dispatch-secret') !== env.MARKETING_DISPATCH_SECRET) return L.json({ error: 'auth' }, 401);
     const missing = ['SUPABASE_SERVICE_KEY', 'RESEND_API_KEY', 'OPERATOR_NAME', 'OPERATOR_ADDRESS'].filter((k) => !env[k]);
     if (missing.length) return L.json({ error: 'not_configured', missing }, 503);
-    const SK = env.SUPABASE_SERVICE_KEY;
+    const SK = String(env.SUPABASE_SERVICE_KEY || '').replace(/[\s\u200B-\u200D\u2060\uFEFF]+/g, '');
     const c = await L.rpc(fetch, 'marketing_claim', { p_limit: Math.min(50, Math.max(1, Number(b.limit) || 20)) }, SK);
     if (!c.ok) return L.json({ error: 'unavailable' }, 503);
     const msg = c.data?.message, list = Array.isArray(c.data?.recipients) ? c.data.recipients : [];
