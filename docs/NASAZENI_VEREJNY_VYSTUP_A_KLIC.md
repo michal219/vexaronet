@@ -95,3 +95,15 @@ Stejné soubory jsou dostupné i na všech dosavadních nasazeních Cloudflare P
   - S parametrem, který obejde mezipaměť, vrací 404.
   - Řešení: Cloudflare → doména vexaronet.com → **Caching → Configuration → Purge Everything**.
 - **Dřívější nasazení a náhledy (`*.pages.dev`)** obsahují celý repozitář, dokud je nechrání Access policy nebo dokud se nesmažou.
+
+## Mezipaměť hlavní domény a stará nasazení (2026-11-08)
+- **Po Purge Everything** vracelo `vexaronet.com` (bez www) pro čtyři dříve stažené interní soubory dál 200, a to i z cizí sítě (Firecrawl). `www` a `vexaronet.pages.dev` vracely 404.
+  - U `.md`, `.sql` a `.py` šlo o odpověď s `cf-cache-status: DYNAMIC`, `s-maxage=604800` a rostoucím `age`. To je mezipaměť statických souborů Pages, kterou vymazání zóny nezasáhlo.
+- **PR #8:** `functions/_middleware.js` a `public/_routes.json` (generuje `build.py`, 36 pravidel). Pro interní cesty vrací 404 s `no-store` dřív, než se servírují statické soubory. Veřejné stránky funkci nevolají.
+  - Výsledek: `/docs/SECURITY_STATUS.md`, `/db/migrations/…sql` a `/build.py` vrací 404 na všech třech adresách.
+- **`/src/ai_guard.js`** na `vexaronet.com` vrací 200 z mezipaměti zóny (`cf-cache-status: HIT`). Uložil se po Purge Everything ze staré kopie Pages, ještě před nasazením middlewaru. Web teď pro tuto cestu vrací 404 s `no-store`, takže ho odstraní jedno další vymazání: Custom Purge URL nebo Purge Everything.
+- **Náhledy a stará nasazení:**
+  - Restrict previews je zapnuté. Bez přihlášení vrací 302 na Cloudflare Access všech 7 náhledů z PR #1–#7 (`d4ff00eb`, `ddda574d`, `fb34dbbd`, `fca6d413`, `1e859a31`, `f94b699d`, `f250f2d1`) i alias větve `claude-happy-bell-5266nk`.
+  - Totéž platí pro náhodnou neexistující subdoménu `a0b1c2d3` a pro `main`. Ochrana tedy kryje celou wildcard doménu `*.vexaronet.pages.dev`, včetně hash adres starých produkčních nasazení.
+  - Konkrétní ID produkčních nasazení z GitHubu zjistit nešla, protože Cloudflare zapisuje kontroly jen k hlavním commitům PR.
+  - Bez ochrany zůstává jen `vexaronet.pages.dev`, která ukazuje na aktuální produkci (interní cesty vrací 404).
