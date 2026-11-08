@@ -100,3 +100,18 @@ Návrat je `paid_runs_enabled = false`: běžící rezervace doběhnou a další
 | Nasazení | připraveno (`docs/NASAZENI_AI_MARKETING.md`) | váš souhlas s nasazením (spolu s dashboardem `8d586f0`) |
 
 - **Další krok:** AI CEO (`/api/advisor`). Souhrn počítaný serverem z DB a z potvrzeného profilu, peněžní limit přes `autopilot_reserve`/`autopilot_settle`, uložení doporučení se stavem přijato/odmítnuto, e2e a UI test.
+
+### 2026-11-08: Příprava prvního placeného AI testu (pilot) – v produkci, placené běhy VYPNUTÉ
+- **Migrace `db/migrations/20261113100000_autopilot_pilot.sql`** (aplikováno jako `autopilot_pilot_root_ids`):
+  - `private.autopilot_platform.pilot_root_ids` a trigger `autopilot_pilot_check` na `private.autopilot_runs`;
+  - firma mimo pilot dostane `paid_runs_disabled` (`reason: not_in_pilot`), a to pro všechny AI moduly;
+  - nastavený pilot: jen hlavní firma „vexaronet“ (`c3c86f7a-…`).
+  - Test: `ai_marketing_e2e` 14/14 včetně pilotu (mimo pilot 403, AI se nevolá, nevznikne rezervace). Migraci jde spustit opakovaně, rollback vrací přesný stav, `run_autopilot_local` 71 kontrol.
+- **Ceník** `gemini-3.5-flash-lite` ověřen proti https://ai.google.dev/gemini-api/docs/pricing dne 2026-11-08: 0,30 USD / 1 M vstupních a 2,50 USD / 1 M výstupních tokenů (včetně přemýšlecích). `verified_on` aktualizováno.
+- **Účty:** e-mail vlastníka relace je ve firmě „vexaronet“ jen `employee`. Vlastníkem je účet `inf…@vexaronet.com`. Profil potvrzuje a limit nastavuje vlastník nebo správce.
+- **Zbývá před prvním návrhem:**
+  1. vlastník potvrdí profil firmy;
+  2. vlastník nastaví limit 0,25 USD (Finance & ROI);
+  3. výslovný souhlas se zapnutím `paid_runs_enabled`;
+  4. první „Vytvořit návrh strategie“;
+  5. ihned poté placené běhy vypnout a zkontrolovat `autopilot_runs` (stav, skutečná cena).
