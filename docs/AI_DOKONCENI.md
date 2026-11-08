@@ -83,8 +83,8 @@ Návrat je `paid_runs_enabled = false`: běžící rezervace doběhnou a další
 - **Web firmy:** sekce **Novinky** v `siteHTML` z `public_site_news` (escapovaná). Bez novinek se nezobrazí. Starší DB bez funkce web nerozbije.
 - **Opravená chyba během testu:** zavření dialogu přes `remove()` nechávalo posluchač Esc, který blokoval další dialogy. Nyní se dialog zavírá přes jeho vlastní tlačítko.
 - **Testy:**
-  - `python3 tests/ai_marketing_ui.py`: všechny kontroly prošly (36). Pokrývá průchod profil → strategie → úprava → schválení → dávka → obnovení stránky se stejným klíčem → schválení s otiskem → publikace → výsledky → web firmy, dále ukázku, zaměstnance a stav bez migrace.
-  - `tests/autopilot_ui.py` a regresní UI testy prošly (viz níže).
+  - `python3 tests/ai_marketing_ui.py`: všechny kontroly prošly (39). Pokrývá průchod profil → strategie → úprava → schválení → dávka → obnovení stránky se stejným klíčem → schválení s otiskem → publikace → výsledky → web firmy, dále ukázku, zaměstnance a stav bez migrace.
+  - Regrese 2026-11-08: prošly `autopilot_ui` a 25 dalších UI testů (mk, web, xss_ui, demo, appmode, crm_ui, profile_ui, legal_ui, eshop, au, ceo, dg, dh, fb, imp, obory, rp, sazby, sk, bank, faktury_ui, faktury_lib, eshop_import, legal, demo_btn; `legal` a `demo_btn` se serverem na portu 8765) a JS testy ai_endpoints, autopilot_core, profile_core. Netestováno v této regresi: dříve známá selhání `fakt`, `faktury_qr` (cv2) a `smoke`.
 - **Nasazení:** připravený krok s dopady a návratem je v `docs/NASAZENI_AI_MARKETING.md` (nenasazeno; placené běhy zůstávají vypnuté).
 
 #### Stav průchodu Marketing Autopilota
