@@ -110,3 +110,17 @@ Dokud nejsou všechny tři splněné a vy to nepotvrdíte, `paid_runs_enabled` z
 - Založit testovací Supabase projekt (postup v `docs/TESTOVACI_PROSTREDI.md`) a poslat mi jeho ID.
 - Souhlas, než cokoli z `db/migrations/` půjde na produkci (jsou 3 nové migrace: profil firmy, bezpečnostní opravy, limity Autopilota).
 - Rozhodnutí o prioritě: pokračovat první AI operací (krok 2), nebo napřed napojit stávající endpointy na limit (krok 4).
+
+## Dashboard AI Marketing Autopilot (vizuální reference)
+
+Stránka Autopilot je dashboard podle schválené reference (`src/autopilot_dash.js`, třídy s prefixem `ad-`). Levé menu má rozbalovací skupinu AI Autopilot se šesti moduly; stará záložka Marketing otevírá sekci Obsah, kde je původní generátor textů.
+
+Data a stavy:
+- Skutečná data: příspěvky (`marketing_posts`), úkoly, zákazníci, obchodní případy, finanční záznamy, limit nákladů na AI.
+- Bez zdroje dat se zobrazí „Nepřipojeno“ nebo „–“: zhlédnutí, prokliky, propojené účty, ROAS, výnosy z kampaní, zisk, cíl strategie, marketingový rozpočet.
+- Náklady na marketing jsou odhad: výdaje, jejichž popis obsahuje marketing, reklama, Facebook, Instagram apod. Finanční záznamy nemají kategorii.
+- Stav „AI neběží“ platí, dokud nejsou povolené placené běhy. „Aktivní“ ani „Propojeno“ se nezobrazuje.
+- Schválení konceptu jen změní stav příspěvku na „Naplánováno“. Nic se nepublikuje ani neodesílá.
+- Ukázkový režim (demo) označuje dashboard štítkem „Ukázková data“.
+
+Limit nákladů na AI (0,25 USD) a podmínky placených běhů jsou v záložce Finance & ROI.

@@ -14,6 +14,7 @@ function apBar(){
  apStyle();
  if(!bar){bar=document.createElement('nav');bar.id='apBar';bar.className='apbar';bar.setAttribute('aria-label','Režimy AI Autopilota');main.parentNode.insertBefore(bar,main)}
  if(!sub){sub=document.createElement('div');sub.id='apSub';sub.className='apsub';main.parentNode.insertBefore(sub,main)}
+ if(APP.tab==='autopilot'||APP.tab==='marketing'){bar.style.display='none';sub.style.display='none';return}bar.style.display='';
  var cur=VXAP.modeOfTab(APP.tab,APS.mode);if(cur&&cur!=='home')APS.mode=cur;
  bar.innerHTML='<button type="button" class="apb'+(cur==='home'?' on':'')+'" data-tab="autopilot" data-ap="home"'+(cur==='home'?' aria-current="page"':'')+'>'+ico('autopilot',16)+'<span>Autopilot</span></button>'
   +VXAP.MODES.map(function(m){var locked=!apNeedsOk(m)||!allowed(m.tab),tag=locked?'<i class="apt lock">'+(m.needs==='accountant'?'AI Účetní+':'PRO+')+'</i>':'<i class="apt '+m.state+'">'+VXAP.STATE[m.state]+'</i>';
@@ -34,11 +35,11 @@ function apErr(res,what){
  return what+' se nepodařilo načíst ('+msg+').'}
 async function apLoad(){
  var root=A('apRoot');if(!root)return;
- if(DEMO){root.innerHTML='<div class="draft">V ukázce se stav limitu nezobrazuje.</div>'+apModesHtml();return}
+ if(DEMO){root.innerHTML='<div class="draft">V ukázce se stav limitu nezobrazuje.</div>';return}
  var c=getSb(),cid=APP.cid,st=await c.rpc('autopilot_status',{cid:cid}),pr=await c.rpc('profile_get',{cid:cid});
  if(!A('apRoot'))return;
  var h='';
- if(st.error){root.innerHTML='<div class="draft">'+esc(apErr(st,'Stav limitu'))+'</div>'+apModesHtml();return}
+ if(st.error){root.innerHTML='<div class="draft">'+esc(apErr(st,'Stav limitu'))+'</div>';return}
  var s=st.data,profileOk=pr.error?null:(pr.data.is_root?!!pr.data.active:!!pr.data.shared_from_root),
   lim=s.monthly_limit_nusd,spent=Number(s.spent_nusd||0),pct=lim?Math.min(100,Math.round(spent/Number(lim)*100)):0,rd=VXAP.readiness(s,profileOk),all=rd.every(function(r){return r.ok});
  h+='<section class="card2"><h3>Placené AI běhy</h3><p>'+(all?'<b class="apok">Podmínky jsou splněné.</b> I tak Autopilot zatím žádné placené volání nespouští; funkce se zapínají postupně.':'<b class="apno">Placené AI běhy jsou vypnuté.</b> Autopilot zatím nespouští žádné placené volání.')+'</p><ul class="apchk">'
@@ -50,7 +51,7 @@ async function apLoad(){
    +'<div class="f"><button class="btn btn-main btn-sm" type="submit">Uložit limit</button> <button class="btn btn-ghost btn-sm" type="button" data-ap-act="preset">Doporučených 0,25 USD</button> '+(lim!=null?'<button class="btn btn-ghost btn-sm" type="button" data-ap-act="clear">Zrušit limit</button>':'')+'</div></form><p class="mut fine">Uložení limitu nespustí žádné volání AI. Hlídá ho databáze: před každým během se rezervuje nejvyšší možná cena a při překročení se běh odmítne.</p>':'<p class="mut">Limit nastavuje a vidí hlavní firma.</p>')
   +'<div id="apBudgetMsg" class="st" role="status" aria-live="polite"></div></section>';
  h+='<section class="card2"><h3>Ceník modelu</h3>'+((s.models||[]).length?'<ul class="rows">'+s.models.map(function(m){return '<li><b>'+esc(m.model)+'</b><span>vstup '+esc(VXAP.perMillionUsd(m.input_nusd_per_token).toFixed(2).replace('.',','))+' USD, výstup '+esc(VXAP.perMillionUsd(m.output_nusd_per_token).toFixed(2).replace('.',','))+' USD za 1 M tokenů · ověřeno '+esc(String(m.verified_on))+'</span></li>'}).join('')+'</ul><p class="mut fine">Zdroj: oficiální ceník Google (Standard). Model bez ověřené ceny se odmítne.</p>':'<p class="mut">Žádný model nemá ověřenou cenu, placené běhy nejsou možné.</p>')+'</section>';
- root.innerHTML=h+apModesHtml()}
+ root.innerHTML=h+(root.getAttribute('data-nomodes')?'':apModesHtml())}
 function apModesHtml(){return '<h3 style="margin:18px 0 8px">Režimy</h3><div class="apgrid">'+VXAP.MODES.map(apCard).join('')+'</div><section class="card2" style="margin-top:14px"><h3>Jak je to zabezpečené</h3><ul class="ticks"><li>AI jen navrhuje. Nic nepublikuje, neodesílá ani neplatí bez vašeho potvrzení.</li><li>Potvrzovat smí jen vlastník nebo správce, vždy pod svou přihlášenou identitou.</li><li>Náklady hlídá databáze (rezervace před během, vypořádání po něm), ne prohlížeč.</li><li>Data firem jsou oddělená; AI dostane jen údaje potřebné pro danou úlohu.</li></ul></section>'}
 async function apSaveLimit(nusd){
  var msg=A('apBudgetMsg');if(msg){msg.className='st';msg.textContent='Ukládám…'}

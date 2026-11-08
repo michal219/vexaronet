@@ -33,5 +33,9 @@ create or replace function auth.uid() returns uuid language sql stable as $$
   )::uuid
 $$;
 
+create or replace function auth.role() returns text language sql stable as $$
+  select coalesce(nullif(current_setting('request.jwt.claim.role', true), ''), (nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role'))
+$$;
+
 alter default privileges in schema public grant execute on functions to anon, authenticated, service_role;
 alter default privileges in schema public grant all on tables to anon, authenticated, service_role;

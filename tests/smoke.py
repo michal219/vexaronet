@@ -25,7 +25,7 @@ with sync_playwright() as p:
     for name, vp in [('desktop', {'width': 1400, 'height': 900}), ('mobil', {'width': 390, 'height': 800})]:
         pg = b.new_page(viewport=vp); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e)))
-        pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK, content_type='text/javascript'))
+        pg.add_init_script(MOCK); pg.route('**/supabase.js', lambda r: r.fulfill(body='', content_type='text/javascript'))
         pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(600)
         pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(900)
         t = pg.inner_text('#appMain')
@@ -62,7 +62,7 @@ with sync_playwright() as p:
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 900}); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
-    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK.replace("plan:'pro'", "plan:'start'").replace("status:'trial'", "status:'active'"), content_type='text/javascript'))
+    pg.add_init_script(MOCK.replace("plan:'pro'", "plan:'start'").replace("status:'trial'", "status:'active'")); pg.route('**/supabase.js', lambda r: r.fulfill(body='', content_type='text/javascript'))
     pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
     t = pg.inner_text('#cenik')
     check('1 199' in t or '1 199' in t, 'ceník: BUSINESS 1 199 Kč')
@@ -88,7 +88,7 @@ with sync_playwright() as p:
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 900}); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
-    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK, content_type='text/javascript'))
+    pg.add_init_script(MOCK); pg.route('**/supabase.js', lambda r: r.fulfill(body='', content_type='text/javascript'))
     pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
     pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(400)
     pg.evaluate("document.querySelector('#vxside [data-tab=zamestnanci]').click()"); pg.wait_for_selector('#teamBox li'); 
@@ -105,7 +105,7 @@ with sync_playwright() as p:
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 1000}, accept_downloads=True); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
-    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK, content_type='text/javascript'))
+    pg.add_init_script(MOCK); pg.route('**/supabase.js', lambda r: r.fulfill(body='', content_type='text/javascript'))
     pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
     pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(400)
     pg.evaluate("document.querySelector('#vxside [data-tab=ucetni]').click()"); pg.wait_for_selector('#accFile'); pg.wait_for_timeout(300)
@@ -128,7 +128,7 @@ with sync_playwright() as p:
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1300, 'height': 900}); errs = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
-    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK.replace("company_id:'c1',role:'owner'", "company_id:'c1',role:'employee'"), content_type='text/javascript'))
+    pg.add_init_script(MOCK.replace("company_id:'c1',role:'owner'", "company_id:'c1',role:'employee'")); pg.route('**/supabase.js', lambda r: r.fulfill(body='', content_type='text/javascript'))
     pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
     pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(400)
     pg.evaluate("document.querySelector('#vxside [data-tab=faktury]').click()"); pg.wait_for_timeout(200)

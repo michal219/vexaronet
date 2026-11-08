@@ -53,6 +53,8 @@ export const onRequest = async ({ request: req, env }) => {
   const kind = String(b?.kind || ''), tone = String(b?.tone || 'friendly'), topic = cut(b?.topic, 700), company = cut(b?.name, 80);
   if (!KINDS[kind] || topic.length < 5) return json({ error: 'bad_request' }, 400);
 
+  const rv = await VXGUARD.reserveAi({ fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid: g.cid });
+  if (!rv.ok) return json({ error: rv.error, ...(rv.message ? { message: rv.message } : {}) }, rv.status);
   const model = env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
   try {
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {

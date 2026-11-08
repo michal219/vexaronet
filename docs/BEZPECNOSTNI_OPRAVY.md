@@ -1,6 +1,7 @@
 # Bezpečnostní opravy z auditu: návrh, dopady, ověření
 
-Stav: 2026-11-08. **Připraveno, neaplikováno na produkci.** Aplikace jen po výslovném souhlasu vlastníka.
+Stav: **aplikováno na produkci 2026-11-07** (migrace `security_hardening_least_privilege`, ověřeno smoke testem 93).
+Aktuální přehled všech nálezů a další opravy: `docs/SECURITY_STATUS.md`.
 Migrace: `db/migrations/20261108100000_bezpecnostni_opravy.sql` (+ `_rollback.sql`). Test: `tests/db/run_security_local.sh`.
 
 ## Co bylo ověřeno v živé databázi (jen čtení katalogu)

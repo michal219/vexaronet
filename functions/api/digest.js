@@ -4,6 +4,7 @@
 //    Posle prehled uzivatelum, kterym prave zacina jejich hodina (digest_settings.send_hour, cesky cas).
 // Nastaveni Cloudflare: RESEND_API_KEY, DIGEST_SECRET, SUPABASE_SERVICE_KEY (tajny klic, jen zde), volitelne GEMINI_API_KEY, INVITE_FROM.
 
+import VXGUARD from '../../src/ai_guard.js';
 const SB_URL = 'https://micymdbqgzeckiqyvvkn.supabase.co';
 const SB_KEY = 'sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW';
 const SITE = 'https://vexaronet.com';
@@ -228,16 +229,23 @@ export const onRequest = async ({ request: req, env }) => {
   if (limited(user.id)) return json({ error: 'rate' }, 429);
   const own = await fetch(`${SB_URL}/rest/v1/company_members?company_id=eq.${cid}&user_id=eq.${user.id}&select=role&limit=1`, { headers: H }).then((r) => (r.ok ? r.json() : [])).catch(() => []);
   if (!own?.length) return json({ error: 'forbidden' }, 403);
-  let to = String(b?.email || '').trim();
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to) || to.length > 200) to = user.email;
+  // Přehled obsahuje firemní data: posílá se jen na e-mail přihlášeného uživatele (ne na libovolnou adresu z požadavku).
+  const to = user.email;
+  if (!to) return json({ error: 'no_email' }, 400);
   const { ymd } = pragueNow();
   const d = await buildDigest(H, cid, ymd);
   let ai = '';
   try {
     const sr = await fetch(`${SB_URL}/rest/v1/subscriptions?company_id=eq.${cid}&select=plan&limit=1`, { headers: H });
     const sub = sr.ok ? (await sr.json())[0] : null;
-    if (sub && ['pro', 'business', 'enterprise'].includes(String(sub.plan).toLowerCase())) ai = await aiLine(env, d);
+    if (sub && ['pro', 'business', 'enterprise'].includes(String(sub.plan).toLowerCase())) {
+      // AI shrnutí jen po rezervaci v serverovém limitu AI (reserve_ai); jinak se přehled pošle bez něj.
+      const rv = await VXGUARD.reserveAi({ fetchFn: fetch, sbUrl: SB_URL, sbKey: SB_KEY, token, cid });
+      if (rv.ok) ai = await aiLine(env, d);
+    }
   } catch { /* bez AI */ }
   const mail = await send(env, to, d, ai);
-  return json({ ok: mail === 'sent', mail, to, n: d.n });
+  // Text chyby poskytovatele e-mailu se klientovi nevrací (jen do logu).
+  if (mail !== 'sent') console.error('digest mail', mail);
+  return json({ ok: mail === 'sent', mail: mail === 'sent' ? 'sent' : 'failed', to, n: d.n });
 };

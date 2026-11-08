@@ -39,7 +39,8 @@ with sync_playwright() as p:
         chk(t_ship-t_pick==99,f'{tag} osobní odběr odečte dopravu 99 Kč ({t_ship} -> {t_pick})')
         chk('zdarma' in pg.inner_text('#vxsite .shl'),f'{tag} řádek odběru je zdarma')
         # prázdné údaje - validace prohlížeče, vyplníme
-        pg.fill('#so_n','Jan Zákazník');pg.fill('#so_e','jan@example.cz');pg.fill('#so_a','Hlavní 5, Brno 60200');pg.check('#so_c')
+        pg.fill('#so_n','Jan Zákazník');pg.fill('#so_e','jan@example.cz');pg.fill('#so_a','Hlavní 5, Brno 60200')
+        chk(pg.locator('#so_c').count()==0 and pg.inner_text('#vxsite button[type=submit]')=='Objednávka zavazující k platbě',f'{tag} poslední tlačítko: Objednávka zavazující k platbě, bez nepravého souhlasu')
         pg.click('#shopOrd button[type=submit]');pg.wait_for_selector('#vxsite h2:has-text("Děkujeme")')
         t=pg.inner_text('#vxsite .shbox')
         chk('Děkujeme za objednávku č. 1' in t and 'Variabilní symbol' in t,f'{tag} potvrzení s údaji k platbě')

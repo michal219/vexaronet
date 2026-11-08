@@ -58,7 +58,7 @@ def open_page(b, cfg, vp=None, store=None):
     pg = b.new_page(viewport=vp or {'width': 1400, 'height': 1000}); pg.errs = []
     pg.on('pageerror', lambda e: pg.errs.append(str(e)))
     pg.add_init_script('window.__cfg=' + json.dumps(cfg) + ';' + ('try{localStorage.setItem("vx_active_company_u1",%s)}catch(e){}' % json.dumps(store) if store else ''))
-    pg.route('**/supabase.js', lambda r: r.fulfill(body=MOCK, content_type='text/javascript'))
+    pg.add_init_script(MOCK); pg.route('**/supabase.js', lambda r: r.fulfill(body='', content_type='text/javascript'))
     pg.goto('file://' + ROOT + '/index.html'); pg.wait_for_timeout(500)
     pg.evaluate("document.getElementById('acc').click()"); pg.wait_for_selector('#vxapp .kpi'); pg.wait_for_timeout(500)
     return pg

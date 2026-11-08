@@ -87,7 +87,10 @@ export const onRequest = async ({ request: req, env, ...context }) => {
       }
     } catch (e) { console.error('Resend', e); mail = 'error ' + String(e).slice(0, 100); }
   } else console.warn('E-mailové upozornění není nastaveno (RESEND_API_KEY, NOTIFY_EMAIL).');
-  if (inquiry && !stored && !String(mail).startsWith('sent')) return json({ error: 'inquiry_failed', mail }, 502);
-  return json({ ok: true, mail });
+  // Veřejný endpoint: podrobnosti o chybě e-mailu (adresy, text poskytovatele) jdou jen do logu, ne návštěvníkovi.
+  if (!String(mail).startsWith('sent') && mail !== 'not_configured') console.error('subscribe mail', mail);
+  const pub = String(mail).startsWith('sent') ? 'sent' : mail === 'not_configured' ? 'not_configured' : 'failed';
+  if (inquiry && !stored && pub !== 'sent') return json({ error: 'inquiry_failed', mail: pub }, 502);
+  return json({ ok: true, mail: pub });
 };
 
