@@ -33,7 +33,7 @@ export const onRequest = async ({ request: req, env }) => {
   const ip = req.headers.get('cf-connecting-ip') || 'x';
   if (limited(ip)) return json({ error: 'too_many' }, 429);
 
-  const H = { apikey: SB_KEY, authorization: `Bearer ${SB_KEY}`, 'content-type': 'application/json' };
+  const H = { apikey: SB_KEY, 'content-type': 'application/json' };
   let data;
   try {
     const r = await fetch(`${SB_URL}/rest/v1/rpc/public_book`, {

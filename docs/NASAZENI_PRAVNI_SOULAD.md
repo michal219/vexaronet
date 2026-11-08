@@ -38,7 +38,7 @@ Doporučené pořadí: **(1) DB DSA → (2) web a funkce → (3) DB marketing, a
 
 ## 1) Databáze: DSA (`20261110110000_dsa_oznameni.sql`)
 
-- **Mění:** jen nové objekty, tedy `private.dsa_notices`, `private.dsa_events` (jen pro připisování) a funkce `dsa_*`. Stávající tabulky a funkce se nemění, `sites`, `shop_settings` a `booking_profiles` se jen čtou.
+- **Mění:** jen nové objekty, tedy `private.dsa_notices`, `private.dsa_events` (technicky jen pro připisování; doba uchování není stanovená, viz `docs/PRAVNI_SOULAD.md` bod 9) a funkce `dsa_*`. Stávající tabulky a funkce se nemění, `sites`, `shop_settings` a `booking_profiles` se jen čtou.
 - **Dopad:** žádný na stávající aplikace, ani na druhou aplikaci nad DB.
 - **Ověření:** `tests/db/run_legal_local.sh` lokálně. Po nasazení jen čtením: `select to_regclass('private.dsa_notices'), has_function_privilege('anon','public.dsa_submit(jsonb,text)','execute')` má vrátit tabulku a `false`. Volitelně zkušební oznámení v transakci s vynuceným rollbackem.
 - **Návrat:** `20261110110000_dsa_oznameni_rollback.sql`. **Před ním exportovat** `private.dsa_notices` a `private.dsa_events`: evidence může být potřeba pro dozor nebo spor.

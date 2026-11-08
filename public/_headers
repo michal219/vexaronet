@@ -1,0 +1,15 @@
+# Hlavičky zabezpečení pro Cloudflare Pages (viz docs/SECURITY_STATUS.md, nález W-1).
+# CSP zatím povoluje 'unsafe-inline', protože aplikace je jeden soubor index.html s vloženým skriptem a styly.
+# I tak zakazuje vkládání stránky do cizích rámů, cizí skripty a fonty (supabase-js i fonty jsou hostované lokálně),
+# odesílání dat jinam než na vlastní web a Supabase a pluginy (object-src).
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000
+  Cross-Origin-Opener-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https://micymdbqgzeckiqyvvkn.supabase.co wss://micymdbqgzeckiqyvvkn.supabase.co; frame-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+/sw.js
+  Cache-Control: no-cache

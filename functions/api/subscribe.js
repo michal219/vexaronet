@@ -43,7 +43,7 @@ export const onRequest = async ({ request: req, env, ...context }) => {
     try {
       const q = await fetch(`${SB_URL}/rest/v1/custom_inquiries`, {
         method: 'POST',
-        headers: { apikey: SB_KEY, authorization: `Bearer ${SB_KEY}`, 'content-type': 'application/json', prefer: 'return=minimal' },
+        headers: { apikey: SB_KEY, 'content-type': 'application/json', prefer: 'return=minimal' },
         body: JSON.stringify({ email, name, company: row.company, business_type: row.business_type, message: row.message }),
       });
       stored = q.ok;
@@ -52,7 +52,7 @@ export const onRequest = async ({ request: req, env, ...context }) => {
   } else {
     const r = await fetch(`${SB_URL}/rest/v1/newsletter_subscribers`, {
       method: 'POST',
-      headers: { apikey: SB_KEY, authorization: `Bearer ${SB_KEY}`, 'content-type': 'application/json', prefer: 'return=minimal' },
+      headers: { apikey: SB_KEY, 'content-type': 'application/json', prefer: 'return=minimal' },
       body: JSON.stringify(row),
     });
     if (r.status === 409) return json({ ok: true, duplicate: true });

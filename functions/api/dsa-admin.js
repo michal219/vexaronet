@@ -34,7 +34,7 @@ export const onRequest = async ({ request: req, env }) => {
   }
   // odůvodnění dotčenému provozovateli obsahu (čl. 17) – jen u omezení a jen když je firma známá
   if (d.decision !== 'bez_opatreni' && d.target_company_id && env.SUPABASE_SERVICE_KEY) {
-    const SK = env.SUPABASE_SERVICE_KEY, H = { apikey: SK, authorization: `Bearer ${SK}` };
+    const SK = env.SUPABASE_SERVICE_KEY, H = { apikey: SK };
     const own = await fetch(`${L.SB_URL}/rest/v1/company_members?company_id=eq.${d.target_company_id}&role=eq.owner&select=user_id`, { headers: H }).then((x) => (x.ok ? x.json() : [])).catch(() => []);
     let sentAny = false;
     for (const o of own.slice(0, 3)) {

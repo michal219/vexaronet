@@ -70,7 +70,7 @@ var VXGUARD=(function(){
   try{var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(o.ip||'unknown').slice(0,100)+'|'+o.serviceKey+'|'+day));
    hex=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}catch(e){return fail(503,'limit_unavailable')}
   var r;
-  try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_help_chat',{method:'POST',headers:{apikey:o.serviceKey,authorization:'Bearer '+o.serviceKey,'content-type':'application/json'},body:JSON.stringify({p_actor:hex})})}
+  try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_help_chat',{method:'POST',headers:{apikey:o.serviceKey,'content-type':'application/json'},body:JSON.stringify({p_actor:hex})})}
   catch(e){return fail(503,'limit_unavailable')}
   if(!r.ok)return fail(503,'limit_unavailable');
   var v=null;try{v=await r.json()}catch(e){v=null}

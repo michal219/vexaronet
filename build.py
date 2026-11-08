@@ -2455,3 +2455,20 @@ document.getElementById('go').addEventListener('click',function(){var g=this,st=
  .catch(function(){g.disabled=false})})})();""")
 print('Stránky: nahlasit, odhlasit')
 
+
+# ===== Veřejný výstup pro Cloudflare Pages: JEN tyto soubory (allowlist) =====
+# Cloudflare Pages nasazuje složku `public/` (Settings → Builds → Build output directory = public).
+# Serverové funkce se dál sestavují z `functions/` v kořeni repozitáře a do `public/` se nekopírují.
+# Interní soubory (docs/, db/, src/, tests/, tools/, build.py, schémata, *.md…) se tak na web nedostanou.
+# Nový veřejný soubor je potřeba přidat sem; test tests/public_dir.py hlídá, že výstup nic nepostrádá ani nepřidává.
+import shutil
+PUBLIC_FILES = ['index.html', '404.html', 'sw.js', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', '_headers', '_redirects']
+PUBLIC_DIRS = ['assets'] + list(LEG) + ['nahlasit', 'odhlasit']
+_P = D + 'public/'
+shutil.rmtree(_P, ignore_errors=True)
+os.makedirs(_P)
+for _f in PUBLIC_FILES:
+    shutil.copy2(D + _f, _P + _f)
+for _d in PUBLIC_DIRS:
+    shutil.copytree(D + _d, _P + _d)
+print('Veřejný výstup public/:', ', '.join(PUBLIC_FILES + [d + '/' for d in PUBLIC_DIRS]))

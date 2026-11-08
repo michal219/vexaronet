@@ -206,7 +206,12 @@ Odvolání souhlasu musí být snadné (čl. 7 odst. 3 GDPR).
   - **potvrzení přijetí e-mailem** (čl. 16 odst. 4);
   - otisk IP jen proti zahlcení (10 oznámení za hodinu na adresu, 500 za den);
   - data jsou přístupná jen přes serverovou funkci a správci platformy.
-- **Evidence:** `private.dsa_events` zaznamenává přijetí, potvrzení, posouzení, rozhodnutí a vyrozumění a **nejde měnit ani mazat** (trigger brání i vlastníkovi tabulky).
+- **Evidence:** `private.dsa_events` zaznamenává přijetí, potvrzení, posouzení, rozhodnutí a vyrozumění.
+  - **Technická ochrana:** trigger odmítne každý `UPDATE` a `DELETE` řádků, a to i od vlastníka tabulky. Oznámení (`dsa_notices`) nejde smazat, dokud na ně odkazuje evidence.
+  - Nejde o absolutní nesmazatelnost: správce databáze může trigger vypnout. Je to ochrana proti nechtěné nebo tiché změně, ne retenční pravidlo.
+  - **Doba uchování není stanovená.** Nemám ověřeno, že by nějaký předpis vyžadoval uchovávat oznámení trvale nebo po konkrétní dobu, a proto to netvrdím.
+  - Lhůtu musí určit provozovatel (ideálně s právníkem) s ohledem na GDPR (omezení uložení), na možné spory a dozor a na povinnosti podle DSA, které na provozovatele skutečně dopadají (bod 3 níže).
+  - Postup výmazu po uplynutí lhůty je potřeba doplnit, až bude lhůta rozhodnutá (viz bod 9).
 - **Rozhodnutí** (čl. 16 odst. 5 a 6, čl. 17):
   - přijímá ho člověk, správce platformy (`private.platform_admins`), v Nastavení aplikace nebo přes `/api/dsa-admin`;
   - povinné odůvodnění a právní nebo smluvní důvod;
@@ -243,3 +248,4 @@ Odvolání souhlasu musí být snadné (čl. 7 odst. 3 GDPR).
 | 6 | Platby předplatného: objednávkový krok podle § 1826a a podmínky obnovování a ukončení | před spuštěním plateb |
 | 7 | Evidence znění souhlasu u novinek (verze textu) | doporučeno |
 | 8 | Kód edge funkcí druhé aplikace (mimo repozitář) jsem posoudil jen podle databázových funkcí | – |
+| 9 | **Doba uchování oznámení DSA a jejich evidence** a postup výmazu po jejím uplynutí. Zákonná povinnost trvalého uchování ověřená není. Doplnit i do zásad ochrany osobních údajů | úplnost zásad, GDPR |
