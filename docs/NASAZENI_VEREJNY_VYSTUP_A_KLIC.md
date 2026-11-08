@@ -75,3 +75,23 @@ Stejné soubory jsou dostupné i na všech dosavadních nasazeních Cloudflare P
   - Potvrzovací e-mail: `ack: failed`. Adresa oznamovatele byla záměrně nedoručitelná (`@example.invalid`), takže odeslání přes Resend tímto testem **ověřené není**.
 - **Validace formuláře:** neúplné údaje, chybějící potvrzení dobré víry, URL `javascript:` i vyplněné skryté pole vrací 400, GET vrací 405.
 - **Interní soubory:** na produkční doméně jsou stále dostupné (`/docs/…`, `/build.py`, `/db/…`, `/src/…` vrací 200). Výstupní složka `public` v Cloudflare ještě nastavená není.
+
+## Přechod na výstup `public/` (2026-11-08)
+- Vlastník změnil v Cloudflare Build output directory na `public`.
+- **Retry deployment** změnu nepoužil. Pozorováno: po Retry dál platil kořen repozitáře. Jestli Retry přebírá konfiguraci původního nasazení, jsem v nastavení Cloudflare ověřit nemohl.
+- **Nové nasazení z nového commitu** (PR #7, `b689b51`) aktuální nastavení použilo:
+  - `/docs/NASAZENI_VEREJNY_VYSTUP_A_KLIC.md` (soubor změněný v tomto commitu) vrací 404;
+  - `/public/index.html` vrací 404.
+- **Ověřeno po nasazení:**
+  - **404:** `/docs/…`, `/db/…`, `/src/legal_server.js`, `/tests/…`, `/tools/`, `/functions/…`, `/schema.sql`, `*.md`, `netlify.toml`, `/android/`, `/desktop/…`, `/.git/config`, varianty `/%64ocs/…`, `/docs%2F…` a `/DOCS/…`.
+  - **200:** všech 7 stránek, `sw.js`, manifest, `robots.txt`, `sitemap.xml`, `supabase-js`, `rrweb`, písma a obrázky. Bezpečnostní hlavičky platí.
+  - **API:**
+    - chat 200 se skutečnou odpovědí;
+    - DSA validace 400;
+    - rezervace odpovídá z databáze;
+    - AI endpointy bez přihlášení 401.
+  - **Prohlížeč:** supabase-js se načte, přihlašovací formulář funguje, dashboard v ukázce funguje, žádné chyby JS.
+- **Zbývá:** mezipaměť Cloudflare dál servíruje dříve stažené kopie čtyř interních souborů (`/docs/SECURITY_STATUS.md`, `/db/migrations/20261112100000_ai_marketing.sql`, `/src/ai_guard.js`, `/build.py`), a to i jiným sítím (ověřeno přes Firecrawl). Odpovědi mají `s-maxage=604800`, tedy až 7 dní.
+  - S parametrem, který obejde mezipaměť, vrací 404.
+  - Řešení: Cloudflare → doména vexaronet.com → **Caching → Configuration → Purge Everything**.
+- **Dřívější nasazení a náhledy (`*.pages.dev`)** obsahují celý repozitář, dokud je nechrání Access policy nebo dokud se nesmažou.
