@@ -53,3 +53,25 @@ Stejné soubory jsou dostupné i na všech dosavadních nasazeních Cloudflare P
 - **Chat:** skutečný dotaz vrátí odpověď a přibude záznam limitu v databázi.
 - **Formulář `/nahlasit/`:** zkušební oznámení vlastníka označené „TEST“ se uloží do `private.dsa_notices` a do evidence a vlastníkovi přijde potvrzení.
 - **Náhledy:** podle adres od vlastníka.
+
+## Stav 2026-11-08 (průběžně)
+- **PR #3** (`public/`, klíče jen v `apikey`): sloučeno. Rezervace s veřejným klíčem jen v `apikey` v produkci fungují (databáze odpověděla věcnou chybou `not_found`).
+- **`SUPABASE_SERVICE_KEY`:** vlastník ho nastavil. Dočasná diagnostika bez obsahu klíče (PR #5, už odstraněná) ukázala formát `sb_secret` a jen ASCII znaky.
+- **Skutečná příčina 503 u chatu (PR #6):** `src/ai_guard.js` volal `o.fetchFn(...)` jako metodu objektu a Cloudflare Workers to odmítá („Illegal invocation“).
+  - Rozbité bylo i AI s limitem `reserve_ai` (AI CEO, generátor marketingových textů, AI pro weby, AI v přehledu), a to od nasazení bezpečnostních oprav.
+  - Lokální testy to nezachytily, protože Node takové volání dovolí. `tests/key_headers.test.mjs` teď podvrhuje `fetch` se stejnou kontrolou jako Workers.
+- **Ověřeno po PR #6:** `POST /api/chat` vrátil 200 se skutečnou odpovědí AI. V `private.help_chat_limits` přibyl záznam `all` (1) a otisk návštěvníka (1). Funkce `reserve_help_chat` je spustitelná jen pro service_role, takže nový `sb_secret_` klíč funguje s hlavičkou `apikey`.
+- **Čeká na vlastníka:**
+  - výstupní složka `public` v Cloudflare a Retry deployment;
+  - ochrana nebo smazání starých nasazení a název projektu na pages.dev;
+  - zkušební oznámení přes `/nahlasit/`.
+- Do té doby jsou interní soubory na produkční doméně stále dostupné, ověřeno: `/docs/SECURITY_STATUS.md` a `/build.py` vrací 200.
+## Ověření po potvrzení vlastníka (2026-11-08, 10:12 UTC)
+- **Chat:** `POST /api/chat` vrátil 200 se skutečnou odpovědí AI.
+- **Formulář hlášení:**
+  - `POST /api/dsa-notice` (stejný požadavek jako stránka `/nahlasit/`) vrátil 200 s referenčním číslem `DSA-20261108-1F3DCBF6`.
+  - V `private.dsa_notices` je stav `received`, cíl `web/test-nasazeni`, otisk IP a v evidenci událost `prijato`.
+  - Oznámení je označené jako TEST a zůstává v evidenci; doba uchování viz `PRAVNI_SOULAD.md` bod 9.
+  - Potvrzovací e-mail: `ack: failed`. Adresa oznamovatele byla záměrně nedoručitelná (`@example.invalid`), takže odeslání přes Resend tímto testem **ověřené není**.
+- **Validace formuláře:** neúplné údaje, chybějící potvrzení dobré víry, URL `javascript:` i vyplněné skryté pole vrací 400, GET vrací 405.
+- **Interní soubory:** na produkční doméně jsou stále dostupné (`/docs/…`, `/build.py`, `/db/…`, `/src/…` vrací 200). Výstupní složka `public` v Cloudflare ještě nastavená není.
