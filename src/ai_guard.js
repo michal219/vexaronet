@@ -74,7 +74,7 @@ var VXGUARD=(function(){
    hex=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}catch(e){return fail(503,'limit_unavailable','hash')}
   var r;
   try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_help_chat',{method:'POST',headers:{apikey:sk,'content-type':'application/json'},body:JSON.stringify({p_actor:hex})})}
-  catch(e){return fail(503,'limit_unavailable','fetch')}
+  catch(e){var f=fail(503,'limit_unavailable','fetch');f.key_format=/^sb_secret_/.test(sk)?'sb_secret':/^sb_publishable_/.test(sk)?'sb_publishable':/^eyJ/.test(sk)?'jwt':'jine';f.key_ascii=/^[\x21-\x7e]+$/.test(sk);return f}
   if(!r.ok)return fail(503,'limit_unavailable','http_'+r.status);
   var v=null;try{v=await r.json()}catch(e){v=null}
   return v===true?{ok:true}:fail(429,'rate')}
