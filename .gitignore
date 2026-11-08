@@ -3,3 +3,4 @@ android/app/build/
 android/.gradle/
 desktop/node_modules/
 desktop/dist/
+public/

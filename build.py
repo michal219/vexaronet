@@ -2455,3 +2455,8 @@ document.getElementById('go').addEventListener('click',function(){var g=this,st=
  .catch(function(){g.disabled=false})})})();""")
 print('Stránky: nahlasit, odhlasit')
 
+
+# ===== Výstupní složka public/ pro Cloudflare Pages (jen veřejné soubory, viz tools/build_public.py) =====
+import sys
+if D == ROOT_DIR + '/':  # při VX_BUILD_DIR jinam se public/ nesestavuje
+    subprocess.run([sys.executable, os.path.join(ROOT_DIR, 'tools', 'build_public.py')], check=True)
