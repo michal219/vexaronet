@@ -53,7 +53,8 @@ var VXGUARD=(function(){
   if(!o.token)return fail(401,'auth');
   if(typeof o.cid!=='string'||!UUID.test(o.cid))return fail(400,'bad_request');
   var r,j=null;
-  try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_ai',{method:'POST',headers:{apikey:o.sbKey,authorization:'Bearer '+o.token,'content-type':'application/json'},body:JSON.stringify({cid:o.cid})})}
+  var f=o.fetchFn;/* volat jako funkci, ne o.fetchFn(): Workers jinak hlásí Illegal invocation */
+  try{r=await f(o.sbUrl+'/rest/v1/rpc/reserve_ai',{method:'POST',headers:{apikey:o.sbKey,authorization:'Bearer '+o.token,'content-type':'application/json'},body:JSON.stringify({cid:o.cid})})}
   catch(e){return fail(503,'limit_unavailable')}
   if(r.ok)return {ok:true};
   try{j=await r.json()}catch(e){j=null}
@@ -73,8 +74,9 @@ var VXGUARD=(function(){
   try{var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(o.ip||'unknown').slice(0,100)+'|'+sk+'|'+day));
    hex=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}catch(e){return fail(503,'limit_unavailable','hash')}
   var r;
-  try{r=await o.fetchFn(o.sbUrl+'/rest/v1/rpc/reserve_help_chat',{method:'POST',headers:{apikey:sk,'content-type':'application/json'},body:JSON.stringify({p_actor:hex})})}
-  catch(e){var f=fail(503,'limit_unavailable','fetch');f.key_format=/^sb_secret_/.test(sk)?'sb_secret':/^sb_publishable_/.test(sk)?'sb_publishable':/^eyJ/.test(sk)?'jwt':'jine';f.key_ascii=/^[\x21-\x7e]+$/.test(sk);return f}
+  var f=o.fetchFn;/* volat jako funkci, ne o.fetchFn(): Workers jinak hlásí Illegal invocation */
+  try{r=await f(o.sbUrl+'/rest/v1/rpc/reserve_help_chat',{method:'POST',headers:{apikey:sk,'content-type':'application/json'},body:JSON.stringify({p_actor:hex})})}
+  catch(e){return fail(503,'limit_unavailable','fetch')}
   if(!r.ok)return fail(503,'limit_unavailable','http_'+r.status);
   var v=null;try{v=await r.json()}catch(e){v=null}
   return v===true?{ok:true}:fail(429,'rate')}
