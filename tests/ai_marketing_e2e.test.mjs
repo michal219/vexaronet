@@ -11,7 +11,7 @@ const sql = (q) => sh(['-X', '-At', '-v', 'ON_ERROR_STOP=1', '-d', DB, '-c', q])
 const lit = (v) => (v === null || v === undefined ? 'NULL' : `'${String(typeof v === 'object' ? JSON.stringify(v) : v).replace(/'/g, "''")}'`);
 sh(['-X', '-q', '-d', 'postgres', '-c', `drop database if exists ${DB}`, '-c', `create database ${DB}`]);
 for (const f of ['db/test/00_local_supabase_shim.sql', 'db/test/01_base_stub.sql', 'db/migrations/20261107120000_profil_firmy.sql', 'db/migrations/20261108110000_autopilot_limity.sql',
-  'db/test/05_marketing_prestate.sql', 'db/migrations/20261112100000_ai_marketing.sql']) sh(['-X', '-q', '-v', 'ON_ERROR_STOP=1', '-d', DB, '-f', f]);
+  'db/test/05_marketing_prestate.sql', 'db/migrations/20261112100000_ai_marketing.sql', 'db/migrations/20261113100000_autopilot_pilot.sql']) sh(['-X', '-q', '-v', 'ON_ERROR_STOP=1', '-d', DB, '-f', f]);
 const O = '00000000-0000-0000-0000-00000000d001', E = '00000000-0000-0000-0000-00000000d002', X = '00000000-0000-0000-0000-00000000d003', Y = '00000000-0000-0000-0000-00000000d004';
 const A = '00000000-0000-0000-0000-00000000aa01', B = '00000000-0000-0000-0000-00000000bb01', C = '00000000-0000-0000-0000-00000000cc01';
 const PROFILE = { shared: { identity: { displayName: 'Autoservis Konina', activity: 'Opravy aut, výměna výfuků a pneuservis v Konině' }, audience: { description: 'Řidiči z Koniny a okolí' },
@@ -129,6 +129,15 @@ await t('příspěvek, který neprojde kontrolou (krátký text), nic neuloží 
   gem.posts = [{ title: 'X', channel: 'Facebook', planned_on: new Date().toISOString().slice(0, 10), body: 'krátké' }];
   const r = await call({ action: 'posts', cid: A, key: 'k-posts-0003' }); assert.equal(r.status, 502);
   assert.equal(sql('select count(*) from public.marketing_posts'), '2'); assert.equal(runs().pop().status, 'failed');
+});
+await t('pilot: firma mimo seznam pilotu dostane 403 paid_runs_disabled, AI se nevolá a nevznikne rezervace; firma v pilotu projde', async () => {
+  sql(`update private.autopilot_platform set pilot_root_ids = array['${B}']::uuid[]`);
+  const c0 = gem.calls, n0 = runs().length;
+  const r = await call({ action: 'strategy', cid: A, key: 'k-pilot-0001' }); assert.equal(r.status, 403); assert.equal((await r.json()).error, 'paid_runs_disabled');
+  assert.equal(gem.calls, c0); assert.equal(runs().length, n0);
+  sql(`update private.autopilot_platform set pilot_root_ids = array['${A}']::uuid[]`);
+  const r2 = await call({ action: 'strategy', cid: A, key: 'k-pilot-0002' }); assert.equal(r2.status, 200); assert.equal(gem.calls, c0 + 1);
+  sql(`update private.autopilot_platform set pilot_root_ids = null`);
 });
 await t('vyčerpaný měsíční limit = 402 a AI se nevolá', async () => {
   sql(`update private.autopilot_budgets set monthly_limit_nusd = 1500000`);
