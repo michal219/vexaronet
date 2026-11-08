@@ -104,6 +104,9 @@ Stejné soubory jsou dostupné i na všech dosavadních nasazeních Cloudflare P
 - **`/src/ai_guard.js`** na `vexaronet.com` vrací 200 z mezipaměti zóny (`cf-cache-status: HIT`). Uložil se po Purge Everything ze staré kopie Pages, ještě před nasazením middlewaru. Web teď pro tuto cestu vrací 404 s `no-store`, takže ho odstraní jedno další vymazání: Custom Purge URL nebo Purge Everything.
 - **Náhledy a stará nasazení:**
   - Restrict previews je zapnuté. Bez přihlášení vrací 302 na Cloudflare Access všech 7 náhledů z PR #1–#7 (`d4ff00eb`, `ddda574d`, `fb34dbbd`, `fca6d413`, `1e859a31`, `f94b699d`, `f250f2d1`) i alias větve `claude-happy-bell-5266nk`.
-  - Totéž platí pro náhodnou neexistující subdoménu `a0b1c2d3` a pro `main`. Ochrana tedy kryje celou wildcard doménu `*.vexaronet.pages.dev`, včetně hash adres starých produkčních nasazení.
+  - Totéž platí pro náhodnou neexistující subdoménu `a0b1c2d3` a pro `main`.
+  - **Ochrana starých produkčních nasazení: NEOVĚŘENO.** Přesměrování neexistující adresy nedokazuje, že je chráněné skutečné produkční nasazení. Cloudflare uvádí ochranu jen pro náhledy. Ověřit to jde jen na konkrétní hash adrese produkčního nasazení (záložka Deployments, prostředí Production) bez přihlášení.
   - Konkrétní ID produkčních nasazení z GitHubu zjistit nešla, protože Cloudflare zapisuje kontroly jen k hlavním commitům PR.
   - Bez ochrany zůstává jen `vexaronet.pages.dev`, která ukazuje na aktuální produkci (interní cesty vrací 404).
+
+- **`/src/ai_guard.js` po Custom Purge:** 404 (`no-store`, `cf-cache-status: BYPASS`) na `vexaronet.com`, `www` i `vexaronet.pages.dev`, ověřeno bez obcházení mezipaměti. Všechny čtyři dříve uložené interní soubory jsou nedostupné.
