@@ -70,3 +70,33 @@ Návrat je `paid_runs_enabled = false`: běžící rezervace doběhnou a další
   - Potřebné proměnné prostředí: `GEMINI_API_KEY`, `SUPABASE_SERVICE_KEY` (volitelně `GEMINI_MODEL`). Bez nich vrací 503.
 - **Test:** `PSQL="runuser -u postgres -- psql" node tests/ai_marketing_e2e.test.mjs` → **13 testů prošlo** (skutečná PostgreSQL přes převodník PostgREST, simulovaný jen Gemini). Ověřeno: oprávnění, tarif, vypínač, limit, profil z DB, idempotence, in_progress, chyby a vypořádání nákladů, příspěvky jen ze schválené strategie a v povolených kanálech a datech.
 - **Další krok:** UI dashboardu (záložka Strategie, dávka návrhů v Obsahu, schválení přes `mkt_post_approve`, publikace, výsledky v Analýze) a sekce Novinky na webu firmy (`public_site_news`). K tomu UI test.
+
+### 2026-11-08: AI Marketing, krok 3 (UI a web firmy) – HOTOVO ve větvi
+- **UI:** `src/ai_marketing_ui.js` (připojeno za `src/autopilot_dash.js` v `build.py`). Vzhled dashboardu zůstává podle reference, mění se jen obsah karet.
+  - **Strategie:** kontrola potvrzeného profilu, „Vytvořit návrh strategie“ přes endpoint, zobrazení konceptu a verze, úprava (formulář, otisk zobrazené verze), schválení, plnění cíle ze skutečných dat.
+  - **Přehled:** karta strategie ukazuje cíl a plnění. Schválení v Aktuálních úkolech jde přes `mkt_post_approve` (SHA-256 otisk shodný s DB) místo přímého zápisu.
+  - **Obsah:** dávka návrhů ze schválené strategie (počet, od data); původní generátor zůstává.
+  - **Kalendář:** náhled s kroky schválit / zveřejnit na webu firmy / zaznamenat ruční zveřejnění s https odkazem / zrušit zveřejnění.
+  - **Analýza:** výsledky zveřejněných příspěvků (poptávky, zákazníci, rezervace a objednávky 7 dní po proti 7 dnům před, s upozorněním na souvislost) a ruční výsledky se zdrojem.
+  - **Opakování a obnovení:** idempotenční klíč s parametry v `localStorage`. Po přerušení nebo obnovení stránky se zobrazí „nebyl dokončen“ a „Zkontrolovat“ pošle stejný klíč, takže AI se neplatí dvakrát. Při 409 `in_progress` klíč zůstává, po úspěchu nebo definitivní chybě se smaže.
+  - **Bez migrace v DB**, v ukázce a pro zaměstnance se nic nespouští. UI zobrazí srozumitelnou hlášku.
+- **Web firmy:** sekce **Novinky** v `siteHTML` z `public_site_news` (escapovaná). Bez novinek se nezobrazí. Starší DB bez funkce web nerozbije.
+- **Opravená chyba během testu:** zavření dialogu přes `remove()` nechávalo posluchač Esc, který blokoval další dialogy. Nyní se dialog zavírá přes jeho vlastní tlačítko.
+- **Testy:**
+  - `python3 tests/ai_marketing_ui.py`: všechny kontroly prošly (36). Pokrývá průchod profil → strategie → úprava → schválení → dávka → obnovení stránky se stejným klíčem → schválení s otiskem → publikace → výsledky → web firmy, dále ukázku, zaměstnance a stav bez migrace.
+  - `tests/autopilot_ui.py` a regresní UI testy prošly (viz níže).
+- **Nasazení:** připravený krok s dopady a návratem je v `docs/NASAZENI_AI_MARKETING.md` (nenasazeno; placené běhy zůstávají vypnuté).
+
+#### Stav průchodu Marketing Autopilota
+| Krok | Stav ve větvi | Zbývá / závislost |
+|---|---|---|
+| Onboarding a potvrzený profil | hotovo (profil nasazen dříve) | – |
+| Strategie (AI návrh, úprava, schválení, verze) | hotovo, testy DB 37 + e2e 13 + UI | zapnout placené běhy (vaše rozhodnutí) |
+| Generování obsahu (dávka ze strategie) | hotovo | totéž |
+| Náhled, úpravy, schválení s otiskem | hotovo | – |
+| Kalendář | hotovo (čte skutečná data) | – |
+| Publikování | web firmy a ruční záznam hotovo | Facebook/Instagram: Meta Graph API + App Review + ověření firmy; Google Business Profile API; e-mail zákazníkům: ověřená doména a souhlasy |
+| Vyhodnocení | systémová data z DB a ruční metriky se zdrojem hotovo | dosah a prokliky: Meta Insights / GA / Search Console |
+| Nasazení | připraveno (`docs/NASAZENI_AI_MARKETING.md`) | váš souhlas s nasazením (spolu s dashboardem `8d586f0`) |
+
+- **Další krok:** AI CEO (`/api/advisor`). Souhrn počítaný serverem z DB a z potvrzeného profilu, peněžní limit přes `autopilot_reserve`/`autopilot_settle`, uložení doporučení se stavem přijato/odmítnuto, e2e a UI test.

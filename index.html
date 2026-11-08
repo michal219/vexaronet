@@ -2076,7 +2076,7 @@ function siteHTML(d,o){o=o||{};d=d||{};
  if(shop)cta+='<a class="b b2" href="'+esc(shop)+'" target="_top">E-shop</a>';else if(sv.length)cta+='<a class="b b2" href="#sluzby">Naše služby</a>';
  var chips=[];if(C.hours)chips.push(WEBIC.ck+'<span>'+esc(String(C.hours).split('\n')[0])+'</span>');if(C.address)chips.push(WEBIC.pn+'<span>'+esc(C.address)+'</span>');
  var heroBg=himg?'linear-gradient(105deg,rgba(8,10,20,.78),rgba(8,10,20,.35)),url(\''+himg+'\') center/cover no-repeat':'radial-gradient(circle at 85% 15%,color-mix(in srgb,var(--c) 70%,#fff) 0,transparent 42%),radial-gradient(circle at 10% 110%,color-mix(in srgb,var(--c) 55%,#000) 0,transparent 55%),linear-gradient(135deg,color-mix(in srgb,var(--c) 82%,#000),color-mix(in srgb,var(--c) 38%,#05060c))';
- var nav=[];if(Ab.text)nav.push(['o-nas',Ab.title||'O nás']);if(sv.length)nav.push(['sluzby','Služby']);if(gal.length)nav.push(['galerie','Galerie']);if(rev.length)nav.push(['reference','Reference']);if(faq.length)nav.push(['otazky','Otázky']);
+ var nav=[];if(Ab.text)nav.push(['o-nas',Ab.title||'O nás']);if(sv.length)nav.push(['sluzby','Služby']);if(gal.length)nav.push(['galerie','Galerie']);if(rev.length)nav.push(['reference','Reference']);if(faq.length)nav.push(['otazky','Otázky']);var news=(o.news||[]).filter(function(x){return x&&x.title&&x.body}).slice(0,6);if(news.length)nav.push(['novinky','Novinky']);
  var h='<!doctype html><html lang="cs"><head><meta charset="utf-8"><base href="about:srcdoc"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(H.title||nm)+'</title><meta name="description" content="'+esc(H.subtitle||'')+'"><meta name="theme-color" content="'+col+'"><link rel="icon" href="'+fav+'"><meta property="og:title" content="'+esc(H.title||nm)+'"><meta property="og:description" content="'+esc(H.subtitle||'')+'">'+(himg?'<meta property="og:image" content="'+esc(himg)+'">':'')+'<style>'
  +':root{--c:'+col+';--on:'+onc+';--bg:'+T.bg+';--tx:'+T.tx+';--alt:'+T.alt+';--bd:'+T.bd+';--mu:'+T.mu+';--cb:'+T.cb+';--t:color-mix(in srgb,var(--c) 11%,var(--bg))}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:74px}body{margin:0;font-family:'+ff+';color:var(--tx);line-height:1.65;background:var(--bg);-webkit-font-smoothing:antialiased}img{max-width:100%}a{color:var(--c)}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}'+(o.prev?'a{pointer-events:none}':'')
  +'.w{max-width:1040px;margin:0 auto;padding:0 22px}'
@@ -2106,6 +2106,7 @@ function siteHTML(d,o){o=o||{};d=d||{};
  if(sv.length)h+='<section id="sluzby" class="alt"><div class="w"><span class="ey">Co nabízíme</span><h2>Služby</h2><div class="g">'+sv.map(function(x,k){return '<div class="card"><div class="n">'+(k+1)+'</div><h3>'+esc(x.name)+'</h3>'+(x.desc?'<p>'+esc(x.desc)+'</p>':'')+(x.price?'<span class="pr">'+esc(x.price)+'</span>':'')+'</div>'}).join('')+'</div></div></section>';
  if(gal.length)h+='<section id="galerie"><div class="w"><span class="ey">Ukázky</span><h2>Galerie</h2><div class="gl">'+gal.map(function(u){return '<img src="'+esc(u)+'" alt="" loading="lazy">'}).join('')+'</div></div></section>';
  if(rev.length)h+='<section id="reference" class="alt"><div class="w"><span class="ey">Reference</span><h2>Co říkají zákazníci</h2><div class="g">'+rev.map(function(x){return '<div class="card q"><p>'+esc(x.text)+'</p>'+(x.who?'<small>'+esc(x.who)+'</small>':'')+'</div>'}).join('')+'</div></div></section>';
+ if(news.length)h+='<section id="novinky" class="alt"><div class="w" style="max-width:820px"><span class="ey">Aktuálně</span><h2>Novinky</h2>'+news.map(function(x){var dt=/^\d{4}-\d{2}-\d{2}$/.test(x.date||'')?x.date.split('-').reverse().map(Number).join('. '):'';return '<article class="card" style="margin-bottom:14px">'+(dt?'<small>'+esc(dt)+'</small>':'')+'<h3>'+esc(x.title)+'</h3><p>'+nl(x.body)+'</p></article>'}).join('')+'</div></section>';
  if(faq.length)h+='<section id="otazky"><div class="w" style="max-width:820px"><span class="ey">Dotazy</span><h2>Časté otázky</h2>'+faq.map(function(x){return '<details><summary>'+esc(x.q)+'</summary><p>'+nl(x.a)+'</p></details>'}).join('')+'</div></section>';
  if(tel||bk||shop)h+='<div class="band"><div class="w"><h2>Ozvěte se nám</h2><p>'+(H.subtitle?esc(H.subtitle):'Rádi vám pomůžeme.')+'</p>'+(bk?'<a class="b b1" href="'+esc(bk)+'" target="_top">Rezervovat termín online</a>':'')+(tel?'<a class="b '+(bk?'b2':'b1')+'" href="tel:'+tel+'" target="_top">Zavolat '+esc(C.phone)+'</a>':'')+(shop?'<a class="b b2" href="'+esc(shop)+'" target="_top">E-shop</a>':'')+'</div></div>';
  var cl=[];if(tel)cl.push('<div class="ci"><i>'+WEBIC.ph+'</i><div><b>Telefon</b><a href="tel:'+tel+'" target="_top">'+esc(C.phone)+'</a></div></div>');if(mail)cl.push('<div class="ci"><i>'+WEBIC.ml+'</i><div><b>E-mail</b><a href="mailto:'+esc(C.email)+'" target="_top">'+esc(C.email)+'</a></div></div>');
@@ -2197,10 +2198,10 @@ async function webOpen(slug,prev){
  var lf1=document.activeElement;function close(){el.remove();document.documentElement.style.overflow=A('vxapp')?'hidden':'';try{document.title=window.DOC_T||document.title}catch(e){}if(lf1&&lf1.focus&&document.contains(lf1))lf1.focus({preventScroll:true});if(!prev){try{history.replaceState(null,'',location.pathname)}catch(e){}}}
  var fr=document.createElement('iframe');fr.className='vxsf';fr.title='Web';fr.setAttribute('sandbox','allow-popups allow-top-navigation-by-user-activation');el.appendChild(fr);
  if(prev){var x=document.createElement('button');x.type='button';x.className='vxsx';x.textContent='Zavřít náhled';x.addEventListener('click',close);el.appendChild(x);fr.srcdoc=siteHTML(webRead(),{name:APP.co,bookUrl:webBook()});return}
- var r=null;try{r=await getSb().rpc('public_site',{p_slug:slug})}catch(e){}
+ var r=null,nw=[];try{var rr=await Promise.all([getSb().rpc('public_site',{p_slug:slug}),getSb().rpc('public_site_news',{p_slug:slug}).then(function(x){return x},function(){return null})]);r=rr[0];if(rr[1]&&!rr[1].error&&Array.isArray(rr[1].data))nw=rr[1].data}catch(e){}
  if(!r||r.error||!r.data){fr.srcdoc='<!doctype html><meta charset="utf-8"><body style="font-family:Arial;padding:40px"><h1>Stránka nenalezena</h1><p>Web neexistuje nebo je vypnutý. Zkontrolujte odkaz.</p>';return}
  var dd=r.data;try{document.title=(dd.data&&dd.data.hero&&dd.data.hero.title)||dd.name||document.title}catch(e){}
- fr.srcdoc=siteHTML(dd.data,{name:dd.name,bookUrl:dd.booking?bookUrl(dd.booking):''})}
+ fr.srcdoc=siteHTML(dd.data,{name:dd.name,bookUrl:dd.booking?bookUrl(dd.booking):'',news:nw})}
 
 /* ===== Marketing: AI návrhy textů a plán příspěvků ===== */
 var MKK=[['social','Příspěvek na sociální sítě','Sociální sítě'],['email','E-mail zákazníkům (newsletter)','E-mail'],['ad','Text online reklamy','Reklama'],['plan','Plán obsahu na týden','Plán obsahu'],['review','Odpověď na recenzi','Recenze']],MKCH=['Instagram','Facebook','E-mail','Web nebo blog','Reklama','Jiné'],MKST={draft:'Koncept',planned:'Naplánováno',done:'Zveřejněno'};
@@ -3724,7 +3725,7 @@ if(!window.__apBound){window.__apBound=true;
 /* ===== AI Marketing Autopilot: dashboard podle vizuální reference =====
    Zobrazuje jen skutečná data z evidence firmy (příspěvky, úkoly, zákazníci, obchodní případy, finanční záznamy).
    Co nemá zdroj dat (zobrazení, prokliky, ROAS, zisk z kampaní, propojené účty), ukazuje jako „Nepřipojeno“ nebo „–“.
-   Nic zde nespouští placené volání AI; schválení konceptu jen změní stav příspěvku. */
+   AI běhy (strategie, dávka příspěvků), schválení s otiskem obsahu, publikace a výsledky řeší src/ai_marketing_ui.js přes server (/api/ai-marketing, RPC mkt_*). */
 var APD={tab:'prehled',week:0,menu:null,st:null};
 var APD_TABS=[['prehled','Přehled','strat0'],['strategie','Strategie','strat'],['obsah','Obsah','img'],['kampane','Kampaně','mega'],['kalendar','Kalendář','kalendar'],['analyza','Analýza','bars'],['finance','Finance & ROI','coins'],['integrace','Integrace','link']];
 IC.strat0='M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z';
@@ -3865,7 +3866,7 @@ function apdCal(){
     +(ps.length?'<button type="button" class="ad-it" data-edit="marketing_posts:'+esc(ps[0].id)+'" aria-label="'+esc(ps.length+' příspěvků, první: '+ps[0].title)+'">'+ps.slice(0,2).map(function(p){return apdChanIcon(p.channel,24)}).join('')+(ps.length>2?'<small>+'+(ps.length-2)+'</small>':'')+(ps.every(function(p){return p.status==='done'})?'<span class="apok" style="color:var(--ok)">'+ico('tick',15)+'</span>':'')+'</button>'
      :'<button type="button" class="ad-add" data-new="marketing_posts" aria-label="Přidat příspěvek na '+d.getDate()+'. '+(d.getMonth()+1)+'.">'+ico('plus',16)+'</button>')+'</div>'}).join('')+'</div></section>'}
 function apdStrategy(){return '<section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('strat',26)+'</span><h3>Marketingová strategie</h3></div>'
- +'<p style="margin:0 0 10px">Cíl: <span class="ad-na">zatím nenastaven</span></p><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div class="ad-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Plnění cíle"><i style="width:0"></i></div><b class="ad-na">–</b></div>'
+ +mkSlot('card')
  +'<button type="button" class="ad-btn2 ad-pr" data-apd="strategie">Zobrazit strategii '+ico('arr',16)+'</button></section>'}
 function apdChart(S,big){
  var W=520,H=big?240:150,pl=44,pr=10,pt=10,pb=22,a30=apdD0(-29),days=30,cu=apdRows('customers'),dl=apdRows('deals'),ser=function(rows){var a=[],c=0;for(var i=0;i<days;i++){var d0=new Date(a30);d0.setDate(d0.getDate()+i);var d1=new Date(d0);d1.setDate(d1.getDate()+1);c+=rows.filter(function(r){return apdInRange(r.created_at,d0,d1)}).length;a.push(c)}return a};
@@ -3894,10 +3895,8 @@ function apdFinBox(){var S=apdStats();
 function apdOverview(){return apdKpis()+'<div class="ad-g2 ad-g-a">'+apdPlan()+apdTasks()+'</div><div class="ad-g2 ad-g-b">'+apdCal()+apdStrategy()+'</div><div class="ad-g2 ad-g-c">'+apdResults()+apdFinBox()+'</div>'}
 /* ---------- ostatní záložky ---------- */
 function apdEmpty(t,x){return '<div class="ad-empty"><span><b>'+esc(t)+'</b><br>'+esc(x)+'</span></div>'}
-function apdTabStrategy(){var pr=APD.prof;return '<div class="ad-tabbody"><section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('strat',26)+'</span><h3>Strategie</h3></div>'
- +apdEmpty('Strategie zatím není nastavená.','Návrh strategie vytváří AI z potvrzeného profilu firmy. Placené AI běhy jsou zatím vypnuté, proto se návrh nevytváří. Ručně zadaný cíl se zatím neukládá.')
- +'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button type="button" class="ad-btn2 ad-pr" data-tab="firmaprofil">Otevřít profil firmy</button><button type="button" class="ad-btn2" data-apd-act="strategy">Vytvořit návrh strategie</button></div></section></div>'}
-function apdTabContent(){var h='<div class="ad-tabbody"><section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('img',24)+'</span><h3>Obsah</h3></div><p class="mut" style="margin:0 0 6px">Generátor textů a plán příspěvků. AI jen navrhuje, nic se samo nepublikuje ani neodesílá.</p></section>';
+function apdTabStrategy(){return '<div class="ad-tabbody"><section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('strat',26)+'</span><h3>Strategie</h3></div>'+mkSlot('strat')+'</section></div>'}
+function apdTabContent(){var h='<div class="ad-tabbody"><section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('img',24)+'</span><h3>Obsah</h3></div><p class="mut" style="margin:0 0 6px">AI jen navrhuje, nic se samo nepublikuje ani neodesílá.</p></section><section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('sparkle',24)+'</span><h3>Návrhy příspěvků ze strategie</h3></div>'+mkSlot('gen')+'</section>';
  var m;try{m=typeof APD_MK==='function'?APD_MK():'<div class="draft">Generátor textů není k dispozici.</div>'}catch(e){m='<div class="draft">Generátor textů se nepodařilo zobrazit: '+esc(e.message)+'</div>'}
  return h+m+'</div>'}
 function apdTabCampaigns(){var ad=apdRows('marketing_posts').filter(function(p){return p.channel==='Reklama'});
@@ -3906,9 +3905,9 @@ function apdTabCampaigns(){var ad=apdRows('marketing_posts').filter(function(p){
   +'<h3 style="margin:16px 0 8px;font-size:1rem">Reklamní texty v plánu</h3>'+(ad.length?'<ul class="ad-lst">'+ad.map(function(p){return '<li>'+apdChanIcon('Reklama',30)+'<div><b>'+esc(p.title)+'</b><small class="mut">'+esc(MKST[p.status]||p.status)+(p.planned_on?' · '+fD(p.planned_on):'')+'</small></div><button type="button" class="ad-btn2" data-edit="marketing_posts:'+esc(p.id)+'">Upravit</button></li>'}).join('')+'</ul>':'<p class="mut">Zatím žádné reklamní texty. Vytvořte je v záložce Obsah.</p>')
   +'<div style="margin-top:12px"><button type="button" class="ad-btn2 ad-pr" data-apd="obsah">Otevřít Obsah</button></div></section></div>'}
 function apdTabCalendar(){return '<div class="ad-tabbody">'+apdCal()+'<section class="ad-card"><div class="ad-ch"><h3>Příspěvky v plánu</h3><button type="button" class="ad-btn2 ad-sp ad-go" data-new="marketing_posts">'+ico('plus',16)+'Nový příspěvek</button></div>'
- +(function(){var P=apdRows('marketing_posts').slice().sort(function(a,b){return String(a.planned_on||'9')<String(b.planned_on||'9')?-1:1});return P.length?'<ul class="ad-lst">'+P.map(function(p){return '<li>'+apdChanIcon(p.channel,30)+'<div><b>'+esc(p.title)+'</b><small class="mut">'+esc(p.channel||'bez kanálu')+' · '+esc(MKST[p.status]||p.status)+'</small></div><span class="mut">'+(p.planned_on?fD(p.planned_on):'bez data')+'</span><button type="button" class="ad-btn2" data-edit="marketing_posts:'+esc(p.id)+'">Upravit</button></li>'}).join('')+'</ul>':apdEmpty('Zatím žádné příspěvky.','Přidejte první příspěvek tlačítkem výše nebo v záložce Obsah.')})()+'</section></div>'}
+ +(function(){var P=apdRows('marketing_posts').slice().sort(function(a,b){return String(a.planned_on||'9')<String(b.planned_on||'9')?-1:1});return P.length?'<ul class="ad-lst">'+P.map(function(p){return '<li>'+apdChanIcon(p.channel,30)+'<div><b>'+esc(p.title)+'</b><small class="mut">'+esc(p.channel||'bez kanálu')+' · '+esc(MKST[p.status]||p.status)+'</small></div><span class="mut">'+(p.planned_on?fD(p.planned_on):'bez data')+'</span><button type="button" class="ad-btn2" data-apd-act="prev" data-id="'+esc(p.id)+'">'+ico('eye',16)+'Náhled</button><button type="button" class="ad-btn2" data-edit="marketing_posts:'+esc(p.id)+'">Upravit</button></li>'}).join('')+'</ul>':apdEmpty('Zatím žádné příspěvky.','Přidejte první příspěvek tlačítkem výše nebo v záložce Obsah.')})()+'</section></div>'}
 function apdTabAnalysis(){var S=apdStats();return '<div class="ad-tabbody"><section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('bars',24)+'</span><h3>Analýza <small class="mut" style="font-weight:400">(30 dní)</small></h3></div>'+apdChart(S,1)+'</section>'
- +'<section class="ad-card"><h3 style="margin-bottom:8px">Co je k dispozici</h3><div class="ad-kv"><div><span>Nové obchodní případy</span><b>'+(S.dealsOk?S.nd:'–')+'</b></div><div><span>Noví zákazníci</span><b>'+(S.custOk?S.nc:'–')+'</b></div><div><span>Zhlédnutí a prokliky</span><b class="ad-na">Nepřipojeno</b></div><div><span>Původ zákazníka (kampaň, kanál)</span><b class="ad-na">neevidujeme</b></div></div><p class="mut fine">Dokud neevidujeme původ zákazníků a nepřipojíme reklamní účty, nelze měřit přínos jednotlivých kampaní.</p></section></div>'}
+ +'<section class="ad-card"><h3 style="margin-bottom:8px">Co je k dispozici</h3><div class="ad-kv"><div><span>Nové obchodní případy</span><b>'+(S.dealsOk?S.nd:'–')+'</b></div><div><span>Noví zákazníci</span><b>'+(S.custOk?S.nc:'–')+'</b></div><div><span>Zhlédnutí a prokliky</span><b class="ad-na">Nepřipojeno</b></div><div><span>Původ zákazníka (kampaň, kanál)</span><b class="ad-na">neevidujeme</b></div></div><p class="mut fine">Dokud neevidujeme původ zákazníků a nepřipojíme reklamní účty, nelze měřit přínos jednotlivých kampaní.</p></section><section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('bars',24)+'</span><h3>Výsledky zveřejněných příspěvků</h3></div>'+mkSlot('res')+'</section></div>'}
 function apdTabFinance(){var S=apdStats();return '<div class="ad-tabbody"><section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('coins',24)+'</span><h3>Finance & ROI</h3></div><div class="ad-finw"><div class="ad-kv">'
  +'<div><span>Výdaje s popisem marketing/reklama (30 dní)</span><b>'+(S.hasFe?apdKc(S.cost30):'<span class="ad-na">–</span>')+'</b></div>'
  +'<div><span>Tento měsíc</span><b>'+(S.hasFe?apdKc(S.costM):'<span class="ad-na">–</span>')+'</b></div>'
@@ -3924,7 +3923,7 @@ async function apdLoadStatus(){
  try{var r=await getSb().rpc('autopilot_status',{cid:APP.cid});if(r.error||!r.data)return;APD.st=r.data;
   var h=A('apdPill');if(h){var all=VXAP.readiness(APD.st,null);var okAll=all[0].ok&&all[2].ok&&all[3].ok;h.innerHTML=okAll?'<span class="ad-pill ad-warn"><i></i>Připraveno, AI neběží</span>':'<span class="ad-pill"><i></i>AI neběží</span>'}
  }catch(e){}}
-function apdAfter(){if(APD.tab==='finance'&&A('apRoot')&&APP.role!=='employee')apLoad();apdLoadStatus()}
+function apdAfter(){if(APD.tab==='finance'&&A('apRoot')&&APP.role!=='employee')apLoad();apdLoadStatus();mkLoad()}
 /* ---------- napojení na aplikaci ---------- */
 var APD_MK=VIEWS.marketing;(function(){var st=document.createElement('style');st.textContent='.vxapp aside .ad-agents{display:flex;align-items:center;gap:12px;margin:10px 0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(139,108,255,.08)}.vxapp aside .ad-agents .ad-ai{color:#a78bfa;display:grid;place-items:center}.vxapp aside .ad-agents b{display:block}.vxapp aside .ad-agents small{display:flex;align-items:center;gap:7px}.vxapp aside .ad-agents small i{width:9px;height:9px;border-radius:50%;background:#7a82a8}';document.head.appendChild(st)})();
 VIEWS.autopilot=function(){if(APP.role==='employee')return '<div class="card2 soonc"><h2>Autopilot</h2><p>Autopilot spravuje vlastník nebo správce.</p></div>';return apdHtml()};
@@ -3943,16 +3942,191 @@ if(!window.__apdBound){window.__apdBound=true;
   if(a==='wk'){APD.week+=Number(b.getAttribute('data-d'));appTab(APP.tab);return}
   if(a==='connect'){apdModal('<h3>Propojení účtů zatím není k dispozici</h3><p>Instagram, Facebook, TikTok, YouTube ani reklamní účty zatím nelze připojit. Proto Vexaronet nezná zhlédnutí, prokliky ani výsledky kampaní a nic za vás nepublikuje.</p>');return}
   if(a==='budget'){apdModal('<h3>Marketingový rozpočet zatím nelze uložit</h3><p>Pole pro měsíční marketingový rozpočet ještě nemá úložiště. Limit nákladů na AI (ne marketingový rozpočet) nastavíte v záložce Finance & ROI.</p>');return}
-  if(a==='strategy'){apdModal('<h3>Návrh strategie zatím nelze vytvořit</h3><p>Vyžaduje placený běh AI, který je vypnutý, dokud není ověřené účtování a vynucování limitů. Potvrďte zatím profil firmy, ze kterého AI později bude vycházet.</p>');return}
+  if(a.indexOf('mk-')===0){mkAct(a,b,id);return}
   var p=apdRows('marketing_posts').filter(function(x){return String(x.id)===id})[0];
-  if(a==='prev'&&p){apdModal('<h3>'+esc(p.title)+'</h3><p class="mut">'+esc(p.channel||'bez kanálu')+' · '+esc(MKST[p.status]||p.status)+(p.planned_on?' · '+esc(fD(p.planned_on)):'')+'</p>'+(p.body?'<pre>'+esc(p.body)+'</pre>':'<p class="mut">Koncept zatím nemá žádný text.</p>'));return}
-  if(a==='appr'&&p){b.disabled=true;(async function(){var r=await getSb().from('marketing_posts').update({status:'planned'}).eq('id',p.id).eq('company_id',APP.cid);
-   if(r.error){b.disabled=false;toast(/permission|policy|42501|read_only/i.test(r.error.message||'')?'K schválení nemáte oprávnění, nebo je účet jen pro čtení.':'Schválení se nepovedlo: '+r.error.message,'err');return}
-   toast('Příspěvek je naplánovaný.','ok');await refresh();appTab(APP.tab)})()}})}
+  if(a==='prev'&&p){mkPreview(p);return}
+  if(a==='appr'&&p){mkApprovePost(p,b)}})}
 
 function apNavSync(){var g=document.querySelector('#vxside .apg');if(!g)return;var want=APD.menu===null?(APGRP.concat(['pripady','nabidky']).indexOf(APP.tab)>=0):APD.menu;if(g.classList.contains('ad-open')!==!!want)renderNav()}
 
 function apAgentsHtml(){if(APP.role==='employee')return '';return '<div class="ad-agents"><span class="ad-ai">'+ico('autopilot',26)+'</span><div><b>AI zaměstnanci</b><small><i></i>0 aktivních</small></div></div>'}
+
+/* ===== AI Marketing Autopilot: průchod strategie → obsah → schválení → publikace → výsledky =====
+   Data: mkt_state / mkt_results (DB, podle firmy a role), AI jen přes /api/ai-marketing (limity a vypínač vynucuje server).
+   Idempotenční klíč požadavku se drží v localStorage, takže obnovení stránky ani opakované kliknutí nespustí AI podruhé.
+   Viz docs/AI_DOKONCENI.md. */
+var MK={st:null,res:null,err:null,cid:null,busy:{},loaded:false};
+var MK_MET={poptavky:'poptávek',zakaznici:'nových zákazníků',rezervace:'rezervací',objednavky:'objednávek'};
+var MK_SYS={poptavky:'Poptávky',zakaznici:'Noví zákazníci',rezervace:'Rezervace',objednavky:'Objednávky'};
+var MK_RMET={dosah:'Dosah',zobrazeni:'Zobrazení',prokliky:'Prokliky',reakce:'Reakce',komentare:'Komentáře',sdileni:'Sdílení',zpravy:'Zprávy',jine:'Jiné'};
+function mkLs(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+function mkLsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function mkLsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+function mkPendKey(a){return 'vxmk:'+APP.cid+':'+a}
+function mkDbErr(e){var m=String(e&&e.message||e||'');
+ if(/stale/.test(m))return 'Obsah se mezitím změnil. Načetli jsme aktuální verzi, zkontrolujte ji a akci zopakujte.';
+ if(/empty_body/.test(m))return 'Příspěvek nemá text. Doplňte ho a pak schvalte.';
+ if(/not_approved/.test(m))return 'Zveřejnit lze jen schválený a od schválení nezměněný příspěvek.';
+ if(/no_site/.test(m))return 'Firma nemá zapnutý web ve Vexaronetu. Zapněte ho v sekci Web.';
+ if(/invalid_url/.test(m))return 'Odkaz musí začínat https://.';
+ if(/not_published/.test(m))return 'Výsledky lze zadat jen u zveřejněného příspěvku.';
+ if(/permission|forbidden|42501|read_only|not_member/.test(m))return 'K této akci nemáte oprávnění, nebo je účet jen pro čtení.';
+ if(/invalid|check|violates/.test(m))return 'Údaje neprošly kontrolou: '+m;
+ return 'Akce se nepovedla: '+m}
+function mkApiErr(j,s){j=j||{};
+ var M={paid_runs_disabled:'Placené AI běhy zatím nejsou zapnuté provozovatelem. Nic se neúčtovalo.',budget_not_set:'Nastavte měsíční limit nákladů na AI (Finance & ROI). Nic se neúčtovalo.',
+  budget_exceeded:'Měsíční limit nákladů na AI je vyčerpaný. Nic se neúčtovalo.',profile_not_confirmed:'Nejdřív potvrďte profil firmy.',strategy_not_approved:'Nejdřív schvalte strategii.',
+  busy:'Právě běží jiné AI požadavky. Zkuste to za chvíli.',plan:'AI marketing je dostupný v tarifu PRO a vyšším.',forbidden:'AI marketing spouští vlastník nebo správce firmy.',auth:'Přihlášení vypršelo. Přihlaste se znovu.',
+  previous_failed:'Předchozí pokus se nepovedl. Zkuste to znovu.',invalid_ai_output:'AI vrátila návrh, který neprošel kontrolou. Nic se neuložilo, zkuste to znovu.',upstream:'Služba AI je nedostupná. Nic se neuložilo, zkuste to později.',
+  not_configured:'AI marketing není na serveru nastavený.',limit_unavailable:'Limit nákladů teď nejde ověřit. Zkuste to později.',key_conflict:'Požadavek se neshoduje s předchozím. Zkuste to znovu.'};
+ return M[j.error]||j.message||('Požadavek se nepovedl (chyba '+s+').')}
+async function mkLoad(){
+ if(DEMO||APP.role==='employee'||!APP.cid)return;
+ var cid=APP.cid;
+ try{var sb=getSb(),r=await Promise.all([sb.rpc('mkt_state',{cid:cid}),sb.rpc('mkt_results',{cid:cid})]);if(APP.cid!==cid)return;
+  if(r[0].error){MK.err=/function|schema cache|does not exist/i.test(r[0].error.message||'')?'AI marketing ještě není v databázi nasazený.':mkDbErr(r[0].error);MK.st=null}else if(!r[0].data||!r[0].data.profile){MK.st=null;MK.err='Stav AI marketingu má neočekávaný tvar.'}else{MK.st=r[0].data;MK.err=null}
+  MK.res=r[1].error?null:(r[1].data||[]);MK.cid=cid}
+ catch(e){MK.err='Stav AI marketingu se nepodařilo načíst. Zkontrolujte připojení.'}
+ MK.loaded=true;mkPaint()}
+function mkPaint(){var S={strat:mkStratHtml,card:mkCardHtml,gen:mkGenHtml,res:mkResHtml};
+ document.querySelectorAll('#apd [data-mk-slot]').forEach(function(el){var f=S[el.getAttribute('data-mk-slot')];if(f)el.innerHTML=f()})}
+function mkSlot(n){return '<div data-mk-slot="'+n+'">'+(DEMO||(MK.loaded&&MK.cid===APP.cid)?({strat:mkStratHtml,card:mkCardHtml,gen:mkGenHtml,res:mkResHtml}[n]()):'<p class="mut">Načítám…</p>')+'</div>'}
+function mkReady(){if(DEMO)return apdEmpty('V ukázce se AI marketing nespouští.','Po přihlášení ke skutečné firmě zde uvidíte strategii, návrhy a výsledky z vašich dat.');
+ if(MK.err)return apdEmpty('AI marketing není k dispozici.',MK.err);if(!MK.st)return '<p class="mut">Načítám…</p>';return ''}
+function mkPendHtml(a,label){var p=mkLs(mkPendKey(a));if(!p||MK.busy[a])return '';
+ return '<div class="ad-empty" style="margin:10px 0"><span><b>'+esc(label)+' nebyl dokončen.</b><br>Mohl se přerušit obnovením stránky. Kontrola použije stejný požadavek, AI se znovu nezaplatí, pokud už výsledek existuje.</span><button type="button" class="ad-btn2 ad-pr" data-apd-act="mk-resume" data-id="'+a+'">Zkontrolovat</button></div>'}
+function mkBusyHtml(a){return MK.busy[a]?'<p class="mut" role="status">AI pracuje… Výsledek se uloží jako koncept ke kontrole.</p>':''}
+/* ---------- strategie ---------- */
+function mkDocHtml(d){d=d||{};var g=d.goal||{};
+ return '<div class="ad-kv">'
+  +'<div><span>Cíl</span><b>'+esc((g.target||'–')+' '+(MK_MET[g.metric]||g.metric||'')+' za '+(g.days||'–')+' dní')+'</b></div>'
+  +'<div><span>Komu</span><b style="font-weight:500">'+esc(d.audience||'–')+'</b></div>'
+  +'<div><span>Čím se odlišujeme</span><b style="font-weight:500">'+esc(d.positioning||'–')+'</b></div>'
+  +(d.tone?'<div><span>Tón</span><b style="font-weight:500">'+esc(d.tone)+'</b></div>':'')
+  +'<div><span>Kanály</span><b style="font-weight:500">'+(d.channels||[]).map(function(c){return esc(c.channel)+(c.why?' <small class="mut">('+esc(c.why)+')</small>':'')}).join(', ')+'</b></div>'
+  +'<div><span>Témata</span><b style="font-weight:500">'+(d.themes||[]).map(function(t){return esc(t.title)+(t.angle?' <small class="mut">– '+esc(t.angle)+'</small>':'')}).join('<br>')+'</b></div>'
+  +'<div><span>Frekvence</span><b>'+esc((d.cadence_per_week||'–')+'× týdně')+'</b></div>'
+  +(d.notes?'<div><span>Poznámky</span><b style="font-weight:500">'+esc(d.notes)+'</b></div>':'')+'</div>'}
+function mkProgHtml(){var p=MK.st&&MK.st.progress;if(!p)return '';var pct=p.target>0?Math.min(100,Math.round(p.value/p.target*100)):0,left=Math.max(0,Math.ceil((new Date(p.until).getTime()-Date.now())/864e5));
+ return '<div style="margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px"><span>Plnění cíle: <b>'+esc(p.value+' z '+p.target+' '+(MK_MET[p.metric]||''))+'</b></span><span class="mut">'+(left?'zbývá '+left+' dní':'období skončilo')+'</span></div>'
+  +'<div class="ad-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'" aria-label="Plnění cíle strategie" style="margin-top:6px"><i style="width:'+pct+'%"></i></div>'
+  +'<small class="mut">Počítáno ze skutečných záznamů ve Vexaronetu od schválení strategie. Ukazuje vývoj, ne prokázaný účinek marketingu.</small></div>'}
+function mkStratHtml(){var w=mkReady();if(w)return w;var st=MK.st,s=st.strategy,a=st.approved;
+ if(!st.profile.confirmed)return apdEmpty('Profil firmy není potvrzený.','Strategie vychází jen z potvrzeného profilu firmy. Vyplňte ho a potvrďte.')+'<div style="margin-top:12px"><button type="button" class="ad-btn2 ad-pr" data-tab="firmaprofil">Otevřít profil firmy</button></div>';
+ var h=mkPendHtml('strategy','Návrh strategie')+mkBusyHtml('strategy');
+ if(!s)return h+apdEmpty('Strategie zatím není nastavená.','AI navrhne cíl, cílové zákazníky, kanály, témata a frekvenci z potvrzeného profilu (verze '+st.profile.version+'). Návrh pak upravíte a schválíte.')
+  +'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button type="button" class="ad-btn2 ad-pr" data-apd-act="mk-gen-strategy"'+(MK.busy.strategy?' disabled':'')+'>Vytvořit návrh strategie</button><button type="button" class="ad-btn2" data-tab="firmaprofil">Profil firmy</button></div>';
+ var draft=s.status==='draft';
+ h+='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><span class="ad-tag">'+(draft?'Koncept – čeká na schválení':'Schváleno')+'</span><small class="mut">verze '+s.version+' · '+(s.source==='ai'?'návrh AI':'ruční úprava')+' · z profilu v'+esc(s.profile_version||'–')+(s.approved_at?' · schváleno '+esc(fD(s.approved_at)):'')+'</small></div>';
+ if(draft&&a)h+='<p class="mut">Platí schválená verze '+a.version+'. Tento koncept začne platit až po schválení.</p>';
+ if(st.profile.version&&s.profile_version&&st.profile.version!==s.profile_version)h+='<p class="mut">Profil firmy se od návrhu změnil (nyní verze '+st.profile.version+'). Zvažte nový návrh.</p>';
+ h+=mkDocHtml(s.doc)+(s.status==='approved'?mkProgHtml():'');
+ h+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">'
+  +(draft?'<button type="button" class="ad-btn2 ad-go" data-apd-act="mk-appr-strategy">'+ico('tick',16)+'Schválit strategii</button>':'')
+  +'<button type="button" class="ad-btn2" data-apd-act="mk-edit-strategy">'+ico('edit',16)+(draft?'Upravit':'Upravit (vznikne nová verze)')+'</button>'
+  +'<button type="button" class="ad-btn2" data-apd-act="mk-gen-strategy"'+(MK.busy.strategy?' disabled':'')+'>'+ico('sparkle',16)+'Nový návrh od AI</button>'
+  +(a?'<button type="button" class="ad-btn2 ad-pr" data-apd="obsah">Navrhnout příspěvky '+ico('arr',16)+'</button>':'')+'</div>';
+ return h}
+function mkCardHtml(){if(DEMO)return '<p style="margin:0 0 10px">Cíl: <span class="ad-na">v ukázce se nenastavuje</span></p>';if(MK.err||!MK.st)return '<p class="mut" style="margin:0 0 10px">'+esc(MK.err||'Načítám…')+'</p>';
+ var a=MK.st.approved,s=MK.st.strategy;if(!a)return '<p style="margin:0 0 10px">Cíl: <span class="ad-na">'+(s?'strategie čeká na schválení':MK.st.profile.confirmed?'zatím nenastaven':'nejdřív potvrďte profil firmy')+'</span></p>';
+ var g=a.doc.goal||{};return '<p style="margin:0 0 4px">Cíl: <b>'+esc(g.target+' '+(MK_MET[g.metric]||'')+' za '+g.days+' dní')+'</b></p>'+mkProgHtml()}
+function mkStrategyForm(d){d=d||{};var g=d.goal||{},ch={};(d.channels||[]).forEach(function(c){ch[c.channel]=c.why||''});
+ var f=function(id,l,v,ta,max){return '<div class="f" style="margin-bottom:8px"><label for="'+id+'">'+l+'</label>'+(ta?'<textarea id="'+id+'" rows="3" maxlength="'+(max||1000)+'">'+esc(v||'')+'</textarea>':'<input id="'+id+'" maxlength="'+(max||300)+'" value="'+esc(v||'')+'">')+'</div>'};
+ return '<h3>Upravit strategii</h3><form id="mkSf" novalidate><div style="display:flex;gap:8px;flex-wrap:wrap"><div class="f"><label for="mk_gm">Cíl – metrika</label><select id="mk_gm">'+Object.keys(MK_MET).map(function(k){return '<option value="'+k+'"'+(g.metric===k?' selected':'')+'>'+esc(MK_SYS[k])+'</option>'}).join('')+'</select></div>'
+  +'<div class="f"><label for="mk_gt">Cílová hodnota</label><input id="mk_gt" type="number" min="1" max="10000" value="'+esc(g.target||'')+'"></div><div class="f"><label for="mk_gd">Za dní (7–180)</label><input id="mk_gd" type="number" min="7" max="180" value="'+esc(g.days||30)+'"></div>'
+  +'<div class="f"><label for="mk_cad">Příspěvků týdně</label><input id="mk_cad" type="number" min="1" max="14" value="'+esc(d.cadence_per_week||2)+'"></div></div>'
+  +f('mk_au','Komu (cíloví zákazníci)',d.audience,1,1000)+f('mk_po','Čím se odlišujeme',d.positioning,1,1000)+f('mk_to','Tón komunikace',d.tone,0,300)
+  +'<fieldset style="border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:8px"><legend>Kanály (1–6)</legend>'+MKCH.map(function(c,i){return '<div style="display:flex;gap:8px;align-items:center;margin:4px 0"><label style="min-width:130px"><input type="checkbox" id="mk_c'+i+'"'+(c in ch?' checked':'')+'> '+esc(c)+'</label><input id="mk_cw'+i+'" maxlength="300" placeholder="proč tento kanál" aria-label="Proč '+esc(c)+'" value="'+esc(ch[c]||'')+'" style="flex:1"></div>'}).join('')+'</fieldset>'
+  +f('mk_th','Témata (2–8, jedno na řádek, „název | úhel pohledu“)',(d.themes||[]).map(function(t){return t.title+(t.angle?' | '+t.angle:'')}).join('\n'),1,4000)
+  +f('mk_no','Poznámky',d.notes,1,2000)+'<p id="mkSfMsg" class="mut" role="alert"></p><button type="submit" class="ad-btn2 ad-go" style="background:#1f7a4d;color:#fff;border:0;border-radius:9px;padding:8px 16px">Uložit</button></form>'}
+function mkStrategyRead(){var v=function(id){var e=A(id);return e?String(e.value||'').trim():''},chs=[];
+ MKCH.forEach(function(c,i){if(A('mk_c'+i)&&A('mk_c'+i).checked)chs.push({channel:c,why:v('mk_cw'+i)||c})});
+ var th=v('mk_th').split('\n').map(function(l){var p=l.split('|');return {title:String(p[0]||'').trim(),angle:String(p.slice(1).join('|')||'').trim()}}).filter(function(t){return t.title});
+ var d={goal:{metric:v('mk_gm'),target:Math.round(Number(v('mk_gt'))),days:Math.round(Number(v('mk_gd')))},audience:v('mk_au'),positioning:v('mk_po'),tone:v('mk_to'),channels:chs,themes:th,cadence_per_week:Math.round(Number(v('mk_cad')))};
+ if(v('mk_no'))d.notes=v('mk_no');var e=[];
+ if(!(d.goal.target>=1&&d.goal.target<=10000))e.push('cílová hodnota 1–10000');if(!(d.goal.days>=7&&d.goal.days<=180))e.push('období 7–180 dní');
+ if(d.audience.length<10)e.push('cílové zákazníky (aspoň 10 znaků)');if(d.positioning.length<10)e.push('odlišení (aspoň 10 znaků)');
+ if(chs.length<1)e.push('aspoň jeden kanál');if(th.length<2||th.length>8)e.push('2–8 témat');if(th.some(function(t){return t.title.length<3||t.title.length>120}))e.push('název tématu 3–120 znaků');
+ if(!(d.cadence_per_week>=1&&d.cadence_per_week<=14))e.push('frekvenci 1–14');return {doc:d,errors:e}}
+/* ---------- obsah: dávka návrhů ze schválené strategie ---------- */
+function mkGenHtml(){var w=mkReady();if(w)return w;var a=MK.st.approved;
+ if(!a)return apdEmpty('Dávku návrhů vytvoří AI ze schválené strategie.','Nejdřív v záložce Strategie nechte navrhnout a schvalte strategii.')+'<div style="margin-top:10px"><button type="button" class="ad-btn2 ad-pr" data-apd="strategie">Přejít na strategii</button></div>';
+ var c=Math.min(14,(a.doc.cadence_per_week||2)*2),td=apdIso(apdD0(0));
+ return mkPendHtml('posts','Návrh příspěvků')+mkBusyHtml('posts')
+  +'<p style="margin:0 0 8px">Podle schválené strategie (verze '+a.version+'): '+esc((a.doc.channels||[]).map(function(x){return x.channel}).join(', '))+'. Návrhy se uloží jako <b>koncepty</b>; nic se nezveřejní bez vašeho schválení.</p>'
+  +'<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end"><div class="f"><label for="mk_pc">Počet příspěvků</label><input id="mk_pc" type="number" min="1" max="14" value="'+c+'"></div><div class="f"><label for="mk_pf">Od data (14 dní)</label><input id="mk_pf" type="date" min="'+td+'" value="'+td+'"></div>'
+  +'<button type="button" class="ad-btn2 ad-pr" data-apd-act="mk-gen-posts"'+(MK.busy.posts?' disabled':'')+'>'+ico('sparkle',16)+'Navrhnout příspěvky</button></div>'}
+/* ---------- výsledky ---------- */
+function mkResHtml(){var w=mkReady();if(w)return w;var R=MK.res||[];
+ if(!R.length)return apdEmpty('Zatím žádný zveřejněný příspěvek.','Po zveřejnění (na webu firmy nebo ručně se záznamem odkazu) zde uvidíte skutečné poptávky, zákazníky, rezervace a objednávky v 7 dnech po zveřejnění proti 7 dnům před ním a výsledky, které zadáte z kanálu.');
+ var td=apdIso(apdD0(0));
+ return '<p class="mut fine">Srovnání ukazuje souvislost v čase, ne prokázaný účinek příspěvku. Dosah a prokliky z Facebooku, Instagramu či Googlu zatím nejsou propojené; můžete je opsat ručně i se zdrojem.</p><ul class="ad-lst">'+R.map(function(r){
+  var dt=r.web_publish_on||String(r.published_at||'').slice(0,10);
+  var sys=Object.keys(MK_SYS).map(function(m){var x=(r.system||{})[m]||{};return '<div><span>'+esc(MK_SYS[m])+'</span><b>'+esc(x.after==null?'–':String(x.after))+' <small class="mut">(před: '+esc(x.before==null?'–':String(x.before))+')</small></b></div>'}).join('');
+  var done=Object.keys(r.system||{}).every(function(m){return r.system[m].complete});
+  var man=(r.manual||[]).map(function(x){return '<li>'+esc(MK_RMET[x.metric]||x.metric)+': <b>'+esc(Number(x.value).toLocaleString('cs-CZ'))+'</b> <small class="mut">('+esc(fD(x.from)+'–'+fD(x.to)+', zdroj: '+x.source)+')</small></li>'}).join('');
+  return '<li style="display:block"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'+apdChanIcon(r.channel==='web'?'Web nebo blog':r.channel,28)+'<b>'+esc(r.title)+'</b><small class="mut">'+esc((r.channel==='web'?'web firmy':r.channel)+' · '+(dt?fD(dt):''))+'</small>'+(r.published_url&&/^https:\/\//.test(r.published_url)?'<a href="'+esc(r.published_url)+'" target="_blank" rel="noopener noreferrer">odkaz</a>':'')+'</div>'
+   +'<div class="ad-kv" style="margin-top:8px">'+sys+'</div><small class="mut">'+(done?'7 dní po zveřejnění vs. 7 dní před.':'Okno 7 dní po zveřejnění ještě běží.')+'</small>'
+   +(man?'<ul style="margin:8px 0 0 18px">'+man+'</ul>':'')
+   +'<details style="margin-top:8px"><summary>Zadat výsledek z kanálu</summary><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-top:6px">'
+   +'<div class="f"><label for="mkr_m_'+esc(r.post_id)+'">Metrika</label><select id="mkr_m_'+esc(r.post_id)+'">'+Object.keys(MK_RMET).map(function(k){return '<option value="'+k+'">'+esc(MK_RMET[k])+'</option>'}).join('')+'</select></div>'
+   +'<div class="f"><label for="mkr_v_'+esc(r.post_id)+'">Hodnota</label><input id="mkr_v_'+esc(r.post_id)+'" type="number" min="0" step="1"></div>'
+   +'<div class="f"><label for="mkr_f_'+esc(r.post_id)+'">Od</label><input id="mkr_f_'+esc(r.post_id)+'" type="date" value="'+esc(dt)+'" max="'+td+'"></div>'
+   +'<div class="f"><label for="mkr_t_'+esc(r.post_id)+'">Do</label><input id="mkr_t_'+esc(r.post_id)+'" type="date" value="'+td+'" max="'+td+'"></div>'
+   +'<div class="f"><label for="mkr_s_'+esc(r.post_id)+'">Zdroj</label><input id="mkr_s_'+esc(r.post_id)+'" maxlength="120" placeholder="např. statistiky Facebooku"></div>'
+   +'<button type="button" class="ad-btn2 ad-pr" data-apd-act="mk-res-add" data-id="'+esc(r.post_id)+'">Uložit</button></div></details></li>'}).join('')+'</ul>'}
+/* ---------- akce ---------- */
+async function mkSha(t){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('')}
+function mkPostHash(p){return mkSha((p.title||'')+'\x1f'+(p.body||'')+'\x1f'+(p.channel||''))}
+async function mkCall(action,extra){
+ if(MK.busy[action])return;var lk=mkPendKey(action),pend=mkLs(lk);
+ if(!pend)pend={key:'m'+Date.now().toString(36)+Math.random().toString(36).slice(2,12),extra:extra||{},at:Date.now()};
+ mkLsSet(lk,pend);MK.busy[action]=true;mkPaint();var keep=false;
+ try{var ses=(await getSb().auth.getSession()).data.session;if(!ses){toast(mkApiErr({error:'auth'}),'err');return}
+  var r=await fetch('/api/ai-marketing',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+ses.access_token},body:JSON.stringify(Object.assign({},pend.extra,{action:action,cid:APP.cid,key:pend.key}))});
+  var j=await r.json().catch(function(){return {}});
+  if(r.ok)toast(action==='strategy'?'Návrh strategie je uložený jako koncept. Zkontrolujte ho a schvalte.':'Návrhy příspěvků jsou uložené jako koncepty ke schválení.','ok');
+  else if(r.status===409&&j.error==='in_progress'){keep=true;toast('Požadavek se ještě zpracovává. Za chvíli ho zkontrolujte.','ok')}
+  else toast(mkApiErr(j,r.status),'err');
+ }catch(e){keep=true;toast('Spojení se přerušilo. Stav zkontrolujte tlačítkem „Zkontrolovat“; AI se nezaplatí dvakrát.','err')}
+ finally{if(!keep)mkLsDel(lk);MK.busy[action]=false}
+ if(action==='posts'){try{await refresh()}catch(e){}appTab(APP.tab)}await mkLoad()}
+async function mkRpc(fn,args,okMsg){try{var r=await getSb().rpc(fn,Object.assign({cid:APP.cid},args));if(r.error){toast(mkDbErr(r.error),'err');if(/stale/.test(r.error.message||'')){try{await refresh()}catch(e){}appTab(APP.tab)}return null}if(okMsg)toast(okMsg,'ok');return r.data||{}}catch(e){toast(mkDbErr(e),'err');return null}}
+async function mkApprovePost(p,b){if(!p)return;if(!String(p.body||'').trim()){toast(mkDbErr('empty_body'),'err');return}if(b)b.disabled=true;
+ var d=await mkRpc('mkt_post_approve',{p_post:p.id,p_expected_hash:await mkPostHash(p)},'Příspěvek je schválený a naplánovaný.');
+ if(b)b.disabled=false;if(d){try{await refresh()}catch(e){}appTab(APP.tab);await mkLoad()}}
+function mkClose(o){var x=o&&o.querySelector('[data-apdm]');if(x)x.click();else if(o)o.remove()}
+function mkItem(id){return ((MK.st&&MK.st.items)||[]).filter(function(i){return String(i.post_id)===String(id)})[0]||null}
+/* náhled příspěvku s dostupnými kroky: schválení, publikace na web firmy, záznam ručního zveřejnění, zrušení */
+function mkPreview(p){var it=mkItem(p.id),td=apdIso(apdD0(0)),site=APP.d&&APP.d.sites&&APP.d.sites.rows&&APP.d.sites.rows[0];
+ var h='<h3>'+esc(p.title)+'</h3><p class="mut">'+esc(p.channel||'bez kanálu')+' · '+esc(MKST[p.status]||p.status)+(p.planned_on?' · '+esc(fD(p.planned_on)):'')+(it&&it.ai?' · návrh AI':'')+'</p>'+(p.body?'<pre>'+esc(p.body)+'</pre>':'<p class="mut">Koncept zatím nemá žádný text.</p>');
+ if(DEMO||APP.role==='employee'){apdModal(h);return}
+ var ok=it&&it.approved,pub=it&&it.published_channel;
+ if(it&&it.changed_after_approval)h+='<p class="mut">Text se po schválení změnil, proto je nutné ho schválit znovu.</p>';
+ if(!ok)h+='<p><button type="button" class="ad-btn2" data-mkm="appr">Schválit</button> <small class="mut">Schvaluje se přesně tento text; po úpravě je nutné schválit znovu.</small></p>';
+ else if(pub)h+='<p>Zveřejněno: <b>'+esc(pub==='web'?'web firmy':pub)+'</b>'+(it.web_publish_on?' od '+esc(fD(it.web_publish_on)):'')+(it.published_url&&/^https:\/\//.test(it.published_url)?' · <a href="'+esc(it.published_url)+'" target="_blank" rel="noopener noreferrer">odkaz</a>':'')+'</p><p><button type="button" class="ad-btn2" data-mkm="unpub">Zrušit zveřejnění</button></p>';
+ else h+='<fieldset style="border:1px solid #4a56b0;border-radius:10px;padding:8px;margin:8px 0"><legend>Zveřejnit na webu firmy ve Vexaronetu</legend>'+(site&&site.enabled?'<label for="mkm_on">Od data</label> <input id="mkm_on" type="date" min="'+td+'" value="'+esc(p.planned_on&&p.planned_on>=td?p.planned_on:td)+'"> <button type="button" class="ad-btn2" data-mkm="web">Zveřejnit v sekci Novinky</button>':'<small>Web firmy není zapnutý. Zapněte ho v sekci Web.</small>')+'</fieldset>'
+  +'<fieldset style="border:1px solid #4a56b0;border-radius:10px;padding:8px;margin:8px 0"><legend>Zveřejnili jste ho sami jinde?</legend><label for="mkm_ch">Kanál</label> <select id="mkm_ch">'+MKCH.map(function(c){return '<option'+(c===p.channel?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select> <label for="mkm_url">Odkaz (https, nepovinné)</label> <input id="mkm_url" type="url" maxlength="1000" placeholder="https://"> <button type="button" class="ad-btn2" data-mkm="manual">Zaznamenat zveřejnění</button>'
+  +'<br><small class="mut">Vexaronet zatím nepublikuje na Facebook, Instagram ani jiné sítě; zde jen zaznamenáte, že jste příspěvek zveřejnili.</small></fieldset>';
+ apdModal(h);var m=document.querySelectorAll('.apdm');m=m[m.length-1];if(!m)return;
+ m.addEventListener('click',async function(e){var b=e.target.closest&&e.target.closest('[data-mkm]');if(!b)return;var k=b.getAttribute('data-mkm'),d=null;b.disabled=true;
+  if(k==='appr'){mkClose(m);await mkApprovePost(p,null);return}
+  if(k==='web')d=await mkRpc('mkt_publish',{p_post:p.id,p_channel:'web',p_on:(A('mkm_on')||{}).value||null},'Příspěvek se zobrazí v sekci Novinky na webu firmy.');
+  if(k==='manual'){var u=String((A('mkm_url')||{}).value||'').trim();if(u&&!/^https:\/\/\S+$/.test(u)){toast(mkDbErr('invalid_url'),'err');b.disabled=false;return}d=await mkRpc('mkt_publish',{p_post:p.id,p_channel:(A('mkm_ch')||{}).value,p_url:u||null},'Zveřejnění je zaznamenané.')}
+  if(k==='unpub')d=await mkRpc('mkt_unpublish',{p_post:p.id},'Zveřejnění je zrušené.');
+  b.disabled=false;if(d){mkClose(m);try{await refresh()}catch(x){}appTab(APP.tab);await mkLoad()}})}
+async function mkAct(a,b,id){
+ if(a==='mk-gen-strategy'){var s=MK.st&&MK.st.strategy;if(s&&!confirm('Vytvořit nový návrh strategie? Spotřebuje část měsíčního limitu nákladů na AI. Stávající verze zůstanou uložené.'))return;mkCall('strategy',{});return}
+ if(a==='mk-gen-posts'){var c=Math.round(Number((A('mk_pc')||{}).value)||0),f=(A('mk_pf')||{}).value||'';if(!(c>=1&&c<=14)){toast('Počet příspěvků musí být 1–14.','err');return}mkCall('posts',{count:c,from:f});return}
+ if(a==='mk-resume'){var p=mkLs(mkPendKey(id));if(p)mkCall(id,p.extra);return}
+ if(a==='mk-appr-strategy'){var s2=MK.st&&MK.st.strategy;if(!s2)return;b.disabled=true;var d=await mkRpc('mkt_strategy_approve',{p_id:s2.id,p_expected_hash:s2.hash},'Strategie je schválená. Teď můžete nechat navrhnout příspěvky.');b.disabled=false;await mkLoad();return}
+ if(a==='mk-edit-strategy'){var s3=MK.st&&MK.st.strategy;if(!s3)return;apdModal(mkStrategyForm(s3.doc));var fm=A('mkSf');if(!fm)return;
+  fm.addEventListener('submit',async function(e){e.preventDefault();var x=mkStrategyRead(),msg=A('mkSfMsg');if(x.errors.length){msg.textContent='Doplňte: '+x.errors.join(', ')+'.';return}
+   var sb=fm.querySelector('[type=submit]');sb.disabled=true;var d2=await mkRpc('mkt_strategy_edit',{p_id:s3.id,p_expected_hash:s3.hash,p_doc:x.doc},s3.status==='approved'?'Uloženo jako nový koncept. Platí dál schválená verze, dokud nový koncept neschválíte.':'Koncept strategie je uložený.');
+   sb.disabled=false;if(d2){mkClose(fm.closest('.apdm'));await mkLoad()}});return}
+ if(a==='mk-res-add'){var g=function(k){var e=A('mkr_'+k+'_'+id);return e?String(e.value||'').trim():''},v=Number(g('v'));
+  if(g('v')===''||!(v>=0)){toast('Zadejte hodnotu 0 nebo vyšší.','err');return}if(!g('f')||!g('t')||g('f')>g('t')){toast('Zkontrolujte období.','err');return}if(g('s').length<3){toast('Uveďte zdroj (aspoň 3 znaky), např. statistiky Facebooku.','err');return}
+  b.disabled=true;var d3=await mkRpc('mkt_result_add',{p_post:id,p_metric:g('m'),p_value:v,p_from:g('f'),p_to:g('t'),p_source:g('s')},'Výsledek je uložený.');b.disabled=false;if(d3)await mkLoad();return}}
 
 })();
 </script>
