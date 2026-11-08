@@ -53,3 +53,16 @@ Stejné soubory jsou dostupné i na všech dosavadních nasazeních Cloudflare P
 - **Chat:** skutečný dotaz vrátí odpověď a přibude záznam limitu v databázi.
 - **Formulář `/nahlasit/`:** zkušební oznámení vlastníka označené „TEST“ se uloží do `private.dsa_notices` a do evidence a vlastníkovi přijde potvrzení.
 - **Náhledy:** podle adres od vlastníka.
+
+## Stav 2026-11-08 (průběžně)
+- **PR #3** (`public/`, klíče jen v `apikey`): sloučeno. Rezervace s veřejným klíčem jen v `apikey` v produkci fungují (databáze odpověděla věcnou chybou `not_found`).
+- **`SUPABASE_SERVICE_KEY`:** vlastník ho nastavil. Dočasná diagnostika bez obsahu klíče (PR #5, už odstraněná) ukázala formát `sb_secret` a jen ASCII znaky.
+- **Skutečná příčina 503 u chatu (PR #6):** `src/ai_guard.js` volal `o.fetchFn(...)` jako metodu objektu a Cloudflare Workers to odmítá („Illegal invocation“).
+  - Rozbité bylo i AI s limitem `reserve_ai` (AI CEO, generátor marketingových textů, AI pro weby, AI v přehledu), a to od nasazení bezpečnostních oprav.
+  - Lokální testy to nezachytily, protože Node takové volání dovolí. `tests/key_headers.test.mjs` teď podvrhuje `fetch` se stejnou kontrolou jako Workers.
+- **Ověřeno po PR #6:** `POST /api/chat` vrátil 200 se skutečnou odpovědí AI. V `private.help_chat_limits` přibyl záznam `all` (1) a otisk návštěvníka (1). Funkce `reserve_help_chat` je spustitelná jen pro service_role, takže nový `sb_secret_` klíč funguje s hlavičkou `apikey`.
+- **Čeká na vlastníka:**
+  - výstupní složka `public` v Cloudflare a Retry deployment;
+  - ochrana nebo smazání starých nasazení a název projektu na pages.dev;
+  - zkušební oznámení přes `/nahlasit/`.
+- Do té doby jsou interní soubory na produkční doméně stále dostupné, ověřeno: `/docs/SECURITY_STATUS.md` a `/build.py` vrací 200.
