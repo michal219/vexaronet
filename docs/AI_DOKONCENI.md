@@ -115,3 +115,18 @@ Návrat je `paid_runs_enabled = false`: běžící rezervace doběhnou a další
   3. výslovný souhlas se zapnutím `paid_runs_enabled`;
   4. první „Vytvořit návrh strategie“;
   5. ihned poté placené běhy vypnout a zkontrolovat `autopilot_runs` (stav, skutečná cena).
+
+### 2026-11-09: Vývojová fáze – limit 10 firem a odpočet do spuštění (připraveno, NENASAZENO)
+- **DB:** `db/migrations/20261114100000_registrace_limit.sql` (+ rollback):
+  - limit 10 nových hlavních firem počítaných od 9. 11. 2026 (starších 8 testovacích firem se nepočítá);
+  - trigger odmítne 11. firmu přes API (`PT403 registration_closed`), souběh hlídá zámek;
+  - pobočky, pozvaní zaměstnanci a správa přes SQL nejsou dotčeni;
+  - `public.registration_status()` vrací jen stav; datum plného spuštění 9. 12. 2026.
+  - Test: `tests/db/run_registrace_local.sh`, 14 kontrol a přesný rollback. Souběh dvou registrací o poslední místo: projde jen jedna.
+- **Web:**
+  - lišta s odpočtem dní a volnými místy (`src/registrace_ui.js`);
+  - stav se čte přes vlastní endpoint `functions/api/registration.js`, takže při načtení se nekontaktuje cizí server;
+  - po naplnění se místo registrace nabízí přihlášení, registrace zůstává jen pro pozvané zaměstnance; srozumitelná hláška při odmítnutí serverem.
+  - Test: `tests/registrace_ui.py` 19 kontrol. Regrese: `legal_ui` 41, `public_dir` 11, `xss_ui`, `appmode`, `profile_ui`, `autopilot_ui`, `ai_marketing_ui`, `legal`, `demo_btn`, `eshop`, `web`, `obory`.
+- **Nasazení:** nejdřív migrace (aplikace v Supabase čeká na schválení vlastníkem), potom sloučení do `main`.
+- **Změny nastavení (SQL):** `update private.registration_limit set max_companies = …`, `… set launch_on = date '…'`, vypnutí `… set active = false`.

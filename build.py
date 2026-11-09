@@ -336,6 +336,7 @@ tpl = r'''<!doctype html>
 <main id="obsah">
 <section class="hero" id="top"><div class="wrap">
   <div>
+    <div class="regbar" id="regBar" role="status" hidden></div>
     <span class="eyebrow fade">Beta verze pro OSVČ a malé firmy</span>
     <h1 id="h1">Zákazníci, zakázky a faktury malé firmy na jednom místě.</h1>
     <p class="sub fade d2">Vexaronet je česká aplikace pro OSVČ a malé firmy, které řídí práci v Excelu a v poznámkách. Už dnes: zákazníci, zakázky, kalendář a online rezervace, sklad, faktury a e-shop. AI CEO ukazuje, co sledovat, a navrhuje další kroky. Změny dat potvrzujete vy.</p>
@@ -628,7 +629,7 @@ var FEATS_SU=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],
 function showAuth(mode){if(document.documentElement.classList.contains('appmode')&&mode==='signup')mode='login';openD(authForm(mode||'login'));if(mode==='signup')planTxt()}
 document.addEventListener('change',function(e){if(e.target&&e.target.name==='pl'&&e.target.closest('#planForm')){var g=document.getElementById('plGo');if(g)g.textContent=e.target.value==='start'?'Přejít na START (zdarma)':'Odeslat nezávaznou žádost'}if(e.target&&e.target.id==='aPlan')planTxt();if(e.target&&e.target.id==='aInv'){var t=document.getElementById('aAgeT'),a=document.getElementById('aAge');if(t)t.innerHTML=esc(e.target.checked?AGE_TXT.invited:AGE_TXT.owner)+' <i aria-hidden="true">*</i>';if(a)a.checked=false}});
 function aMsg(t,c){var e=$('#aSt');if(e){e.className='st '+c;e.textContent=t}}
-function niceErr(e){var m=(e&&e.message)||String(e);if(/check constraint|violates/i.test(m))return 'Vybraný tarif zatím není v databázi povolený. Napište na info@vexaronet.com.';if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
+function niceErr(e){var m=(e&&e.message)||String(e);if(/registration_closed/.test(m))return 'Všech 10 míst pro testovací firmy je obsazeno, zakládání nových firem je do spuštění uzavřené. Pokud vás pozval zaměstnavatel, přihlaste se e-mailem, na který přišla pozvánka.';if(/check constraint|violates/i.test(m))return 'Vybraný tarif zatím není v databázi povolený. Napište na info@vexaronet.com.';if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
 async function ensureCompany(c,user){
  var r=await c.from('company_members').select('company_id,role,companies(id,name,parent_company_id,created_at)').eq('user_id',user.id);
  if(r.error)r=await c.from('company_members').select('company_id,role').eq('user_id',user.id);
@@ -2360,7 +2361,7 @@ out = out.replace('@@PROFIL@@', _nm(open('src/jsonschema_mini.js',encoding='utf-
     + '\nvar VXPSCHEMA=' + json.dumps(json.load(open('src/onboarding_schema.json',encoding='utf-8')), ensure_ascii=False, separators=(',', ':')) + ';\n'
     + open('src/profile_ui.js',encoding='utf-8').read())
 out = out.replace('@@AUTOPILOT@@', _nm(open('src/autopilot_core.js',encoding='utf-8').read()) + '\n' + open('src/autopilot_ui.js',encoding='utf-8').read())
-out = out.replace('@@CONSENT@@', open('src/consent.js',encoding='utf-8').read() + '\n' + open('src/dsa_ui.js',encoding='utf-8').read())
+out = out.replace('@@CONSENT@@', open('src/consent.js',encoding='utf-8').read() + '\n' + open('src/dsa_ui.js',encoding='utf-8').read() + '\n' + open('src/registrace_ui.js',encoding='utf-8').read())
 out = out.replace('@@APDASH@@', open('src/autopilot_dash.js',encoding='utf-8').read() + '\n' + open('src/ai_marketing_ui.js',encoding='utf-8').read())
 assert '@@' not in out
 open(D + 'index.html', 'w', encoding='utf-8').write(out)
