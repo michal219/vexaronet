@@ -94,9 +94,13 @@ function apdRobot(){return '<svg class="ad-robot" viewBox="0 0 128 112" role="im
  +'<ellipse cx="53" cy="44" rx="7" ry="8" fill="url(#rbE)"/><ellipse cx="75" cy="44" rx="7" ry="8" fill="url(#rbE)"/>'
  +'<rect x="20" y="34" width="12" height="26" rx="6" fill="#6f5cf0"/><rect x="96" y="34" width="12" height="26" rx="6" fill="#6f5cf0"/><path d="M26 34c0-26 76-26 76 0" fill="none" stroke="#b6a8ff" stroke-width="4" stroke-linecap="round"/><path d="M102 58c0 10-10 14-22 14" fill="none" stroke="#b6a8ff" stroke-width="3" stroke-linecap="round"/><circle cx="78" cy="72" r="3.5" fill="#cfc6ff"/></svg>'}
 /* ---------- bloky Přehledu ---------- */
+/* Stav AI: „Aktivní“ jen když platí tarif, je nastaven limit a provozovatel povolil placené běhy (stav z databáze). */
+function apdPillHtml(s){if(!s)return '<span class="ad-pill"><i></i>AI neběží</span>';var r=VXAP.readiness(s,null);
+ if(r[0].ok&&r[2].ok&&r[3].ok)return '<span class="ad-pill ad-on"><i></i>Aktivní</span>';
+ if(r[0].ok&&r[2].ok)return '<span class="ad-pill ad-warn"><i></i>Připraveno, AI zatím vypnutá</span>';
+ return '<span class="ad-pill"><i></i>AI neběží</span>'}
 function apdHeader(){
- var s=APD.st,all=s&&VXAP.readiness(s,null).slice(0,1).concat(VXAP.readiness(s,null).slice(2)).every(function(r){return r.ok}),
-  pill=s?(all?'<span class="ad-pill ad-warn"><i></i>Připraveno, AI neběží</span>':'<span class="ad-pill"><i></i>AI neběží</span>'):'<span class="ad-pill"><i></i>AI neběží</span>',
+ var s=APD.st,pill=apdPillHtml(s),
   fe=apdRows('fe'),fl=fe.length?'Finance: z vaší evidence':'Finance: bez záznamů';
  return '<div class="ad-hd">'+apdRobot()+'<div class="ad-ttl"><h2>AI Marketing Autopilot'+(DEMO?'<span class="ad-demo">Ukázková data</span>':'')+'</h2><p class="mut">Váš marketingový pomocník. Navrhuje, schvalujete vy.</p></div>'
   +'<div id="apdPill">'+pill+'</div>'
@@ -117,15 +121,20 @@ function apdPlan(){
  var t0=apdD0(0),t1=apdD0(1),td=apdIso(t0),items=[];
  apdRows('marketing_posts').forEach(function(p){if(p.planned_on===td&&p.status!=='draft')items.push({t:'',n:'Příspěvek: '+p.title,ok:p.status==='done'})});
  apdRows('tasks').forEach(function(x){if(x.due_at&&apdInRange(x.due_at,t0,t1)){var d=new Date(x.due_at);items.push({t:('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2),n:x.title,ok:!!x.completed})}});
+ var T=(typeof AIT!=='undefined'&&AIT.st&&AIT.cid===APP.cid)?AIT.st:null;
+ if(T){(T.schedules||[]).forEach(function(q){if(q.enabled&&q.next_run_at&&apdInRange(q.next_run_at,t0,t1)){var d=new Date(q.next_run_at);items.push({t:('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2),n:'AI: '+q.title,ok:false})}});
+  (T.jobs||[]).forEach(function(j){if(apdInRange(j.created_at,t0,t1)&&j.status!=='cancelled'){var d=new Date(j.created_at);items.push({t:('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2),n:'AI: '+j.title+(j.status==='awaiting_approval'?' (čeká na schválení)':j.status==='failed'?' (nepovedlo se)':''),ok:j.status==='done'})}})}
  items.sort(function(a,b){return a.t<b.t?-1:a.t>b.t?1:0});
  var nowT=('0'+new Date().getHours()).slice(-2)+':00',cur=-1;items.forEach(function(it,i){if(cur<0&&!it.ok&&(it.t===''||it.t>=nowT))cur=i});
- return '<section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('kalendar',24)+'</span><h3>Dnešní plán</h3></div>'
+ return '<section class="ad-card" id="apdPlanBox"><div class="ad-ch"><span class="ad-ci">'+ico('kalendar',24)+'</span><h3>Dnešní plán AI</h3></div>'
   +(items.length?'<ul class="ad-plan">'+items.slice(0,6).map(function(it,i){return '<li'+(i===cur?' class="ad-now"':'')+'><span class="ad-dot"></span><time>'+(it.t||'celý den')+'</time><span>'+esc(it.n)+'</span><span class="ad-st'+(it.ok?' ad-ok':'')+'" role="img" aria-label="'+(it.ok?'hotovo':'čeká')+'">'+(it.ok?ico('tick',13):'')+'</span></li>'}).join('')+'</ul>'
-   :'<div class="ad-empty"><span>Na dnes není v úkolech ani v plánu příspěvků nic naplánováno.</span></div>')
-  +'<p class="mut" style="margin:10px 0 0;font-size:.78rem">Plán se skládá z vašich úkolů a naplánovaných příspěvků. Denní plán sestavený AI se objeví, až bude Autopilot zapnutý.</p></section>'}
+   :'<div class="ad-empty"><span>Na dnes není nic naplánováno. Pravidelné úlohy AI nastavíte v <button type="button" class="lnkb" data-tab="aitym">AI týmu</button>.</span></div>')
+  +'<p class="mut" style="margin:10px 0 0;font-size:.78rem">Skládá se z vašich úkolů, naplánovaných příspěvků a dnešních úloh AI.</p></section>'}
 function apdTasks(){
  var dr=apdRows('marketing_posts').filter(function(p){return p.status==='draft'}),err=apdErr('marketing_posts');
- return '<section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('coins',24)+'</span><h3>Aktuální úkoly</h3>'+(dr.length?'<span class="ad-badge">'+dr.length+' '+(dr.length===1?'čeká':dr.length<5?'čekají':'čeká')+' na schválení</span>':'')+'</div>'
+ var ai=(typeof AIT!=='undefined'&&AIT.st&&AIT.cid===APP.cid)?(AIT.st.actions||[]).filter(function(a){return a.status==='proposed'}).length:0,nw=dr.length+ai;
+ return '<section class="ad-card" id="apdTasksBox"><div class="ad-ch"><span class="ad-ci">'+ico('coins',24)+'</span><h3>Aktuální úkoly</h3>'+(nw?'<span class="ad-badge">'+nw+' '+(nw===1?'čeká':nw<5?'čekají':'čeká')+' na schválení</span>':'')+'</div>'
+  +(ai?'<div class="ad-empty" style="margin-bottom:8px"><span><b>'+ai+' '+(ai===1?'návrh':ai<5?'návrhy':'návrhů')+' AI</b> čeká na vaše schválení.</span><button type="button" class="ad-btn2 ad-go" data-tab="aitym">Zobrazit</button></div>':'')
   +(err?'<div class="ad-empty">Příspěvky nelze načíst: '+esc(err)+'</div>':dr.length?'<ul class="ad-tk">'+dr.slice(0,3).map(function(p){var kd=(p.title||'').split(':')[0];
    return '<li><span class="ad-th">'+ico('img',24)+'</span><div class="ad-tt"><b>'+esc(p.title)+'</b><small>'+esc(p.channel||'bez kanálu')+(p.planned_on?' · '+fD(p.planned_on):'')+'</small></div><span class="ad-tag">'+esc(p.channel||'Koncept')+'</span>'
    +'<button type="button" class="ad-btn2" data-apd-act="prev" data-id="'+esc(p.id)+'">'+ico('eye',17)+'Náhled</button><button type="button" class="ad-btn2 ad-go" data-apd-act="appr" data-id="'+esc(p.id)+'">'+ico('tick',17)+'Schválit</button><button type="button" class="ad-btn2 ad-more" data-edit="marketing_posts:'+esc(p.id)+'" aria-label="Upravit příspěvek">'+ico('dots',18)+'</button></li>'}).join('')+'</ul>'
@@ -157,9 +166,7 @@ function apdChart(S,big){
   +(none?'<text x="'+(W/2)+'" y="'+(H/2-4)+'" text-anchor="middle" fill="currentColor" opacity=".8" font-size="13">Za 30 dní zatím žádné nové poptávky ani zákazníci.</text>':'')+'</svg>'
   +'<div style="display:flex;gap:16px;margin-top:6px;font-size:.8rem" class="mut"><span><i style="display:inline-block;width:14px;height:3px;background:#3bb6ff;vertical-align:middle;margin-right:6px"></i>Poptávky (obchodní případy)</span><span><i style="display:inline-block;width:14px;height:3px;background:#a78bfa;vertical-align:middle;margin-right:6px"></i>Noví zákazníci</span></div>'}
 function apdResults(){var S=apdStats();
- function tile(ic,v,l,na){return '<div class="ad-tile"><span class="ad-ti">'+ico(ic,20)+'</span><b'+(na?' class="ad-na"':'')+'>'+v+'</b><span>'+esc(l)+'</span></div>'}
- return '<section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('bars',24)+'</span><h3>Výsledky marketingu <small class="mut" style="font-weight:400">(30 dní)</small></h3></div><div class="ad-chart"><div>'+apdChart(S)+'</div><div class="ad-tiles">'
-  +tile('eye','Nepřipojeno','Zhlédnutí',1)+tile('strat','Nepřipojeno','Prokliky',1)+tile('usr',S.dealsOk?S.nd:'–','Poptávky')+tile('usrs',S.custOk?S.nc:'–','Zákazníci')+'</div></div></section>'}
+ return '<section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('bars',24)+'</span><h3>Výsledky marketingu <small class="mut" style="font-weight:400">(30 dní)</small></h3></div><div class="ad-chart"><div>'+apdChart(S)+'</div><div class="ad-tiles" data-mk-slot="tiles">'+mkTilesHtml()+'</div></div></section>'}
 function apdRing(txt,sub){return '<svg class="ad-ring" viewBox="0 0 140 140" role="img" aria-label="ROI: '+esc(txt)+'"><defs><linearGradient id="rgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3bb6ff"/><stop offset="1" stop-color="#c06cff"/></linearGradient></defs><circle cx="70" cy="70" r="58" fill="none" stroke="rgba(130,150,255,.2)" stroke-width="12"/><circle cx="70" cy="70" r="58" fill="none" stroke="url(#rgG)" stroke-width="12" stroke-linecap="round" stroke-dasharray="364" stroke-dashoffset="364" transform="rotate(-90 70 70)" opacity=".0"/><text x="70" y="68" text-anchor="middle" font-size="26" font-weight="700" fill="currentColor">'+esc(txt)+'</text><text x="70" y="88" text-anchor="middle" font-size="12" fill="currentColor" opacity=".7">'+esc(sub)+'</text></svg>'}
 function apdFinBox(){var S=apdStats();
  return '<section class="ad-card"><div class="ad-ch"><span class="ad-ci">'+ico('coins',24)+'</span><h3>Marketing & Finance <small class="mut" style="font-weight:400">('+(S.hasFe?'z vaší evidence':'bez dat')+')</small></h3></div><div class="ad-finw"><div class="ad-kv">'
@@ -197,9 +204,10 @@ function apdHtml(){apdCss();apStyle();return '<div class="apd" id="apd">'+apdHea
 async function apdLoadStatus(){
  if(DEMO||APP.role==='employee')return;
  try{var r=await getSb().rpc('autopilot_status',{cid:APP.cid});if(r.error||!r.data)return;APD.st=r.data;
-  var h=A('apdPill');if(h){var all=VXAP.readiness(APD.st,null);var okAll=all[0].ok&&all[2].ok&&all[3].ok;h.innerHTML=okAll?'<span class="ad-pill ad-warn"><i></i>Připraveno, AI neběží</span>':'<span class="ad-pill"><i></i>AI neběží</span>'}
+  var h=A('apdPill');if(h)h.innerHTML=apdPillHtml(APD.st)
  }catch(e){}}
-function apdAfter(){if(APD.tab==='finance'&&A('apRoot')&&APP.role!=='employee')apLoad();apdLoadStatus();mkLoad()}
+function apdAfter(){if(APD.tab==='finance'&&A('apRoot')&&APP.role!=='employee')apLoad();apdLoadStatus();mkLoad();
+ if(typeof aitLoad==='function'&&APP.role!=='employee'&&!DEMO)aitLoad().then(function(){var p=A('apdPlanBox'),t=A('apdTasksBox');if(p)p.outerHTML=apdPlan();if(t)t.outerHTML=apdTasks();apAgentsSync()})}
 /* ---------- napojení na aplikaci ---------- */
 var APD_MK=VIEWS.marketing;(function(){var st=document.createElement('style');st.textContent='.vxapp aside .ad-agents{display:flex;align-items:center;gap:12px;margin:10px 0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(139,108,255,.08)}.vxapp aside .ad-agents .ad-ai{color:#a78bfa;display:grid;place-items:center}.vxapp aside .ad-agents b{display:block}.vxapp aside .ad-agents small{display:flex;align-items:center;gap:7px}.vxapp aside .ad-agents small i{width:9px;height:9px;border-radius:50%;background:#7a82a8}';document.head.appendChild(st)})();
 VIEWS.autopilot=function(){if(APP.role==='employee')return '<div class="card2 soonc"><h2>Autopilot</h2><p>Autopilot spravuje vlastník nebo správce.</p></div>';return apdHtml()};
@@ -225,4 +233,8 @@ if(!window.__apdBound){window.__apdBound=true;
 
 function apNavSync(){var g=document.querySelector('#vxside .apg');if(!g)return;var want=APD.menu===null?(APGRP.concat(['pripady','nabidky']).indexOf(APP.tab)>=0):APD.menu;if(g.classList.contains('ad-open')!==!!want)renderNav()}
 
-function apAgentsHtml(){if(APP.role==='employee')return '';return '<div class="ad-agents"><span class="ad-ai">'+ico('autopilot',26)+'</span><div><b>AI zaměstnanci</b><small><i></i>0 aktivních</small></div></div>'}
+/* „Aktivní“ AI zaměstnanec = modul, který má zapnutý pravidelný plán nebo za posledních 7 dní dokončil úlohu (stav z databáze). */
+function apAgentsCount(){var T=(typeof AIT!=='undefined'&&AIT.st&&AIT.cid===APP.cid)?AIT.st:null,m={};if(!T)return 0;var w=Date.now()-7*864e5;
+ (T.schedules||[]).forEach(function(q){if(q.enabled)m[q.module]=1});(T.jobs||[]).forEach(function(j){if((j.status==='done'||j.status==='awaiting_approval')&&new Date(j.created_at).getTime()>=w)m[j.module]=1});return Object.keys(m).length}
+function apAgentsSync(){var e=A('apAgentsN');if(e){var n=apAgentsCount();e.innerHTML='<i'+(n?' style="background:var(--ok)"':'')+'></i>'+n+' '+(n===1?'aktivní':n>=2&&n<=4?'aktivní':'aktivních')}}
+function apAgentsHtml(){if(APP.role==='employee')return '';var n=apAgentsCount();return '<div class="ad-agents"><span class="ad-ai">'+ico('autopilot',26)+'</span><div><b>AI zaměstnanci</b><small id="apAgentsN"><i'+(n?' style="background:var(--ok)"':'')+'></i>'+n+' '+(n>=1&&n<=4?'aktivní':'aktivních')+'</small></div></div>'}

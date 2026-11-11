@@ -11,7 +11,7 @@ const sql = (q) => sh(['-X', '-At', '-v', 'ON_ERROR_STOP=1', '-d', DB, '-c', q])
 const lit = (v) => (v === null || v === undefined ? 'NULL' : `'${String(typeof v === 'object' ? JSON.stringify(v) : v).replace(/'/g, "''")}'`);
 sh(['-X', '-q', '-d', 'postgres', '-c', `drop database if exists ${DB}`, '-c', `create database ${DB}`]);
 for (const f of ['db/test/00_local_supabase_shim.sql', 'db/test/01_base_stub.sql', 'db/migrations/20261107120000_profil_firmy.sql', 'db/migrations/20261108110000_autopilot_limity.sql',
-  'db/test/05_marketing_prestate.sql', 'db/migrations/20261112100000_ai_marketing.sql', 'db/migrations/20261113100000_autopilot_pilot.sql']) sh(['-X', '-q', '-v', 'ON_ERROR_STOP=1', '-d', DB, '-f', f]);
+  'db/test/05_marketing_prestate.sql', 'db/migrations/20261112100000_ai_marketing.sql', 'db/migrations/20261113100000_autopilot_pilot.sql', 'db/test/06_ai_team_prestate.sql', 'db/migrations/20261115100000_ai_tym.sql']) sh(['-X', '-q', '-v', 'ON_ERROR_STOP=1', '-d', DB, '-f', f]);
 const O = '00000000-0000-0000-0000-00000000d001', E = '00000000-0000-0000-0000-00000000d002', X = '00000000-0000-0000-0000-00000000d003', Y = '00000000-0000-0000-0000-00000000d004';
 const A = '00000000-0000-0000-0000-00000000aa01', B = '00000000-0000-0000-0000-00000000bb01', C = '00000000-0000-0000-0000-00000000cc01';
 const PROFILE = { shared: { identity: { displayName: 'Autoservis Konina', activity: 'Opravy aut, výměna výfuků a pneuservis v Konině' }, audience: { description: 'Řidiči z Koniny a okolí' },

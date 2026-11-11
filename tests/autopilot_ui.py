@@ -32,7 +32,7 @@ window.supabase={createClient:function(){return{from:qb,rpc:rpc,auth:{getSession
 '''
 CO = [{'id': '11111111-1111-1111-1111-111111111111', 'name': 'Autoservis Konina', 'industry': 'Autoservis', 'parent_company_id': None, 'created_at': '2026-10-01T00:00:00Z'}]
 def members(role='owner'): return [{'company_id': CO[0]['id'], 'role': role, 'companies': CO[0]}]
-MODES = ['AI Marketing', 'AI Obchodník', 'AI CEO', 'AI Účetnictví', 'AI Weby a e-shopy', 'AI Automatizace']
+MODES = ['AI tým (přehled)', 'AI Marketing', 'AI Obchodník', 'AI CEO', 'AI Účetnictví', 'AI Weby a e-shopy', 'AI Automatizace']
 fails = []
 def check(c, m):
     print(('OK   ' if c else 'FAIL ') + m)
@@ -54,7 +54,7 @@ def dtab(pg, k): pg.click('#apd [data-apd=%s]' % k); pg.wait_for_timeout(350)
 with sync_playwright() as p:
     b = p.chromium.launch()
     pg = open_page(b, {'members': members()})
-    check(menu(pg) == MODES, 'levé menu: skupina AI Autopilot nabízí šest modulů ve správném pořadí: %s' % menu(pg))
+    check(menu(pg) == MODES, 'levé menu: skupina AI Autopilot nabízí přehled AI týmu a šest modulů ve správném pořadí: %s' % menu(pg))
     check(pg.locator('#vxside .ad-hdr').inner_text().strip().startswith('AI Autopilot'), 'skupina se jmenuje AI Autopilot')
     tab(pg, 'autopilot'); pg.wait_for_selector('#apd')
     check(pg.locator('#vxside .apg.ad-open').count() == 1, 'při otevřeném Autopilotu je skupina rozbalená')
@@ -121,7 +121,11 @@ with sync_playwright() as p:
     check(pg.locator('.apchk .apok').count() == 4 and 'Podmínky jsou splněné' in t and 'žádné placené volání nespouští' in t, 'i při splněných podmínkách Autopilot zatím žádné placené volání nespouští')
     check('0,0062 USD' in t and '2 %' in t, 'spotřeba a využití limitu se zobrazí (0,0062 USD, 2 %)')
     tab(pg, 'autopilot'); pg.wait_for_timeout(400)
-    check('Připraveno, AI neběží' in pg.inner_text('#apdPill'), 'stav v hlavičce: připraveno, ale AI neběží')
+    check(pg.inner_text('#apdPill').strip() == 'Aktivní' and pg.locator('#apdPill .ad-on').count() == 1, 'stav v hlavičce: „Aktivní“ až když platí tarif, limit i povolení provozovatele')
+    pg.close()
+    pg = open_page(b, {'members': members(), 'limit': 250000000, 'platform': False}); tab(pg, 'autopilot'); pg.wait_for_timeout(500)
+    check('Připraveno, AI zatím vypnutá' in pg.inner_text('#apdPill'), 'limit nastaven, ale placené běhy vypnuté: „Připraveno, AI zatím vypnutá“')
+    check('Dnešní plán AI' in pg.inner_text('#apd'), 'blok Dnešní plán AI')
     pg.close()
 
     pg = open_page(b, {'members': members(), 'noDb': True}); tab(pg, 'autopilot'); dtab(pg, 'finance'); pg.wait_for_selector('#apRoot .draft')

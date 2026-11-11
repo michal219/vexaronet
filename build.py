@@ -336,6 +336,7 @@ tpl = r'''<!doctype html>
 <main id="obsah">
 <section class="hero" id="top"><div class="wrap">
   <div>
+    <div class="regbar" id="regBar" role="status" hidden></div>
     <span class="eyebrow fade">Beta verze pro OSVČ a malé firmy</span>
     <h1 id="h1">Zákazníci, zakázky a faktury malé firmy na jednom místě.</h1>
     <p class="sub fade d2">Vexaronet je česká aplikace pro OSVČ a malé firmy, které řídí práci v Excelu a v poznámkách. Už dnes: zákazníci, zakázky, kalendář a online rezervace, sklad, faktury a e-shop. AI CEO ukazuje, co sledovat, a navrhuje další kroky. Změny dat potvrzujete vy.</p>
@@ -628,7 +629,7 @@ var FEATS_SU=[['zakaznici','Zákazníci (CRM)'],['zakazky','Zakázky a úkoly'],
 function showAuth(mode){if(document.documentElement.classList.contains('appmode')&&mode==='signup')mode='login';openD(authForm(mode||'login'));if(mode==='signup')planTxt()}
 document.addEventListener('change',function(e){if(e.target&&e.target.name==='pl'&&e.target.closest('#planForm')){var g=document.getElementById('plGo');if(g)g.textContent=e.target.value==='start'?'Přejít na START (zdarma)':'Odeslat nezávaznou žádost'}if(e.target&&e.target.id==='aPlan')planTxt();if(e.target&&e.target.id==='aInv'){var t=document.getElementById('aAgeT'),a=document.getElementById('aAge');if(t)t.innerHTML=esc(e.target.checked?AGE_TXT.invited:AGE_TXT.owner)+' <i aria-hidden="true">*</i>';if(a)a.checked=false}});
 function aMsg(t,c){var e=$('#aSt');if(e){e.className='st '+c;e.textContent=t}}
-function niceErr(e){var m=(e&&e.message)||String(e);if(/check constraint|violates/i.test(m))return 'Vybraný tarif zatím není v databázi povolený. Napište na info@vexaronet.com.';if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
+function niceErr(e){var m=(e&&e.message)||String(e);if(/registration_closed/.test(m))return 'Všech 10 míst pro testovací firmy je obsazeno, zakládání nových firem je do spuštění uzavřené. Pokud vás pozval zaměstnavatel, přihlaste se e-mailem, na který přišla pozvánka.';if(/check constraint|violates/i.test(m))return 'Vybraný tarif zatím není v databázi povolený. Napište na info@vexaronet.com.';if(/Invalid login/i.test(m))return 'Nesprávný e-mail nebo heslo.';if(/already registered|already been/i.test(m))return 'Tento e-mail už je zaregistrovaný. Přihlaste se.';if(/Email not confirmed/i.test(m))return 'E-mail zatím není potvrzený. Klikněte na odkaz v e-mailu, který jsme poslali.';if(/rate limit/i.test(m))return 'Příliš mnoho pokusů. Zkuste to později.';return 'Chyba: '+m}
 async function ensureCompany(c,user){
  var r=await c.from('company_members').select('company_id,role,companies(id,name,parent_company_id,created_at)').eq('user_id',user.id);
  if(r.error)r=await c.from('company_members').select('company_id,role').eq('user_id',user.id);
@@ -767,9 +768,9 @@ function tabLab(k){var P=prof();return (P.lab&&P.lab[k])||((NAV.filter(function(
 function jobNewL(){return prof().jobNew||'Nová zakázka'}
 function jobActL(){return prof().jobAct||'Aktivní zakázky'}
 function navBtn(k){return '<button type="button" data-tab="'+k+'">'+ico(k)+'<span>'+esc(tabLab(k))+'</span></button>'}
-var APGRP=['autopilot','marketing','ceo','ucetni','weby','automatizace'];
+var APGRP=['aitym','autopilot','marketing','ceo','ucetni','weby','automatizace'];
 function apGroupHtml(){if(APP.role==='employee')return '';var open=APD.menu===null?(APGRP.concat(['pripady','nabidky']).indexOf(APP.tab)>=0):APD.menu,
- it=[['autopilot','AI Marketing','marketing'],['pripady','AI Obchodník','zakaznici'],['ceo','AI CEO','ceo'],['ucetni','AI Účetnictví','ucetni'],['weby','AI Weby a e-shopy','weby'],['automatizace','AI Automatizace','automatizace']];
+ it=[['aitym','AI tým (přehled)','autopilot'],['autopilot','AI Marketing','marketing'],['pripady','AI Obchodník','zakaznici'],['ceo','AI CEO','ceo'],['ucetni','AI Účetnictví','ucetni'],['weby','AI Weby a e-shopy','weby'],['automatizace','AI Automatizace','automatizace']];
  return '<div class="apg'+(open?' ad-open':'')+'"><button type="button" class="ad-hdr" data-apgrp="1" aria-expanded="'+(open?'true':'false')+'">'+ico('autopilot',20)+'<span>AI Autopilot</span><span class="ad-chv">'+ico('chev',16)+'</span></button><div class="ad-sub">'+it.map(function(x){return '<button type="button" data-tab="'+x[0]+'">'+ico(x[2],16)+'<span>'+x[1]+'</span></button>'}).join('')+'</div></div>'}
 function navHtml(){var all=NAV.map(function(n){return n[0]}).filter(function(k){return APGRP.indexOf(k)<0}),P=prof(),ord=P.nav?P.nav.filter(function(k){return all.indexOf(k)>=0}):all,rest=all.filter(function(k){return ord.indexOf(k)<0}),first=ord.indexOf('prehled')===0;
  return (first?navBtn('prehled'):'')+apGroupHtml()+(first?ord.slice(1):ord).map(navBtn).join('')+(rest.length?'<details class="more"'+(rest.indexOf(APP.tab)>=0?' open':'')+'><summary>'+ico('menu',18)+'<span>Další moduly</span></summary>'+rest.map(navBtn).join('')+'</details>':'')}
@@ -780,7 +781,7 @@ function stepsCard(){if(APP.role==='employee')return '';var P=prof(),sk='vxsteps
  var st=(P.steps||[]).map(function(s){return {t:s[0],go:s[1],done:stepDone(s[2])}}),dn=st.filter(function(x){return x.done}).length;if(!st.length||dn===st.length)return '';
  return '<section class="card2 steps"><div class="bar2"><div><h3>Začínáme: '+esc(obKey(APP.ind))+'</h3><p class="mut">Postup přizpůsobený vašemu oboru. Hotovo '+dn+' z '+st.length+'.</p></div><button type="button" class="btn btn-ghost btn-sm" data-app="stepsoff">Skrýt</button></div><ul class="stl">'+st.map(function(x){return '<li class="'+(x.done?'ok':'')+'"><button type="button" data-tab="'+x.go+'"><i aria-hidden="true">'+(x.done?'✓':'')+'</i><span>'+esc(x.t)+'</span></button></li>'}).join('')+'</ul></section>'}
 function ceoQs(){var P=prof();return P.q||CEOQ}
-var NAV=[['prehled','Přehled'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['pripady','Obchodní případy'],['nabidky','Nabídky'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['sklad','Sklad a produkty'],['eshop','E-shop'],['pobocky','Pobočky'],['zamestnanci','Zaměstnanci'],['firmaprofil','Profil firmy'],['autopilot','Autopilot']];
+var NAV=[['prehled','Přehled'],['aitym','AI tým'],['ceo','AI CEO'],['ucetni','AI Účetní'],['zakaznici','CRM a zákazníci'],['pripady','Obchodní případy'],['nabidky','Nabídky'],['zakazky','Zakázky a projekty'],['ukoly','Úkoly'],['faktury','Fakturace'],['finance','Finance'],['kalendar','Kalendář a rezervace'],['online','Online rezervace'],['weby','Jednoduchý web'],['marketing','Marketing'],['reporty','Reporty'],['automatizace','Automatizace'],['sklad','Sklad a produkty'],['eshop','E-shop'],['pobocky','Pobočky'],['zamestnanci','Zaměstnanci'],['firmaprofil','Profil firmy'],['autopilot','Autopilot']];
 var SOON={};
 var PLANN={start:'START',starter:'START',accountant:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet BUSINESS',enterprise:'ENTERPRISE'},STATN={demo:'ukázka',trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
 var PLANLIM={start:'CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel. Bez AI CEO.',accountant:'1 uživatel, 100 AI vytěžených dokladů měsíčně.',pro:'3 uživatelé, 150 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',business:'10 uživatelů, 500 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',enterprise:'Individuální limity podle dohody.'};
@@ -1895,7 +1896,7 @@ async function accProcess(){
  try{var data=await new Promise(function(res,rej){var fr=new FileReader();fr.onload=function(){res(String(fr.result).split(',')[1]||'')};fr.onerror=rej;fr.readAsDataURL(f)});
   var o=await accCall({mime:mt,data:data});
   if(!o.r.ok){accSt(accErr(o.r,o.j),'err');return}
-  APP.accDoc=o.j.doc;accUse(o.j.used,o.j.limit);accSt('Hotovo. Zkontrolujte údaje níže, nic ještě není uložené.','ok');A('accRes').innerHTML=accForm(o.j.doc)
+  accUse(o.j.used,o.j.limit);if(o.j.stored){APP.accDoc=null;accSt('Hotovo. Doklad je uložený ke kontrole'+(o.j.duplicate_of?' a vypadá jako DUPLICITA dříve nahraného dokladu':'')+'. Do evidence se zapíše až po vašem schválení.','ok');A('accRes').innerHTML='<div class="card2"><p><b>'+esc(o.j.doc.supplier_name||'Doklad')+'</b> '+esc(o.j.doc.document_number||'')+(o.j.doc.total_amount!=null?' · '+esc(o.j.doc.total_amount)+' '+esc(o.j.doc.currency||''):'')+'</p>'+((o.j.doc.warnings||[]).length?'<div class="draft">'+o.j.doc.warnings.map(esc).join('<br>')+'</div>':'')+'<button type="button" class="btn btn-main" id="accToDocs">Zkontrolovat a schválit doklad</button></div>';var gd=A('accToDocs');if(gd)gd.addEventListener('click',function(){AIT.tab='ucetnictvi';appTab('aitym')})}else{APP.accDoc=o.j.doc;accSt('Hotovo. Zkontrolujte údaje níže, nic ještě není uložené.','ok');A('accRes').innerHTML=accForm(o.j.doc)}
  }catch(x){accSt('Zpracování se nepodařilo. Zkuste to znovu.','err')}finally{APP.busy=false}}
 function accForm(d){
  var cz=!d.currency||d.currency==='CZK',w=(d.warnings||[]).slice();
@@ -2360,8 +2361,8 @@ out = out.replace('@@PROFIL@@', _nm(open('src/jsonschema_mini.js',encoding='utf-
     + '\nvar VXPSCHEMA=' + json.dumps(json.load(open('src/onboarding_schema.json',encoding='utf-8')), ensure_ascii=False, separators=(',', ':')) + ';\n'
     + open('src/profile_ui.js',encoding='utf-8').read())
 out = out.replace('@@AUTOPILOT@@', _nm(open('src/autopilot_core.js',encoding='utf-8').read()) + '\n' + open('src/autopilot_ui.js',encoding='utf-8').read())
-out = out.replace('@@CONSENT@@', open('src/consent.js',encoding='utf-8').read() + '\n' + open('src/dsa_ui.js',encoding='utf-8').read())
-out = out.replace('@@APDASH@@', open('src/autopilot_dash.js',encoding='utf-8').read() + '\n' + open('src/ai_marketing_ui.js',encoding='utf-8').read())
+out = out.replace('@@CONSENT@@', open('src/consent.js',encoding='utf-8').read() + '\n' + open('src/dsa_ui.js',encoding='utf-8').read() + '\n' + open('src/registrace_ui.js',encoding='utf-8').read())
+out = out.replace('@@APDASH@@', open('src/autopilot_dash.js',encoding='utf-8').read() + '\n' + open('src/ai_marketing_ui.js',encoding='utf-8').read() + '\n' + _nm(open('src/bank_csv.js',encoding='utf-8').read()) + '\n' + open('src/ai_team_ui.js',encoding='utf-8').read())
 assert '@@' not in out
 open(D + 'index.html', 'w', encoding='utf-8').write(out)
 print('OK', len(out))

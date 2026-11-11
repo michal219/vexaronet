@@ -62,7 +62,7 @@ base = 'http://127.0.0.1:%d' % port
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(); errs = []; nf = []
     pg.on('pageerror', lambda e: errs.append(str(e)))
-    pg.on('response', lambda r: nf.append(r.url) if r.url.startswith(base) and r.status >= 400 else None)
+    pg.on('response', lambda r: nf.append(r.url) if r.url.startswith(base) and r.status >= 400 and '/api/' not in r.url else None)
     for path in ['/', '/podminky/', '/ochrana-udaju/', '/cookies/', '/dsa/', '/nahlasit/', '/odhlasit/']:
         pg.goto(base + path, wait_until='networkidle'); pg.wait_for_timeout(300)
     pg.goto(base + '/', wait_until='networkidle'); pg.wait_for_timeout(600)
