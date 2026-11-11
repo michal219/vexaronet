@@ -32,12 +32,19 @@ async function mkLoad(){
  var cid=APP.cid;
  try{var sb=getSb(),r=await Promise.all([sb.rpc('mkt_state',{cid:cid}),sb.rpc('mkt_results',{cid:cid})]);if(APP.cid!==cid)return;
   if(r[0].error){MK.err=/function|schema cache|does not exist/i.test(r[0].error.message||'')?'AI marketing ještě není v databázi nasazený.':mkDbErr(r[0].error);MK.st=null}else if(!r[0].data||!r[0].data.profile){MK.st=null;MK.err='Stav AI marketingu má neočekávaný tvar.'}else{MK.st=r[0].data;MK.err=null}
-  MK.res=r[1].error?null:(r[1].data||[]);MK.cid=cid}
+  MK.res=r[1].error||!Array.isArray(r[1].data)?null:r[1].data;MK.cid=cid}
  catch(e){MK.err='Stav AI marketingu se nepodařilo načíst. Zkontrolujte připojení.'}
  MK.loaded=true;mkPaint()}
-function mkPaint(){var S={strat:mkStratHtml,card:mkCardHtml,gen:mkGenHtml,res:mkResHtml};
+function mkPaint(){var S={strat:mkStratHtml,card:mkCardHtml,gen:mkGenHtml,res:mkResHtml,tiles:mkTilesHtml};
  document.querySelectorAll('#apd [data-mk-slot]').forEach(function(el){var f=S[el.getAttribute('data-mk-slot')];if(f)el.innerHTML=f()})}
 function mkSlot(n){return '<div data-mk-slot="'+n+'">'+(DEMO||(MK.loaded&&MK.cid===APP.cid)?({strat:mkStratHtml,card:mkCardHtml,gen:mkGenHtml,res:mkResHtml}[n]()):'<p class="mut">Načítám…</p>')+'</div>'}
+/* Dlaždice výsledků: poptávky a zákazníci z evidence; zhlédnutí a prokliky jen z výsledků, které jste u zveřejněných příspěvků zadali se zdrojem (30 dní). */
+function mkTilesHtml(){var S=apdStats(),since=apdIso(apdD0(-29)),sum={v:0,c:0},has={v:false,c:false};
+ (MK.cid===APP.cid&&Array.isArray(MK.res)?MK.res:[]).forEach(function(r){(Array.isArray(r&&r.manual)?r.manual:[]).forEach(function(x){if(String(x.to)<since)return;if(x.metric==='zobrazeni'||x.metric==='dosah'){sum.v+=Number(x.value)||0;has.v=true}if(x.metric==='prokliky'){sum.c+=Number(x.value)||0;has.c=true}})});
+ function tile(ic,v,l,na,tt){return '<div class="ad-tile"'+(tt?' title="'+esc(tt)+'"':'')+'><span class="ad-ti">'+ico(ic,20)+'</span><b'+(na?' class="ad-na"':'')+'>'+v+'</b><span>'+esc(l)+'</span></div>'}
+ return tile('eye',has.v?esc(sum.v.toLocaleString('cs-CZ')):'Nepřipojeno','Zhlédnutí',!has.v,has.v?'Součet vámi zadaných výsledků za 30 dní':'Zadejte výsledky u zveřejněných příspěvků v Analýze, nebo propojte účty')
+  +tile('strat',has.c?esc(sum.c.toLocaleString('cs-CZ')):'Nepřipojeno','Prokliky',!has.c,has.c?'Součet vámi zadaných výsledků za 30 dní':'')
+  +tile('usr',S.dealsOk?S.nd:'–','Poptávky')+tile('usrs',S.custOk?S.nc:'–','Zákazníci')}
 function mkReady(){if(DEMO)return apdEmpty('V ukázce se AI marketing nespouští.','Po přihlášení ke skutečné firmě zde uvidíte strategii, návrhy a výsledky z vašich dat.');
  if(MK.err)return apdEmpty('AI marketing není k dispozici.',MK.err);if(!MK.st)return '<p class="mut">Načítám…</p>';return ''}
 function mkPendHtml(a,label){var p=mkLs(mkPendKey(a));if(!p||MK.busy[a])return '';

@@ -121,7 +121,11 @@ with sync_playwright() as p:
     check(pg.locator('.apchk .apok').count() == 4 and 'Podmínky jsou splněné' in t and 'žádné placené volání nespouští' in t, 'i při splněných podmínkách Autopilot zatím žádné placené volání nespouští')
     check('0,0062 USD' in t and '2 %' in t, 'spotřeba a využití limitu se zobrazí (0,0062 USD, 2 %)')
     tab(pg, 'autopilot'); pg.wait_for_timeout(400)
-    check('Připraveno, AI neběží' in pg.inner_text('#apdPill'), 'stav v hlavičce: připraveno, ale AI neběží')
+    check(pg.inner_text('#apdPill').strip() == 'Aktivní' and pg.locator('#apdPill .ad-on').count() == 1, 'stav v hlavičce: „Aktivní“ až když platí tarif, limit i povolení provozovatele')
+    pg.close()
+    pg = open_page(b, {'members': members(), 'limit': 250000000, 'platform': False}); tab(pg, 'autopilot'); pg.wait_for_timeout(500)
+    check('Připraveno, AI zatím vypnutá' in pg.inner_text('#apdPill'), 'limit nastaven, ale placené běhy vypnuté: „Připraveno, AI zatím vypnutá“')
+    check('Dnešní plán AI' in pg.inner_text('#apd'), 'blok Dnešní plán AI')
     pg.close()
 
     pg = open_page(b, {'members': members(), 'noDb': True}); tab(pg, 'autopilot'); dtab(pg, 'finance'); pg.wait_for_selector('#apRoot .draft')
