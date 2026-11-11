@@ -397,6 +397,15 @@ begin
   return jsonb_build_object('id', p_job, 'status', 'cancelled');
 end $$;
 
+-- Ověření před spuštěním čekající úlohy z prohlížeče (např. dílčí úlohy AI CEO): jen člověk s právem zápisu ve firmě úlohy.
+create or replace function public.ai_job_status(cid uuid, p_job uuid) returns jsonb language plpgsql stable security definer set search_path = '' as $$
+declare uid uuid := private.profile_actor(cid, true); j private.ai_jobs;
+begin
+  select * into j from private.ai_jobs where id = p_job and company_id = cid;
+  if j.id is null then perform private.ai_fail('PT404', 'not_found'); end if;
+  return jsonb_build_object('id', j.id, 'status', j.status, 'module', j.module, 'kind', j.kind);
+end $$;
+
 -- Převzetí úlohy serverem: zámek na 3 minuty, nejvýše max_attempts pokusů. Vrací úlohu s kontextem, nebo NULL.
 create or replace function public.ai_job_claim(p_job uuid) returns jsonb language plpgsql security definer set search_path = '' as $$
 declare j private.ai_jobs; tok uuid := gen_random_uuid(); r text;
@@ -755,13 +764,13 @@ end $$;
 revoke all on function private.ap_plan(uuid), private.autopilot_budget_cap_check(), private.autopilot_limits_check(), private.ai_fail(text, text), private.ai_hash(jsonb),
   private.ai_member_role_of(uuid, uuid), private.ai_writable_company(uuid), private.ai_next_run(text, timestamptz), private.ai_action_clean(uuid, text, jsonb),
   private.ai_context_impl(uuid, text), private.ai_goal_value(uuid, text, date), private.acc_doc_clean(jsonb), private.acc_dedupe_key(jsonb) from public, anon, authenticated, service_role;
-revoke all on function public.autopilot_set_limits(uuid, bigint, bigint), public.ai_job_create(uuid, text, text, text, jsonb, text), public.ai_job_cancel(uuid, uuid), public.ai_job_claim(uuid),
+revoke all on function public.autopilot_set_limits(uuid, bigint, bigint), public.ai_job_create(uuid, text, text, text, jsonb, text), public.ai_job_cancel(uuid, uuid), public.ai_job_status(uuid, uuid), public.ai_job_claim(uuid),
   public.ai_job_reserve(uuid, uuid, text, integer, integer), public.ai_job_finish(uuid, uuid, boolean, jsonb, jsonb, jsonb, text), public.ai_action_decide(uuid, uuid, text, boolean),
   public.ai_chat_store(uuid, text, uuid, text, text), public.ai_chat_history(uuid, text), public.ai_context(uuid, text), public.ai_schedule_save(uuid, text, text, text, text, boolean),
   public.ai_schedule_stop_all(uuid), public.ai_schedule_tick(integer), public.ai_team_state(uuid), public.acc_settings_save(uuid, text, boolean),
   public.acc_document_store(uuid, text, text, jsonb), public.acc_document_update(uuid, uuid, text, jsonb), public.acc_document_decide(uuid, uuid, text, boolean, boolean),
   public.acc_state(uuid), public.acc_vat_summary(uuid, date, date), public.acc_export(uuid, date, date) from public, anon, authenticated, service_role;
-grant execute on function public.autopilot_set_limits(uuid, bigint, bigint), public.ai_job_create(uuid, text, text, text, jsonb, text), public.ai_job_cancel(uuid, uuid),
+grant execute on function public.autopilot_set_limits(uuid, bigint, bigint), public.ai_job_create(uuid, text, text, text, jsonb, text), public.ai_job_cancel(uuid, uuid), public.ai_job_status(uuid, uuid),
   public.ai_action_decide(uuid, uuid, text, boolean), public.ai_chat_history(uuid, text), public.ai_context(uuid, text), public.ai_schedule_save(uuid, text, text, text, text, boolean),
   public.ai_schedule_stop_all(uuid), public.ai_team_state(uuid), public.acc_settings_save(uuid, text, boolean), public.acc_document_store(uuid, text, text, jsonb),
   public.acc_document_update(uuid, uuid, text, jsonb), public.acc_document_decide(uuid, uuid, text, boolean, boolean), public.acc_state(uuid), public.acc_vat_summary(uuid, date, date),

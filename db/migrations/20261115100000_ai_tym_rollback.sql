@@ -1,5 +1,5 @@
 -- Návrat migrace 20261115100000_ai_tym. POZOR: smaže úlohy, akce, chat, plány, cíle AI a evidenci dokladů (před návratem exportovat private.ai_* a private.acc_*).
-drop function if exists public.autopilot_set_limits(uuid, bigint, bigint), public.ai_job_create(uuid, text, text, text, jsonb, text), public.ai_job_cancel(uuid, uuid), public.ai_job_claim(uuid),
+drop function if exists public.autopilot_set_limits(uuid, bigint, bigint), public.ai_job_create(uuid, text, text, text, jsonb, text), public.ai_job_cancel(uuid, uuid), public.ai_job_status(uuid, uuid), public.ai_job_claim(uuid),
   public.ai_job_reserve(uuid, uuid, text, integer, integer), public.ai_job_finish(uuid, uuid, boolean, jsonb, jsonb, jsonb, text), public.ai_action_decide(uuid, uuid, text, boolean),
   public.ai_chat_store(uuid, text, uuid, text, text), public.ai_chat_history(uuid, text), public.ai_context(uuid, text), public.ai_schedule_save(uuid, text, text, text, text, boolean),
   public.ai_schedule_stop_all(uuid), public.ai_schedule_tick(integer), public.ai_team_state(uuid), public.acc_settings_save(uuid, text, boolean),
