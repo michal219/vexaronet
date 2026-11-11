@@ -130,3 +130,9 @@ Návrat je `paid_runs_enabled = false`: běžící rezervace doběhnou a další
   - Test: `tests/registrace_ui.py` 19 kontrol. Regrese: `legal_ui` 41, `public_dir` 11, `xss_ui`, `appmode`, `profile_ui`, `autopilot_ui`, `ai_marketing_ui`, `legal`, `demo_btn`, `eshop`, `web`, `obory`.
 - **Nasazení:** nejdřív migrace (aplikace v Supabase čeká na schválení vlastníkem), potom sloučení do `main`.
 - **Změny nastavení (SQL):** `update private.registration_limit set max_companies = …`, `… set launch_on = date '…'`, vypnutí `… set active = false`.
+
+### 2026-11-11: AI tým (všech šest modulů) a AI Účetnictví – HOTOVO ve větvi, NENASAZENO
+- Popis, testy, limity, nasazení a návrat: `docs/AI_TYM.md`.
+- Commity: `77980e0` (DB), `bb61e58` (endpointy), `d9ef637` (rozhraní a účetnictví).
+- **Další krok:** souhlas vlastníka s nasazením (migrace registrace a AI týmu, pak web), potvrzení profilu firmy a první placený test v pilotu.
+- **Nehotové:** Open Banking (čeká na poskytovatele), publikování na sociální sítě a odesílání e-mailů zákazníkům (externí schválení), ukládání souborů dokladů, kontrolní hlášení a přiznání k DPH.
