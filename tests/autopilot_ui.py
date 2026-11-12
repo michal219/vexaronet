@@ -47,7 +47,7 @@ def open_page(b, cfg, vp=None):
     return pg
 def tab(pg, t): pg.evaluate("document.querySelector('#vxapp [data-tab=%s]').click()" % t); pg.wait_for_timeout(350)
 def log(pg, n): return pg.evaluate("window.__log.filter(function(x){return x[0]==='rpc'&&x[1]==='%s'})" % n)
-def menu(pg): return [t.strip() for t in pg.locator('#vxside .ad-sub button span').all_inner_texts()]
+def menu(pg): return [t.strip() for t in pg.locator('#vxside .vxd-sub button span').all_inner_texts()]
 TABS = ['Přehled', 'Strategie', 'Obsah', 'Kampaně', 'Kalendář', 'Analýza', 'Finance & ROI', 'Integrace']
 def dtab(pg, k): pg.click('#apd [data-apd=%s]' % k); pg.wait_for_timeout(350)
 
@@ -55,27 +55,27 @@ with sync_playwright() as p:
     b = p.chromium.launch()
     pg = open_page(b, {'members': members()})
     check(menu(pg) == MODES, 'levé menu: skupina AI Autopilot nabízí přehled AI týmu a šest modulů ve správném pořadí: %s' % menu(pg))
-    check(pg.locator('#vxside .ad-hdr').inner_text().strip().startswith('AI Autopilot'), 'skupina se jmenuje AI Autopilot')
+    check(pg.locator('#vxside .vxd-hdr').inner_text().strip().startswith('AI Autopilot'), 'skupina se jmenuje AI Autopilot')
     tab(pg, 'autopilot'); pg.wait_for_selector('#apd')
-    check(pg.locator('#vxside .apg.ad-open').count() == 1, 'při otevřeném Autopilotu je skupina rozbalená')
-    check(pg.locator('#vxside .ad-sub [aria-pressed=true]').inner_text().strip() == 'AI Marketing', 'AI Marketing je zvýrazněn')
-    pg.click('#vxside .ad-hdr'); pg.wait_for_timeout(200)
-    check(pg.locator('#vxside .apg.ad-open').count() == 0, 'skupinu lze sbalit')
-    pg.click('#vxside .ad-hdr'); pg.wait_for_timeout(200)
-    check(pg.locator('#vxside .apg.ad-open').count() == 1, 'a znovu rozbalit')
+    check(pg.locator('#vxside .apg.vxd-open').count() == 1, 'při otevřeném Autopilotu je skupina rozbalená')
+    check(pg.locator('#vxside .vxd-sub [aria-pressed=true]').inner_text().strip() == 'AI Marketing', 'AI Marketing je zvýrazněn')
+    pg.click('#vxside .vxd-hdr'); pg.wait_for_timeout(200)
+    check(pg.locator('#vxside .apg.vxd-open').count() == 0, 'skupinu lze sbalit')
+    pg.click('#vxside .vxd-hdr'); pg.wait_for_timeout(200)
+    check(pg.locator('#vxside .apg.vxd-open').count() == 1, 'a znovu rozbalit')
     t = pg.inner_text('#apd')
     check('AI Marketing Autopilot' in t, 'hlavička dashboardu')
-    check([x.strip() for x in pg.locator('#apd .ad-tabs button').all_inner_texts()] == TABS, 'navigace: %s' % [x.strip() for x in pg.locator('#apd .ad-tabs button').all_inner_texts()])
-    check(pg.locator('#apd .ad-kpis .ad-kpi').count() == 5, 'řada pěti karet metrik')
+    check([x.strip() for x in pg.locator('#apd .vxd-tabs button').all_inner_texts()] == TABS, 'navigace: %s' % [x.strip() for x in pg.locator('#apd .vxd-tabs button').all_inner_texts()])
+    check(pg.locator('#apd .vxd-kpis .vxd-kpi').count() == 5, 'řada pěti karet metrik')
     check('Dnešní plán' in t and 'Aktuální úkoly' in t and 'Marketingový kalendář' in t and 'Marketingová strategie' in t and 'Výsledky marketingu' in t and 'Marketing & Finance' in t, 'jsou všechny bloky přehledu')
     check('Nepřipojeno' in t and 'AI neběží' in t, 'poctivé stavy: „Nepřipojeno“ a „AI neběží“')
     check('Aktivní' not in t and 'Propojeno s financemi' not in t, 'žádný falešný stav „Aktivní“ ani „Propojeno“')
-    kp = pg.locator('#apd .ad-kpi').all_inner_texts()
+    kp = pg.locator('#apd .vxd-kpi').all_inner_texts()
     check('–' in kp[3] and 'ROAS' in kp[3] and '–' in kp[4], 'ROAS a zisk se bez dat nepočítají (zobrazí se „–“): %s' % [k.replace('\n', ' ') for k in kp[3:]])
-    check(pg.locator('#apd .ad-cal .ad-day').count() == 7, 'kalendář má sedm dnů')
+    check(pg.locator('#apd .vxd-cal .vxd-day').count() == 7, 'kalendář má sedm dnů')
     # záložky
     for k, lab in [('strategie', 'Strategie'), ('obsah', 'Obsah'), ('kampane', 'Kampaně'), ('kalendar', 'Příspěvky v plánu'), ('analyza', 'Analýza'), ('integrace', 'Integrace')]:
-        dtab(pg, k); check(pg.locator('#apd .ad-tabs [aria-current=page]').get_attribute('data-apd') == k and lab in pg.inner_text('#apd'), 'záložka %s funguje' % k)
+        dtab(pg, k); check(pg.locator('#apd .vxd-tabs [aria-current=page]').get_attribute('data-apd') == k and lab in pg.inner_text('#apd'), 'záložka %s funguje' % k)
     dtab(pg, 'obsah'); check(pg.locator('#mk_topic').count() == 1 and pg.locator('[data-mk=gen]').count() == 1, 'generátor textů je v sekci Obsah')
     dtab(pg, 'integrace'); pg.click('#apd [data-apd-act=connect]'); pg.wait_for_selector('.apdm')
     check('nelze připojit' in pg.inner_text('.apdm') or 'není k dispozici' in pg.inner_text('.apdm'), 'Připojit vysvětlí nedostupnost')
@@ -84,10 +84,10 @@ with sync_playwright() as p:
     check(not pg.errs, 'bez chyb JS: %s' % pg.errs)
     # moduly z menu
     for nm in ['AI Obchodník', 'AI CEO', 'AI Účetnictví', 'AI Weby a e-shopy', 'AI Automatizace']:
-        pg.locator('#vxside .ad-sub button', has_text=nm).click(); pg.wait_for_timeout(350)
-        check(pg.locator('#vxside .ad-sub [aria-pressed=true]').inner_text().strip() == nm, 'menu: %s je zvýrazněn' % nm)
+        pg.locator('#vxside .vxd-sub button', has_text=nm).click(); pg.wait_for_timeout(350)
+        check(pg.locator('#vxside .vxd-sub [aria-pressed=true]').inner_text().strip() == nm, 'menu: %s je zvýrazněn' % nm)
     check(pg.locator('#apBar').is_visible() and 'AI Automatizace' in pg.locator('#apBar .apb.on').inner_text(), 'na stránkách modulů zůstává horní přepínač režimů')
-    pg.evaluate("var x=document.createElement('button');x.dataset.tab='marketing';document.querySelector('#vxapp').appendChild(x)"); tab(pg, 'marketing'); check(pg.locator('#apd .ad-tabs [aria-current=page]').get_attribute('data-apd') == 'obsah' and pg.locator('#apBar').is_hidden(), 'stará záložka Marketing otevře Obsah dashboardu')
+    pg.evaluate("var x=document.createElement('button');x.dataset.tab='marketing';document.querySelector('#vxapp').appendChild(x)"); tab(pg, 'marketing'); check(pg.locator('#apd .vxd-tabs [aria-current=page]').get_attribute('data-apd') == 'obsah' and pg.locator('#apBar').is_hidden(), 'stará záložka Marketing otevře Obsah dashboardu')
     pg.close()
 
     # limit nákladů je ve Finance & ROI
@@ -121,11 +121,19 @@ with sync_playwright() as p:
     check(pg.locator('.apchk .apok').count() == 4 and 'Podmínky jsou splněné' in t and 'žádné placené volání nespouští' in t, 'i při splněných podmínkách Autopilot zatím žádné placené volání nespouští')
     check('0,0062 USD' in t and '2 %' in t, 'spotřeba a využití limitu se zobrazí (0,0062 USD, 2 %)')
     tab(pg, 'autopilot'); pg.wait_for_timeout(400)
-    check(pg.inner_text('#apdPill').strip() == 'Aktivní' and pg.locator('#apdPill .ad-on').count() == 1, 'stav v hlavičce: „Aktivní“ až když platí tarif, limit i povolení provozovatele')
+    check(pg.inner_text('#apdPill').strip() == 'Aktivní' and pg.locator('#apdPill .vxd-on').count() == 1, 'stav v hlavičce: „Aktivní“ až když platí tarif, limit i povolení provozovatele')
     pg.close()
     pg = open_page(b, {'members': members(), 'limit': 250000000, 'platform': False}); tab(pg, 'autopilot'); pg.wait_for_timeout(500)
     check('Připraveno, AI zatím vypnutá' in pg.inner_text('#apdPill'), 'limit nastaven, ale placené běhy vypnuté: „Připraveno, AI zatím vypnutá“')
     check('Dnešní plán AI' in pg.inner_text('#apd'), 'blok Dnešní plán AI')
+    # blokovač reklam (Opera, uBlock, AdBlock) skrývá prvky s třídami jako ad-card, ad-tabs, ad-banner: dashboard je nesmí používat
+    pg.add_style_tag(content='[class^="ad-"],[class*=" ad-"],[class^="ads-"],[class*=" ads-"],[id^="ad-"],[class*="advert"],[class*="banner-ad"],[class*="sponsor"]{display:none!important}'); pg.wait_for_timeout(200)
+    vis = pg.evaluate("['#apd .vxd-tabs','#apd .vxd-kpis','#apd .vxd-card','#vxside .vxd-sub','#vxside .vxd-agents'].map(function(q){var e=document.querySelector(q);return !!e&&e.offsetParent!==null&&e.getBoundingClientRect().height>10})")
+    check(all(vis), 'se zapnutým blokovačem reklam zůstane dashboard i menu AI Autopilota vidět: %s' % vis)
+    src = open(ROOT + '/index.html', encoding='utf-8').read()
+    import re as _re
+    bad = sorted(set(_re.findall(r'(?<![A-Za-z0-9_-])(?:ad|ads|advert|banner|sponsor)-[a-z0-9]+', ' '.join(_re.findall(r'class=\\?["\']([^"\']*)', src)))))
+    check(not bad, 'v aplikaci nejsou třídy, které blokovače reklam skrývají: %s' % bad[:8])
     pg.close()
 
     pg = open_page(b, {'members': members(), 'noDb': True}); tab(pg, 'autopilot'); dtab(pg, 'finance'); pg.wait_for_selector('#apRoot .draft')
@@ -141,9 +149,9 @@ with sync_playwright() as p:
     check(len(log(pg, 'autopilot_status')) == 0, 'zaměstnanec nevolá server pro stav limitu'); pg.close()
     pg = open_page(b, {'members': members(), 'plan': 'start'})
     check(pg.locator('#apBar .apt.lock').count() >= 0 and pg.locator('#vxside .apg').count() == 1, 'tarif START: skupina je vidět')
-    pg.locator('#vxside .ad-sub button', has_text='AI CEO').click(); pg.wait_for_timeout(300)
+    pg.locator('#vxside .vxd-sub button', has_text='AI CEO').click(); pg.wait_for_timeout(300)
     check('není součástí vašeho tarifu' in pg.inner_text('#appMain'), 'tarif START: AI CEO je zamčené (existující pravidlo tarifu zůstává)')
-    pg.locator('#vxside .ad-sub button', has_text='AI Automatizace').click(); pg.wait_for_timeout(300)
+    pg.locator('#vxside .vxd-sub button', has_text='AI Automatizace').click(); pg.wait_for_timeout(300)
     check('není součástí' not in pg.inner_text('#appMain'), 'tarif START: AI Automatizace (pravidla) dostupná')
     pg.close()
 
@@ -155,7 +163,7 @@ with sync_playwright() as p:
 
     # mobil
     pg = open_page(b, {'members': members()}, vp={'width': 390, 'height': 800}); tab(pg, 'autopilot'); pg.wait_for_selector('#apd')
-    w = pg.evaluate("[document.documentElement.scrollWidth, window.innerWidth, document.getElementById('appMain').scrollWidth, document.getElementById('appMain').clientWidth, document.querySelector('#apd .ad-tabs').scrollWidth, document.querySelector('#apd .ad-tabs').clientWidth]")
+    w = pg.evaluate("[document.documentElement.scrollWidth, window.innerWidth, document.getElementById('appMain').scrollWidth, document.getElementById('appMain').clientWidth, document.querySelector('#apd .vxd-tabs').scrollWidth, document.querySelector('#apd .vxd-tabs').clientWidth]")
     check(w[0] <= w[1] + 1 and w[2] <= w[3] + 1, 'mobil 390 px: stránka ani obsah se nerozšiřuje do šířky %s' % w)
     check(w[4] > w[5], 'mobil: záložky se posouvají vodorovně uvnitř svého pruhu')
     pg.close()

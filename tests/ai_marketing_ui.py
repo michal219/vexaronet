@@ -125,7 +125,7 @@ with sync_playwright() as p:
     a = log(pg, 'mkt_strategy_approve')
     check(len(a) == 1 and a[0]['p_id'] == 'st1' and a[0]['p_expected_hash'].startswith('h'), 'schválení posílá id a otisk')
     check('Schváleno' in pg.inner_text('#apd') and 'Plnění cíle: 4 z 20' in pg.inner_text('#apd'), 'schválená strategie ukazuje plnění cíle ze skutečných dat')
-    dtab(pg, 'prehled'); check('20 poptávek za 30 dní' in pg.inner_text('#apd') and pg.locator('#apd .ad-bar[aria-valuenow="20"]').count() == 1, 'karta strategie v přehledu ukazuje cíl a plnění (4/20 = 20 %)')
+    dtab(pg, 'prehled'); check('20 poptávek za 30 dní' in pg.inner_text('#apd') and pg.locator('#apd .vxd-bar[aria-valuenow="20"]').count() == 1, 'karta strategie v přehledu ukazuje cíl a plnění (4/20 = 20 %)')
 
     # 3) obsah: dávka návrhů; přerušené spojení a obnovení stránky použije stejný klíč
     dtab(pg, 'obsah'); check(pg.locator('#apd [data-apd-act=mk-gen-posts]').count() == 1 and pg.locator('#mk_topic').count() == 1, 'v Obsahu je dávka ze strategie i původní generátor')
@@ -142,11 +142,11 @@ with sync_playwright() as p:
     check(pg.evaluate("localStorage.getItem('vxmk:%s:posts')" % CID) is None, 'po úspěchu se rozpracovaný požadavek smaže')
 
     # 4) schválení příspěvku na serveru s otiskem (stejný vzorec jako DB)
-    dtab(pg, 'prehled'); check(pg.locator('#apd .ad-tk li').count() == 2, 'nové koncepty jsou v Aktuálních úkolech')
+    dtab(pg, 'prehled'); check(pg.locator('#apd .vxd-tk li').count() == 2, 'nové koncepty jsou v Aktuálních úkolech')
     pg.click('#apd [data-apd-act=appr][data-id=p1]'); pg.wait_for_timeout(700)
     ap = log(pg, 'mkt_post_approve')
     check(len(ap) == 1 and ap[0]['p_post'] == 'p1' and len(ap[0]['p_expected_hash']) == 64 and 'schválený' in toast(pg), 'schválení přes mkt_post_approve s otiskem shodným s DB (SHA-256)')
-    check(pg.evaluate("window.__S.posts[0].status") == 'planned' and pg.locator('#apd .ad-tk li').count() == 1, 'schválený příspěvek je naplánovaný a zmizí z konceptů')
+    check(pg.evaluate("window.__S.posts[0].status") == 'planned' and pg.locator('#apd .vxd-tk li').count() == 1, 'schválený příspěvek je naplánovaný a zmizí z konceptů')
     # 5) publikace: web firmy a ruční záznam
     dtab(pg, 'kalendar'); pg.click('#apd [data-apd-act=prev][data-id=p1]'); pg.wait_for_selector('.apdm')
     check('<b>' not in pg.inner_html('.apdm pre') or '&lt;b&gt;' in pg.inner_html('.apdm pre'), 'text příspěvku je v náhledu escapovaný')
@@ -194,7 +194,12 @@ with sync_playwright() as p:
     pg.route('**/supabase.js', lambda r: r.fulfill(body='', content_type='text/javascript')); pg.goto(BASE); pg.wait_for_timeout(400)
     pg.click('.cta [data-demo]'); pg.wait_for_selector('#vxapp .kpi')
     pg.evaluate("var x=document.createElement('button');x.dataset.tab='autopilot';document.querySelector('#vxapp').appendChild(x);x.click()"); pg.wait_for_selector('#apd'); dtab(pg, 'strategie')
-    check('V ukázce se AI marketing nespouští' in pg.inner_text('#apd') and not pg.errs, 'ukázka: AI marketing se nespouští, bez chyb JS %s' % pg.errs); ctx.close()
+    t = pg.inner_text('#apd')
+    check('Schváleno' in t and '20 nových zákazníků za 30 dní' in t and 'Plnění cíle: 12 z 20' in t and 'Ukázková data' in t, 'ukázka: vzorová schválená strategie s plněním cíle, označená jako ukázková data')
+    pg.click('#apd [data-apd-act=mk-gen-strategy]'); pg.wait_for_timeout(300)
+    check('Ukázka: akce se neprovádí' in pg.inner_text('#appToast') and not pg.errs, 'ukázka: tlačítka AI nic nespouštějí, bez chyb JS %s' % pg.errs)
+    pg.click('#apd [data-apd=prehled]'); pg.wait_for_timeout(500); t = pg.inner_text('#apd')
+    check('Aktivní (ukázka)' in t and '3 čekají na schválení' in t and '4 150' in t.replace('\u00a0', ' ') and pg.locator('#apd .vxd-plan li').count() >= 3 and pg.locator('#apd .vxd-cal .vxd-it').count() >= 3, 'ukázka: naplněný přehled (stav, plán AI, 3 koncepty, kalendář, zhlédnutí ze vzorových výsledků)'); ctx.close()
     b.close()
 srv.shutdown()
 print('\nSELHALO: %d' % len(fails) if fails else '\nVšechny kontroly prošly.')
