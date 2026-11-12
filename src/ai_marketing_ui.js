@@ -171,16 +171,17 @@ function mkPreview(p){var it=mkItem(p.id),td=apdIso(apdD0(0)),site=APP.d&&APP.d.
  var ok=it&&it.approved,pub=it&&it.published_channel;
  if(it&&it.changed_after_approval)h+='<p class="mut">Text se po schválení změnil, proto je nutné ho schválit znovu.</p>';
  if(!ok)h+='<p><button type="button" class="vxd-btn2" data-mkm="appr">Schválit</button> <small class="mut">Schvaluje se přesně tento text; po úpravě je nutné schválit znovu.</small></p>';
- else if(pub)h+='<p>Zveřejněno: <b>'+esc(pub==='web'?'web firmy':pub)+'</b>'+(it.web_publish_on?' od '+esc(fD(it.web_publish_on)):'')+(it.published_url&&/^https:\/\//.test(it.published_url)?' · <a href="'+esc(it.published_url)+'" target="_blank" rel="noopener noreferrer">odkaz</a>':'')+'</p><p><button type="button" class="vxd-btn2" data-mkm="unpub">Zrušit zveřejnění</button></p>';
+ else if(pub)h+='<p>Zveřejněno: <b>'+esc(pub==='web'?'web firmy':pub)+'</b>'+(it.web_publish_on?' od '+esc(fD(it.web_publish_on)):'')+(it.published_url&&/^https:\/\//.test(it.published_url)?' · <a href="'+esc(it.published_url)+'" target="_blank" rel="noopener noreferrer">odkaz</a>':'')+'</p><p><button type="button" class="vxd-btn2" data-mkm="unpub">Zrušit zveřejnění</button></p>'+socPublishHtml(p);
  else h+='<fieldset style="border:1px solid #4a56b0;border-radius:10px;padding:8px;margin:8px 0"><legend>Zveřejnit na webu firmy ve Vexaronetu</legend>'+(site&&site.enabled?'<label for="mkm_on">Od data</label> <input id="mkm_on" type="date" min="'+td+'" value="'+esc(p.planned_on&&p.planned_on>=td?p.planned_on:td)+'"> <button type="button" class="vxd-btn2" data-mkm="web">Zveřejnit v sekci Novinky</button>':'<small>Web firmy není zapnutý. Zapněte ho v sekci Web.</small>')+'</fieldset>'
   +'<fieldset style="border:1px solid #4a56b0;border-radius:10px;padding:8px;margin:8px 0"><legend>Zveřejnili jste ho sami jinde?</legend><label for="mkm_ch">Kanál</label> <select id="mkm_ch">'+MKCH.map(function(c){return '<option'+(c===p.channel?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select> <label for="mkm_url">Odkaz (https, nepovinné)</label> <input id="mkm_url" type="url" maxlength="1000" placeholder="https://"> <button type="button" class="vxd-btn2" data-mkm="manual">Zaznamenat zveřejnění</button>'
-  +'<br><small class="mut">Vexaronet zatím nepublikuje na Facebook, Instagram ani jiné sítě; zde jen zaznamenáte, že jste příspěvek zveřejnili.</small></fieldset>';
- apdModal(h);var m=document.querySelectorAll('.apdm');m=m[m.length-1];if(!m)return;
+  +'<br><small class="mut">Zde jen zaznamenáte, že jste příspěvek zveřejnili sami.</small></fieldset>'+socPublishHtml(p);
+ apdModal(h);var m=document.querySelectorAll('.apdm');m=m[m.length-1];if(!m)return;socPublishBind(m);
  m.addEventListener('click',async function(e){var b=e.target.closest&&e.target.closest('[data-mkm]');if(!b)return;var k=b.getAttribute('data-mkm'),d=null;b.disabled=true;
   if(k==='appr'){mkClose(m);await mkApprovePost(p,null);return}
   if(k==='web')d=await mkRpc('mkt_publish',{p_post:p.id,p_channel:'web',p_on:(A('mkm_on')||{}).value||null},'Příspěvek se zobrazí v sekci Novinky na webu firmy.');
   if(k==='manual'){var u=String((A('mkm_url')||{}).value||'').trim();if(u&&!/^https:\/\/\S+$/.test(u)){toast(mkDbErr('invalid_url'),'err');b.disabled=false;return}d=await mkRpc('mkt_publish',{p_post:p.id,p_channel:(A('mkm_ch')||{}).value,p_url:u||null},'Zveřejnění je zaznamenané.')}
   if(k==='unpub')d=await mkRpc('mkt_unpublish',{p_post:p.id},'Zveřejnění je zrušené.');
+  if(k.indexOf('soc')===0)d=await socPublishAct(k,b,p,m);
   b.disabled=false;if(d){mkClose(m);try{await refresh()}catch(x){}appTab(APP.tab);await mkLoad()}})}
 async function mkAct(a,b,id){
  if(DEMO&&a!=='mk-edit-strategy'){mkDemoStop();return}

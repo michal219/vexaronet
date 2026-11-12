@@ -110,7 +110,7 @@ function apdHeader(){
   fe=apdRows('fe'),fl=fe.length?'Finance: z vaší evidence':'Finance: bez záznamů';
  return '<div class="vxd-hd">'+apdRobot()+'<div class="vxd-ttl"><h2>AI Marketing Autopilot'+(DEMO?'<span class="vxd-demo">Ukázková data</span>':'')+'</h2><p class="mut">Váš marketingový pomocník. Navrhuje, schvalujete vy.</p></div>'
   +'<div id="apdPill">'+pill+'</div>'
-  +'<div class="vxd-card vxd-acc"><div><b>Propojené účty</b><div class="vxd-ic" aria-label="Žádný účet není propojený"><span class="vxd-soc" style="background:#0a7cff">∞</span><span class="vxd-soc" style="background:linear-gradient(135deg,#f9a03f,#e1306c)">IG</span><span class="vxd-soc" style="background:#1877f2">f</span><span class="vxd-soc" style="background:#111">♪</span><span class="vxd-soc" style="background:#e62117">▶</span></div></div><div><small class="mut">Nepřipojeno</small><button type="button" class="vxd-btn2 vxd-pr" data-apd-act="connect" style="margin-top:6px">Připojit</button></div></div>'
+  +socHeadHtml()
   +'<div class="vxd-card vxd-fin"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="var(--pv2)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC.coins+'"/></svg><div><b>'+esc(fl)+'</b><small class="mut">Náklady a výnosy ze záložky Finance</small></div></div></div>'}
 function apdTabs(){return '<nav class="vxd-tabs" aria-label="Sekce AI Marketing Autopilota">'+APD_TABS.map(function(t){return '<button type="button" data-apd="'+t[0]+'"'+(APD.tab===t[0]?' aria-current="page"':'')+'>'+ico(t[2],20)+'<span>'+esc(t[1])+'</span></button>'}).join('')+'</nav>'}
 function apdKpis(){var S=apdStats();
@@ -203,8 +203,7 @@ function apdTabFinance(){var S=apdStats();return '<div class="vxd-tabbody"><sect
  +'<div><span>Výnosy přiřazené kampaním</span><b class="vxd-na">Nepřipojeno</b></div><div><span>ROAS</span><b class="vxd-na">nelze spočítat</b></div><div><span>ROI</span><b class="vxd-na">nelze spočítat</b></div><div><span>Zisk z marketingu</span><b class="vxd-na">nelze spočítat</b></div></div>'+apdRing('–','ROI')+'</div></section>'
  +'<section class="vxd-card"><h3 style="margin-bottom:8px">Jak se čísla počítají</h3><ul class="vxd-lst"><li><div><b>ROAS</b><small class="mut">výnosy z kampaně ÷ výdaje na reklamu. Potřebuje tržby přiřazené konkrétní kampani.</small></div></li><li><div><b>Výnosy</b><small class="mut">tržby, které lze doložit jako výsledek marketingu.</small></div></li><li><div><b>Zisk</b><small class="mut">výnosy minus všechny související náklady (reklama, práce, AI). Bez úplných nákladů i výnosů se nepočítá.</small></div></li><li><div><b>ROI</b><small class="mut">(zisk ÷ náklady). Dokud chybí výnosy nebo zisk, zobrazuje se „–“.</small></div></li></ul><p class="mut fine">Výdaje se rozpoznávají jen podle popisu finančního záznamu (marketing, reklama, Facebook, Instagram…). Je to odhad, ne účetní kategorie.</p></section>'
  +'<section class="vxd-card"><div class="vxd-ch"><h3>Náklady na AI a limit</h3></div><div class="ap" id="apRoot" data-nomodes="1"><p class="mut">Načítám stav limitu…</p></div></section></div>'}
-function apdTabIntegr(){var L=[['Instagram','Instagram'],['Facebook','Facebook'],['TikTok',''],['YouTube',''],['Meta Ads','Reklama'],['Google Ads','Reklama']];
- return '<div class="vxd-tabbody"><section class="vxd-card"><div class="vxd-ch"><span class="vxd-ci">'+ico('link',24)+'</span><h3>Integrace</h3></div><ul class="vxd-lst">'+L.map(function(x){return '<li>'+(x[1]?apdChanIcon(x[1],30):'<span class="vxd-chn" style="width:30px;height:30px;background:#6b73a8">'+esc(x[0].charAt(0))+'</span>')+'<div><b>'+esc(x[0])+'</b><small class="mut">Nepřipojeno</small></div><button type="button" class="vxd-btn2" data-apd-act="connect">Připojit</button></li>'}).join('')+'</ul><p class="mut fine">Propojení externích účtů zatím není k dispozici. Až bude, požádáme o souhlas a vždy půjde odpojit.</p></section></div>'}
+function apdTabIntegr(){return socIntegrHtml()}
 function apdBody(){switch(APD.tab){case 'strategie':return apdTabStrategy();case 'obsah':return apdTabContent();case 'kampane':return apdTabCampaigns();case 'kalendar':return apdTabCalendar();case 'analyza':return apdTabAnalysis();case 'finance':return apdTabFinance();case 'integrace':return apdTabIntegr();default:return apdOverview()}}
 function apdHtml(){apdCss();apStyle();return '<div class="apd" id="apd">'+apdHeader()+apdTabs()+'<div id="apdBody">'+apdBody()+'</div></div>'}
 async function apdLoadStatus(){
@@ -212,7 +211,7 @@ async function apdLoadStatus(){
  try{var r=await getSb().rpc('autopilot_status',{cid:APP.cid});if(r.error||!r.data)return;APD.st=r.data;
   var h=A('apdPill');if(h)h.innerHTML=apdPillHtml(APD.st)
  }catch(e){}}
-function apdAfter(){if(APD.tab==='finance'&&A('apRoot')&&APP.role!=='employee')apLoad();apdLoadStatus();mkLoad();
+function apdAfter(){if(APD.tab==='finance'&&A('apRoot')&&APP.role!=='employee')apLoad();apdLoadStatus();mkLoad();socLoad();
  if(typeof aitLoad==='function'&&APP.role!=='employee'&&!DEMO)aitLoad().then(function(){var p=A('apdPlanBox'),t=A('apdTasksBox');if(p)p.outerHTML=apdPlan();if(t)t.outerHTML=apdTasks();apAgentsSync()})}
 /* ---------- napojení na aplikaci ---------- */
 var APD_MK=VIEWS.marketing;(function(){var st=document.createElement('style');st.textContent='.vxapp aside .vxd-agents{display:flex;align-items:center;gap:12px;margin:10px 0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(139,108,255,.08)}.vxapp aside .vxd-agents .vxd-ai{color:#a78bfa;display:grid;place-items:center}.vxapp aside .vxd-agents b{display:block}.vxapp aside .vxd-agents small{display:flex;align-items:center;gap:7px}.vxapp aside .vxd-agents small i{width:9px;height:9px;border-radius:50%;background:#7a82a8}';document.head.appendChild(st)})();
@@ -230,7 +229,8 @@ if(!window.__apdBound){window.__apdBound=true;
   var t=e.target.closest&&e.target.closest('#apd [data-apd]');if(t){e.preventDefault();APD.tab=t.getAttribute('data-apd');if(APD.tab==='obsah'){APP.tab!=='marketing'?appTab('marketing'):appTab('marketing')}else{APP.tab!=='autopilot'?appTab('autopilot'):appTab('autopilot')}return}
   var b=e.target.closest&&e.target.closest('#apd [data-apd-act]');if(!b)return;var a=b.getAttribute('data-apd-act'),id=b.getAttribute('data-id');
   if(a==='wk'){APD.week+=Number(b.getAttribute('data-d'));appTab(APP.tab);return}
-  if(a==='connect'){apdModal('<h3>Propojení účtů zatím není k dispozici</h3><p>Instagram, Facebook, TikTok, YouTube ani reklamní účty zatím nelze připojit. Proto Vexaronet nezná zhlédnutí, prokliky ani výsledky kampaní a nic za vás nepublikuje.</p>');return}
+  if(a==='connect'){APD.tab='integrace';appTab('autopilot');return}
+  if(a.indexOf('soc-')===0){socAct(a,b,id);return}
   if(a==='budget'){apdModal('<h3>Marketingový rozpočet zatím nelze uložit</h3><p>Pole pro měsíční marketingový rozpočet ještě nemá úložiště. Limit nákladů na AI (ne marketingový rozpočet) nastavíte v záložce Finance & ROI.</p>');return}
   if(a.indexOf('mk-')===0){mkAct(a,b,id);return}
   var p=apdRows('marketing_posts').filter(function(x){return String(x.id)===id})[0];
