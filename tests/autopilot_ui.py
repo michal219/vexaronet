@@ -77,8 +77,9 @@ with sync_playwright() as p:
     for k, lab in [('strategie', 'Strategie'), ('obsah', 'Obsah'), ('kampane', 'Kampaně'), ('kalendar', 'Příspěvky v plánu'), ('analyza', 'Analýza'), ('integrace', 'Integrace')]:
         dtab(pg, k); check(pg.locator('#apd .vxd-tabs [aria-current=page]').get_attribute('data-apd') == k and lab in pg.inner_text('#apd'), 'záložka %s funguje' % k)
     dtab(pg, 'obsah'); check(pg.locator('#mk_topic').count() == 1 and pg.locator('[data-mk=gen]').count() == 1, 'generátor textů je v sekci Obsah')
-    dtab(pg, 'integrace'); pg.click('#apd [data-apd-act=connect]'); pg.wait_for_selector('.apdm')
-    check('nelze připojit' in pg.inner_text('.apdm') or 'není k dispozici' in pg.inner_text('.apdm'), 'Připojit vysvětlí nedostupnost')
+    dtab(pg, 'prehled'); pg.click('#apd [data-apd-act=connect]'); pg.wait_for_selector('#socList')
+    check('Facebook a Instagram' in pg.inner_text('#socList') and 'Nepodporováno' in pg.inner_text('#socList'), 'Připojit otevře Integrace s podporovanými a nepodporovanými sítěmi')
+    dtab(pg, 'prehled'); pg.click('#apd [data-apd-act=budget]'); pg.wait_for_selector('.apdm')
     pg.keyboard.press('Escape'); pg.wait_for_timeout(200)
     check(pg.locator('.apdm').count() == 0 and pg.locator('#vxapp').count() == 1, 'Esc zavře dialog a ne celou aplikaci')
     check(not pg.errs, 'bez chyb JS: %s' % pg.errs)

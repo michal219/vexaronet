@@ -2363,7 +2363,7 @@ out = out.replace('@@PROFIL@@', _nm(open('src/jsonschema_mini.js',encoding='utf-
     + open('src/profile_ui.js',encoding='utf-8').read())
 out = out.replace('@@AUTOPILOT@@', _nm(open('src/autopilot_core.js',encoding='utf-8').read()) + '\n' + open('src/autopilot_ui.js',encoding='utf-8').read())
 out = out.replace('@@CONSENT@@', open('src/consent.js',encoding='utf-8').read() + '\n' + open('src/dsa_ui.js',encoding='utf-8').read() + '\n' + open('src/registrace_ui.js',encoding='utf-8').read())
-out = out.replace('@@APDASH@@', open('src/autopilot_dash.js',encoding='utf-8').read() + '\n' + open('src/ai_marketing_ui.js',encoding='utf-8').read() + '\n' + _nm(open('src/bank_csv.js',encoding='utf-8').read()) + '\n' + open('src/ai_team_ui.js',encoding='utf-8').read())
+out = out.replace('@@APDASH@@', open('src/autopilot_dash.js',encoding='utf-8').read() + '\n' + open('src/ai_marketing_ui.js',encoding='utf-8').read() + '\n' + open('src/social_ui.js',encoding='utf-8').read() + '\n' + _nm(open('src/bank_csv.js',encoding='utf-8').read()) + '\n' + open('src/ai_team_ui.js',encoding='utf-8').read())
 assert '@@' not in out
 open(D + 'index.html', 'w', encoding='utf-8').write(out)
 print('OK', len(out))
