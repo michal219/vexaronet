@@ -92,7 +92,7 @@ def toast(pg): return pg.inner_text('#appToast')
 with sync_playwright() as p:
     b = p.chromium.launch()
     pg = open_page(b, {'members': members()})
-    check('AI tým (přehled)' in pg.inner_text('#vxside .ad-sub'), 'v menu AI Autopilot je položka AI tým')
+    check('AI tým (přehled)' in pg.inner_text('#vxside .vxd-sub'), 'v menu AI Autopilot je položka AI tým')
     pg.click('#vxside [data-tab=aitym]'); pg.wait_for_selector('#ait .ait-tabs'); pg.wait_for_timeout(500)
     check([x.strip() for x in pg.locator('#ait .ait-tabs button').all_inner_texts()] == ['Přehled', 'AI Marketing', 'AI Obchodník', 'AI CEO', 'AI Účetní', 'AI Weby a e-shopy', 'AI Automatizace'], 'horní přepínač: přehled a šest AI pracovníků')
     t = pg.inner_text('#ait')
