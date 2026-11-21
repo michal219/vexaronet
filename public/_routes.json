@@ -4,12 +4,15 @@
   "/api/*",
   "/public/*",
   "/ARCHITEKTURA.md",
+  "/CHANGELOG.md",
   "/NAVOD.md",
   "/PRAVNI_PODKLADY.md",
   "/README.md",
+  "/VERSION",
   "/android/*",
   "/base.css",
   "/build.py",
+  "/config.local.example.json",
   "/db/*",
   "/desktop/*",
   "/docs/*",
@@ -19,6 +22,7 @@
   "/schema.sql",
   "/schema_automatizace.sql",
   "/schema_crm.sql",
+  "/schema_crm2.sql",
   "/schema_dochazka.sql",
   "/schema_eshop.sql",
   "/schema_eshop_dodani.sql",
@@ -36,7 +40,8 @@
   "/schema_zpetna_vazba.sql",
   "/src/*",
   "/tests/*",
-  "/tools/*"
+  "/tools/*",
+  "/version.json"
  ],
  "exclude": []
 }

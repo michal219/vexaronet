@@ -3,6 +3,10 @@ import json, html, re, os
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 os.chdir(ROOT_DIR)  # relativní cesty (src/…) se berou od adresáře skriptu
 D = os.environ.get('VX_BUILD_DIR', ROOT_DIR).rstrip('/') + '/'
+import json as _json
+try: CFG = _json.load(open(ROOT_DIR + '/config.local.json', encoding='utf-8'))
+except Exception: CFG = {}
+VERSION = open(ROOT_DIR + '/VERSION', encoding='utf-8').read().strip() if os.path.exists(ROOT_DIR + '/VERSION') else '0.0.0'
 css = open(D + 'base.css', encoding='utf-8').read()
 esc = lambda s: html.escape(s, quote=True)
 
@@ -594,8 +598,8 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
 
 window.DOC_T=document.title;
 /* ===== Supabase: registrace a přihlášení ===== */
-var SB_URL='https://micymdbqgzeckiqyvvkn.supabase.co';
-var SB_KEY='sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW'; /* veřejný (publishable) klíč, smí být ve webu */
+var SB_URL=@@CFG_SBURL@@;
+var SB_KEY=@@CFG_SBKEY@@;var VX_VERSION=@@VERSION@@,VX_FEED=@@CFG_FEED@@; /* veřejný (publishable) klíč, smí být ve webu */
 var PLAN_OPTS=[['start','START – zdarma'],['pro','Vexaronet PRO – 699 Kč / měsíc bez DPH, 30 dní zdarma'],['accountant','AI Účetní – 399 Kč / měsíc bez DPH, 30 dní zdarma'],['business','Vexaronet BUSINESS – 1 199 Kč / měsíc bez DPH, 30 dní zdarma']];
 var PLAN_ALLOWED=['start','accountant','pro','business','enterprise'],LEGACY={'VEXARONET PRO':'pro','AI ÚČETNÍ':'accountant','STARTER':'start','PRO':'pro','BUSINESS':'business'};
 function planVal(x){x=LEGACY[x]||x;return PLAN_ALLOWED.indexOf(x)>=0?x:'pro'}
@@ -934,7 +938,8 @@ async function refresh(first){
  R[0].rows=R[0].rows.filter(function(x){return !x.archived});
  APP.d={customers:R[0],jobs:R[1],reservations:R[2],tasks:R[3],invoices:R[4],ds:R[5].error?{err:R[5].error.message}:(R[5].data||{}),fe:R[6],shifts:R[7],booking_profiles:R[8],booking_services:R[9],sites:R[10],marketing_posts:R[11],automation_rules:R[12],products:R[13],stock_moves:R[14],locations:R[15],digest_settings:R[16],time_entries:R[17],shop_settings:R[18],shop_orders:R[19],profile:R[21],deals:R[22],quotes:R[23],client_notes:R[24]};
  var itb={};(R[20].rows||[]).forEach(function(i){(itb[i.invoice_id]=itb[i.invoice_id]||[]).push(i)});APP.d.invoices.rows.forEach(function(f){if(itb[f.id])f.items=itb[f.id].sort(function(a,b){return a.position-b.position})});
- if(!DEMO)await crmProbe();else APP.crm2={cust:true,task:true,deal:true};
+ if(!DEMO)await crmProbe();
+ if(!DEMO&&VX_FEED&&!APP.updChecked){APP.updChecked=1;try{var fr=await fetch(VX_FEED,{cache:'no-store',credentials:'omit'});var fj=await fr.json();var nv=String(fj.version||'').split('.').map(Number),cv=String(VX_VERSION).split('.').map(Number);if(nv.length===3&&nv.every(isFinite)&&(nv[0]>cv[0]||(nv[0]===cv[0]&&(nv[1]>cv[1]||(nv[1]===cv[1]&&nv[2]>cv[2])))))APP.upd={version:nv.join('.')}}catch(e){}}else APP.crm2={cust:true,task:true,deal:true};
  if(A('vxapp')){subCard();renderBell()}}
 function appTab(t){
  APP.tab=t;var el=A('vxapp');if(!el)return;el.classList.remove('side');
@@ -952,6 +957,7 @@ function notes(){
  d.reservations.rows.forEach(function(x){if(x.canceled)return;var s=new Date(x.starts_at);if(s>=now&&s<t2)n.push(['info','Rezervace '+(s<t1?'dnes':'zítra')+' '+fD(x.starts_at,1)+': '+(x.title||''),'kalendar'])});
  d.invoices.rows.forEach(function(x){if(x.paid_at||!x.due_on)return;if(new Date(x.due_on)<t0)n.push(['bad','Faktura po splatnosti: '+(x.number||'')+' ('+fM(x.total,x.currency)+')','faktury'])});
  d.jobs.rows.forEach(function(x){if(!x.due_at||DONE.test(x.status||''))return;var s=new Date(x.due_at);if(s<t0)n.push(['bad','Zakázka po termínu: '+x.title,'zakazky'])});
+ if(APP.upd)n.unshift(['info','Je dostupná nová verze Vexaronetu '+APP.upd.version+' (vaše verze: '+VX_VERSION+'). Postup najdete v AKTUALIZACE.md.','profil']);
  return n.slice(0,25)}
 function renderBell(){var n=notes(),b=A('appBdg'),p=A('appBell');if(!b)return;b.textContent=n.length>9?'9+':n.length;b.style.display=n.length?'':'none';p.innerHTML='<h4>Notifikace</h4>'+(n.length?n.map(function(x){return '<button type="button" class="nt '+x[0]+'" data-tab="'+x[2]+'">'+esc(x[1])+'</button>'}).join(''):'<p class="mut">Nic zásadního. Vše je v pořádku.</p>')}
 
@@ -2378,8 +2384,26 @@ out = out.replace('@@AUTOPILOT@@', _nm(open('src/autopilot_core.js',encoding='ut
 out = out.replace('@@CONSENT@@', open('src/consent.js',encoding='utf-8').read() + '\n' + open('src/dsa_ui.js',encoding='utf-8').read() + '\n' + open('src/registrace_ui.js',encoding='utf-8').read())
 out = out.replace('@@APDASH@@', open('src/autopilot_dash.js',encoding='utf-8').read() + '\n' + open('src/ai_marketing_ui.js',encoding='utf-8').read() + '\n' + open('src/social_ui.js',encoding='utf-8').read() + '\n' + _nm(open('src/bank_csv.js',encoding='utf-8').read()) + '\n' + open('src/ai_team_ui.js',encoding='utf-8').read())
 out = out.replace('@@CRM2@@', open('src/crm2_ui.js',encoding='utf-8').read())
+out = (out.replace('@@CFG_SBURL@@', _json.dumps(CFG.get('supabase_url', 'https://micymdbqgzeckiqyvvkn.supabase.co')))
+          .replace('@@CFG_SBKEY@@', _json.dumps(CFG.get('supabase_publishable_key', 'sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW')))
+          .replace('@@CFG_FEED@@', _json.dumps(CFG.get('update_feed', ''))).replace('@@VERSION@@', _json.dumps(VERSION)))
 assert '@@' not in out
 open(D + 'index.html', 'w', encoding='utf-8').write(out)
+open(D + 'version.json', 'w', encoding='utf-8').write(_json.dumps({'version': VERSION}))
+# Hlavičky (CSP) podle konfigurace: adresa vlastní databáze a případně zdroj informací o aktualizacích
+import re as _re
+try:
+    _h = open(D + '_headers', encoding='utf-8').read()
+    _host = _re.sub(r'^https?://', '', CFG.get('supabase_url', 'https://micymdbqgzeckiqyvvkn.supabase.co')).rstrip('/')
+    _h = _re.sub(r'https://[a-z0-9-]+\.supabase\.co', 'https://' + _host, _h)
+    _h = _re.sub(r'wss://[a-z0-9-]+\.supabase\.co', 'wss://' + _host, _h)
+    _feed = CFG.get('update_feed', '')
+    _m = _re.match(r'(https://[^/]+)/', _feed + '/') if _feed else None
+    if _m and _m.group(1) not in _h:
+        _h = _h.replace('connect-src ', 'connect-src ' + _m.group(1) + ' ', 1)
+    open(D + '_headers', 'w', encoding='utf-8').write(_h)
+except FileNotFoundError:
+    pass
 print('OK', len(out))
 
 # ===== Statické právní stránky (skutečné adresy /podminky/, /ochrana-udaju/, /cookies/) =====
