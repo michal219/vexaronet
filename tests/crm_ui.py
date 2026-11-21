@@ -18,7 +18,7 @@ def run(w,h,tag):
         T('nabidky');pg.wait_for_selector('.ivl');n=pg.locator('.ivl li').count();print('quotes',n);assert n==2
         pg.click('[data-crm^="qv:"]');pg.wait_for_selector('.ivd');print('title',pg.inner_text('.ivd h2'),'qr',pg.locator('.ivd .qrb').count());assert pg.locator('.ivd .qrb').count()==0;pg.click('[data-app=mclose]')
         pg.click('[data-crm^="qi:"]');pg.wait_for_selector('#invEd');print('invoice prefilled',pg.input_value('#ieRows .ier .id'));pg.click('[data-app=mclose]')
-        T('zakaznici');pg.click('#lst li');pg.wait_for_selector('#entForm');pg.click('[data-crm^="th:"]');pg.wait_for_selector('#cnForm')
+        T('zakaznici');pg.click('#lst li >> nth=0');pg.wait_for_selector('.c2card');pg.click('.c2card [data-c2^="edit"]');pg.wait_for_selector('#entForm');pg.click('[data-crm^="th:"]');pg.wait_for_selector('#cnForm')
         pg.fill('#cnB','Test poznámka');pg.click('#cnForm button[type=submit]');pg.wait_for_timeout(500);print('timeline',pg.locator('.mbox .tl li').count());assert 'Test poznámka' in pg.inner_text('.mbox')
         pg.screenshot(path='/tmp/crm_t_%s.png'%tag);pg.click('[data-app=mclose]');T('pripady');pg.screenshot(path='/tmp/crm_p_%s.png'%tag)
         print('errors',errs);assert not errs;b.close()

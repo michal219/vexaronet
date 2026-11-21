@@ -1,0 +1,22 @@
+import { createRequire } from 'module'; const require=createRequire(import.meta.url);
+const E=require('../src/eu.js'); let p=0,f=0; const ok=(n,c)=>{c?p++:f++;console.log((c?'OK   ':'FAIL ')+n)};
+ok('27 států',E.CODES.length===27 && new Set(E.CODES).size===27);
+const nonEuro=E.list().filter(x=>!x.euro).map(x=>x.code).sort().join(',');
+ok('mimo eurozónu: CZ DK HU PL RO SE ('+nonEuro+')',nonEuro==='CZ,DK,HU,PL,RO,SE');
+ok('standardní sazby: HU 27, LU 17, FI 25.5, CZ 21, SK 23',E.get('HU').vat===27&&E.get('LU').vat===17&&E.get('FI').vat===25.5&&E.get('CZ').vat===21&&E.get('SK').vat===23);
+ok('všechny sazby v rozumných mezích (standardní 15–27, snížené ≥ 5)',E.list().every(x=>x.vat>=15&&x.vat<=27&&x.reduced.every(r=>r>=5&&r<x.vat)));
+ok('sazby CZ [21,12], SK [23,19,5]',JSON.stringify(E.rates('CZ'))==='[21,12]'&&JSON.stringify(E.rates('SK'))==='[23,19,5]');
+ok('název -> kód a zpět',E.codeByName('Německo')==='DE'&&E.nameOf('DE')==='Německo'&&E.codeByName('Jiná země')===null);
+const vat={DE:'DE123456789',NL:'NL123456789B01',FR:'FR12345678901',ES:'ESX1234567L',IE:'IE1234567T',CZ:'CZ12345678',SK:'SK2020123456',PL:'PL1234567890',GR:'EL123456789',AT:'ATU12345678',SE:'SE123456789012'};
+Object.entries(vat).forEach(([c,v])=>ok('IČ DPH '+v+' platný tvar pro '+c,E.vatOk(v,c).ok));
+ok('IČ DPH s mezerami a tečkami se normalizuje',E.vatOk('DE 123.456.789','DE').normalized==='DE123456789');
+ok('IČ DPH s předvolbou GR (ne EL) odmítnuto',!E.vatOk('GR123456789').ok);
+ok('IČ DPH nesedí na vybraný stát',!E.vatOk('DE123456789','CZ').ok);
+ok('IČ DPH špatná délka',!E.vatOk('CZ123').ok&&!E.vatOk('NL123456789B1').ok);
+ok('prázdné IČ DPH je v pořádku',E.vatOk('').ok);
+['CZ6508000000192000145399','DE89370400440532013000','AT611904300234573201','SK3112000000198742637541','PL61109010140000071219812874','FR1420041010050500013M02606','GR1601101250000000012300695','NL91ABNA0417164300'].forEach(i=>ok('IBAN '+i+' platný',E.ibanOk(i)));
+ok('IBAN s chybou v kontrolní číslici odmítnut',!E.ibanOk('DE89370400440532013001'));
+ok('IBAN se špatnou délkou odmítnut',!E.ibanOk('DE8937040044053201300'));
+ok('IBAN s mezerami',E.ibanOk('DE89 3704 0044 0532 0130 00'));
+ok('hint pro přeshraniční B2B',E.crossBorderHint('CZ','DE','DE123456789').includes('VIES')&&E.crossBorderHint('CZ','CZ','')==='' );
+console.log(`\n${p}/${p+f} prošlo`); process.exit(f?1:0)
