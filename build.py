@@ -161,7 +161,7 @@ plans_html='''<div class="codeoffer" data-r="up">
    <ul class="ticks">
     <li>Aplikace: zákazníci a CRM, zakázky, kalendář a rezervace, sklad, faktury, e-shop, zaměstnanci a docházka, reporty</li>
     <li>CRM pro firmy z celé EU: 27 států, IČ DPH a IBAN se kontrolují podle tvaru</li>
-    <li>Databázové skripty pro Supabase (tabulky, oprávnění, funkce) a serverové funkce</li>
+    <li>Databázové migrace pro Supabase a serverové funkce (úplný export celého schématu databáze teprve dokončujeme)</li>
     <li>Automatické testy, architektura a návod k nasazení</li>
     <li>Sestavení jedním příkazem, hostování například na Cloudflare Pages</li>
    </ul></div>
@@ -599,7 +599,7 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
 window.DOC_T=document.title;
 /* ===== Supabase: registrace a přihlášení ===== */
 var SB_URL=@@CFG_SBURL@@;
-var SB_KEY=@@CFG_SBKEY@@;var VX_VERSION=@@VERSION@@,VX_FEED=@@CFG_FEED@@; /* veřejný (publishable) klíč, smí být ve webu */
+var SB_KEY=@@CFG_SBKEY@@;var VX_VERSION=@@VERSION@@,VX_FEED=@@CFG_FEED@@,VX_ED=@@CFG_ED@@; /* veřejný (publishable) klíč, smí být ve webu */
 var PLAN_OPTS=[['start','START – zdarma'],['pro','Vexaronet PRO – 699 Kč / měsíc bez DPH, 30 dní zdarma'],['accountant','AI Účetní – 399 Kč / měsíc bez DPH, 30 dní zdarma'],['business','Vexaronet BUSINESS – 1 199 Kč / měsíc bez DPH, 30 dní zdarma']];
 var PLAN_ALLOWED=['start','accountant','pro','business','enterprise'],LEGACY={'VEXARONET PRO':'pro','AI ÚČETNÍ':'accountant','STARTER':'start','PRO':'pro','BUSINESS':'business'};
 function planVal(x){x=LEGACY[x]||x;return PLAN_ALLOWED.indexOf(x)>=0?x:'pro'}
@@ -796,7 +796,7 @@ var NAV=[['prehled','Přehled'],['aitym','AI tým'],['ceo','AI CEO'],['ucetni','
 var SOON={};
 var PLANN={start:'START',starter:'START',accountant:'AI Účetní',ucetni:'AI Účetní',pro:'Vexaronet PRO',business:'Vexaronet BUSINESS',enterprise:'ENTERPRISE'},STATN={demo:'ukázka',trial:'zkušební období',active:'aktivní',past_due:'po splatnosti',canceled:'zrušeno',expired:'vypršelo'};
 var PLANLIM={start:'CRM max. 50 zákazníků, 10 zakázek, 10 faktur měsíčně, 1 uživatel. Bez AI CEO.',accountant:'1 uživatel, 100 AI vytěžených dokladů měsíčně.',pro:'3 uživatelé, 150 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',business:'10 uživatelů, 500 AI dokladů měsíčně, 1 web, 1 firma. AI akce zatím nepočítáme.',enterprise:'Individuální limity podle dohody.'};
-function effPlan(){var s=APP.sub;if(!s)return 'start';var p=String(s.plan||'').toLowerCase();if(p==='starter')p='start';if(p==='ucetni')p='accountant';if(p==='start')return p;var ended=(s.status==='trial'&&s.trial_end&&new Date(s.trial_end)<new Date())||s.status==='expired'||s.status==='canceled';return ended?'start':p}
+function effPlan(){if(VX_ED==='source')return 'enterprise';var s=APP.sub;if(!s)return 'start';var p=String(s.plan||'').toLowerCase();if(p==='starter')p='start';if(p==='ucetni')p='accountant';if(p==='start')return p;var ended=(s.status==='trial'&&s.trial_end&&new Date(s.trial_end)<new Date())||s.status==='expired'||s.status==='canceled';return ended?'start':p}
 function hasCeo(){return ['pro','business','enterprise'].indexOf(effPlan())>=0}
 var TEAMLIM={start:1,accountant:2,pro:3,business:10,enterprise:1000},ROLEN={owner:'Majitel',admin:'Správce',employee:'Zaměstnanec'};
 function allowed(t){var p=effPlan();if(APP.role==='employee'&&['prehled','zakaznici','zakazky','ukoly','kalendar','zamestnanci','profil'].indexOf(t)<0)return false;if(p==='start')return ['prehled','zakaznici','pripady','nabidky','zakazky','ukoly','faktury','finance','kalendar','online','reporty','automatizace','firmaprofil','autopilot','profil'].indexOf(t)>=0;if(p==='accountant')return ['prehled','ucetni','faktury','finance','reporty','zamestnanci','firmaprofil','autopilot','profil'].indexOf(t)>=0;return true}
@@ -2386,7 +2386,7 @@ out = out.replace('@@APDASH@@', open('src/autopilot_dash.js',encoding='utf-8').r
 out = out.replace('@@CRM2@@', open('src/crm2_ui.js',encoding='utf-8').read())
 out = (out.replace('@@CFG_SBURL@@', _json.dumps(CFG.get('supabase_url', 'https://micymdbqgzeckiqyvvkn.supabase.co')))
           .replace('@@CFG_SBKEY@@', _json.dumps(CFG.get('supabase_publishable_key', 'sb_publishable_Owl1zZ5ZoGJVPxkjRVAOJw_8O6mLDwW')))
-          .replace('@@CFG_FEED@@', _json.dumps(CFG.get('update_feed', ''))).replace('@@VERSION@@', _json.dumps(VERSION)))
+          .replace('@@CFG_FEED@@', _json.dumps(CFG.get('update_feed', ''))).replace('@@CFG_ED@@', _json.dumps(CFG.get('edition', 'saas'))).replace('@@VERSION@@', _json.dumps(VERSION)))
 assert '@@' not in out
 open(D + 'index.html', 'w', encoding='utf-8').write(out)
 open(D + 'version.json', 'w', encoding='utf-8').write(_json.dumps({'version': VERSION}))

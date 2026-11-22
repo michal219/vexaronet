@@ -7,7 +7,7 @@ Aplikace pro OSVČ a malé firmy: zákazníci a CRM pro celou EU, zakázky, kale
 - vlastní doménu a e-mailovou službu (např. Resend) pro e-maily z aplikace
 
 ## Postup nasazení
-1. V Supabase vytvořte nový projekt. V SQL editoru spusťte skripty `schema*.sql` a migrace ze složky `db/migrations` (pořadí viz `ARCHITEKTURA.md`).
+1. V Supabase vytvořte nový projekt. **Pozor: úplný export celého databázového schématu (cca 100 tabulek a 190 funkcí) zatím v balíčku není.** Soubory `schema*.sql`, `db/migrations` a `db/snapshot` jsou dílčí a z nich samotných databázi od nuly spolehlivě nepostavíte. Úplný skript dodá prodávající samostatně. Do té doby nasazení nezačínejte.
 2. Zkopírujte `config.local.example.json` na `config.local.json` a doplňte adresu projektu a veřejný *publishable* klíč (Supabase → Project Settings → API). **Tajný klíč (service_role) nikdy nevkládejte do webu.** Soubor `config.local.json` se při aktualizacích nepřepisuje.
 3. Sestavte web: `python3 build.py`
 4. Nahrajte na hosting a nastavte proměnné prostředí a tajemství (viz `NAVOD.md`).
@@ -16,6 +16,9 @@ Aplikace pro OSVČ a malé firmy: zákazníci a CRM pro celou EU, zakázky, kale
 
 ## Testy
 `tests/` obsahuje automatické testy (Node a Python s Playwrightem). Spouštějí se proti lokálně sestavenému webu.
+
+## Edice zdrojového kódu
+V `config.local.json` je `"edition": "source"`. Aplikace pak nehlídá limity tarifů (START apod.). Na straně databáze nastavte svou firmu v tabulce `subscriptions` na plán `enterprise`, jinak server část funkcí odmítne.
 
 ## Upozornění
 - Zabezpečení, zálohy, provoz a právní soulad (smlouvy, ochrana údajů, daně a účetnictví) jsou odpovědností provozovatele.
