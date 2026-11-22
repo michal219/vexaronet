@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Vexaronet – zakázky, rezervace a faktury pro malé firmy</title>
-<meta name="description" content="Zdrojový kód aplikace pro OSVČ a malé firmy za 350 € jednorázově: CRM pro celou EU, zakázky, rezervace, sklad, faktury a e-shop. Vyzkoušejte ukázku.">
+<meta name="description" content="Vexaronet pro OSVČ a malé firmy: zdrojový kód za 350 € jednorázově, nebo online předplatné. CRM pro celou EU, zakázky, rezervace, sklad, faktury a e-shop. Vyzkoušejte ukázku.">
 <meta name="theme-color" content="#03040a">
 <script>(function(){try{var q=new URLSearchParams(location.search),st=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;if(q.get("app")==="1"&&!q.get("r")&&!q.get("w")&&!q.get("s")||st&&!q.get("r")&&!q.get("w")&&!q.get("s")){document.documentElement.classList.add("appmode")}}catch(e){}})()</script><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Vexaronet">
 <link rel="canonical" href="https://vexaronet.com/">
 <meta property="og:type" content="website"><meta property="og:locale" content="cs_CZ"><meta property="og:site_name" content="Vexaronet">
-<meta property="og:title" content="Vexaronet – zdrojový kód aplikace pro malé firmy"><meta property="og:description" content="Zákazníci, zakázky, kalendář, online rezervace, sklad, faktury a e-shop na jednom místě. Zdrojový kód za 350 € jednorázově.">
+<meta property="og:title" content="Vexaronet – spouštíme. Vyberte si zdrojový kód, nebo online"><meta property="og:description" content="Zákazníci, zakázky, kalendář, online rezervace, sklad, faktury a e-shop na jednom místě. Zdrojový kód za 350 € jednorázově, nebo online předplatné.">
 <meta property="og:url" content="https://vexaronet.com/"><meta property="og:image" content="https://vexaronet.com/assets/og-image.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Přehled firmy ve Vexaronetu: ukázková data, ukazatele, faktury a doporučení AI CEO"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Vexaronet – zakázky, rezervace a faktury pro malé firmy"><meta name="twitter:description" content="Zákazníci, zakázky, kalendář, online rezervace, sklad, faktury a e-shop na jednom místě. Zdrojový kód za 350 € jednorázově."><meta name="twitter:image" content="https://vexaronet.com/assets/og-image.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233b7bff'/%3E%3Cstop offset='1' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%2303040a'/%3E%3Cpath d='M7 9l9 15 9-15' fill='none' stroke='url(%23g)' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"Vexaronet","url":"https://vexaronet.com/","email":"info@vexaronet.com"},{"@type":"WebSite","name":"Vexaronet","url":"https://vexaronet.com/","inLanguage":"cs"}]}</script>
@@ -581,6 +581,13 @@ html[data-theme=light] .stb-now{color:#0f8a5f}html[data-theme=light] .stb-lim{co
 .codeoffer .cu-price b{font-size:3rem}@media(max-width:820px){.codeoffer{grid-template-columns:1fr}}
 
 
+/* --- web podle reklamy --- */
+.vpick{display:flex;gap:14px;flex-wrap:wrap;margin:0 0 20px}.vpick .vp{flex:1 1 210px;max-width:270px;padding:16px 18px;border-radius:18px;border:1px solid rgba(150,175,255,.3);background:rgba(150,175,255,.08);display:flex;flex-direction:column;gap:3px}.vpick .vp2{border-color:rgba(139,92,246,.6)}.vpick i{font-style:normal;font-size:1.5rem;opacity:.9}.vpick b{font-size:1.05rem}.vpick span{color:var(--mut);font-size:.95rem}
+.hero .why{max-width:540px;margin:0 0 22px;color:#b3bbd8;font-size:1rem;line-height:1.55}
+.variants{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch;margin:8px 0 22px}@media(max-width:820px){.variants{grid-template-columns:1fr}}
+.vcard{display:flex;flex-direction:column;gap:12px;border:1px solid var(--line,rgba(150,175,255,.25));border-radius:22px;padding:28px;background:rgba(255,255,255,.03)}.vcard.vc2{border-color:rgba(139,92,246,.6)}.vcard h3{font-size:1.5rem;margin:0}.vcard .ticks{flex:1}.vcard .btn{align-self:flex-start}
+.vprice{display:flex;flex-direction:column;gap:2px}.vprice b{font-size:2.6rem;line-height:1.1}.vc2 .vprice b{font-size:1.5rem;padding:.6rem 0 .5rem}.vprice span{color:var(--mut)}
+
 /* --- ceník --- */
 .plans5 .plan{position:relative}.plans5 .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:99px;white-space:nowrap}.plans5 .price{min-height:2.2em;display:flex;align-items:flex-end}.plans5 .price b.pp:not([data-m]){font-size:1.2rem;white-space:normal}.plans5 .plan.hot{border-color:rgba(130,160,255,.7)}
 .bill{display:flex;gap:10px;justify-content:center;margin:0 0 24px;flex-wrap:wrap}.bill small{opacity:.8;font-weight:500}
@@ -708,26 +715,27 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 
 <header class="nav" id="nav"><div class="in">
   <a class="logo" href="#top" aria-label="Vexaronet – úvod"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>pro malé firmy</small></span></a>
-  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Ceník</a><a href="#namiru">Na míru</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
+  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Varianty</a><a href="#namiru">Na míru</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
   <div class="nav-r">
     <button class="themeb" id="theme" type="button" aria-label="Přepnout světlý a tmavý režim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg></button>
     <button class="btn btn-ghost btn-sm" id="acc" type="button">Přihlásit</button>
-    <button class="btn btn-ghost btn-sm" type="button" data-namiru="code">Koupit zdrojový kód</button>
+    <button class="btn btn-ghost btn-sm" type="button" data-namiru="start">Dejte mi vědět</button>
     <button class="btn btn-main btn-sm btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button>
     <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="mnav"><i></i></button>
   </div>
 </div></header>
-<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Ceník</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#namiru" style="--i:5">Systém na míru</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a><a href="#demo" data-demo="1" style="--i:7" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</a><a href="#stahnout" data-install="1" style="--i:8">Instalace aplikace</a></nav>
+<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Varianty</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#namiru" style="--i:5">Systém na míru</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a><a href="#demo" data-demo="1" style="--i:7" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</a><a href="#stahnout" data-install="1" style="--i:8">Instalace aplikace</a></nav>
 
 <main id="obsah">
 <section class="hero" id="top"><div class="wrap">
   <div>
-    <div class="regbar" id="regBar" role="status" hidden></div>
-    <span class="eyebrow fade">Zdrojový kód aplikace pro malé firmy · 350 € jednorázově</span>
-    <h1 id="h1">Zákazníci, zakázky a faktury malé firmy na jednom místě.</h1>
-    <p class="sub fade d2">Vexaronet je hotová aplikace pro OSVČ a malé firmy, kterou získáte jako zdrojový kód a provozujete na vlastních účtech. Už dnes: zákazníci a CRM pro celou EU, zakázky, kalendář a online rezervace, sklad, faktury a e-shop. Vyzkoušejte ukázku, než koupíte.</p>
-    <div class="cta fade d3"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button><button class="btn btn-ghost btn-acc" type="button" data-namiru="code">Koupit zdrojový kód za 350 €</button></div>
-    <p class="betan fade d3"><b>Beta verze.</b> Základ funguje se skutečnými daty, další části jsou označené „připravujeme“. Prodává se zdrojový kód, ne hostovaná služba.</p>
+    <span class="eyebrow fade" id="launchE">Spouštíme Vexaronet</span>
+    <h1 id="h1">Vexaronet spouštíme už brzy.</h1>
+    <p class="sub fade d2">A sami si vyberete, jak ho chcete používat.</p>
+    <div class="vpick fade d2"><div class="vp"><i aria-hidden="true">&lt;/&gt;</i><b>Zdrojový kód</b><span>350 € jednorázově</span></div><div class="vp vp2"><i aria-hidden="true">☁</i><b>Předplatné</b><span>Vexaronet online</span></div></div>
+    <p class="why fade d3">Pracujeme na něm každý den a verze se zdrojovým kódem je skoro připravená k prodeji. Dokončujeme platební bránu, aby si šla vybraná varianta hned koupit.</p>
+    <div class="cta fade d3"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button><button class="btn btn-ghost btn-acc" type="button" data-namiru="start">Dejte mi vědět o startu</button></div>
+    <p class="betan fade d3"><b>Beta verze.</b> Základ funguje se skutečnými daty, další části jsou označené „připravujeme“. Platit zatím nejde, platební bránu dokončujeme.</p>
     <p class="hlinks fade d3"><a href="#funkce">Co už funguje</a> · <a href="#cenik">Ceník</a> · <button type="button" class="lnkb" data-install="1">Instalace aplikace</button></p>
   </div>
   <div class="scene" id="scene"><div class="fit" id="fit"><div class="stage" id="stage"><div class="laptop" id="laptop">
@@ -745,14 +753,14 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 </div></div>
 
 <section id="jak"><div class="wrap">
-  <div class="sec-h c" data-r="up"><span class="eyebrow">Jak to funguje</span><h2>Od koupě <span class="grad">k první zakázce</span></h2><p class="lead">Po koupi aplikaci nasadíte na vlastní účty. Návod je součástí.</p></div>
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Jak to funguje u zdrojového kódu</span><h2>Od koupě <span class="grad">k první zakázce</span></h2><p class="lead">Po koupi aplikaci nasadíte na vlastní účty. Návod je součástí. Online variantu nasazovat nemusíte.</p></div>
   <div class="how" data-r="up">
    <div class="hs"><b>1</b><h3>Získáte kód</h3><p>Po domluvě a zaplacení 350 € dostanete zdrojový kód, databázové skripty a návod k nasazení.</p></div>
    <div class="hs"><b>2</b><h3>Nasadíte a vyberete obor</h3><p>Autoservis, kadeřnictví, řemeslník, restaurace, obchod nebo jiný. Menu, názvy a stavy zakázek se přizpůsobí.</p></div>
    <div class="hs"><b>3</b><h3>Přidáte zákazníky a zboží</h3><p>Nahrajete je z Excelu (CSV) nebo napíšete ručně. Zakázky, sklad a termíny máte na jednom místě.</p></div>
    <div class="hs"><b>4</b><h3>Vystavujete a prodáváte</h3><p>Faktury, docházka, online rezervace a e-shop, který sám vystaví fakturu a odečte sklad.</p></div>
   </div>
-  <div class="cta" style="justify-content:center;margin-top:24px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button><button class="btn btn-ghost" type="button" data-namiru="code">Koupit zdrojový kód za 350 €</button></div>
+  <div class="cta" style="justify-content:center;margin-top:24px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button><button class="btn btn-ghost" type="button" data-namiru="code">Mám zájem o zdrojový kód</button></div>
 </div></section>
 
 <section id="ucet"><div class="wrap">
@@ -813,25 +821,37 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 </div></section>
 
 <section id="cenik"><div class="wrap">
-  <div class="sec-h c" data-r="up"><span class="eyebrow">Cena</span><h2>Jednou zaplatíte, <span class="grad">kód je váš</span></h2><p class="lead">Žádné měsíční tarify. Jedna cena za zdrojový kód: 350 €.</p></div>
-  <div class="codeoffer" data-r="up">
-  <div class="co-main"><span class="eyebrow">Zdrojový kód</span><h3>Vexaronet jako zdrojový kód</h3>
-   <p class="note">Dostanete kompletní zdrojový kód aplikace, databázové skripty a dokumentaci. Aplikaci si nasadíte na vlastní účty a data zůstávají u vás.</p>
-   <ul class="ticks">
-    <li>Aplikace: zákazníci a CRM, zakázky, kalendář a rezervace, sklad, faktury, e-shop, zaměstnanci a docházka, reporty</li>
-    <li>CRM pro firmy z celé EU: 27 států, IČ DPH a IBAN se kontrolují podle tvaru</li>
-    <li>Databázové migrace pro Supabase a serverové funkce (úplný export celého schématu databáze teprve dokončujeme)</li>
-    <li>Automatické testy, architektura a návod k nasazení</li>
-    <li>Sestavení jedním příkazem, hostování například na Cloudflare Pages</li>
-   </ul></div>
-  <div class="co-price"><small>Cena</small><div class="cu-price"><b>350 €</b></div><p class="mut">Jednorázová platba za zdrojový kód. Žádné předplatné ani měsíční poplatky.</p>
-   <button type="button" class="btn btn-main" data-namiru="code">Mám zájem o zdrojový kód</button>
-   <button type="button" class="btn btn-ghost btn-demo" data-demo="1">▶ Nejdřív si vyzkoušet ukázku</button></div>
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Dvě varianty</span><h2>Vyberte si, <span class="grad">jak ho chcete používat</span></h2><p class="lead">Zdrojový kód za 350 € jednorázově, nebo předplatné s Vexaronetem online. Platební bránu dokončujeme, zájem ale můžete nahlásit už teď a ozveme se před startem.</p></div>
+  <div class="variants" data-r="up">
+ <div class="vcard">
+  <span class="eyebrow">Zdrojový kód</span><h3>Vexaronet jako zdrojový kód</h3>
+  <div class="vprice"><b>350 €</b><span>jednorázově</span></div>
+  <p class="note">Dostanete kompletní zdrojový kód aplikace, databázové skripty a dokumentaci. Aplikaci si nasadíte na vlastní účty a data zůstávají u vás. Žádné předplatné.</p>
+  <ul class="ticks">
+   <li>Zákazníci a CRM, zakázky, kalendář a rezervace, sklad, faktury, e-shop, zaměstnanci a docházka, reporty</li>
+   <li>CRM pro firmy z celé EU: 27 států, IČ DPH a IBAN se kontrolují podle tvaru</li>
+   <li>Databázové migrace pro Supabase a serverové funkce (úplný export celého schématu databáze teprve dokončujeme)</li>
+   <li>Automatické testy, architektura a návod k nasazení</li>
+  </ul>
+  <button type="button" class="btn btn-main" data-namiru="code">Mám zájem o zdrojový kód</button>
+ </div>
+ <div class="vcard vc2">
+  <span class="eyebrow">Předplatné</span><h3>Vexaronet online</h3>
+  <div class="vprice"><b>cena zatím neurčena</b><span>oznámíme před startem</span></div>
+  <p class="note">Aplikaci používáte v prohlížeči a nemusíte nic nasazovat ani spravovat. Cenu a podmínky předplatného zatím nemáme stanovené, žádná čísla proto nevymýšlíme.</p>
+  <ul class="ticks">
+   <li>Stejná aplikace jako ve zdrojovém kódu, bez vlastní databáze a hostingu</li>
+   <li>Zatím nic neúčtujeme a nic se automaticky nestrhává</li>
+   <li>Ozveme se, jakmile bude cena a podmínky jasné</li>
+  </ul>
+  <button type="button" class="btn btn-ghost" data-namiru="online">Chci být u startu online verze</button>
+ </div>
 </div>
+<p class="mut fine" style="text-align:center;margin:14px 0 6px"><button type="button" class="btn btn-ghost btn-demo" data-demo="1">▶ Nejdřív si vyzkoušet ukázku</button></p>
 <div class="pnotes">
- <div><h4>Co kupujete</h4><p>Zdrojový kód, ne službu. Aplikaci si sami nasadíte, nastavíte vlastní databázi (Supabase) a hosting a sami za ně platíte. Provoz, zálohy, zabezpečení a právní soulad (smlouvy, ochrana údajů, daňové a účetní náležitosti u vás) jsou na vaší straně.</p></div>
+ <div><h4>Co kupujete u zdrojového kódu</h4><p>Zdrojový kód, ne službu. Aplikaci si sami nasadíte, nastavíte vlastní databázi (Supabase) a hosting a sami za ně platíte. Provoz, zálohy, zabezpečení a právní soulad (smlouvy, ochrana údajů, daňové a účetní náležitosti u vás) jsou na vaší straně.</p></div>
  <div><h4>V jakém je to stavu</h4><p>Vexaronet je beta verze. Co funguje, je napsané jako funguje, části označené „připravujeme“ hotové nejsou. Přesně to vidíte v ukázce a ve stavu vývoje níže. Platební brána v aplikaci není, faktury se vystavují a platí převodem. Fakturace je zatím jen pro dodavatele z ČR a Slovenska.</p></div>
- <div><h4>Platba, licence a podpora</h4><p>Podmínky licence (co s kódem smíte dělat, například používat ve vlastní firmě nebo dál prodávat), způsob platby a rozsah podpory dostanete písemně před koupí. Napište na info@vexaronet.com, nebo použijte tlačítko výše.</p></div>
+ <div><h4>Platba, licence a podpora</h4><p>Platební bránu dokončujeme. Podmínky licence (co s kódem smíte dělat), způsob platby a rozsah podpory dostanete písemně před koupí. Napište na info@vexaronet.com, nebo použijte tlačítka výše.</p></div>
 </div>
 </div></section>
 
@@ -850,7 +870,8 @@ button.kpi{cursor:pointer;transition:.2s}button.kpi:hover{transform:translateY(-
 <section id="otazky"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Časté otázky</span><h2>Co se nejčastěji <span class="grad">ptáte</span></h2><p class="lead">Co funguje, je napsané jako funguje, co se připravuje, jako připravuje.</p></div>
   <div class="faq" data-r="up">
-   <details><summary>Kolik to stojí a co dostanu?</summary><p>Zdrojový kód stojí 350 € jednorázově, bez předplatného. Dostanete aplikaci, databázové skripty, testy a dokumentaci. Aplikaci si nasadíte na vlastní účty (databáze Supabase a hosting, například Cloudflare Pages) a tyto služby si platíte sami. Podmínky licence, platbu a rozsah podpory potvrdíme písemně před koupí. Napište na info@vexaronet.com.</p></details>
+   <details><summary>Kdy začne prodej a proč ještě nejde koupit?</summary><p>Spouštíme v termínu uvedeném nahoře na stránce. Dokončujeme platební bránu, aby si šla vybraná varianta hned koupit. Do té doby můžete zájem nahlásit formulářem a ozveme se vám před startem. Nic vám zatím neúčtujeme.</p></details>
+   <details><summary>Kolik to stojí a co dostanu?</summary><p>Zdrojový kód stojí 350 € jednorázově, bez předplatného. Cenu předplatného u online verze zatím nemáme stanovenou. Dostanete aplikaci, databázové skripty, testy a dokumentaci. Aplikaci si nasadíte na vlastní účty (databáze Supabase a hosting, například Cloudflare Pages) a tyto služby si platíte sami. Podmínky licence, platbu a rozsah podpory potvrdíme písemně před koupí. Napište na info@vexaronet.com.</p></details>
    <details><summary>Mám zákazníky v Excelu. Dají se přenést?</summary><p>Ano. Tabulku uložíte jako CSV a nahrajete ji v části Zákazníci (Import z CSV). Před uložením uvidíte náhled a duplicity se přeskočí. Zakázky a faktury se zatím zadávají ručně. Data si můžete stáhnout zpět do CSV.</p></details>
    <details><summary>Co už opravdu funguje a co se připravuje?</summary><p>Funguje: zákazníci, zakázky, kalendář a online rezervace, sklad, zaměstnanci s docházkou, faktury a příjmy a výdaje, import bankovních výpisů, reporty. S omezením: e-shop (platba převodem), editor webu, AI CEO a AI Účetní, marketingové návrhy a automatizace (vyžadují externí služby nebo tarif). Připravujeme: PDF a QR platby, odesílání faktur, DPH a účetnictví, AI Autopilot, platební bránu a vlastní doménu. Přesný stav u každého modulu najdete v části Funkce.</p></details>
    <details><summary>Dá se spustit e-shop propojený se skladem a fakturami?</summary><p>Ano, v tarifech PRO a vyšších. Zákazník nakoupí na veřejné stránce obchodu bez registrace, objednávka se uloží, zboží se odepíše ze skladu a vystaví se faktura. Platba kartou není, zákazník platí převodem podle faktury. Fakturu mu zatím posíláte sami, e-mailem se neodesílá. Před spuštěním je potřeba vyplnit fakturační údaje.</p></details>
@@ -953,6 +974,9 @@ var RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var MOD=JSON.parse($('#modData').textContent),BIZ=JSON.parse($('#bizData').textContent);
 $('#yr').textContent=new Date().getFullYear();
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var LAUNCH="2026-11-27";
+(function(){var h=$('#h1'),e=$('#launchE');if(!h||!LAUNCH)return;var d=Math.ceil((new Date(LAUNCH+'T00:00:00+01:00')-new Date())/864e5),dt=new Date(LAUNCH+'T12:00:00').toLocaleDateString('cs-CZ');
+if(d>1){h.textContent='Vexaronet spouštíme už za '+d+'\u00a0'+(d<5?'dny':'dní')+'.';if(e)e.textContent='Start '+dt}else if(d===1){h.textContent='Vexaronet spouštíme už zítra.';if(e)e.textContent='Start '+dt}else{h.textContent='Vexaronet právě spouštíme.';if(e)e.textContent='Dokončujeme poslední kroky'}})();
 (function(){var h=$('#h1');var t=h.textContent.trim();h.setAttribute('aria-label',t);var i=0;h.innerHTML=t.split(' ').map(function(w){i++;return '<span class="w" aria-hidden="true"><span style="--i:'+i+'">'+w+'</span></span>'}).join(' ')})();
 
 /* motiv */
@@ -1043,7 +1067,7 @@ function msg(t,c){st.className='st '+c;st.textContent=t}
 var custom=false;
 function setMode(c){if(typeof c!=='boolean')c=custom;custom=c;var aw=document.getElementById('fAgeW');if(aw)aw.hidden=c;sendB.textContent=c?'Odeslat poptávku':'Odebírat novinky';[].forEach.call(document.querySelectorAll('[data-fmode]'),function(b){b.setAttribute('aria-pressed',String((b.dataset.fmode==='custom')===c))});[].forEach.call(document.querySelectorAll('#form [data-cu]'),function(x){x.hidden=!c});$('#fPlan').value=c?'Systém na míru (od 20 000 Kč)':'';$('#fNameL').textContent=c?'Jméno *':'Jméno (nepovinné)';$('#fName').required=c;$('#fPurpose').textContent=c?'Popište, co potřebujete. Údaje použijeme jen k odpovědi na poptávku a nezapíšeme vás k odběru novinek.':'Stačí e-mail. Pošleme vám jen informace o vývoji Vexaronetu a odhlásit se můžete kdykoli.';$('#fOkT').innerHTML=c?'Souhlasím se zpracováním údajů za účelem vyřízení poptávky. <a href="/ochrana-udaju/" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i>':'Souhlasím, že mi Vexaronet bude na uvedený e-mail posílat novinky o vývoji. Souhlas mohu kdykoli odvolat. <a href="/ochrana-udaju/" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i>'}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-fmode]');if(b){setMode(b.dataset.fmode==='custom')}});
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-namiru]');if(!b)return;e.preventDefault();setMode(true);if(b.dataset.namiru==='code'){var pl=$('#fPlan');if(pl)pl.value='Zdrojový kód Vexaronet (350 €)';var mm=$('#fMsg');if(mm&&!mm.value)mm.value='Mám zájem o zdrojový kód Vexaronet za 350 €. Prosím o informace o platbě, licenčních podmínkách a podpoře.'}$('#early').scrollIntoView({behavior:'smooth'});setTimeout(function(){var m=$('#fMsg');if(m)m.focus({preventScroll:true})},700)});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-namiru]');if(!b)return;e.preventDefault();setMode(true);if(b.dataset.namiru==='code'){var pl=$('#fPlan');if(pl)pl.value='Zdrojový kód Vexaronet (350 €)';var mm=$('#fMsg');if(mm&&!mm.value)mm.value='Mám zájem o zdrojový kód Vexaronet za 350 €. Prosím o informace o platbě, licenčních podmínkách a podpoře.'}else if(b.dataset.namiru==='online'){var pl2=$('#fPlan');if(pl2)pl2.value='Vexaronet online (předplatné, cena zatím neurčena)';var m2=$('#fMsg');if(m2&&!m2.value)m2.value='Mám zájem o Vexaronet online jako předplatné. Dejte mi prosím vědět, až bude znám start, cena a podmínky.'}else if(b.dataset.namiru==='start'){var pl3=$('#fPlan');if(pl3)pl3.value='Informace o startu prodeje (kód / online)';var m3=$('#fMsg');if(m3&&!m3.value)m3.value='Dejte mi prosím vědět o startu prodeje Vexaronetu. Zajímá mě: zdrojový kód / online předplatné (nehodící se škrtněte).'}$('#early').scrollIntoView({behavior:'smooth'});setTimeout(function(){var m=$('#fMsg');if(m)m.focus({preventScroll:true})},700)});
 form.addEventListener('submit',function(e){e.preventDefault();var f=form.elements;
  if(!f.email.value.trim()||(custom&&!f.jmeno.value.trim())){msg(custom?'Vyplňte prosím jméno a e-mail.':'Vyplňte prosím e-mail.','err');(f.email.value.trim()?f.jmeno:f.email).focus();return}
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.value.trim())){msg('Zkontrolujte prosím formát e-mailu.','err');return}
