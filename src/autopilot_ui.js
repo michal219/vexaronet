@@ -10,6 +10,7 @@ function apNeedsOk(m){var p=effPlan();if(m.needs==='start')return true;if(m.need
 function apBar(){
  var main=A('appMain'),root=A('vxapp');if(!main||!root)return;
  var bar=A('apBar'),sub=A('apSub');
+ if(off('autopilot')){if(bar)bar.remove();if(sub)sub.remove();return}
  if(APP.role==='employee'){if(bar)bar.remove();if(sub)sub.remove();return}
  apStyle();
  if(!bar){bar=document.createElement('nav');bar.id='apBar';bar.className='apbar';bar.setAttribute('aria-label','Režimy AI Autopilota');main.parentNode.insertBefore(bar,main)}

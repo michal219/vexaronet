@@ -1,6 +1,6 @@
 # Vexaronet: zdrojový kód (balíček pro kupce)
 
-Aplikace pro OSVČ a malé firmy: zákazníci a CRM pro celou EU, zakázky, kalendář a rezervace, sklad, faktury, e-shop, zaměstnanci a docházka. Je to **beta verze**, části označené „připravujeme“ nejsou hotové.
+Aplikace pro OSVČ a malé firmy: jádro tvoří zákazníci a CRM pro celou EU, obchodní případy, nabídky, zakázky, úkoly, kalendář a rezervace, faktury, finance, zaměstnanci a docházka a reporty. Je to **beta verze**, části označené „připravujeme“ nejsou hotové.
 
 ## Co potřebujete
 - účet na Supabase (databáze a přihlášení), hosting statického webu se serverovými funkcemi (např. Cloudflare Pages), Python 3 a Node.js 20+
@@ -19,6 +19,8 @@ Aplikace pro OSVČ a malé firmy: zákazníci a CRM pro celou EU, zakázky, kale
 
 ## Edice zdrojového kódu
 V `config.local.json` je `"edition": "source"`. Aplikace pak nehlídá limity tarifů (START apod.). Na straně databáze nastavte svou firmu v tabulce `subscriptions` na plán `enterprise`, jinak server část funkcí odmítne.
+
+**Moduly.** V edici zdrojového kódu jsou ve výchozím nastavení vypnuté složitější části: e-shop, sklad, pobočky, jednoduché weby, online rezervace pro veřejnost, marketing a všechny AI funkce (AI CEO, AI Účetní, Autopilot). Kód v balíčku je, ale nepodporujeme jej a nemusí fungovat bez dalšího nastavení. Seznam vypnutých modulů změníte v `config.local.json` klíčem `"modules_off"` (např. `"modules_off": []` zapne vše).
 
 ## Upozornění
 - Zabezpečení, zálohy, provoz a právní soulad (smlouvy, ochrana údajů, daně a účetnictví) jsou odpovědností provozovatele.
