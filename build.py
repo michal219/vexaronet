@@ -166,7 +166,7 @@ plans_html='''<div class="variants" data-r="up">
    <li>Složitější moduly (e-shop, sklad, pobočky, weby, AI) jsou v této edici ve výchozím nastavení vypnuté a nejsou součástí podpory</li>
    <li>CRM pro firmy z celé EU: 27 států, IČ DPH a IBAN se kontrolují podle tvaru</li>
    <li>Hotová lokální aplikace: bez serveru, bez účtu a bez internetu, záloha a obnova do souboru</li>
-   <li>Automatické testy, architektura a návod, jak aplikaci znovu sestavit a upravit</li>
+   <li>Zdrojový kód, který si jedním dvojklikem (Python 3) sestavíte a upravíte, a krok za krokem návod</li>
   </ul>
   <form id="dlForm" class="dlf" novalidate>
    <p class="hp" aria-hidden="true"><label>Nevyplňovat <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
@@ -2580,7 +2580,8 @@ os.makedirs(_P)
 for _f in PUBLIC_FILES:
     shutil.copy2(D + _f, _P + _f)
 for _d in PUBLIC_DIRS:
-    shutil.copytree(D + _d, _P + _d)
+    if os.path.isdir(D + _d):  # např. stazeni/ v balíčku zdrojového kódu chybí
+        shutil.copytree(D + _d, _P + _d)
 # _routes.json: serverové funkce se volají jen pro /api/* a pro interní cesty z kořene repozitáře
 # (functions/_middleware.js na nich vrátí 404 i tehdy, když Cloudflare drží starou kopii v mezipaměti).
 _pub = set(PUBLIC_FILES + PUBLIC_DIRS + ['public'])
