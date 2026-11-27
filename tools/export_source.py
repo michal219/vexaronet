@@ -7,7 +7,13 @@ files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
 SKIP = ('index.html', 'public/', 'tests/shot_', 'version.json', 'tools/export_source.py', '.github/')
 README = open('docs/KUPUJICI_README.md', encoding='utf-8').read()
 LIC = open('docs/LICENCE_NAVRH.md', encoding='utf-8').read()
+# hotová lokální aplikace (bez Supabase) se přibalí jako složka lokalni-aplikace/
+subprocess.run([sys.executable, 'tools/export_local.py'], check=True, stdout=subprocess.DEVNULL)
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
+    with zipfile.ZipFile('vexaronet-lokalni.zip') as lz:
+        for n in lz.namelist():
+            if n.endswith('/'): continue
+            z.writestr('vexaronet/lokalni-aplikace/' + n.split('/', 1)[1], lz.read(n))
     for f in files:
         if not f or any(f == s or f.startswith(s) for s in SKIP) or not os.path.isfile(f): continue
         data = open(f, 'rb').read()

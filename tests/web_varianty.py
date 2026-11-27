@@ -11,7 +11,7 @@ with sync_playwright() as p:
         pg.route('**/supabase.js',lambda r:r.fulfill(body='',content_type='text/javascript'))
         pg.goto('file://'+R+'/index.html');pg.wait_for_timeout(1500)
         h=pg.inner_text('#h1').replace('\xa0',' ')
-        chk(nm+' nadpis s odpočtem','Vexaronet spouštíme' in h and ('za' in h or 'zítra' in h or 'právě' in h))
+        chk(nm+' nadpis s odpočtem','spouštíme' in h and ('za' in h or 'zítra' in h or 'právě' in h))
         chk(nm+' bez lišty limitu firem',pg.locator('#regBar').count()==0)
         chk(nm+' dvě varianty v úvodu',pg.locator('.vpick .vp').count()==2 and '350 €' in pg.inner_text('.vpick'))
         chk(nm+' bez vodorovného posunu',pg.evaluate('document.documentElement.scrollWidth')<=vw+1)

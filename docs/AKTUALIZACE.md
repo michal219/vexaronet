@@ -17,3 +17,6 @@ Kupující dostává aktualizace po zaplacení, a to takto: kód je v **soukrom�
 
 ## Upozornění v aplikaci
 Pokud je v `config.local.json` vyplněno `update_feed`, aplikace majiteli firmy ukáže upozornění na novější verzi. Je to jen dotaz na číslo verze, nic se nestahuje ani neinstaluje. Nevyplníte-li ho, aplikace se nikam neptá. Adresa zdroje se přidá do pravidel zabezpečení (CSP) automaticky při sestavení.
+
+## Lokální verze
+Lokální verzi aktualizujete výměnou souboru `Vexaronet.html` za novější (složku `assets` nechte). Data v prohlížeči zůstanou. Před výměnou si stáhněte zálohu.

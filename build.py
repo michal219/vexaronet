@@ -160,13 +160,14 @@ plans_html='''<div class="variants" data-r="up">
  <div class="vcard">
   <span class="eyebrow">Zdrojový kód</span><h3>Vexaronet jako zdrojový kód</h3>
   <div class="vprice"><b>350 €</b><span>jednorázově</span></div>
-  <p class="note">Dostanete kompletní zdrojový kód aplikace, databázové skripty a dokumentaci. Aplikaci si nasadíte na vlastní účty a data zůstávají u vás. Žádné předplatné.</p>
+  <p class="note">Dostanete zdrojový kód a hotovou lokální aplikaci: soubor, který otevřete v prohlížeči a běží u vás v počítači. Data zůstávají u vás. Žádné předplatné.</p>
   <ul class="ticks">
    <li>Jádro aplikace: zákazníci a CRM, obchodní případy, nabídky, zakázky, úkoly, kalendář a rezervace, faktury, finance, zaměstnanci a docházka, reporty</li>
    <li>Složitější moduly (e-shop, sklad, pobočky, weby, AI) jsou v této edici ve výchozím nastavení vypnuté a nejsou součástí podpory</li>
    <li>CRM pro firmy z celé EU: 27 států, IČ DPH a IBAN se kontrolují podle tvaru</li>
-   <li>Databázové migrace pro Supabase a serverové funkce (úplný export celého schématu databáze teprve dokončujeme)</li>
-   <li>Automatické testy, architektura a návod k nasazení</li>
+   <li>Hotová lokální aplikace: bez serveru, bez účtu a bez internetu, záloha a obnova do souboru</li>
+   <li>Volitelně provoz na vlastním serveru (Supabase). Databázové migrace jsou v balíčku, úplný export celého schématu teprve dokončujeme</li>
+   <li>Automatické testy, architektura a návod, jak aplikaci znovu sestavit a upravit</li>
   </ul>
   <button type="button" class="btn btn-main" data-namiru="code">Mám zájem o zdrojový kód</button>
  </div>
@@ -184,7 +185,7 @@ plans_html='''<div class="variants" data-r="up">
 </div>
 <p class="mut fine" style="text-align:center;margin:14px 0 6px"><button type="button" class="btn btn-ghost btn-demo" data-demo="1">▶ Nejdřív si vyzkoušet ukázku</button></p>
 <div class="pnotes">
- <div><h4>Co kupujete u zdrojového kódu</h4><p>Zdrojový kód, ne službu. Aplikaci si sami nasadíte, nastavíte vlastní databázi (Supabase) a hosting a sami za ně platíte. Provoz, zálohy, zabezpečení a právní soulad (smlouvy, ochrana údajů, daňové a účetní náležitosti u vás) jsou na vaší straně.</p></div>
+ <div><h4>Co kupujete u zdrojového kódu</h4><p>Zdrojový kód a lokální aplikace, ne služba. Data jsou jen na vašem počítači a zálohy si děláte sami. Faktury v lokální verzi jsou zjednodušené (bez výpočtu DPH) a musí je zkontrolovat účetní. Právní soulad (smlouvy, ochrana údajů, daňové a účetní náležitosti) je na vaší straně.</p></div>
  <div><h4>V jakém je to stavu</h4><p>Vexaronet je beta verze. Co funguje, je napsané jako funguje, části označené „připravujeme“ hotové nejsou. Přesně to vidíte v ukázce a ve stavu vývoje níže. Platební brána v aplikaci není, faktury se vystavují a platí převodem. Fakturace je zatím jen pro dodavatele z ČR a Slovenska.</p></div>
  <div><h4>Platba, licence a podpora</h4><p>Platební bránu dokončujeme. Podmínky licence (co s kódem smíte dělat), způsob platby a rozsah podpory dostanete písemně před koupí. Napište na info@vexaronet.com, nebo použijte tlačítka výše.</p></div>
 </div>'''
@@ -394,18 +395,18 @@ tpl = r'''<!doctype html>
 </div></div>
 
 <section id="jak"><div class="wrap">
-  <div class="sec-h c" data-r="up"><span class="eyebrow">Jak to funguje u zdrojového kódu</span><h2>Od koupě <span class="grad">k první zakázce</span></h2><p class="lead">Po koupi aplikaci nasadíte na vlastní účty. Návod je součástí. Online variantu nasazovat nemusíte.</p></div>
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Jak to funguje u zdrojového kódu</span><h2>Od koupě <span class="grad">k první zakázce</span></h2><p class="lead">Po koupi dostanete hotovou aplikaci, která běží u vás v počítači, a k ní zdrojový kód. Nepotřebujete web ani účet. Online variantu nasazovat nemusíte.</p></div>
   <div class="how" data-r="up">
-   <div class="hs"><b>1</b><h3>Získáte kód</h3><p>Po domluvě a zaplacení 350 € dostanete zdrojový kód, databázové skripty a návod k nasazení.</p></div>
-   <div class="hs"><b>2</b><h3>Nasadíte a vyberete obor</h3><p>Autoservis, kadeřnictví, řemeslník, restaurace, obchod nebo jiný. Menu, názvy a stavy zakázek se přizpůsobí.</p></div>
-   <div class="hs"><b>3</b><h3>Přidáte zákazníky a zboží</h3><p>Nahrajete je z Excelu (CSV) nebo napíšete ručně. Zakázky, sklad a termíny máte na jednom místě.</p></div>
-   <div class="hs"><b>4</b><h3>Vystavujete a prodáváte</h3><p>Faktury, docházka, online rezervace a e-shop, který sám vystaví fakturu a odečte sklad.</p></div>
+   <div class="hs"><b>1</b><h3>Získáte balíček</h3><p>Po domluvě a zaplacení 350 € dostanete zdrojový kód a hotovou lokální aplikaci s návodem.</p></div>
+   <div class="hs"><b>2</b><h3>Dvakrát kliknete</h3><p>Soubor Vexaronet.html se otevře v prohlížeči. Data zůstávají jen na vašem počítači, bez účtu a bez internetu.</p></div>
+   <div class="hs"><b>3</b><h3>Přidáte zákazníky</h3><p>Nahrajete je z Excelu (CSV) nebo napíšete ručně. Zakázky, úkoly a termíny máte na jednom místě.</p></div>
+   <div class="hs"><b>4</b><h3>Vystavujete a zálohujete</h3><p>Faktury, docházka a reporty. Zálohu stáhnete jedním kliknutím do souboru.</p></div>
   </div>
   <div class="cta" style="justify-content:center;margin-top:24px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button><button class="btn btn-ghost" type="button" data-namiru="code">Mám zájem o zdrojový kód</button></div>
 </div></section>
 
 <section id="ucet"><div class="wrap">
-  <div class="sec-h c" data-r="up"><span class="eyebrow">Přehled v účtu</span><h2>Takhle vypadá <span class="grad">váš účet</span></h2><p class="lead">Po přihlášení uvidíte na jednom místě ukazatele firmy, doporučení AI CEO a jeho chat. Obrázek je ze skutečné aplikace, jen s ukázkovými daty. Kliknutím ho zvětšíte.</p></div>
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Přehled firmy · online verze</span><h2>Takhle vypadá <span class="grad">přehled firmy</span></h2><p class="lead">Online verze ukazuje na jednom místě ukazatele firmy, doporučení AI CEO a jeho chat. Lokální verze a zdrojový kód obsahují jádro aplikace bez AI částí. Obrázek je z aplikace s ukázkovými daty, kliknutím ho zvětšíte.</p></div>
   <button type="button" class="appshot" data-zoom="1" data-r="up" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" loading="lazy" alt="Přehled firmy ve Vexaronetu: tržby, nezaplacené faktury, aktivní zakázky, doporučení AI CEO a chat s AI CEO (ukázková data)"></button>
   <div class="cta" style="justify-content:center;margin-top:22px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button></div>
   <p class="mut fine" style="text-align:center;margin-top:12px">Ukázková data. Aplikace je v beta verzi, hotové části fungují se skutečnými daty, nehotové jsou označené „připravujeme“.</p>
@@ -455,14 +456,15 @@ tpl = r'''<!doctype html>
   <div class="sec-h c" data-r="up"><span class="eyebrow">Časté otázky</span><h2>Co se nejčastěji <span class="grad">ptáte</span></h2><p class="lead">Co funguje, je napsané jako funguje, co se připravuje, jako připravuje.</p></div>
   <div class="faq" data-r="up">
    <details><summary>Kdy začne prodej a proč ještě nejde koupit?</summary><p>Spouštíme v termínu uvedeném nahoře na stránce. Dokončujeme platební bránu, aby si šla vybraná varianta hned koupit. Do té doby můžete zájem nahlásit formulářem a ozveme se vám před startem. Nic vám zatím neúčtujeme.</p></details>
-   <details><summary>Kolik to stojí a co dostanu?</summary><p>Zdrojový kód stojí 350 € jednorázově, bez předplatného. Cenu předplatného u online verze zatím nemáme stanovenou. Dostanete aplikaci, databázové skripty, testy a dokumentaci. Aplikaci si nasadíte na vlastní účty (databáze Supabase a hosting, například Cloudflare Pages) a tyto služby si platíte sami. Podmínky licence, platbu a rozsah podpory potvrdíme písemně před koupí. Napište na info@vexaronet.com.</p></details>
+   <details><summary>Kolik to stojí a co dostanu?</summary><p>Zdrojový kód stojí 350 € jednorázově, bez předplatného. Cenu předplatného u online verze zatím nemáme stanovenou. Dostanete hotovou lokální aplikaci (soubor, který otevřete v prohlížeči), zdrojový kód, testy a dokumentaci. Žádné další služby platit nemusíte. Chcete-li aplikaci provozovat na vlastním serveru, potřebujete vlastní databázi Supabase a hosting a ty si platíte sami. Podmínky licence, platbu a rozsah podpory potvrdíme písemně před koupí. Napište na info@vexaronet.com.</p></details>
+   <details><summary>Musím něco instalovat nebo platit hosting?</summary><p>U lokální verze ne. Rozbalíte složku, otevřete soubor Vexaronet.html a aplikace běží. Data se ukládají v prohlížeči na tomto počítači a zálohu stáhnete do souboru jedním kliknutím. Pravidelně ji ukládejte mimo počítač, protože po smazání dat prohlížeče by data zmizela. Aktualizaci pošleme jako nový soubor a vy ho jen vyměníte.</p></details>
    <details><summary>Mám zákazníky v Excelu. Dají se přenést?</summary><p>Ano. Tabulku uložíte jako CSV a nahrajete ji v části Zákazníci (Import z CSV). Před uložením uvidíte náhled a duplicity se přeskočí. Zakázky a faktury se zatím zadávají ručně. Data si můžete stáhnout zpět do CSV.</p></details>
    <details><summary>Co už opravdu funguje a co se připravuje?</summary><p>Funguje: zákazníci, zakázky, kalendář a online rezervace, sklad, zaměstnanci s docházkou, faktury a příjmy a výdaje, import bankovních výpisů, reporty. S omezením: e-shop (platba převodem), editor webu, AI CEO a AI Účetní, marketingové návrhy a automatizace (vyžadují externí služby nebo tarif). Připravujeme: PDF a QR platby, odesílání faktur, DPH a účetnictví, AI Autopilot, platební bránu a vlastní doménu. Přesný stav u každého modulu najdete v části Funkce.</p></details>
-   <details><summary>Dá se spustit e-shop propojený se skladem a fakturami?</summary><p>Ano, v tarifech PRO a vyšších. Zákazník nakoupí na veřejné stránce obchodu bez registrace, objednávka se uloží, zboží se odepíše ze skladu a vystaví se faktura. Platba kartou není, zákazník platí převodem podle faktury. Fakturu mu zatím posíláte sami, e-mailem se neodesílá. Před spuštěním je potřeba vyplnit fakturační údaje.</p></details>
+   <details><summary>Dá se spustit e-shop propojený se skladem a fakturami?</summary><p>Jen v online verzi. V lokální verzi a ve zdrojovém kódu je e-shop ve výchozím nastavení vypnutý. V online verzi ano, v tarifech PRO a vyšších. Zákazník nakoupí na veřejné stránce obchodu bez registrace, objednávka se uloží, zboží se odepíše ze skladu a vystaví se faktura. Platba kartou není, zákazník platí převodem podle faktury. Fakturu mu zatím posíláte sami, e-mailem se neodesílá. Před spuštěním je potřeba vyplnit fakturační údaje.</p></details>
    <details><summary>Dělá AI něco sama bez mého svolení?</summary><p>Ne. AI CEO a AI Účetní navrhují a upozorňují a AI texty jen připraví návrh. Cokoli změní vaše data, uložíte až vy. AI Autopilot, který by akce propojoval, ještě není hotový.</p></details>
    <details><summary>Kam se posílají moje data kvůli AI?</summary><p>Když použijete AI funkci, odešle se váš dotaz a údaje potřebné k odpovědi externí AI službě (Google). Podrobnosti jsou v zásadách ochrany osobních údajů.</p></details>
-   <details><summary>Kde jsou moje data a vidí je někdo jiný?</summary><p>Databáze běží v regionu EU (Stockholm). Každá firma vidí jen svoje záznamy a zaměstnanci jen to, co jim role dovolí. Zálohy, šifrování a bezpečnostní audit zatím jako hotovou jistotu neslibujeme. Podrobnosti najdete v zásadách ochrany osobních údajů.</p></details>
-   <details><summary>Můžu data exportovat nebo účet zrušit?</summary><p>Data můžete stáhnout do CSV z reportů a seznamů. Zrušení účtu a smazání dat zatím nejsou samoobslužné: napište na info@vexaronet.com. Samoobslužné zrušení připravujeme.</p></details>
+   <details><summary>Kde jsou moje data a vidí je někdo jiný?</summary><p>Databáze běží v regionu EU (Stockholm). Každá firma vidí jen svoje záznamy a zaměstnanci jen to, co jim role dovolí. Zálohy, šifrování a bezpečnostní audit zatím jako hotovou jistotu neslibujeme. V lokální verzi jsou data jen na vašem počítači a nikam se neodesílají. Podrobnosti najdete v zásadách ochrany osobních údajů.</p></details>
+   <details><summary>Můžu data exportovat nebo účet zrušit?</summary><p>V lokální verzi stáhnete zálohu všech dat jedním kliknutím do souboru. V online verzi můžete data stáhnout do CSV z reportů a seznamů. Zrušení účtu online a smazání dat zatím nejsou samoobslužné: napište na info@vexaronet.com. Samoobslužné zrušení připravujeme.</p></details>
    <details><summary>Je to vhodné pro můj obor?</summary><p>Po registraci vyberete obor (autoservis, řemeslník, restaurace, služby, kadeřnictví a krása, obchod nebo jiný) a aplikace přizpůsobí menu, názvy, stavy zakázek a první kroky. Moduly mimo váš obor zůstávají dostupné.</p></details>
    <details><summary>Nahradí mi to účetního?</summary><p>Ne. Vexaronet pomáhá připravit podklady (evidence, faktury, export pro účetního). Účetnictví a DPH ještě nejsou hotové a daňové ani právní rady od nás nečekejte.</p></details>
   </div>

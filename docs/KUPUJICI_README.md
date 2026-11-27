@@ -2,11 +2,19 @@
 
 Aplikace pro OSVČ a malé firmy: jádro tvoří zákazníci a CRM pro celou EU, obchodní případy, nabídky, zakázky, úkoly, kalendář a rezervace, faktury, finance, zaměstnanci a docházka a reporty. Je to **beta verze**, části označené „připravujeme“ nejsou hotové.
 
-## Co potřebujete
+## Nejrychlejší start: lokální aplikace (bez serveru)
+Ve složce `lokalni-aplikace/` je hotová aplikace. Rozbalte ji, dvakrát klikněte na `Vexaronet.html` a pracujete. Nepotřebujete web, účet ani internet. Data jsou v prohlížeči na vašem počítači, zálohu stáhnete tlačítkem „Stáhnout zálohu“ (viz `PRECTI-MNE.txt` ve složce). Faktury jsou v této verzi zjednodušené (bez DPH), před ostrým použitím je zkontrolujte s účetním.
+
+**Úprava a nové sestavení lokální verze:** upravte soubory v `src/` nebo `build.py` a spusťte `python3 tools/export_local.py`. Vznikne nový `vexaronet-lokalni.zip`. Stačí Python 3.
+
+## Volitelně: provoz na vlastním serveru (Supabase)
+Tento postup je pro pokročilé a vyžaduje vlastní účty, které si platíte sami.
+
+### Co potřebujete
 - účet na Supabase (databáze a přihlášení), hosting statického webu se serverovými funkcemi (např. Cloudflare Pages), Python 3 a Node.js 20+
 - vlastní doménu a e-mailovou službu (např. Resend) pro e-maily z aplikace
 
-## Postup nasazení
+### Postup nasazení
 1. V Supabase vytvořte nový projekt. **Pozor: úplný export celého databázového schématu (cca 100 tabulek a 190 funkcí) zatím v balíčku není.** Soubory `schema*.sql`, `db/migrations` a `db/snapshot` jsou dílčí a z nich samotných databázi od nuly spolehlivě nepostavíte. Úplný skript dodá prodávající samostatně. Do té doby nasazení nezačínejte.
 2. Zkopírujte `config.local.example.json` na `config.local.json` a doplňte adresu projektu a veřejný *publishable* klíč (Supabase → Project Settings → API). **Tajný klíč (service_role) nikdy nevkládejte do webu.** Soubor `config.local.json` se při aktualizacích nepřepisuje.
 3. Sestavte web: `python3 build.py`
