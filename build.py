@@ -174,11 +174,10 @@ plans_html='''<div class="variants" data-r="up">
    <label class="chk"><input type="checkbox" name="lic"><span>Souhlasím s <a href="/licence/" target="_blank" rel="noopener">licenčními podmínkami</a>: software nesmím přeprodávat ani dál šířit. <i aria-hidden="true">*</i></span></label>
    <label class="chk"><input type="checkbox" name="souhlas"><span>Souhlasím, že mi Vexaronet bude na uvedený e-mail posílat novinky o vývoji. Souhlas mohu kdykoli odvolat. <a href="/ochrana-udaju/" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i></span></label>
    <label class="chk"><input type="checkbox" name="vek"><span>Je mi alespoň 15 let. <i aria-hidden="true">*</i></span></label>
-   <button class="btn btn-main" type="submit" id="dlGo">⬇ Zadat e-mail a stáhnout zdarma</button>
+   <div class="cta"><button class="btn btn-main" type="submit" id="dlGo" data-f="lokalni">⬇ Stáhnout aplikaci pro počítač</button><button class="btn btn-ghost" type="submit" data-f="zdroj">⬇ Stáhnout zdrojový kód</button></div>
    <div class="st" id="dlSt" role="status" aria-live="polite"></div>
   </form>
-  <div id="dlOk" hidden></div>
-  <p class="mut fine" id="dlNote">Po zadání e-mailu se hned zobrazí odkazy ke stažení: aplikace pro počítač (otevřete Vexaronet.html) a zdrojový kód, který aplikaci obsahuje. Běží u vás v počítači, na žádný web ji dávat nemusíte.</p>
+    <p class="mut fine" id="dlNote">Soubor se začne stahovat po zadání e-mailu a souhlasů. Aplikace pro počítač: otevřete Vexaronet.html. Zdrojový kód aplikaci obsahuje. Běží u vás v počítači, na žádný web ji dávat nemusíte.</p>
  </div>
  <div class="vcard vc2">
   <span class="eyebrow">Předplatné</span><h3>Vexaronet online</h3>
@@ -637,17 +636,19 @@ form.addEventListener('submit',function(e){e.preventDefault();var f=form.element
  fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:f.email.value.trim(),name:f.jmeno.value.trim()||'(neuvedeno)',company:f.firma.value.trim(),business_type:f.obor.value,interested_plan:f.tarif.value,message:f.zprava.value.trim(),consent:true,inquiry:custom,hp:f['bot-field'].value})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){msg((custom?'Děkujeme, poptávku jsme přijali. Ozveme se vám na uvedený e-mail.':(d&&d.duplicate?'Tento e-mail už novinky odebírá. Děkujeme!':'Děkujeme, e-mail jsme uložili. O novinkách vám dáme vědět.')),'ok');form.reset();setMode()}).catch(function(er){msg('Odeslání se teď nepodařilo (chyba '+((er&&er.message)||'síť')+'). Napište nám prosím na info@vexaronet.com.','err')}).then(function(){sendB.disabled=false;setMode()})});
 
 
-(function(){var f=document.getElementById('dlForm');if(!f)return;var st=document.getElementById('dlSt'),b=document.getElementById('dlGo'),ok=document.getElementById('dlOk'),t0=Date.now();
+(function(){var f=document.getElementById('dlForm');if(!f)return;var st=document.getElementById('dlSt'),t0=Date.now(),fb=null,bs=[].slice.call(f.querySelectorAll('button[type=submit]'));
 function m(t,c){st.className='st '+c;st.textContent=t}
-f.addEventListener('submit',function(e){e.preventDefault();var x=f.elements,em=x.email.value.trim();
+bs.forEach(function(x){x.addEventListener('click',function(){fb=x.dataset.f})});
+f.addEventListener('submit',function(e){e.preventDefault();var x=f.elements,em=x.email.value.trim(),fl=(e.submitter&&e.submitter.dataset.f)||fb||'lokalni';
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){m('Zadejte prosím platný e-mail.','err');x.email.focus();return}
  if(!x.lic.checked){m('Pro stažení je nutný souhlas s licenčními podmínkami.','err');return}
  if(!x.souhlas.checked){m('Pro stažení zdarma je nutný souhlas s odběrem novinek.','err');return}
  if(!x.vek.checked){m('Potvrďte prosím, že je vám alespoň 15 let.','err');return}
  if(x['bot-field'].value||Date.now()-t0<2500){m('Odeslání se nepodařilo ověřit. Zkuste to prosím znovu.','err');return}
- b.disabled=true;b.textContent='Odesílám…';st.className='st';
- fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:em,name:'(stažení)',interested_plan:'stažení zdarma',consent:true,inquiry:false,hp:x['bot-field'].value})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(){
-  f.hidden=true;var nt=document.getElementById('dlNote');if(nt)nt.hidden=true;ok.hidden=false;ok.innerHTML='<p class="note"><b>Děkujeme.</b> Odkazy ke stažení:</p><div class="cta"><a class="btn btn-main" href="/stazeni/Vexaronet-lokalni.zip" download>⬇ Aplikace pro počítač (zip)</a><a class="btn btn-ghost" href="/stazeni/Vexaronet-zdrojovy-kod.zip" download>⬇ Zdrojový kód (zip)</a></div><p class="mut fine">Aplikaci rozbalte a otevřete Vexaronet.html. Data zůstávají jen ve vašem počítači, pravidelně si stahujte zálohu.</p>'}).catch(function(er){m('Odeslání se teď nepodařilo (chyba '+((er&&er.message)||'síť')+'). Zkuste to prosím znovu nebo napište na info@vexaronet.com.','err');b.disabled=false;b.textContent='⬇ Zadat e-mail a stáhnout zdarma'})})})();
+ bs.forEach(function(y){y.disabled=true});m('Odesílám…','');
+ fetch('/api/stahnout',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:em,file:fl,consent:true,license:true,age:true,hp:x['bot-field'].value})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.blob()}).then(function(bl){
+  var u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download=fl==='zdroj'?'Vexaronet-zdrojovy-kod.zip':'Vexaronet-lokalni.zip';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000);
+  m('Děkujeme, stahování začalo. Aplikaci rozbalte a otevřete Vexaronet.html. Data zůstávají jen ve vašem počítači, pravidelně si stahujte zálohu. Druhý soubor stáhnete druhým tlačítkem.','ok')}).catch(function(er){m('Stažení se teď nepodařilo (chyba '+((er&&er.message)||'síť')+'). Zkuste to prosím znovu nebo napište na info@vexaronet.com.','err')}).then(function(){bs.forEach(function(y){y.disabled=false})})})})();
 
 window.DOC_T=document.title;
 /* ===== Supabase: registrace a přihlášení ===== */
@@ -2584,7 +2585,7 @@ for _d in PUBLIC_DIRS:
 # (functions/_middleware.js na nich vrátí 404 i tehdy, když Cloudflare drží starou kopii v mezipaměti).
 _pub = set(PUBLIC_FILES + PUBLIC_DIRS + ['public'])
 _internal = sorted(x for x in os.listdir(D) if not x.startswith('.') and x not in _pub)
-_routes = ['/api/*'] + ['/public/*'] + [('/%s/*' % x) if os.path.isdir(D + x) else ('/' + x) for x in _internal]
+_routes = ['/api/*'] + ['/public/*'] + ['/stazeni/*'] + [('/%s/*' % x) if os.path.isdir(D + x) else ('/' + x) for x in _internal]
 assert len(_routes) <= 100, 'Cloudflare dovoluje nejvýše 100 pravidel v _routes.json'
 open(_P + '_routes.json', 'w', encoding='utf-8').write(json.dumps({'version': 1, 'include': _routes, 'exclude': []}, ensure_ascii=False, indent=1) + '\n')
 print('Veřejný výstup public/:', ', '.join(PUBLIC_FILES + [d + '/' for d in PUBLIC_DIRS]))
