@@ -18,8 +18,7 @@ with sync_playwright() as p:
         chk(nm+' dvě karty variant',pg.locator('.variants .vcard').count()==2)
         t=pg.inner_text('.variants')
         chk(nm+' zdarma ke stažení a online bez vymyšlené ceny','0 €' in t and '350' not in t and 'cena zatím neurčena' in t and 'Kč' not in t)
-        hr=pg.eval_on_selector_all('a[download]','e=>e.map(x=>x.getAttribute("href"))')
-        chk(nm+' odkazy ke stažení',all(x.startswith('/stazeni/') for x in hr) and len(hr)>=3)
+        chk(nm+' formulář ke stažení a bez přímých odkazů',pg.locator('#dlForm').count()==1 and pg.eval_on_selector_all('a[href*="stazeni"]','e=>e.length')==0)
         for k,txt in (('online','online'),('start','startu')):
             pg.evaluate("k=>document.querySelector('[data-namiru='+k+']').click()",k);pg.wait_for_timeout(800)
             chk(nm+' formulář předvyplněn: '+k,txt in (pg.input_value('#fPlan')+pg.input_value('#fMsg')).lower())

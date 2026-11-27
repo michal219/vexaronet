@@ -1,39 +1,26 @@
-# Vexaronet: zdrojový kód (balíček pro kupce)
+# Vexaronet: zdrojový kód a aplikace pro počítač
 
-Aplikace pro OSVČ a malé firmy: jádro tvoří zákazníci a CRM pro celou EU, obchodní případy, nabídky, zakázky, úkoly, kalendář a rezervace, faktury, finance, zaměstnanci a docházka a reporty. Je to **beta verze**, části označené „připravujeme“ nejsou hotové.
+Aplikace pro OSVČ a malé firmy: zákazníci a CRM pro celou EU, obchodní případy, nabídky, zakázky, úkoly, kalendář, faktury, finance, zaměstnanci a reporty. Je to **beta verze**, části označené „připravujeme“ nejsou hotové.
 
-## Nejrychlejší start: lokální aplikace (bez serveru)
-Ve složce `lokalni-aplikace/` je hotová aplikace. Rozbalte ji, dvakrát klikněte na `Vexaronet.html` a pracujete. Nepotřebujete web, účet ani internet. Data jsou v prohlížeči na vašem počítači, zálohu stáhnete tlačítkem „Stáhnout zálohu“ (viz `PRECTI-MNE.txt` ve složce). Faktury jsou v této verzi zjednodušené (bez DPH), před ostrým použitím je zkontrolujte s účetním.
+**Běží u vás v počítači. Na žádný web ani server ji dávat nemusíte.**
 
-**Úprava a nové sestavení lokální verze:** upravte soubory v `src/` nebo `build.py` a spusťte `python3 tools/export_local.py`. Vznikne nový `vexaronet-lokalni.zip`. Stačí Python 3.
+## Spuštění (bez instalace)
+1. Rozbalte celý balíček.
+2. Ve složce `lokalni-aplikace/` dvakrát klikněte na `Vexaronet.html`. Otevře se v prohlížeči (doporučeno Chrome nebo Edge).
+3. Začněte přidáním zákazníků. U faktur nejdřív vyplňte „Fakturační údaje“.
 
-## Volitelně: provoz na vlastním serveru (Supabase)
-Tento postup je pro pokročilé a vyžaduje vlastní účty, které si platíte sami.
+Data se ukládají v prohlížeči na tomto počítači. Pravidelně klikejte na „Stáhnout zálohu“ a soubor uložte mimo počítač. Podrobnosti a omezení jsou v `lokalni-aplikace/PRECTI-MNE.txt`. Faktury jsou zjednodušené (bez DPH), před použitím je zkontrolujte s účetním.
 
-### Co potřebujete
-- účet na Supabase (databáze a přihlášení), hosting statického webu se serverovými funkcemi (např. Cloudflare Pages), Python 3 a Node.js 20+
-- vlastní doménu a e-mailovou službu (např. Resend) pro e-maily z aplikace
+## Úprava a nové sestavení
+Potřebujete jen Python 3. Upravte soubory v `src/` nebo `build.py` a spusťte `python3 tools/export_local.py`. Vznikne nový `vexaronet-lokalni.zip` s upravenou aplikací.
 
-### Postup nasazení
-1. V Supabase vytvořte nový projekt. **Pozor: úplný export celého databázového schématu (cca 100 tabulek a 190 funkcí) zatím v balíčku není.** Soubory `schema*.sql`, `db/migrations` a `db/snapshot` jsou dílčí a z nich samotných databázi od nuly spolehlivě nepostavíte. Úplný skript dodá prodávající samostatně. Do té doby nasazení nezačínejte.
-2. Zkopírujte `config.local.example.json` na `config.local.json` a doplňte adresu projektu a veřejný *publishable* klíč (Supabase → Project Settings → API). **Tajný klíč (service_role) nikdy nevkládejte do webu.** Soubor `config.local.json` se při aktualizacích nepřepisuje.
-3. Sestavte web: `python3 build.py`
-4. Nahrajte na hosting a nastavte proměnné prostředí a tajemství (viz `NAVOD.md`).
-5. V Supabase → Authentication → URL Configuration nastavte adresu svého webu.
-6. Přepište texty, značku (název, logo, kontakty) a právní stránky (podmínky, ochrana údajů, cookies) tak, aby odpovídaly **vašemu** provozu. Součástí balíčku jsou jen vzory.
+V lokální verzi jsou vypnuté složitější části (e-shop, sklad, pobočky, weby, AI). Zdrojový kód těchto částí v balíčku je, ale nepodporujeme jej a bez serveru nefunguje.
 
 ## Testy
-`tests/` obsahuje automatické testy (Node a Python s Playwrightem). Spouštějí se proti lokálně sestavenému webu.
+`tests/` obsahuje automatické testy (Python s Playwrightem). Test `tests/lokalni_verze.py` ověřuje lokální aplikaci.
 
-## Edice zdrojového kódu
-V `config.local.json` je `"edition": "source"`. Aplikace pak nehlídá limity tarifů (START apod.). Na straně databáze nastavte svou firmu v tabulce `subscriptions` na plán `enterprise`, jinak server část funkcí odmítne.
-
-**Moduly.** V edici zdrojového kódu jsou ve výchozím nastavení vypnuté složitější části: e-shop, sklad, pobočky, jednoduché weby, online rezervace pro veřejnost, marketing a všechny AI funkce (AI CEO, AI Účetní, Autopilot). Kód v balíčku je, ale nepodporujeme jej a nemusí fungovat bez dalšího nastavení. Seznam vypnutých modulů změníte v `config.local.json` klíčem `"modules_off"` (např. `"modules_off": []` zapne vše).
-
-## Upozornění
-- Zabezpečení, zálohy, provoz a právní soulad (smlouvy, ochrana údajů, daně a účetnictví) jsou odpovědností provozovatele.
-- Fakturace je zatím jen pro dodavatele z ČR a Slovenska. Sazby DPH a ostatní údaje o zemích EU jsou orientační a před ostrým použitím je ověřte.
-- Zkontrolujte, že aplikace po úpravě neodkazuje na původní projekt (adresa databáze, e-maily, odkazy na stahování).
+## Licence
+Software smíte používat ve své firmě a upravovat pro vlastní potřebu. **Nesmíte ho prodávat, pronajímat ani dál šířit.** Plné znění je v `LICENCE.txt`.
 
 ## Aktualizace
-Postup je v `AKTUALIZACE.md` (nové verze, databázové migrace, upozornění v aplikaci).
+Novou verzi si stáhněte na vexaronet.com. Lokální verzi aktualizujete výměnou souboru `Vexaronet.html` (složku `assets` nechte). Data v prohlížeči zůstanou. Před výměnou si stáhněte zálohu.

@@ -1,0 +1,33 @@
+LICENČNÍ PODMÍNKY VEXARONET (aplikace pro počítač a zdrojový kód)
+Poslední aktualizace: 27. listopadu 2026. Plné znění: https://vexaronet.com/licence/
+
+NÁVRH K PRÁVNÍ KONTROLE. Text vyjadřuje záměr provozovatele a má ho zkontrolovat právník.
+
+1. Co se licencuje
+Aplikace Vexaronet pro počítač a její zdrojový kód (dále "software"). Autorská práva má provozovatel Vexaronet.
+
+2. Co smíte
+- Používat software ve vlastní firmě nebo vlastní činnosti, na svých počítačích, bez časového omezení.
+- Upravovat zdrojový kód pro vlastní potřebu.
+- Zálohovat si software a svá data.
+
+3. Co nesmíte
+- Software ani jeho upravenou verzi nesmíte prodávat, pronajímat, půjčovat ani sublicencovat.
+- Nesmíte ho nabízet jiným osobám jako službu (například provozovat ho pro své zákazníky na webu).
+- Nesmíte ho zveřejňovat ani rozesílat dál, ani zdarma. Kdo ho chce, stáhne si ho sám na vexaronet.com.
+- Nesmíte odstraňovat označení autora a používat název Vexaronet a logo pro vlastní produkt nebo službu.
+
+4. Povaha licence
+Bezúplatná, nevýhradní, nepřenosná a časově neomezená. Zanikne porušením podmínek. Po zániku software přestaňte používat a smažte ho.
+
+5. Bez záruky
+Software je beta verze a poskytuje se tak, jak je, bez záruky. Odpovídáte za zálohování dat a za kontrolu faktur a dokladů před použitím. Faktury v lokální verzi jsou zjednodušené a nenahrazují účetnictví. Provozovatel neodpovídá za škodu v rozsahu, v jakém to zákon dovoluje. Zákonná práva, která nelze vyloučit, tím nejsou dotčena.
+
+6. Aktualizace a podpora
+Nezaručujeme. Dotazy a chyby: info@vexaronet.com.
+
+7. Součásti třetích stran
+Balíček může obsahovat komponenty třetích stran (například supabase-js) s vlastními licencemi.
+
+8. Právo a kontakt
+Řídí se právem České republiky. Provozovatel: identifikační údaje zatím nejsou doplněné. Kontakt: info@vexaronet.com.

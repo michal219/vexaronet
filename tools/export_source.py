@@ -6,7 +6,7 @@ out = sys.argv[1] if len(sys.argv) > 1 else 'vexaronet-zdrojovy-kod.zip'
 files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
 SKIP = ('index.html', 'stazeni/', 'vexaronet-lokalni.zip', 'public/', 'tests/shot_', 'version.json', 'tools/export_source.py', '.github/')
 README = open('docs/KUPUJICI_README.md', encoding='utf-8').read()
-LIC = open('docs/LICENCE_NAVRH.md', encoding='utf-8').read()
+LIC = open('docs/LICENCE.txt', encoding='utf-8').read()
 # hotová lokální aplikace (bez Supabase) se přibalí jako složka lokalni-aplikace/
 subprocess.run([sys.executable, 'tools/export_local.py'], check=True, stdout=subprocess.DEVNULL)
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
@@ -26,5 +26,5 @@ with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
             data = re.sub(r'(https|wss)://[a-z0-9-]+\.supabase\.co', r'\1://VASE-PROJEKT.supabase.co', data.decode('utf-8')).encode('utf-8')
         z.writestr('vexaronet/' + f, data)
     z.writestr('vexaronet/README_KUPUJICI.md', README)
-    z.writestr('vexaronet/LICENCE_NAVRH.md', LIC)
+    z.writestr('vexaronet/LICENCE.txt', LIC)
 print('Hotovo:', out)

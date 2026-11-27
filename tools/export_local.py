@@ -42,6 +42,9 @@ OMEZENÍ (PROSÍM PŘEČTĚTE)
 - E-shop, sklad, pobočky, weby a AI funkce v této verzi nejsou.
 - Data nejsou nikde jinde zálohovaná. Když se smaže prohlížeč bez zálohy, data jsou pryč.
 - Aplikace nic neposílá na internet.
+
+LICENCE
+Software smíte používat ve své firmě a upravovat pro vlastní potřebu. Nesmíte ho prodávat, pronajímat ani dál šířit. Celé znění je v souboru LICENCE.txt.
 """
 OUT = ROOT + '/vexaronet-lokalni.zip'
 with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED) as z:
@@ -53,5 +56,6 @@ with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED) as z:
             if 'og-image' in f: continue
             z.write(full, 'Vexaronet/' + rel)
     z.writestr('Vexaronet/PRECTI-MNE.txt', README)
+    z.writestr('Vexaronet/LICENCE.txt', open(ROOT + '/docs/LICENCE.txt', encoding='utf-8').read())
 shutil.rmtree(T, ignore_errors=True)
 print('Hotovo:', OUT)
