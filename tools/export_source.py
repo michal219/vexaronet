@@ -4,7 +4,7 @@ Bere jen soubory ve verzi (git), vymění adresu a klíč databáze za zástupn�
 import subprocess, zipfile, sys, re, os, io
 out = sys.argv[1] if len(sys.argv) > 1 else 'vexaronet-zdrojovy-kod.zip'
 files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
-SKIP = ('index.html', 'public/', 'tests/shot_', 'version.json', 'tools/export_source.py', '.github/')
+SKIP = ('index.html', 'stazeni/', 'vexaronet-lokalni.zip', 'public/', 'tests/shot_', 'version.json', 'tools/export_source.py', '.github/')
 README = open('docs/KUPUJICI_README.md', encoding='utf-8').read()
 LIC = open('docs/LICENCE_NAVRH.md', encoding='utf-8').read()
 # hotová lokální aplikace (bez Supabase) se přibalí jako složka lokalni-aplikace/

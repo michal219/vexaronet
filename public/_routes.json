@@ -3,6 +3,7 @@
  "include": [
   "/api/*",
   "/public/*",
+  "/AKTUALIZACE.md",
   "/ARCHITEKTURA.md",
   "/CHANGELOG.md",
   "/NAVOD.md",
