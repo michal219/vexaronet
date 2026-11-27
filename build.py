@@ -168,16 +168,8 @@ plans_html='''<div class="variants" data-r="up">
    <li>Hotová lokální aplikace: bez serveru, bez účtu a bez internetu, záloha a obnova do souboru</li>
    <li>Zdrojový kód, který si jedním dvojklikem (Python 3) sestavíte a upravíte, a krok za krokem návod</li>
   </ul>
-  <form id="dlForm" class="dlf" novalidate>
-   <p class="hp" aria-hidden="true"><label>Nevyplňovat <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-   <div class="f"><label for="dlMail">Váš e-mail <i aria-hidden="true">*</i></label><input id="dlMail" name="email" type="email" required aria-required="true" autocomplete="email" inputmode="email"></div>
-   <label class="chk"><input type="checkbox" name="lic"><span>Souhlasím s <a href="/licence/" target="_blank" rel="noopener">licenčními podmínkami</a>: software nesmím přeprodávat ani dál šířit. <i aria-hidden="true">*</i></span></label>
-   <label class="chk"><input type="checkbox" name="souhlas"><span>Souhlasím, že mi Vexaronet bude na uvedený e-mail posílat novinky o vývoji. Souhlas mohu kdykoli odvolat. <a href="/ochrana-udaju/" target="_blank" rel="noopener">Zásady ochrany osobních údajů</a> <i aria-hidden="true">*</i></span></label>
-   <label class="chk"><input type="checkbox" name="vek"><span>Je mi alespoň 15 let. <i aria-hidden="true">*</i></span></label>
-   <div class="cta"><button class="btn btn-main" type="submit" id="dlGo" data-f="lokalni">⬇ Stáhnout aplikaci pro počítač</button><button class="btn btn-ghost" type="submit" data-f="zdroj">⬇ Stáhnout zdrojový kód</button></div>
-   <div class="st" id="dlSt" role="status" aria-live="polite"></div>
-  </form>
-    <p class="mut fine" id="dlNote">Soubor se začne stahovat po zadání e-mailu a souhlasů. Aplikace pro počítač: otevřete Vexaronet.html. Zdrojový kód aplikaci obsahuje. Běží u vás v počítači, na žádný web ji dávat nemusíte.</p>
+  <div class="cta" style="margin-top:6px"><a class="btn btn-main" href="#top" data-dlgo="1">⬇ Stáhnout zdarma (zadat e-mail)</a></div>
+    <p class="mut fine">Aplikace: rozbalíte a otevřete Vexaronet.html. Zdrojový kód aplikaci obsahuje. Běží u vás v počítači, na žádný web ji dávat nemusíte.</p>
  </div>
  <div class="vcard vc2">
   <span class="eyebrow">Předplatné</span><h3>Vexaronet online</h3>
@@ -218,6 +210,7 @@ html.vxlocal body>*:not(#vxapp):not(script):not(style){display:none!important}ht
 .variants{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch;margin:8px 0 22px}@media(max-width:820px){.variants{grid-template-columns:1fr}}
 .vcard{display:flex;flex-direction:column;gap:12px;border:1px solid var(--line,rgba(150,175,255,.25));border-radius:22px;padding:28px;background:rgba(255,255,255,.03)}.vcard.vc2{border-color:rgba(139,92,246,.6)}.vcard h3{font-size:1.5rem;margin:0}.vcard .ticks{flex:1}.vcard .btn{align-self:flex-start}
 .dlf{display:flex;flex-direction:column;gap:10px}.dlf .f{display:flex;flex-direction:column;gap:4px}.dlf .chk{display:flex;gap:10px;align-items:flex-start;font-size:.9rem}.dlf .chk input{margin-top:3px}
+.dlh{max-width:560px;margin:6px 0 14px;padding:18px;border:1px solid rgba(150,175,255,.35);border-radius:20px;background:rgba(10,14,40,.6);backdrop-filter:blur(6px)}.dlh>.f label{font-weight:700;font-size:1rem}.dlh input[type=email]{font-size:1.05rem;padding:13px 14px}.dlh .chk{font-size:.82rem;color:#b3bbd8}
 .vprice{display:flex;flex-direction:column;gap:2px}.vprice b{font-size:2.6rem;line-height:1.1}.vc2 .vprice b{font-size:1.5rem;padding:.6rem 0 .5rem}.vprice span{color:var(--mut)}
 
 /* --- ceník --- */
@@ -366,7 +359,7 @@ tpl = r'''<!doctype html>
 
 <header class="nav" id="nav"><div class="in">
   <a class="logo" href="#top" aria-label="Vexaronet – úvod"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b9bff"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="#0a0e24" stroke="rgba(150,175,255,.35)"/><path d="M7.5 9.5l8.5 14 8.5-14" fill="none" stroke="url(#lg)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vexaronet<small>pro malé firmy</small></span></a>
-  <nav class="links" aria-label="Hlavní navigace"><a href="#funkce">Funkce</a><a href="#ukazka">Ukázka</a><a href="#cenik">Stáhnout zdarma</a><a href="#namiru">Na míru</a><a href="#postup">Vývoj</a><a href="#early">Novinky e-mailem</a></nav>
+  <nav class="links" aria-label="Hlavní navigace"><a href="#cenik">Co dostanete</a><a href="#jak">Jak to funguje</a><a href="#ukazka">Ukázka</a><a href="#otazky">Otázky</a><a href="#ucet">Online verze</a><a href="#namiru">Na míru</a></nav>
   <div class="nav-r">
     <button class="themeb" id="theme" type="button" aria-label="Přepnout světlý a tmavý režim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/></svg></button>
     <button class="btn btn-ghost btn-sm" id="acc" type="button">Přihlásit</button>
@@ -375,32 +368,44 @@ tpl = r'''<!doctype html>
     <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="mnav"><i></i></button>
   </div>
 </div></header>
-<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#funkce" style="--i:1">Funkce</a><a href="#ukazka" style="--i:2">Ukázka</a><a href="#cenik" style="--i:3">Stáhnout zdarma</a><a href="#postup" style="--i:4">Vývoj</a><a href="#early" style="--i:5">Novinky</a><a href="#namiru" style="--i:5">Systém na míru</a><a href="#prihlaseni" style="--i:6">Přihlásit se</a><a href="#demo" data-demo="1" style="--i:7" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</a><a href="#stahnout" data-install="1" style="--i:8">Instalace aplikace</a></nav>
+<nav class="mnav" id="mnav" aria-label="Mobilní navigace"><a href="#top" style="--i:1">Stáhnout zdarma</a><a href="#cenik" style="--i:2">Co dostanete</a><a href="#jak" style="--i:3">Jak to funguje</a><a href="#ukazka" style="--i:4">Ukázka</a><a href="#otazky" style="--i:5">Otázky</a><a href="#ucet" style="--i:6">Online verze</a><a href="#namiru" style="--i:7">Na míru</a><a href="#prihlaseni" style="--i:8">Přihlásit se</a><a href="#demo" data-demo="1" style="--i:9" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</a><a href="#stahnout" data-install="1" style="--i:10">Instalace aplikace</a></nav>
 
 <main id="obsah">
 <section class="hero" id="top"><div class="wrap">
   <div>
-    <span class="eyebrow fade" id="launchE">Vexaronet je venku</span>
+    <span class="eyebrow fade" id="launchE">Zdarma · běží ve vašem počítači</span>
     <h1 id="h1">Vexaronet si stáhnete <span class="grad">zdarma</span>.</h1>
-    <p class="sub fade d2">Zakázky, zákazníci, faktury a kalendář malé firmy v jedné aplikaci, která běží u vás v počítači. Bez účtu, bez internetu, bez poplatku.</p>
-    <div class="vpick fade d2"><div class="vp"><i aria-hidden="true">⬇</i><b>Aplikace pro počítač</b><span>zdarma</span></div><div class="vp vp2"><i aria-hidden="true">&lt;/&gt;</i><b>Zdrojový kód</b><span>zdarma</span></div></div>
-    <div class="cta fade d3"><a class="btn btn-main" href="#cenik">⬇ Stáhnout zdarma</a><button class="btn btn-ghost btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button></div>
-    <p class="betan fade d3"><b>Beta verze.</b> Základ funguje, další části jsou označené „připravujeme“. Data máte jen u sebe v prohlížeči, pravidelně si stahujte zálohu.</p>
-    <p class="hlinks fade d3"><a href="#funkce">Co už funguje</a> · <a href="#cenik">Stažení</a> · <button type="button" class="lnkb" data-install="1">Instalace aplikace</button></p>
+    <p class="sub fade d2">Zákazníci, zakázky, faktury a kalendář malé firmy v jedné aplikaci, která běží přímo ve vašem počítači. Bez účtu, bez internetu, bez poplatku. Dostanete i zdrojový kód.</p>
+    <form id="dlForm" class="dlf dlh fade d2" novalidate aria-label="Stažení Vexaronetu zdarma">
+      <p class="hp" aria-hidden="true"><label>Nevyplňovat <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="f"><label for="dlMail">Zadejte e-mail a stáhněte si Vexaronet zdarma <i aria-hidden="true">*</i></label><input id="dlMail" name="email" type="email" required aria-required="true" autocomplete="email" inputmode="email" placeholder="vas@email.cz"></div>
+      <label class="chk"><input type="checkbox" name="lic"><span>Souhlasím s <a href="/licence/" target="_blank" rel="noopener">licenčními podmínkami</a>: software nesmím přeprodávat ani dál šířit. <i aria-hidden="true">*</i></span></label>
+      <label class="chk"><input type="checkbox" name="souhlas"><span>Souhlasím, že mi Vexaronet bude na e-mail posílat novinky o vývoji (kdykoli odvolatelné). <a href="/ochrana-udaju/" target="_blank" rel="noopener">Ochrana údajů</a> <i aria-hidden="true">*</i></span></label>
+      <label class="chk"><input type="checkbox" name="vek"><span>Je mi alespoň 15 let. <i aria-hidden="true">*</i></span></label>
+      <div class="cta"><button class="btn btn-main" type="submit" id="dlGo" data-f="lokalni">⬇ Aplikace pro počítač</button><button class="btn btn-ghost" type="submit" data-f="zdroj">⬇ Zdrojový kód</button></div>
+      <div class="st" id="dlSt" role="status" aria-live="polite"></div>
+    </form>
+    <p class="hlinks fade d3"><button type="button" class="lnkb btn-demo" data-demo="1">▶ Nejdřív si vyzkoušet ukázku</button> · <a href="#jak">Jak to funguje</a> · <a href="#otazky">Časté otázky</a></p>
+    <p class="betan fade d3"><b>Beta verze.</b> Data máte jen u sebe v prohlížeči. Pravidelně si stahujte zálohu.</p>
   </div>
   <div class="scene" id="scene"><div class="fit" id="fit"><div class="stage" id="stage"><div class="laptop" id="laptop">
     <div class="sh"></div>
-    <div class="lid"><div class="screen"><button type="button" class="shotb" id="shotB" data-zoom="1" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" alt="Přehled firmy ve Vexaronetu: ukazatele, doporučení AI CEO a chat s AI CEO (ukázková data)" fetchpriority="high"></button><span class="sample">Ukázková data · kliknutím zvětšíte</span></div></div>
+    <div class="lid"><div class="screen"><button type="button" class="shotb" id="shotB" data-zoom="1" aria-label="Zvětšit ukázku aplikace"><img src="assets/prehled-lokalni.webp" width="2160" height="1314" alt="Přehled firmy v lokální aplikaci Vexaronet: ukazatele, první kroky a záloha dat (ukázková data)" fetchpriority="high"></button><span class="sample">Ukázková data · kliknutím zvětšíte</span></div></div>
     <div class="base"><div class="keys">@@KEYS@@</div><div class="pad"></div></div><div class="edge"></div>
   </div>
-  <div class="fl d">AI CEO</div><div class="fl e">Faktury a CRM</div>
+  <div class="fl d">Zakázky</div><div class="fl e">Faktury a CRM</div>
   </div></div></div>
 </div></section>
 
 <div class="strip" aria-hidden="true"><div class="tr">
- <span>AI centrum</span><span>Faktury a evidence</span><span>CRM a zakázky</span><span>Jednoduché weby</span><span>Marketing</span><span>Automatizace</span>
- <span>AI centrum</span><span>Faktury a evidence</span><span>CRM a zakázky</span><span>Jednoduché weby</span><span>Marketing</span><span>Automatizace</span>
+ <span>CRM a zákazníci</span><span>Zakázky</span><span>Faktury</span><span>Kalendář</span><span>Úkoly</span><span>Reporty</span><span>Záloha do souboru</span>
+ <span>CRM a zákazníci</span><span>Zakázky</span><span>Faktury</span><span>Kalendář</span><span>Úkoly</span><span>Reporty</span><span>Záloha do souboru</span>
 </div></div>
+
+<section id="cenik"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Co dostanete</span><h2>Aplikace a zdrojový kód, <span class="grad">oboje zdarma</span></h2><p class="lead">Aplikace i zdrojový kód jsou zdarma. Online verzi s předplatným připravujeme, cena zatím není.</p></div>
+  @@PLANS@@
+</div></section>
 
 <section id="jak"><div class="wrap">
   <div class="sec-h c" data-r="up"><span class="eyebrow">Jak to funguje</span><h2>Od stažení <span class="grad">k první zakázce</span></h2><p class="lead">Po stažení máte hotovou aplikaci, která běží u vás v počítači, a k ní zdrojový kód. Nepotřebujete web ani účet. Online variantu nasazovat nemusíte.</p></div>
@@ -411,23 +416,6 @@ tpl = r'''<!doctype html>
    <div class="hs"><b>4</b><h3>Vystavujete a zálohujete</h3><p>Faktury, docházka a reporty. Zálohu stáhnete jedním kliknutím do souboru.</p></div>
   </div>
   <div class="cta" style="justify-content:center;margin-top:24px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button><a class="btn btn-ghost" href="#cenik">⬇ Stáhnout zdarma</a></div>
-</div></section>
-
-<section id="ucet"><div class="wrap">
-  <div class="sec-h c" data-r="up"><span class="eyebrow">Přehled firmy · online verze</span><h2>Takhle vypadá <span class="grad">přehled firmy</span></h2><p class="lead">Online verze ukazuje na jednom místě ukazatele firmy, doporučení AI CEO a jeho chat. Lokální verze a zdrojový kód obsahují jádro aplikace bez AI částí. Obrázek je z aplikace s ukázkovými daty, kliknutím ho zvětšíte.</p></div>
-  <button type="button" class="appshot" data-zoom="1" data-r="up" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" loading="lazy" alt="Přehled firmy ve Vexaronetu: tržby, nezaplacené faktury, aktivní zakázky, doporučení AI CEO a chat s AI CEO (ukázková data)"></button>
-  <div class="cta" style="justify-content:center;margin-top:22px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button></div>
-  <p class="mut fine" style="text-align:center;margin-top:12px">Ukázková data. Aplikace je v beta verzi, hotové části fungují se skutečnými daty, nehotové jsou označené „připravujeme“.</p>
-  <div class="ceox" data-r="up"><h3>Co je AI CEO, běžnou řečí</h3><div class="ceoc">
-   <div><b>Kontroluje</b><p>Čte data, která ve Vexaronetu máte: faktury po splatnosti, zakázky, rezervace, sklad, příjmy a výdaje. Z nich skládá zdraví firmy, platby od zákazníků a výhled na 30 dní.</p></div>
-   <div><b>Navrhuje</b><p>Napíše doporučení, co řešit jako první, a v chatu odpoví na otázky nad vašimi daty.</p></div>
-   <div><b>Rozhodujete vy</b><p>AI CEO sám nic nemění, nevystavuje ani neodesílá. Je v tarifu PRO a vyšším a běží přes externí AI službu. Odpovědi mohou být nepřesné, důležité věci si ověřte.</p></div>
-  </div></div>
-</div></section>
-
-<section id="funkce"><div class="wrap">
-  <div class="sec-h" data-r="up"><span class="eyebrow">Funkce platformy</span><h2>Sedm oblastí, <span class="grad">jasný stav u každé</span></h2><p class="lead">U každého modulu je napsáno, co už funguje, co funguje s omezením a co teprve připravujeme. Úplně hotový je zatím jen základ řízení firmy, ostatní moduly fungují částečně.</p><p class="legend"><b class="stb stb-now">k dispozici</b> funguje se skutečnými daty · <b class="stb stb-lim">s omezením</b> funguje, ale má podmínku nebo chybějící část · <b class="stb stb-soon">připravujeme</b> zatím nejde použít</p></div>
-  <div class="svcs">@@MODS@@</div>
 </div></section>
 
 <section id="ukazka"><div class="wrap">
@@ -441,23 +429,6 @@ tpl = r'''<!doctype html>
     </div>
   </div>
   <div class="warn" data-r="up"><b>Důležité upozornění:</b> faktury a evidence nejsou legislativně ověřené. Před ostrým použitím je nechte zkontrolovat účetním. Účetnictví a DPH ještě nejsou hotové. Funkce závislé na externích službách (platby, e-maily, AI) fungují jen tam, kde jsou služby zapnuté.</div>
-</div></section>
-
-<section id="cenik"><div class="wrap">
-  <div class="sec-h c" data-r="up"><span class="eyebrow">Stažení</span><h2>Stáhněte si, <span class="grad">co potřebujete</span></h2><p class="lead">Aplikace i zdrojový kód jsou zdarma. Online verzi s předplatným připravujeme, cena zatím není.</p></div>
-  @@PLANS@@
-</div></section>
-
-<section id="namiru"><div class="wrap">
-  <div class="custom" data-r="up">
-    <div class="cu-t"><span class="eyebrow">Řešení na míru</span><h2>Potřebujete systém <span class="grad">přesně pro svou firmu?</span></h2>
-    <p class="lead">Pokud vám nestačí hotová aplikace, můžeme připravit systém podle toho, jak vaše firma pracuje. Vycházíme z hotových částí Vexaronetu, takže nezačínáme od nuly. Rozsah vždy určuje individuální nabídka.</p>
-    <ul class="ticks"><li>Moduly a postupy podle toho, jak vaše firma pracuje</li><li>Případně AI asistent nad vašimi zakázkami, zákazníky a fakturami</li><li>Nasazení, nastavení a zaškolení týmu</li></ul>
-    <h3 class="cuh">Jak poptávka probíhá</h3><ol class="cuol"><li>Pošlete poptávku (formulář níže nebo e-mail info@vexaronet.com).</li><li>Ozveme se a probereme, co potřebujete. Konzultace je nezávazná.</li><li>Pošleme individuální nabídku s rozsahem a cenou. Nic se neděje bez vašeho odsouhlasení.</li></ol>
-    <p class="mut fine">Údržba, podpora po nasazení a případné pravidelné náklady (provoz, služby třetích stran) se určují v nabídce, žádné nevymýšlíme předem. Referenční projekty zatím nemáme. Problém nebo chybu nahlásíte e-mailem na info@vexaronet.com.</p></div>
-    <div class="cu-p"><small>Cena</small><div class="cu-price"><span>od</span> <b>20 000 Kč</b></div><p class="mut">Orientační cena bez DPH za jednorázovou přípravu. Cena od 20 000 Kč nezahrnuje předem daný rozsah, konečnou cenu a rozsah určí individuální nabídka po nezávazné konzultaci. Může zahrnovat například úpravu modulů nebo nastavení pro vaši firmu.</p>
-    <button type="button" class="btn btn-main" id="askCustom" data-namiru="1">Poslat poptávku</button></div>
-  </div>
 </div></section>
 
 <section id="otazky"><div class="wrap">
@@ -475,6 +446,35 @@ tpl = r'''<!doctype html>
    <details><summary>Můžu data exportovat nebo účet zrušit?</summary><p>V lokální verzi stáhnete zálohu všech dat jedním kliknutím do souboru. V online verzi můžete data stáhnout do CSV z reportů a seznamů. Zrušení účtu online a smazání dat zatím nejsou samoobslužné: napište na info@vexaronet.com. Samoobslužné zrušení připravujeme.</p></details>
    <details><summary>Je to vhodné pro můj obor?</summary><p>Po registraci vyberete obor (autoservis, řemeslník, restaurace, služby, kadeřnictví a krása, obchod nebo jiný) a aplikace přizpůsobí menu, názvy, stavy zakázek a první kroky. Moduly mimo váš obor zůstávají dostupné.</p></details>
    <details><summary>Nahradí mi to účetního?</summary><p>Ne. Vexaronet pomáhá připravit podklady (evidence, faktury, export pro účetního). Účetnictví a DPH ještě nejsou hotové a daňové ani právní rady od nás nečekejte.</p></details>
+  </div>
+</div></section>
+
+<section id="ucet"><div class="wrap">
+  <div class="sec-h c" data-r="up"><span class="eyebrow">Přehled firmy · online verze</span><h2>Takhle vypadá <span class="grad">přehled firmy</span></h2><p class="lead">Online verze ukazuje na jednom místě ukazatele firmy, doporučení AI CEO a jeho chat. Lokální verze a zdrojový kód obsahují jádro aplikace bez AI částí. Obrázek je z aplikace s ukázkovými daty, kliknutím ho zvětšíte.</p></div>
+  <button type="button" class="appshot" data-zoom="1" data-r="up" aria-label="Zvětšit ukázku přehledu v účtu"><img src="assets/prehled.webp" width="2160" height="1314" loading="lazy" alt="Přehled firmy ve Vexaronetu: tržby, nezaplacené faktury, aktivní zakázky, doporučení AI CEO a chat s AI CEO (ukázková data)"></button>
+  <div class="cta" style="justify-content:center;margin-top:22px"><button class="btn btn-main btn-demo" type="button" data-demo="1" title="Otevře ukázkovou aplikaci bez registrace, s ukázkovými daty">▶ Ukázka, jak to vypadá</button></div>
+  <p class="mut fine" style="text-align:center;margin-top:12px">Ukázková data. Aplikace je v beta verzi, hotové části fungují se skutečnými daty, nehotové jsou označené „připravujeme“.</p>
+  <div class="ceox" data-r="up"><h3>Co je AI CEO, běžnou řečí</h3><div class="ceoc">
+   <div><b>Kontroluje</b><p>Čte data, která ve Vexaronetu máte: faktury po splatnosti, zakázky, rezervace, sklad, příjmy a výdaje. Z nich skládá zdraví firmy, platby od zákazníků a výhled na 30 dní.</p></div>
+   <div><b>Navrhuje</b><p>Napíše doporučení, co řešit jako první, a v chatu odpoví na otázky nad vašimi daty.</p></div>
+   <div><b>Rozhodujete vy</b><p>AI CEO sám nic nemění, nevystavuje ani neodesílá. Je v tarifu PRO a vyšším a běží přes externí AI službu. Odpovědi mohou být nepřesné, důležité věci si ověřte.</p></div>
+  </div></div>
+</div></section>
+
+<section id="funkce"><div class="wrap">
+  <div class="sec-h" data-r="up"><span class="eyebrow">Online verze · funkce platformy</span><h2>Sedm oblastí, <span class="grad">jasný stav u každé</span></h2><p class="lead">Lokální aplikace obsahuje jádro (zákazníci, zakázky, faktury, kalendář, úkoly, reporty). Širší moduly patří k online verzi, kterou připravujeme. U každého modulu je napsáno, co už funguje, co funguje s omezením a co teprve připravujeme. Úplně hotový je zatím jen základ řízení firmy, ostatní moduly fungují částečně.</p><p class="legend"><b class="stb stb-now">k dispozici</b> funguje se skutečnými daty · <b class="stb stb-lim">s omezením</b> funguje, ale má podmínku nebo chybějící část · <b class="stb stb-soon">připravujeme</b> zatím nejde použít</p></div>
+  <div class="svcs">@@MODS@@</div>
+</div></section>
+
+<section id="namiru"><div class="wrap">
+  <div class="custom" data-r="up">
+    <div class="cu-t"><span class="eyebrow">Řešení na míru</span><h2>Potřebujete systém <span class="grad">přesně pro svou firmu?</span></h2>
+    <p class="lead">Pokud vám nestačí hotová aplikace, můžeme připravit systém podle toho, jak vaše firma pracuje. Vycházíme z hotových částí Vexaronetu, takže nezačínáme od nuly. Rozsah vždy určuje individuální nabídka.</p>
+    <ul class="ticks"><li>Moduly a postupy podle toho, jak vaše firma pracuje</li><li>Případně AI asistent nad vašimi zakázkami, zákazníky a fakturami</li><li>Nasazení, nastavení a zaškolení týmu</li></ul>
+    <h3 class="cuh">Jak poptávka probíhá</h3><ol class="cuol"><li>Pošlete poptávku (formulář níže nebo e-mail info@vexaronet.com).</li><li>Ozveme se a probereme, co potřebujete. Konzultace je nezávazná.</li><li>Pošleme individuální nabídku s rozsahem a cenou. Nic se neděje bez vašeho odsouhlasení.</li></ol>
+    <p class="mut fine">Údržba, podpora po nasazení a případné pravidelné náklady (provoz, služby třetích stran) se určují v nabídce, žádné nevymýšlíme předem. Referenční projekty zatím nemáme. Problém nebo chybu nahlásíte e-mailem na info@vexaronet.com.</p></div>
+    <div class="cu-p"><small>Cena</small><div class="cu-price"><span>od</span> <b>20 000 Kč</b></div><p class="mut">Orientační cena bez DPH za jednorázovou přípravu. Cena od 20 000 Kč nezahrnuje předem daný rozsah, konečnou cenu a rozsah určí individuální nabídka po nezávazné konzultaci. Může zahrnovat například úpravu modulů nebo nastavení pro vaši firmu.</p>
+    <button type="button" class="btn btn-main" id="askCustom" data-namiru="1">Poslat poptávku</button></div>
   </div>
 </div></section>
 
@@ -650,6 +650,7 @@ f.addEventListener('submit',function(e){e.preventDefault();var x=f.elements,em=x
   var u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download=fl==='zdroj'?'Vexaronet-zdrojovy-kod.zip':'Vexaronet-lokalni.zip';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000);
   m('Děkujeme, stahování začalo. Aplikaci rozbalte a otevřete Vexaronet.html. Data zůstávají jen ve vašem počítači, pravidelně si stahujte zálohu. Druhý soubor stáhnete druhým tlačítkem.','ok')}).catch(function(er){m('Stažení se teď nepodařilo (chyba '+((er&&er.message)||'síť')+'). Zkuste to prosím znovu nebo napište na info@vexaronet.com.','err')}).then(function(){bs.forEach(function(y){y.disabled=false})})})})();
 
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-dlgo]');if(!a)return;e.preventDefault();var t=document.getElementById('top');if(t)t.scrollIntoView({behavior:'smooth'});setTimeout(function(){var m=document.getElementById('dlMail');if(m)m.focus({preventScroll:true})},600)});
 window.DOC_T=document.title;
 /* ===== Supabase: registrace a přihlášení ===== */
 var SB_URL=@@CFG_SBURL@@;

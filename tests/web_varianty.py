@@ -13,7 +13,7 @@ with sync_playwright() as p:
         h=pg.inner_text('#h1').replace('\xa0',' ')
         chk(nm+' nadpis s odpočtem','zdarma' in h)
         chk(nm+' bez lišty limitu firem',pg.locator('#regBar').count()==0)
-        chk(nm+' dvě volby zdarma v úvodu',pg.locator('.vpick .vp').count()==2 and '350' not in pg.inner_text('.vpick'))
+        chk(nm+' formulář ke stažení v úvodu',pg.locator('#top #dlForm').count()==1 and '350' not in pg.inner_text('#top'))
         chk(nm+' bez vodorovného posunu',pg.evaluate('document.documentElement.scrollWidth')<=vw+1)
         chk(nm+' dvě karty variant',pg.locator('.variants .vcard').count()==2)
         t=pg.inner_text('.variants')
