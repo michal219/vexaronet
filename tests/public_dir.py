@@ -27,7 +27,7 @@ check(same(PUB, tmp + '/public'), 'public/ v repozitáři odpovídá čerstvému
 
 # 2) allowlist
 TOP = {'index.html', '404.html', 'sw.js', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', '_headers', '_redirects', '_routes.json',
-       'assets', 'stazeni', 'licence', 'podminky', 'ochrana-udaju', 'cookies', 'dsa', 'nahlasit', 'odhlasit'}
+       'assets', 'stazeni', 'navod', 'licence', 'podminky', 'ochrana-udaju', 'cookies', 'dsa', 'nahlasit', 'odhlasit'}
 check(set(os.listdir(PUB)) == TOP, 'nejvyšší úroveň public/ je přesně allowlist: %s' % sorted(set(os.listdir(PUB)) ^ TOP))
 files = [os.path.relpath(os.path.join(d, f), PUB) for d, _, fs in os.walk(PUB) for f in fs]
 bad = [f for f in files if re.search(r'\.(md|sql|py|mjs|sh|toml|yml|yaml|env|pem|key)$', f) or f.split('/')[0] in ('docs', 'db', 'src', 'tests', 'tools', 'functions', 'netlify', 'android', 'desktop', '.git')]
